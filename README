@@ -1,0 +1,28 @@
+ Description
+=============
+Simple ray-tracer with some tests
+
+ How To
+========
+   A.  Building
+      ----------
+        Note: We are using cmake for building the whole thing.
+
+        - Create a directory where all generated files will be placed, and
+          change to that directory
+
+            $ mkdir raytracer-build && cd raytracer-build
+
+        - Now, generate the makefiles
+            $ cmake .. -G "Unix Makefiles"
+
+        - Build everything
+            $ cmake --build .
+
+        Once the last step completes, following executable files are
+        generated:
+            - $PWD/src/ray-tracer       : ray-tracer
+            - $PWD/test/ray-tracer-test : ray-tracer-test
+
+    B. Running
+      ---------
