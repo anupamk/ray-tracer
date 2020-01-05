@@ -1,5 +1,5 @@
-#ifndef COMMONG_LOGGING_H__
-#define COMMONG_LOGGING_H__
+#ifndef COMMON_INCLUDE_LOGGING_H__
+#define COMMON_INCLUDE_LOGGING_H__
 
 /* system includes */
 #include <stdio.h>
