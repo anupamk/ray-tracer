@@ -1,0 +1,127 @@
+#ifndef RAYTRACER_SRC_COLOR_HPP__
+#define RAYTRACER_SRC_COLOR_HPP__
+
+/*
+ * this file implements the representation of color with which various image
+ * pixels will be drawn.
+**/
+#include <string>
+
+// our includes
+#include "tuple.hpp"
+
+namespace raytracer
+{
+        /*
+         * a color is composite of (r)ed, (g)reen, and (b)lue colors,
+         * represented via a tuple (point)
+        **/
+        class color
+        {
+            private:
+                tuple rgb_;
+
+            public:
+                constexpr explicit color()
+                        : color(0.0, 0.0, 0.0)
+                {
+                }
+
+                constexpr explicit color(float r, float g, float b)
+                    : rgb_(create_point(r, g, b))
+                {
+                }
+
+            public:
+                /// get the values out
+                constexpr float R() const
+                {
+                        return this->rgb_.x();
+                }
+
+                constexpr float G() const
+                {
+                        return this->rgb_.y();
+                }
+
+                constexpr float B() const
+                {
+                        return this->rgb_.z();
+                }
+
+                constexpr tuple RGB() const
+                {
+                        return this->rgb_;
+                }
+
+            public:
+                /// some operators
+                color& operator+=(color);
+                color& operator-=(color);
+
+                /// conversion from color -> string
+                std::string stringify() const;
+        };
+
+        color operator+(color a, color b);
+        color operator-(color a, color b);
+        std::ostream& operator<<(std::ostream& os, color const& C);
+
+        ///
+        /// epsilon equality comparison of two tuples
+        ///
+        constexpr bool operator==(color lhs, color rhs)
+        {
+                // clang-format off
+                return (epsilon_equal(lhs.R(), rhs.R())      &&
+                        epsilon_equal(lhs.G(), rhs.G())      &&
+                        epsilon_equal(lhs.B(), rhs.B()));
+                // clang-format on
+        }
+
+        /// scalar multiplication
+        constexpr color operator*(color a, float f)
+        {
+                return color(a.R() * f, a.G() * f, a.B() * f);
+        }
+
+        ///
+        /// hadamard/schur product of 'color * color', just multiply
+        /// corresponding components from each color
+        ///
+        constexpr color operator*(color a, color b)
+        {
+                return color(a.R() * b.R(),  // red
+                             a.G() * b.G(),  // green
+                             a.B() * b.B()); // blue
+        }
+
+        /// some well known colors
+        constexpr color color_black()
+        {
+                return color{0.0, 0.0, 0.0};
+        }
+
+        constexpr color color_white()
+        {
+                return color{1.0, 1.0, 1.0};
+        }
+
+        constexpr color color_red()
+        {
+                return color{1.0, 0.0, 0.0};
+        }
+
+        constexpr color color_green()
+        {
+                return color{0.0, 1.0, 0.0};
+        }
+
+        constexpr color color_blue()
+        {
+                return color{0.0, 0.0, 1.0};
+        }
+
+} // namespace raytracer
+
+#endif // RAYTRACER_SRC_COLOR_HPP__

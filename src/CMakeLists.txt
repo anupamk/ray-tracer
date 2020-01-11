@@ -5,10 +5,15 @@ project(ray-tracer CXX)
 set (RAYTRACER_LIB_SOURCES
   tuple.hpp
   tuple.cpp
+  color.hpp
+  color.cpp
+  canvas.hpp
+  canvas.cpp
   constants.hpp
   utils.hpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
+target_link_libraries(raytracer_lib PRIVATE common)
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # the main program

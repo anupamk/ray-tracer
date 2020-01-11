@@ -9,6 +9,12 @@
 
 namespace raytracer
 {
+///
+/// gcc'izms
+///
+#define likely(x) __builtin_expect(!!(x), 1)
+#define unlikely(x) __builtin_expect(!!(x), 0)
+
         ///
         /// this function returns true if 'a' is approx. equal to 'b', false
         /// otherwise.
