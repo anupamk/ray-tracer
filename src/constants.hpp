@@ -1,6 +1,9 @@
 #ifndef RAYTRACER_CONSTANTS_HPP__
 #define RAYTRACER_CONSTANTS_HPP__
 
+/// c++ includes
+#include <cstdint>
+
 namespace raytracer
 {
         /// floating point approx comparison

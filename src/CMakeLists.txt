@@ -3,14 +3,17 @@ project(ray-tracer CXX)
 
 # all the sources that we are testing, go into it's own static library
 set (RAYTRACER_LIB_SOURCES
+  constants.hpp
+  utils.hpp
   tuple.hpp
   tuple.cpp
   color.hpp
   color.cpp
   canvas.hpp
   canvas.cpp
-  constants.hpp
-  utils.hpp)
+  matrix.hpp
+  matrix.cpp
+  )
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
 target_link_libraries(raytracer_lib PRIVATE common)
