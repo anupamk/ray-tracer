@@ -20,7 +20,8 @@ Simple ray-tracer with some tests
             $ cmake --build .
 
         Once the last step completes, following executable files are
-        generated:
+        generated ($PWD == 'raytracer-build'):
+
             - $PWD/src/ray-tracer       : ray-tracer
             - $PWD/test/ray-tracer-test : ray-tracer-test
 

@@ -9,6 +9,7 @@
 
 // our includes
 #include "tuple.hpp"
+#include "utils.hpp"
 
 namespace raytracer
 {
@@ -23,7 +24,7 @@ namespace raytracer
 
             public:
                 constexpr explicit color()
-                        : color(0.0, 0.0, 0.0)
+                    : color(0.0, 0.0, 0.0)
                 {
                 }
 
@@ -94,6 +95,17 @@ namespace raytracer
                 return color(a.R() * b.R(),  // red
                              a.G() * b.G(),  // green
                              a.B() * b.B()); // blue
+        }
+
+        /// --------------------------------------------------------------------
+        /// return 'clamped' values of color. all color components must be
+        /// between [0.0 ... 1.0]
+        constexpr color clamp(color c)
+        {
+                /// the '0.0f/1.0f' is specifically there for type deduction
+                return color(clamp_in_range(c.R(), 0.0f, 1.0f),
+                             clamp_in_range(c.G(), 0.0f, 1.0f),
+                             clamp_in_range(c.B(), 0.0f, 1.0f));
         }
 
         /// some well known colors

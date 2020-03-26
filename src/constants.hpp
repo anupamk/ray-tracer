@@ -4,14 +4,14 @@
 namespace raytracer
 {
         /// floating point approx comparison
-        constexpr auto EPSILON = 0.00001;
+        constexpr auto EPSILON = 1.0e-5;
 
         /// max + min color values
-        constexpr uint8_t PPM_MAX_COLOR_VALUE{255}; /// for colors ≥ 1.0
-        constexpr uint8_t PPM_MIN_COLOR_VALUE{0};   /// for colors ≤ 0.0
+        constexpr uint8_t PPM_MAX_COLOR_VALUE = 255; /// for colors ≥ 1.0
+        constexpr uint8_t PPM_MIN_COLOR_VALUE = 0;   /// for colors ≤ 0.0
 
         /// a line in ppm file cannot be longer than this
-        constexpr uint8_t PPM_MAX_LINE_LENGTH{70};
+        constexpr uint8_t PPM_MAX_LINE_LENGTH = 70;
 } // namespace raytracer
 
 #endif // RAYTRACER_CONSTANTS_HPP__
