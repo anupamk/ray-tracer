@@ -13,6 +13,8 @@ set (RAYTRACER_LIB_SOURCES
   canvas.cpp
   matrix.hpp
   matrix.cpp
+  matrix_transformations.hpp
+  matrix_transformations.cpp
   )
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
@@ -34,3 +36,10 @@ set (VIRTUAL_CANNON_SOURCES
 add_executable(virtual-cannon virtual_cannon_main.cpp ${VIRTUAL_CANNON_SOURCES})
 target_link_libraries(virtual-cannon PRIVATE common)
 target_link_libraries(virtual-cannon PRIVATE raytracer_lib)
+
+#
+# draw a clock-dial via matrix transformations
+#
+add_executable(clock-dial clock_dial_matxforms_main.cpp)
+target_link_libraries(clock-dial PRIVATE common)
+target_link_libraries(clock-dial PRIVATE raytracer_lib)

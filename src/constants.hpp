@@ -15,6 +15,9 @@ namespace raytracer
 
         /// a line in ppm file cannot be longer than this
         constexpr uint8_t PPM_MAX_LINE_LENGTH = 70;
+
+        /// the value of Π
+        constexpr double PI = 3.14159265358979323846;
 } // namespace raytracer
 
 #endif // RAYTRACER_CONSTANTS_HPP__
