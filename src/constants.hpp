@@ -16,8 +16,16 @@ namespace raytracer
         /// a line in ppm file cannot be longer than this
         constexpr uint8_t PPM_MAX_LINE_LENGTH = 70;
 
-        /// the value of Π
-        constexpr double PI = 3.14159265358979323846;
+        /// π specific constants
+        constexpr double PI	  = 3.14159265358979323846;
+        constexpr double PI_BY_2F = PI / 2.0;
+        constexpr double PI_BY_3F = PI / 3.0;
+        constexpr double PI_BY_4F = PI / 4.0;
+        constexpr double PI_BY_6F = PI / 6.0;
+
+        /// some commonly used square-roots
+        constexpr double SQRT_2	      = 1.4142135;
+        constexpr double SQRT_2_BY_2F = SQRT_2 / 2.0;
 } // namespace raytracer
 
 #endif // RAYTRACER_CONSTANTS_HPP__

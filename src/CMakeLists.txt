@@ -15,6 +15,14 @@ set (RAYTRACER_LIB_SOURCES
   matrix.cpp
   matrix_transformations.hpp
   matrix_transformations.cpp
+  ray.hpp
+  ray.cpp
+  shape_interface.hpp
+  shape_interface.cpp
+  sphere.hpp
+  sphere.cpp
+  intersection_record.hpp
+  intersection_record.cpp
   )
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
@@ -43,3 +51,10 @@ target_link_libraries(virtual-cannon PRIVATE raytracer_lib)
 add_executable(clock-dial clock_dial_matxforms_main.cpp)
 target_link_libraries(clock-dial PRIVATE common)
 target_link_libraries(clock-dial PRIVATE raytracer_lib)
+
+#
+# draw the sphere silhouette
+#
+add_executable(sphere-silhouette sphere_silhouette_main.cpp)
+target_link_libraries(sphere-silhouette PRIVATE common)
+target_link_libraries(sphere-silhouette PRIVATE raytracer_lib)

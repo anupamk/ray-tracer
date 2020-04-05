@@ -4,9 +4,15 @@
 /// c++ includes
 #include <algorithm>
 #include <cmath>
+<<<<<<< HEAD
 #include <optional>
 #include <type_traits>
 #include <utility>
+=======
+#include <utility>
+#include <optional>
+#include <functional>
+>>>>>>> 52237e0... Chapter 5 : Ray-Sphere Intersections
 
 /// our includes
 #include "constants.hpp"

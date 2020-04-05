@@ -9,8 +9,11 @@ project(the-ray-tracer CXX)
 # disable colors : they don't help much
 set (CMAKE_COLOR_MAKEFILE 0)
 
-# we are going with c++11
+# we are going with c++17
 set (CMAKE_CXX_STANDARD 17)
+
+# verbose builds
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 add_compile_options(
   -fdiagnostics-color=never

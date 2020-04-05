@@ -1,0 +1,8 @@
+#
+# list of files+directories that we can ignore
+#
+build/*
+
+# compilation database related
+.clangd/*
+compile_commands.json
