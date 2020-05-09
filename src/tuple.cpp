@@ -3,10 +3,15 @@
 **/
 
 /// c++ includes
+#include <ios>
+#include <ostream>
+#include <sstream>
 #include <stdexcept>
+#include <string>
 
 /// our includes
 #include "tuple.hpp"
+#include "assert_utils.h"
 
 namespace raytracer
 {

@@ -1,6 +1,3 @@
-/// c++ includes
-#include <iostream>
-
 /// our includes
 #include "logging.h"
 

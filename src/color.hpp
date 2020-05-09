@@ -5,6 +5,9 @@
  * this file implements the representation of color with which various image
  * pixels will be drawn.
 **/
+
+/// c++ includes
+#include <ostream>
 #include <string>
 
 // our includes

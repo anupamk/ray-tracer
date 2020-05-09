@@ -1,12 +1,14 @@
 /*
  * implement the raytracer canvas
 **/
+
 /// c++ includes
 #include <algorithm>
 #include <cerrno>
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <typeindex>
@@ -19,6 +21,7 @@
 #include "canvas.hpp"
 #include "color.hpp"
 #include "string_utils.hpp"
+
 
 namespace raytracer
 {

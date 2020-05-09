@@ -3,9 +3,11 @@
 **/
 
 /// c++ includes
+#include <ios>
 #include <optional>
 #include <ostream>
 #include <sstream>
+#include <string>
 
 /// our includes
 #include "intersection_record.hpp"

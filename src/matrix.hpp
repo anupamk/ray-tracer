@@ -2,8 +2,11 @@
 #define RAYTRACER_SRC_MATRIX_HPP__
 
 /// c++ includes
+#include <cstddef>
+#include <initializer_list>
+#include <ostream>
+#include <string>
 #include <vector>
-#include <iterator>
 
 /// our includes
 #include "tuple.hpp"

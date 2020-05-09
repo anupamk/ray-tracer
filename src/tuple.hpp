@@ -2,12 +2,12 @@
 #define RAYTRACER_TUPLE_HPP__
 
 /// c++ includes
-#include <iomanip>
-#include <iostream>
+#include <ostream>
+#include <stdexcept>
+#include <string>
 
-// our includes
+/// our includes
 #include "utils.hpp"
-#include "assert_utils.h"
 
 namespace raytracer
 {

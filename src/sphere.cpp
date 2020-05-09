@@ -3,9 +3,12 @@
 **/
 
 /// c++ includes
+#include <ios>
 #include <memory>
 #include <optional>
+#include <ostream>
 #include <sstream>
+#include <string>
 
 /// our includes
 #include "sphere.hpp"
@@ -18,7 +21,6 @@ namespace raytracer
         {
                 ASSERT(radius >= 0.0);
         }
-
 
         std::string sphere::stringify() const
         {

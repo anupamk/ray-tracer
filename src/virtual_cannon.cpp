@@ -1,6 +1,3 @@
-/// c++ includes
-#include <stdexcept>
-
 /// our includes
 #include "virtual_cannon.hpp"
 

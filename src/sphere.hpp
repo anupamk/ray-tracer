@@ -3,6 +3,8 @@
 
 /// c++ includes
 #include <optional>
+#include <ostream>
+#include <string>
 
 /// our includes
 #include "shape_interface.hpp"

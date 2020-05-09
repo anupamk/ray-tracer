@@ -2,6 +2,13 @@
  * implement the raytracer ray
 **/
 
+/// c++ includes
+#include <algorithm>
+#include <ostream>
+#include <sstream>
+#include <string>
+
+/// our includes
 #include "ray.hpp"
 
 namespace raytracer

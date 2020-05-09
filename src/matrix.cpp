@@ -2,8 +2,13 @@
  * implement the raytracer matrix
 **/
 /// c++ includes
-#include <iomanip>
-#include <iostream>
+#include <algorithm>
+#include <cstddef>
+#include <ios>
+#include <ostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 /// our includes
 #include "matrix.hpp"

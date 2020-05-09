@@ -3,7 +3,10 @@
 **/
 
 /// c++ includes
-#include <stdexcept>
+#include <ios>
+#include <ostream>
+#include <sstream>
+#include <string>
 
 /// our includes
 #include "color.hpp"

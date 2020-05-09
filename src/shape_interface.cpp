@@ -1,3 +1,6 @@
+/// c++ includes
+#include <algorithm>
+
 /// our includes
 #include "shape_interface.hpp"
 #include "tuple.hpp"

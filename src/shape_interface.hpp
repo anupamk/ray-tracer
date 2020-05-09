@@ -2,6 +2,7 @@
 #define RAYTRACER_SHAPE_INTERFACE_HPP__
 
 /// c++ includes
+#include <algorithm>
 #include <memory>
 #include <optional>
 

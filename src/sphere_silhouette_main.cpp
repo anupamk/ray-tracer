@@ -4,12 +4,9 @@
 **/
 
 /// c++ includes
-#include <bits/stdint-uintn.h>
-#include <iostream>
+#include <cstdint>
+#include <memory>
 #include <string>
-#include <vector>
-#include <algorithm>
-#include <cmath>
 
 /// our includes
 #include "color.hpp"
