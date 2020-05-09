@@ -1,8 +1,6 @@
 /// c++ includes
-#include "matrix.hpp"
-#include "matrix_transformations.hpp"
-#include "tuple.hpp"
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -15,6 +13,11 @@
 #include "sphere.hpp"
 #include "ray.hpp"
 #include "intersection_record.hpp"
+#include "constants.hpp"
+#include "material.hpp"
+#include "matrix.hpp"
+#include "matrix_transformations.hpp"
+#include "tuple.hpp"
 
 /// convenience
 namespace RT = raytracer;
@@ -152,7 +155,7 @@ TEST_CASE("test transformed sphere.intersect(...) result")
                 auto const scale_mat = RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0);
 
                 the_sphere->transform(scale_mat);
-                auto const xs_value = the_sphere->intersect(r).value();
+                auto const xs_value = r.intersect(the_sphere).value();
 
                 CHECK(xs_value.size() == 2);
                 CHECK(xs_value[0].where() == 3.0);
@@ -166,8 +169,97 @@ TEST_CASE("test transformed sphere.intersect(...) result")
                 auto const xlate_mat = RT_XFORM::create_3d_translation_matrix(5.0, 0.0, 0.0);
 
                 the_sphere->transform(xlate_mat);
-                auto const xs = the_sphere->intersect(r);
+                auto const xs = r.intersect(the_sphere);
 
                 CHECK(xs.has_value() == false);
         }
+}
+
+TEST_CASE("test sphere.normal_at_local(...) returns correct results")
+{
+        // clang-format off
+        struct {
+                RT::tuple point;                  /// point in object-space
+                RT::tuple exp_normal;             /// expected normal
+        } const all_tc[] = {
+                /// [0]
+                {
+                        RT::create_point(1.0, 0.0, 0.0),
+                        RT::create_vector(1.0, 0.0, 0.0)
+                },
+
+                /// [1]
+                {
+                        RT::create_point(0.0, 1.0, 0.0),
+                        RT::create_vector(0.0, 1.0, 0.0)
+                },
+
+                /// [2]
+                {
+                        RT::create_point(0.0, 0.0, 1.0),
+                        RT::create_vector(0.0, 0.0, 1.0)
+                },
+
+                /// [3]
+                {
+                        RT::create_point(RT::SQRT_3/3.0, RT::SQRT_3/3.0, RT::SQRT_3/3.0),
+                        RT::create_vector(RT::SQRT_3/3.0, RT::SQRT_3/3.0, RT::SQRT_3/3.0)
+                },
+        };
+        // clang-format on
+
+        auto const sphere = std::make_shared<RT::sphere>();
+
+        for (auto tc : all_tc) {
+                auto const got_normal = sphere->normal_at_local(tc.point);
+                CHECK(got_normal == tc.exp_normal);
+
+                /// normal is 'normalized' i.e. magnitude == 1.0
+                CHECK(RT::epsilon_equal(magnitude(got_normal), 1.0) == true);
+        }
+}
+
+TEST_CASE("test shape.normal_at_world(...) returns correct results")
+{
+        using RT_XFORM = RT::matrix_transformations_t;
+
+        /// normal on a translated sphere
+        {
+                auto sphere = std::make_shared<RT::sphere>();
+                sphere->transform(RT_XFORM::create_3d_translation_matrix(0.0, 1.0, 0.0));
+
+                auto const world_pt	    = RT::create_point(0.0, 1.70711, -0.70711);
+                auto const got_world_normal = sphere->normal_at_world(world_pt);
+                auto const exp_world_normal = RT::create_vector(0.0, 0.70711, -0.70711);
+
+                CHECK(got_world_normal == exp_world_normal);
+        }
+
+        /// normal on a scaled + rotated phere
+        {
+                auto sphere		= std::make_shared<RT::sphere>();
+                auto const xform_matrix = (RT_XFORM::create_3d_scaling_matrix(1.0, 0.5, 1.0) *
+                                           RT_XFORM::create_rotz_matrix(RT::PI_BY_5F));
+                sphere->transform(xform_matrix);
+
+                auto const world_pt	    = RT::create_point(0.0, RT::SQRT_2_BY_2F, -RT::SQRT_2_BY_2F);
+                auto const got_world_normal = sphere->normal_at_world(world_pt);
+                auto const exp_world_normal = RT::create_vector(0.0, 0.97014, -0.24254);
+
+                CHECK(got_world_normal == exp_world_normal);
+        }
+}
+
+TEST_CASE("test sphere.material(...) interface")
+{
+        /// default material interface
+        auto sphere = std::make_shared<RT::sphere>();
+        CHECK(sphere->get_material() == RT::material());
+
+        /// set a different material
+        auto new_material = RT::material();
+        new_material.set_ambient(0.3).set_specular(0.6).set_shininess(100);
+        sphere->set_material(new_material);
+
+        CHECK(sphere->get_material() == new_material);
 }

@@ -52,10 +52,8 @@ namespace raytracer
          * solution of which (via canonical means) gives us the desired
          * intersection points.
          **/
-        std::optional<intersection_records> sphere::intersect(ray_t const& r) const
+        std::optional<intersection_records> sphere::intersect(ray_t const& R) const
         {
-                const auto R = r.transform(this->inv_transform());
-
                 /// vector from sphere's center to the ray-origin
                 const auto sphere_to_ray = R.origin() - this->center();
                 const auto ray_dir	 = R.direction();
@@ -74,6 +72,15 @@ namespace raytracer
                 }
 
                 return std::nullopt;
+        }
+
+        ///
+        /// this function is called to return the normal of at a point 'P' on
+        /// the surface of the sphere
+        ///
+        tuple sphere::normal_at_local(tuple const& local_pt) const
+        {
+                return create_vector(local_pt.x(), local_pt.y(), local_pt.z());
         }
 
         ///

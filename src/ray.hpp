@@ -1,9 +1,16 @@
 #ifndef RAYTRACER_RAY_HPP__
 #define RAYTRACER_RAY_HPP__
 
+/// c++ includes
+#include <algorithm>
+#include <memory>
+#include <ostream>
+#include <string>
+
 // our includes
 #include "tuple.hpp"
 #include "matrix.hpp"
+#include "shape_interface.hpp"
 
 namespace raytracer
 {
@@ -37,6 +44,7 @@ namespace raytracer
                 tuple position(double t) const;
                 ray_t transform(fsize_dense2d_matrix_t const& M) const;
                 std::string stringify() const;
+                std::optional<intersection_records> intersect(std::shared_ptr<shape_interface> const&) const;
         };
 
         bool operator==(ray_t const& lhs, ray_t const& rhs);

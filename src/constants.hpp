@@ -21,11 +21,14 @@ namespace raytracer
         constexpr double PI_BY_2F = PI / 2.0;
         constexpr double PI_BY_3F = PI / 3.0;
         constexpr double PI_BY_4F = PI / 4.0;
+        constexpr double PI_BY_5F = PI / 5.0;
         constexpr double PI_BY_6F = PI / 6.0;
 
         /// some commonly used square-roots
         constexpr double SQRT_2	      = 1.4142135;
         constexpr double SQRT_2_BY_2F = SQRT_2 / 2.0;
+        constexpr double SQRT_3	      = 1.7320508;
+
 } // namespace raytracer
 
 #endif // RAYTRACER_CONSTANTS_HPP__

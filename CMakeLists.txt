@@ -19,7 +19,7 @@ add_compile_options(
   -fdiagnostics-color=never
   -g
   -O2
-  -march=native
+  -pipe
   -std=c++17
   )
 

@@ -7,6 +7,7 @@
 
 // our includes
 #include "utils.hpp"
+#include "assert_utils.h"
 
 namespace raytracer
 {
@@ -182,6 +183,11 @@ namespace raytracer
                                      (a.z() * b.x()) - (a.x() * b.z()),	 // y
                                      (a.x() * b.y()) - (a.y() * b.x())); // z
         }
+
+        ///
+        /// return the reflection vector of a vector 'in' at the normal 'N'
+        ///
+        tuple reflect(tuple in, tuple N);
 
 } // namespace raytracer
 

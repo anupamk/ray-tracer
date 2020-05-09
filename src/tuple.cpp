@@ -107,4 +107,14 @@ namespace raytracer
                 return os << a.stringify();
         }
 
+        ///
+        /// this function is called to return the reflection of a vector 'in'
+        /// around the normal vector 'N'
+        ///
+        tuple reflect(tuple in, tuple N)
+        {
+                ASSERT(in.is_vector() && N.is_vector());
+                return in - N * 2 * dot(in, N);
+        }
+
 } // namespace raytracer

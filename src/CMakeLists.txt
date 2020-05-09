@@ -23,7 +23,12 @@ set (RAYTRACER_LIB_SOURCES
   sphere.cpp
   intersection_record.hpp
   intersection_record.cpp
-  )
+  point_light.hpp
+  point_light.cpp
+  material.hpp
+  material.cpp
+  phong_illumination.hpp
+  phong_illumination.cpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
 target_link_libraries(raytracer_lib PRIVATE common)
@@ -58,3 +63,10 @@ target_link_libraries(clock-dial PRIVATE raytracer_lib)
 add_executable(sphere-silhouette sphere_silhouette_main.cpp)
 target_link_libraries(sphere-silhouette PRIVATE common)
 target_link_libraries(sphere-silhouette PRIVATE raytracer_lib)
+
+#
+# draw the sphere illuminated with phong-reflection model
+#
+add_executable(phong-sphere phong_sphere_main.cpp)
+target_link_libraries(phong-sphere PRIVATE common)
+target_link_libraries(phong-sphere PRIVATE raytracer_lib)

@@ -8,6 +8,7 @@
 /// our includes
 #include "intersection_record.hpp"
 #include "matrix.hpp"
+#include "material.hpp"
 
 namespace raytracer
 {
@@ -23,6 +24,7 @@ namespace raytracer
 	    private:
 		fsize_dense2d_matrix_t xform_;
 		fsize_dense2d_matrix_t inv_xform_;
+		material material_;
 
 	    public:
 		shape_interface();
@@ -32,7 +34,7 @@ namespace raytracer
 		/// this function is called to return zero or more intersections
 		/// of a shape with a ray 'R'
 		///
-		virtual std::optional<intersection_records> intersect(ray_t const& r) const = 0;
+		virtual std::optional<intersection_records> intersect(ray_t const& R) const = 0;
 
 		///
 		/// this function is called to return the current transform
@@ -51,6 +53,24 @@ namespace raytracer
 		/// matrix with the shape
 		///
 		void transform(fsize_dense2d_matrix_t const& M);
+
+		///
+		/// this function is called to return the normal at a point on
+		/// the shape in object-space coordinates
+		///
+		virtual tuple normal_at_local(tuple const&) const = 0;
+
+		///
+		/// this function is called to return the normal at a point on
+		/// the shape in world-space coordinates
+		///
+		tuple normal_at_world(tuple const&) const;
+
+		///
+		/// adjust material properties of a shape
+		///
+		material get_material() const;
+		void set_material(material const&);
 	};
 } // namespace raytracer
 

@@ -519,3 +519,28 @@ TEST_CASE("cross(tuple, tuple)")
                 }
         }
 }
+
+TEST_CASE("test raytracer::reflect(...) correct results")
+{
+        namespace RT = raytracer;
+
+        /// tc-01
+        {
+                auto const tc_in_vec	= RT::create_vector(1.0, -1.0, 0.0);
+                auto const tc_in_norm	= RT::create_vector(0.0, 1.0, 0.0);
+                auto const exp_refl_vec = RT::create_vector(1.0, 1.0, 0.0);
+                auto const got_refl_vec = RT::reflect(tc_in_vec, tc_in_norm);
+
+                CHECK(got_refl_vec == exp_refl_vec);
+        }
+
+        /// tc-02
+        {
+                auto const tc_in_vec	= RT::create_vector(0.0, -1.0, 0.0);
+                auto const tc_in_norm	= RT::create_vector(RT::SQRT_2_BY_2F, RT::SQRT_2_BY_2F, 0.0);
+                auto const exp_refl_vec = RT::create_vector(1.0, 0.0, 0.0);
+                auto const got_refl_vec = RT::reflect(tc_in_vec, tc_in_norm);
+
+                CHECK(got_refl_vec == exp_refl_vec);
+        }
+}

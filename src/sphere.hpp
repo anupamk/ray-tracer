@@ -41,7 +41,11 @@ namespace raytracer
                 std::string stringify() const;
 
                 /// compute intersection of a ray with the sphere
-                std::optional<intersection_records> intersect(ray_t const& r) const override;
+                std::optional<intersection_records> intersect(ray_t const& R) const override;
+
+                /// normal vector at a given point on the sphere (in local
+                /// coordinates)
+                tuple normal_at_local(tuple const&) const override;
         };
 
         std::ostream& operator<<(std::ostream& os, sphere const& S);
