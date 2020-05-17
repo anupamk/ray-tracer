@@ -17,8 +17,6 @@ set (RAYTRACER_LIB_SOURCES
   color.cpp
   canvas.hpp
   canvas.cpp
-  sdl2_canvas.hpp
-  sdl2_canvas.cpp
   matrix.hpp
   matrix.cpp
   matrix_transformations.hpp
@@ -75,6 +73,15 @@ target_link_libraries(sphere-silhouette PRIVATE raytracer_lib)
 #
 # draw the sphere illuminated with phong-reflection model
 #
-add_executable(phong-sphere phong_sphere_main.cpp)
-target_link_libraries(phong-sphere PRIVATE common)
-target_link_libraries(phong-sphere PRIVATE raytracer_lib)
+add_executable(st-phong-sphere st_phong_sphere_main.cpp)
+target_link_libraries(st-phong-sphere PRIVATE common)
+target_link_libraries(st-phong-sphere PRIVATE raytracer_lib)
+
+#
+# multi-threaded phong-sphere
+#
+add_executable(mt-phong-sphere mt_phong_sphere_main.cpp)
+target_link_libraries(mt-phong-sphere PRIVATE common)
+target_link_libraries(mt-phong-sphere PRIVATE raytracer_lib)
+target_link_libraries(mt-phong-sphere PRIVATE concurrentqueue)
+target_link_libraries(mt-phong-sphere PRIVATE pthread)

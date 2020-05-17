@@ -83,6 +83,11 @@ namespace raytracer
                 // clang-format on
         }
 
+        constexpr bool operator!=(color lhs, color rhs)
+        {
+                return !(lhs == rhs);
+        }
+
         /// scalar multiplication
         constexpr color operator*(color a, float f)
         {

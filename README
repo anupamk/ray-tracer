@@ -22,12 +22,117 @@ Simple ray-tracer with some tests
         executable files are generated:
 
             - build/test/ray-tracer-test ........................ ray tracer tests
-            - build/src/virtual-cannon .......................... trace virtual cannonball on ppm canvas
+            - build/src/virtual-cannon .......................... trace path of virtual cannonball
             - build/src/ray-tracer .............................. just a place holder
-            - build/src/clock-dial .............................. clock dial using matrix transforms on ppm canvas
-            - build/src/sphere-silhouette ....................... silhouette of a sphere on ppm canvas
-            - build/src/phong-sphere ............................ phong shaded sphere on sdl2 canvas
+            - build/src/clock-dial .............................. clock dial using matrix transforms
+            - build/src/sphere-silhouette ....................... silhouette of a sphere
+            - build/src/st-phong-sphere ......................... phong shaded sphere
+            - build/src/mt-phong-sphere ......................... multi-threaded phong shaded sphere
 
-    B. Running
-      ---------
-        Run any of the programs listed above...
+        Just run any program as you would normally !
+
+    B. Brief note on 'mt-phong-sphere'
+       -------------------------------
+       For this particular case, i am using a concurrent mpmc lockless
+       queue, aka 'work-queue' for dispatching work items to
+       workers/renderers.
+
+       Each 'work-item' comprises 'N' pixels worth of rendering, in a
+       specific row. 'N' is computed based on
+       `std::thread::hardware_concurrency()` i.e. number of h/w cores
+       on the machine, and number of x-pixels making up the scene.
+
+       Thus, if a machine has 8 physical cores, and the image is 320
+       pixels wide (in the x-direction), 'N' would be '320 / 8 ==
+       40'.
+
+       A worker picks an item from the queue, and renders all pixels
+       specified in the work item. Since all work items (that make up
+       the entire canvas) contain disjoint set of pixels, no locking
+       is required. Once done with the current work-item, the renderer
+       picks up the next one from the queue.
+
+       This goes on, till all the work items in the queue are done.
+
+       This _seems_ to be a better approach than slicing up the entire
+       scene into multiple stripes, and then letting each of the
+       threads handle a specific stripe. Depending on the scene, some
+       threads might get a 'free-ride' by just rendering stripes that
+       contain few non-black pixels.
+
+       Once a scene is rendered, we dump the number of milliseconds it
+       took, a log of which looks like so:
+
+       ,----
+       | INFO   | 2020-06-21 12:00:08.576 | /home/anupam/source-code/c++/ray-tracer/src/phong_sphere_main.cpp : 00063 | total render time: 848 (ms)
+       `----
+
+       Thus, it took '848' milliseconds to render a scene. This is
+       '$13' by the way in awk parlance [**].
+
+       Multiple such runs (as explained below) are then used to
+       compute both the mean, and standard-deviation of rendering
+       times for images of various sizes (for both single-threaded and
+       multi-threaded renders)
+
+       Statistics[*]:
+
+       | Serial |    Canvas | Single Threaded           | Multi (8) Threaded        | Factor |
+       |    No. |      Size | Mean (ms) & Std Deviation | Mean (ms) & Std Deviation |        |
+       |--------+-----------+---------------------------+---------------------------+--------|
+       |      0 |   640x480 | 217.020000, 9.248762      | 57.630000, 1.163228       |   3.76 |
+       |      1 |  1280x960 | 861.040, 25.469558        | 230.310000, 2.115160      |   3.74 |
+       |      2 | 1600x1200 | 1358.290000, 46.517587    | 361.050000, 4.441565      |   3.76 |
+       |      3 | 1920x1440 | 1958.390000, 63.047267    | 533.970000, 24.884314     |   3.67 |
+       |--------+-----------+---------------------------+---------------------------+--------|
+
+       The core of mean+standard deviation numbers reported above are
+       computed via the following quickly hacked awk snippet:
+
+       ,---- [ for $13 see above ** ]
+       | awk '{sum += $13; sum_square += $13 * $13} END {mean = sum/NR; std_dev = sqrt(sum_square/NR - (sum/NR)^2); printf("mean:%f, std-dev:%f\n", mean, std_dev)}' | ${log-file}
+       `----
+
+       For 100 runs of the program, we do this:
+
+       ,---- [ '100' for 100 samples ]
+       |        seq 100 |
+       |        while read i
+       |        do
+       |            ./src/st-phong-sphere 2>&1 | grep 'total render time' &>> st-phong-render.log
+       |        done
+       `----
+
+       so, the whole thing looks like this:
+
+       ,----[ mt-phong-sphere: 1920x1440 ]
+       |        seq 100 |
+       |        while read i
+       |        do
+       |                ./src/st-phong-sphere 2>&1 | grep 'total render time' &>> ${log_fname}
+       |        done && awk '{sum += $13; sum_square += $13 * $13} END {mean = sum/NR; std_dev = sqrt(sum_square/NR - (sum/NR)^2); printf("mean:%f, std-dev:%f\n", mean, std_dev)}' ${log_fname}
+       |
+       |        mean:533.970000, std-dev:24.884314
+       `----
+
+       This whole thing can probably be quite easily wrapped in a
+       small shell script for automating the whole thing.
+
+       CPU Information [relevant sections from lscpu]
+       ----------------------------------------------
+       Vendor ID:                       GenuineIntel
+       CPU family:                      6
+       Model:                           26
+       Model name:                      Intel(R) Core(TM) i7 CPU         920  @ 2.67GHz
+       Stepping:                        4
+       Frequency boost:                 enabled
+       CPU MHz:                         2798.166
+       CPU max MHz:                     2793.0000
+       CPU min MHz:                     1596.0000
+       BogoMIPS:                        5331.57
+       Virtualization:                  VT-x
+       L1d cache:                       128 KiB
+       L1i cache:                       128 KiB
+       L2 cache:                        1 MiB
+       L3 cache:                        8 MiB
+       NUMA node0 CPU(s):               0-7
