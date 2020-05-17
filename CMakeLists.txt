@@ -34,7 +34,7 @@ add_compile_options(
 #    - src                 : actual sources
 #    - test                : the tests
 #
-add_subdirectory(3rd-party/doctest)
+add_subdirectory(3rd-party)
 add_subdirectory(common)
 add_subdirectory(src)
 add_subdirectory(test)

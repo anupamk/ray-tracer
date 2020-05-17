@@ -9,21 +9,25 @@ Simple ray-tracer with some tests
         Note: We are using cmake for building the whole thing.
 
         - Create a directory where all generated files will be placed, and
-          change to that directory
+          change to that directory, and generate the Makefiles:
 
-            $ mkdir raytracer-build && cd raytracer-build
-
-        - Now, generate the makefiles
+            $ mkdir build && cd build
             $ cmake .. -G "Unix Makefiles"
 
-        - Build everything
-            $ cmake --build .
+        - Parallel builds are supported, so, just do (8 == number of
+          cores on this machine)
+            $ make -j 8
 
-        Once the last step completes, following executable files are
-        generated ($PWD == 'raytracer-build'):
+        Once the last step completes (successfully), following
+        executable files are generated:
 
-            - $PWD/src/ray-tracer       : ray-tracer
-            - $PWD/test/ray-tracer-test : ray-tracer-test
+            - build/test/ray-tracer-test ........................ ray tracer tests
+            - build/src/virtual-cannon .......................... trace virtual cannonball on ppm canvas
+            - build/src/ray-tracer .............................. just a place holder
+            - build/src/clock-dial .............................. clock dial using matrix transforms on ppm canvas
+            - build/src/sphere-silhouette ....................... silhouette of a sphere on ppm canvas
+            - build/src/phong-sphere ............................ phong shaded sphere on sdl2 canvas
 
     B. Running
       ---------
+        Run any of the programs listed above...
