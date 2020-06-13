@@ -117,7 +117,7 @@ static std::vector<RT::tuple> compute_dial_positions(size_t total_points)
 	/// we have a '-1' because, first position i.e. 12'o clock is
 	/// pre-computed.
 	///
-	for (auto i = 0; i < total_points - 1; i++) {
+	for (size_t i = 0; i < total_points - 1; i++) {
 		auto const next_hour_dial_pos = dial_zrot_mat * dial_pos[i];
 		dial_pos.push_back(next_hour_dial_pos);
 	}

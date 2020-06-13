@@ -1,6 +1,12 @@
 # project name
 project(ray-tracer CXX)
 
+#
+# find sdl2 package : required for sdl2_canvas implementation
+#
+INCLUDE(FindPkgConfig)
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+
 # all the sources that we are testing, go into it's own static library
 set (RAYTRACER_LIB_SOURCES
   constants.hpp
@@ -11,6 +17,8 @@ set (RAYTRACER_LIB_SOURCES
   color.cpp
   canvas.hpp
   canvas.cpp
+  sdl2_canvas.hpp
+  sdl2_canvas.cpp
   matrix.hpp
   matrix.cpp
   matrix_transformations.hpp
@@ -30,9 +38,9 @@ set (RAYTRACER_LIB_SOURCES
   phong_illumination.hpp
   phong_illumination.cpp)
 
-add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
-target_link_libraries(raytracer_lib PRIVATE common)
-target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES} )
+target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
+target_link_libraries(raytracer_lib PRIVATE common ${SDL2_LIBRARIES})
 
 # the main program
 add_executable(ray-tracer raytracer_main.cpp)

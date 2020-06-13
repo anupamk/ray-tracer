@@ -21,6 +21,10 @@ add_compile_options(
   -O2
   -pipe
   -std=c++17
+  -Wall
+  -Werror
+  -lm
+  -march=native
   )
 
 #

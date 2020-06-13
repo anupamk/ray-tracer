@@ -1,6 +1,11 @@
 # project name
 project(ray-tracer-tests CXX)
 
+add_compile_options(
+  -Wno-unused-variable
+  -Wno-unused-but-set-variable
+)
+
 # files making up the tests
 set (RAYTRACER_TEST_SOURCES
   tuple_test.cpp
