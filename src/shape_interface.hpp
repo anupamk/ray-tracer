@@ -10,6 +10,7 @@
 #include "intersection_record.hpp"
 #include "matrix.hpp"
 #include "material.hpp"
+#include "badge.hpp"
 
 namespace raytracer
 {
@@ -35,7 +36,7 @@ namespace raytracer
 		/// this function is called to return zero or more intersections
 		/// of a shape with a ray 'R'
 		///
-		virtual std::optional<intersection_records> intersect(ray_t const& R) const = 0;
+		virtual std::optional<intersection_records> intersect(the_badge<ray_t>, ray_t const& R) const = 0;
 
 		///
 		/// this function is called to return the current transform
@@ -72,6 +73,10 @@ namespace raytracer
 		///
 		material get_material() const;
 		void set_material(material const&);
+
+                /// ------------------------------------------------------------
+                /// stringified representation of a shape
+                virtual std::string stringify() const = 0;
 	};
 } // namespace raytracer
 

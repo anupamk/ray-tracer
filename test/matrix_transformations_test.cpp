@@ -466,3 +466,85 @@ TEST_CASE("test chained transforms")
         auto const got_final_pt	   = final_xform_mat * pt;
         CHECK(got_final_pt == exp_final_pt);
 }
+
+/// ----------------------------------------------------------------------------
+/// test view transformations: default orientation
+TEST_CASE("matrix_transformations_t::create_view_transform(...) tests")
+{
+        auto const look_from = raytracer::create_point(0.0, 0.0, 0.0);
+        auto const look_to = raytracer::create_point(0.0, 0.0, -1.0);
+        auto const up_vec = raytracer::create_vector(0.0, 1.0, 0.0);
+
+        auto const got_view_xform = rt_matrix_xforms_t::create_view_transform(look_from, look_to, up_vec);
+        auto const exp_view_xform = raytracer::fsize_dense2d_matrix_t::create_identity_matrix(4);
+
+        CHECK(got_view_xform == exp_view_xform);
+}
+
+/// ----------------------------------------------------------------------------
+/// test view transformations: looking in +ve z-direction
+TEST_CASE("matrix_transformations_t::create_view_transform(...) tests")
+{
+        auto const look_from = raytracer::create_point(0.0, 0.0, 0.0);
+        auto const look_to = raytracer::create_point(0.0, 0.0, 1.0);
+        auto const up_vec = raytracer::create_vector(0.0, 1.0, 0.0);
+
+        auto const got_view_xform = rt_matrix_xforms_t::create_view_transform(look_from, look_to, up_vec);
+        auto const exp_view_xform = rt_matrix_xforms_t::create_3d_scaling_matrix(-1.0, 1.0, -1.0);
+
+        CHECK(got_view_xform == exp_view_xform);
+}
+
+/// ----------------------------------------------------------------------------
+/// test view transformations: moving the world
+TEST_CASE("matrix_transformations_t::create_view_transform(...) tests")
+{
+        auto const look_from = raytracer::create_point(0.0, 0.0, 8.0);
+        auto const look_to = raytracer::create_point(0.0, 0.0, 0.0);
+        auto const up_vec = raytracer::create_vector(0.0, 1.0, 0.0);
+
+        auto const got_view_xform = rt_matrix_xforms_t::create_view_transform(look_from, look_to, up_vec);
+        auto const exp_view_xform = rt_matrix_xforms_t::create_3d_translation_matrix(0.0, 0.0, -8.0);
+
+        CHECK(got_view_xform == exp_view_xform);
+}
+
+/// ----------------------------------------------------------------------------
+/// test view transformations: arbitrary view
+TEST_CASE("matrix_transformations_t::create_view_transform(...) tests")
+{
+        auto const look_from = raytracer::create_point(1.0, 3.0, 2.0);
+        auto const look_to = raytracer::create_point(4.0, -2.0, 8.0);
+        auto const up_vec = raytracer::create_vector(1.0, 1.0, 0.0);
+
+        auto const got_view_xform = rt_matrix_xforms_t::create_view_transform(look_from, look_to, up_vec);
+
+        /// setup the expected matrix
+        auto exp_view_xform = raytracer::fsize_dense2d_matrix_t::create_identity_matrix(4);
+
+        /// row-0
+        exp_view_xform(0,0) = -0.50709;
+        exp_view_xform(0,1) = 0.50709;
+        exp_view_xform(0,2) = 0.67612;
+        exp_view_xform(0,3) = -2.36643;
+
+        /// row-1
+        exp_view_xform(1,0) = 0.76772;
+        exp_view_xform(1,1) = 0.60609;
+        exp_view_xform(1,2) = 0.12122;
+        exp_view_xform(1,3) = -2.82843;
+
+        /// row-2
+        exp_view_xform(2,0) = -0.35857;
+        exp_view_xform(2,1) = 0.59761;
+        exp_view_xform(2,2) = -0.71714;
+        exp_view_xform(2,3) = 0.00000;
+
+        /// row-3
+        exp_view_xform(3,0) = 0.00000;
+        exp_view_xform(3,1) = 0.00000;
+        exp_view_xform(3,2) = 0.00000;
+        exp_view_xform(3,3) = 1.00000;
+
+        CHECK(got_view_xform == exp_view_xform);
+}

@@ -40,10 +40,10 @@ namespace raytracer
 
             public:
                 /// stringified reperesentation of a sphere
-                std::string stringify() const;
+                std::string stringify() const override;
 
                 /// compute intersection of a ray with the sphere
-                std::optional<intersection_records> intersect(ray_t const& R) const override;
+                std::optional<intersection_records> intersect(the_badge<ray_t>, ray_t const& R) const override;
 
                 /// normal vector at a given point on the sphere (in local
                 /// coordinates)

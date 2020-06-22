@@ -189,10 +189,25 @@ namespace raytracer
                 ASSERT(this->num_cols() == rhs.num_rows());
                 fsize_dense2d_matrix_t lhs(this->num_rows(), rhs.num_cols());
 
-                for (size_t i = 0; i < lhs.num_rows(); i++) {
-                        for (size_t j = 0; j < lhs.num_cols(); j++) {
-                                for (size_t k = 0; k < this->num_cols(); k++) {
-                                        lhs(i, j) += (*this)(i, k) * rhs(k, j);
+                if (likely((lhs.num_cols() == 4) && (lhs.num_rows() == 4))) {
+                        /// ----------------------------------------------------
+                        /// 'unrolled' 4x4 multiplication
+                        for (size_t i = 0; i < lhs.num_rows(); i++) {
+                                for (size_t j = 0; j < lhs.num_cols(); j++) {
+                                        lhs(i, j) = ((*this)(i, 0) * rhs(0, j) + /// 1
+                                                     (*this)(i, 1) * rhs(1, j) + /// 2
+                                                     (*this)(i, 2) * rhs(2, j) + /// 3
+                                                     (*this)(i, 3) * rhs(3, j)); /// 4
+                                }
+                        }
+                } else {
+                        /// ----------------------------------------------------
+                        /// canonical 'generic' multiplication
+                        for (size_t i = 0; i < lhs.num_rows(); i++) {
+                                for (size_t j = 0; j < lhs.num_cols(); j++) {
+                                        for (size_t k = 0; k < this->num_cols(); k++) {
+                                                lhs(i, j) += (*this)(i, k) * rhs(k, j);
+                                        }
                                 }
                         }
                 }

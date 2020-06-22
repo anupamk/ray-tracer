@@ -92,7 +92,7 @@ int main(int argc, char** argv)
                         auto const wall_xyz    = RT::create_point(wall_x, wall_y, WALL_ZPOS);
                         auto const ray_to_wall = RT::ray_t(CAMERA_POSITION, (wall_xyz - CAMERA_POSITION));
 
-                        auto const xs_record = sphere->intersect(ray_to_wall);
+                        auto const xs_record = ray_to_wall.intersect(sphere);
                         if (xs_record && RT::visible_intersection(xs_record.value())) {
                                 canvas.write_pixel(x, y, RED_COLOR);
                         }

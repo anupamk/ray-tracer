@@ -17,7 +17,9 @@ set (RAYTRACER_TEST_SOURCES
   sphere_test.cpp
   ray_transform_test.cpp
   point_light_test.cpp
-  phong_illumination_test.cpp)
+  phong_illumination_test.cpp
+  world_test.cpp
+  camera_test.cpp)
 
 # what does this build ?
 add_executable(ray-tracer-test doctest_main.cpp ${RAYTRACER_TEST_SOURCES})

@@ -56,7 +56,7 @@ namespace raytracer
                 float const WALL_YSIZE	   = 9.0;
 
                 /// maintain a 3:4 aspect ratio for the canvas
-                uint32_t const canvas_dim_x = 1920;
+                uint32_t const canvas_dim_x = 1280;
                 uint32_t const canvas_dim_y = (canvas_dim_x * 3) / 4;
 
                 /// --------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ namespace raytracer
                 /// --------------------------------------------------------------------------------
                 /// setup scene-lighting
                 auto const light_position = create_point(-20.0, 20.0, -20.0);
-                auto const light_color	  = color(sphere_color * 0.64125);
+                auto const light_color	  = raytracer::color_white();
                 auto const scene_light	  = point_light(light_position, light_color);
 
                 // clang-format off

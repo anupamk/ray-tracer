@@ -54,7 +54,7 @@ namespace raytracer
          * solution of which (via canonical means) gives us the desired
          * intersection points.
          **/
-        std::optional<intersection_records> sphere::intersect(ray_t const& R) const
+        std::optional<intersection_records> sphere::intersect(the_badge<ray_t>, ray_t const& R) const
         {
                 /// vector from sphere's center to the ray-origin
                 const auto sphere_to_ray = R.origin() - this->center();

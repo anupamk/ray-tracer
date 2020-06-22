@@ -3,6 +3,7 @@
 **/
 
 /// c++ includes
+#include "tuple.hpp"
 #include <algorithm>
 #include <ostream>
 #include <sstream>
@@ -10,6 +11,7 @@
 
 /// our includes
 #include "ray.hpp"
+#include "intersection_record.hpp"
 
 namespace raytracer
 {
@@ -72,7 +74,35 @@ namespace raytracer
         std::optional<intersection_records> ray_t::intersect(std::shared_ptr<shape_interface> const& S) const
         {
                 const auto inv_ray = this->transform(S->inv_transform());
-                return S->intersect(inv_ray);
+                return S->intersect({}, inv_ray);
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to return some information about the intersection
+        intersection_info_t ray_t::prepare_computations(intersection_record xs_data) const
+        {
+                intersection_info_t retval;
+
+                /// set some trivial values
+                retval.point(xs_data.where())
+                        .what_object(xs_data.what_object())
+                        .position(position(xs_data.where()))
+                        .eye_vector(-direction());
+
+                /// compute normal at intersection
+                auto const normal_at_xs = xs_data.what_object()->normal_at_world(retval.position());
+
+                /// intersection is inside or outside ?
+                if (raytracer::dot(normal_at_xs, retval.eye_vector()) < 0) {
+                        retval.inside(true)
+                                .normal_vector(-normal_at_xs);
+                }
+                else {
+                        retval.inside(false)
+                                .normal_vector(normal_at_xs);
+                }
+
+                return retval;
         }
 
         ///

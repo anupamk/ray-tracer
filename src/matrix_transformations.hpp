@@ -4,6 +4,7 @@
 /// our includes
 #include "matrix.hpp"
 #include "assert_utils.h"
+#include "tuple.hpp"
 
 namespace raytracer
 {
@@ -37,6 +38,9 @@ namespace raytracer
                                                                      double yx, double yz,
                                                                      double zx, double zy);
                 // clang-format on
+
+                static fsize_dense2d_matrix_t create_view_transform(tuple from_point, tuple to_point, tuple up_vector);
+
         };
 } // namespace raytracer
 

@@ -11,6 +11,7 @@
 #include "tuple.hpp"
 #include "matrix.hpp"
 #include "shape_interface.hpp"
+#include "intersection_info.hpp"
 
 namespace raytracer
 {
@@ -45,6 +46,9 @@ namespace raytracer
                 ray_t transform(fsize_dense2d_matrix_t const& M) const;
                 std::string stringify() const;
                 std::optional<intersection_records> intersect(std::shared_ptr<shape_interface> const&) const;
+
+                /// return some information about the intersection
+                intersection_info_t prepare_computations(intersection_record) const;
         };
 
         bool operator==(ray_t const& lhs, ray_t const& rhs);

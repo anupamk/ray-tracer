@@ -3,6 +3,7 @@
 **/
 
 /// c++ includes
+#include "tuple.hpp"
 #include <cmath>
 
 /// our includes
@@ -179,6 +180,59 @@ namespace raytracer
                 shear_matrix(2, 1) = zy;
 
                 return shear_matrix;
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to create a view-transform matrix. which
+        /// basically, orients the world relative to our eye, allowing us to
+        /// easily line up the image/world...
+        fsize_dense2d_matrix_t
+        matrix_transformations_t::create_view_transform(tuple from_point, tuple to_point, tuple up_vector)
+        {
+                auto const forward     = normalize(to_point - from_point);
+                auto const norm_up_vec = normalize(up_vector);
+                auto const left_vec    = cross(forward, norm_up_vec);
+                auto const true_up_vec = cross(left_vec, forward);
+
+                /// ------------------------------------------------------------
+                /// setup the view-transformation matrix as follows
+                ///
+                ///       left_vec.x    ,     left_vec.y ,  left_vec.z    ,  0
+                ///       true_up_vec.x ,  true_up_vec.y ,  true_up_vec.z ,  0
+                ///       -forward.x    ,     -forward.y ,  forward.z     ,  0
+                ///       0             ,              0 ,             0  ,  1
+
+                auto view_xform_mat = fsize_dense2d_matrix_t::create_identity_matrix(4);
+
+                /// row-0
+                view_xform_mat(0, 0) = left_vec.x();
+                view_xform_mat(0, 1) = left_vec.y();
+                view_xform_mat(0, 2) = left_vec.z();
+                view_xform_mat(0, 3) = 0.0;
+
+                /// row-1
+                view_xform_mat(1, 0) = true_up_vec.x();
+                view_xform_mat(1, 1) = true_up_vec.y();
+                view_xform_mat(1, 2) = true_up_vec.z();
+                view_xform_mat(1, 3) = 0.0;
+
+                /// row-2
+                view_xform_mat(2, 0) = -forward.x();
+                view_xform_mat(2, 1) = -forward.y();
+                view_xform_mat(2, 2) = -forward.z();
+                view_xform_mat(2, 3) = 0.0;
+
+                /// row-3
+                view_xform_mat(3, 0) = 0.0;
+                view_xform_mat(3, 1) = 0.0;
+                view_xform_mat(3, 2) = 0.0;
+                view_xform_mat(3, 3) = 1.0;
+
+                // clang-format off
+                return (view_xform_mat * create_3d_translation_matrix(-from_point.x(),
+                                                                      -from_point.y(),
+                                                                      -from_point.z()));
+                // clang-format on
         }
 
 } // namespace raytracer

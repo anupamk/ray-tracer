@@ -74,7 +74,7 @@ TEST_CASE("test that sphere.intersect(...) gives right results")
 
         for (auto tc : all_tc) {
                 auto const r	  = RT::ray_t(tc.ray_origin, tc.ray_direction);
-                auto const got_xs = the_sphere->intersect(r);
+                auto const got_xs = r.intersect(the_sphere);
 
                 CHECK(got_xs == tc.expected_xs);
         }

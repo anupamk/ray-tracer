@@ -42,8 +42,8 @@ namespace raytracer
 			return this->what_;
 		}
 
-                /// stringified representation of an intersection record
-                std::string stringify() const;
+		/// stringified representation of an intersection record
+		std::string stringify() const;
 	};
 
 	bool operator==(intersection_record const& lhs, intersection_record const& rhs);
