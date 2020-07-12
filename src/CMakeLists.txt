@@ -83,7 +83,7 @@ target_link_libraries(mt-phong-sphere PRIVATE concurrentqueue)
 target_link_libraries(mt-phong-sphere PRIVATE pthread)
 
 # ------------------------------------------------------------------------------
-# rendering a world: single-threaded
+# rendering a world: single+multi threaded
 add_executable(render-world render_world_main.cpp)
 target_link_libraries(render-world PRIVATE common)
 target_link_libraries(render-world PRIVATE raytracer_lib)

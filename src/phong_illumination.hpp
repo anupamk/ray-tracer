@@ -13,7 +13,8 @@ namespace raytracer
 				 material const& surface_material,  /// material
 				 point_light const& incident_light, /// light illuminating the scene
 				 tuple const& eye_vector,	    /// camera || viewer
-				 tuple const& surface_normal);	    /// normal at intersection
+				 tuple const& surface_normal,	    /// normal at intersection
+				 bool is_shadowed = false);	    /// is the point shadowed ?
 }
 
 #endif /// RAYTRACER_PHONG_ILLUMINATION_HPP__

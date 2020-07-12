@@ -54,6 +54,9 @@ namespace raytracer
                 /// stringified representation of the world
                 std::string stringify() const;
 
+                /// return true if point 'pt' is in shadow w.r.t a light source.
+                bool is_shadowed(tuple const& pt) const;
+
             private:
                 static point_light create_default_light();
                 static std::vector<std::shared_ptr<shape_interface>> create_default_shapes();

@@ -19,6 +19,7 @@ namespace raytracer
                 bool inside_;					/// intersction is inside ?
                 double point_;					/// where intersection happens
                 tuple position_;				/// position of intersection
+                tuple over_position_;				/// EPSILON adjustment (over position_)
                 tuple eye_vec_;					/// eye vector
                 tuple normal_vec_;				/// normal at point of intersection
                 std::shared_ptr<shape_interface const> object_; /// object that is intresected
@@ -29,6 +30,7 @@ namespace raytracer
                 intersection_info_t& inside(bool val);
                 intersection_info_t& point(double val);
                 intersection_info_t& position(tuple val);
+                intersection_info_t& over_position(tuple val);
                 intersection_info_t& eye_vector(tuple val);
                 intersection_info_t& normal_vector(tuple val);
                 intersection_info_t& what_object(std::shared_ptr<shape_interface const> val);
@@ -47,6 +49,11 @@ namespace raytracer
                 tuple position() const
                 {
                         return position_;
+                }
+
+                tuple over_position() const
+                {
+                        return over_position_;
                 }
 
                 tuple eye_vector() const

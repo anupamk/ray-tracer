@@ -21,6 +21,7 @@
 #include "canvas.hpp"
 #include "color.hpp"
 #include "string_utils.hpp"
+#include "utils.hpp"
 
 
 namespace raytracer
@@ -172,9 +173,9 @@ namespace raytracer
         {
                 auto pixel_color = this->read_pixel(x, y);
 
-                r = roundf(pixel_color.R() * 255.0);
-                g = roundf(pixel_color.G() * 255.0);
-                b = roundf(pixel_color.B() * 255.0);
+                r = roundf(clamp_in_range(pixel_color.R(), 0.0f, 1.0f) * 255.0);
+                g = roundf(clamp_in_range(pixel_color.G(), 0.0f, 1.0f) * 255.0);
+                b = roundf(clamp_in_range(pixel_color.B(), 0.0f, 1.0f) * 255.0);
 
                 return;
         }

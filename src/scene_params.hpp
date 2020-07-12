@@ -13,6 +13,7 @@
 #include "material.hpp"
 #include "color.hpp"
 #include "sphere.hpp"
+#include "matrix_transformations.hpp"
 
 namespace raytracer
 {
@@ -48,12 +49,14 @@ namespace raytracer
         /// size of canvas where things are drawn etc.
         static inline scene_params create_scene_params()
         {
+                namespace RT = raytracer;
+
                 /// --------------------------------------------------------------------------------
                 /// define some scene specific constants first.
-                auto const CAMERA_POSITION = create_point(0.0, 0.0, -3.0);
-                float const WALL_ZPOS	   = 6.0;
-                float const WALL_XSIZE	   = 12.0;
-                float const WALL_YSIZE	   = 9.0;
+                auto const CAMERA_POSITION = create_point(0.0, 0.0, -5.0);
+                float const WALL_ZPOS	   = 10.0;
+                float const WALL_XSIZE	   = 7.0;
+                float const WALL_YSIZE	   = 7.0;
 
                 /// maintain a 3:4 aspect ratio for the canvas
                 uint32_t const canvas_dim_x = 1280;
@@ -78,7 +81,7 @@ namespace raytracer
                 auto const scene_descr = (std::string("sphere: {") + sphere_01->stringify() + "}, " +
                                           std::string("light: {") + scene_light.stringify() + "}");
 
-                LOG_INFO("phong-sphere scene description '%s'", scene_descr.c_str());
+                LOG_DEBUG("phong-sphere scene description '%s'", scene_descr.c_str());
                 // clang-format on
 
                 /// and finally return the scene

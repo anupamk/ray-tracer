@@ -77,12 +77,12 @@ namespace raytracer
         }
 
         ///
-        /// this function is called to return the normal of at a point 'P' on
+        /// this function is called to return the normal at a point 'P' on
         /// the surface of the sphere
         ///
-        tuple sphere::normal_at_local(tuple const& local_pt) const
+        tuple sphere::normal_at_local(tuple const& P) const
         {
-                return create_vector(local_pt.x(), local_pt.y(), local_pt.z());
+                return create_vector(P.x(), P.y(), P.z());
         }
 
         ///

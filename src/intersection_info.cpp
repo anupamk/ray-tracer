@@ -6,12 +6,13 @@ namespace raytracer
         /// ----------------------------------------------------------------------------
         /// a default constructed intersection info
         intersection_info_t::intersection_info_t()
-                : inside_(false)
-                , point_(0.0)
-                , position_(create_point(0.0, 0.0, 0.0))
-                , eye_vec_(create_vector(0.0, 0.0, 0.0))
-                , normal_vec_(create_vector(0.0, 0.0, 0.0))
-                , object_(nullptr)
+            : inside_(false)
+            , point_(0.0)
+            , position_(create_point(0.0, 0.0, 0.0))
+            , over_position_(create_point(0.0, 0.0, 0.0))
+            , eye_vec_(create_vector(0.0, 0.0, 0.0))
+            , normal_vec_(create_vector(0.0, 0.0, 0.0))
+            , object_(nullptr)
         {
         }
 
@@ -30,6 +31,12 @@ namespace raytracer
         intersection_info_t& intersection_info_t::position(tuple val)
         {
                 position_ = val;
+                return *this;
+        }
+
+        intersection_info_t& intersection_info_t::over_position(tuple val)
+        {
+                over_position_ = val;
                 return *this;
         }
 

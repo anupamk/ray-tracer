@@ -84,7 +84,8 @@ TEST_CASE("phong_illumination(...) test: light at 45° to normal, relection at 4
         CHECK(got_reflected_color == exp_reflected_color);
 }
 
-TEST_CASE("phong_illumination(...) test: light opposite of normal, reflection opposite of normal, viewer on normal")
+TEST_CASE(
+        "phong_illumination(...) test: light opposite of normal, reflection opposite of normal, viewer on normal")
 {
         auto const eye_vector	  = RT::create_vector(0.0, 0.0, -1.0);
         auto const surface_normal = RT::create_vector(0.0, 0.0, -1.0);
@@ -96,6 +97,26 @@ TEST_CASE("phong_illumination(...) test: light opposite of normal, reflection op
                                                                 incident_light,	  /// incoming light
                                                                 eye_vector,	  /// viewwer
                                                                 surface_normal);  /// normal
+
+        CHECK(got_reflected_color == exp_reflected_color);
+}
+
+/// ----------------------------------------------------------------------------
+/// ensure that points that are in a shadow only have ambient contribution to
+/// their overall color.
+TEST_CASE("phong_illumination(...) test: point in a shadow")
+{
+        auto const eye_vector	  = RT::create_vector(0.0, 0.0, -1.0);
+        auto const surface_normal = RT::create_vector(0.0, 0.0, -1.0);
+        auto const incident_light = RT::point_light(RT::create_point(0.0, 0.0, -10.0), RT::color_white());
+
+        auto const exp_reflected_color = RT::color(0.1, 0.1, 0.1);
+        auto const got_reflected_color = RT::phong_illumination(SURFACE_POINT,	  /// where
+                                                                SURFACE_MATERIAL, /// material
+                                                                incident_light,	  /// incoming light
+                                                                eye_vector,	  /// viewwer
+                                                                surface_normal,	  /// normal
+                                                                true);		  /// in-shadow
 
         CHECK(got_reflected_color == exp_reflected_color);
 }

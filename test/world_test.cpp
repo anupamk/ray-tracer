@@ -3,6 +3,7 @@
 **/
 
 /// c++ includes
+#include "sphere.hpp"
 #include <cstddef>
 #include <iostream>
 #include <ostream>
@@ -20,9 +21,11 @@
 #include "point_light.hpp"
 #include "phong_illumination.hpp"
 #include "ray.hpp"
+#include "matrix_transformations.hpp"
 
 /// convenience
 namespace RT = raytracer;
+using RT_XFORM = RT::matrix_transformations_t;
 
 /// ----------------------------------------------------------------------------
 ///
@@ -168,6 +171,91 @@ TEST_CASE("world::color_at(...) test")
         /// intersection
         auto const got_color = w.color_at(r);
         auto const exp_color = w.shapes()[1]->get_material().get_color();
+
+        CHECK(got_color == exp_color);
+}
+
+/// ----------------------------------------------------------------------------
+/// is a point in shadow ? case-1 : when nothing is co-linear between point and
+/// light.
+TEST_CASE("world::is_shadowed(...) test")
+{
+        auto w	      = RT::world::create_default_world();
+        auto xs_point = RT::create_point(0, 10, 0);
+
+        auto got_pt_shadowed = w.is_shadowed(xs_point);
+        auto exp_pt_shadowed = false;
+
+        CHECK(got_pt_shadowed == exp_pt_shadowed);
+}
+
+/// ----------------------------------------------------------------------------
+/// is a point in shadow ? case-2 : when object is between point and light
+TEST_CASE("world::is_shadowed(...) test")
+{
+        auto w	      = RT::world::create_default_world();
+        auto xs_point = RT::create_point(10, -10, 10);
+
+        auto got_pt_shadowed = w.is_shadowed(xs_point);
+        auto exp_pt_shadowed = true;
+
+        CHECK(got_pt_shadowed == exp_pt_shadowed);
+}
+
+/// ----------------------------------------------------------------------------
+/// is a point in shadow ? case-3 : when object is behind the light
+TEST_CASE("world::is_shadowed(...) test")
+{
+        auto w	      = RT::world::create_default_world();
+        auto xs_point = RT::create_point(-20, 20, -20);
+
+        auto got_pt_shadowed = w.is_shadowed(xs_point);
+        auto exp_pt_shadowed = false;
+
+        CHECK(got_pt_shadowed == exp_pt_shadowed);
+}
+
+/// ----------------------------------------------------------------------------
+/// is a point in shadow ? case-4 : when object is behind the point
+TEST_CASE("world::is_shadowed(...) test")
+{
+        auto w	      = RT::world::create_default_world();
+        auto xs_point = RT::create_point(-2, 2, -2);
+
+        auto got_pt_shadowed = w.is_shadowed(xs_point);
+        auto exp_pt_shadowed = false;
+
+        CHECK(got_pt_shadowed == exp_pt_shadowed);
+}
+
+/// ----------------------------------------------------------------------------
+/// shade_hit with point in shade
+TEST_CASE("world::shade_hit(...) point is in shadow")
+{
+        /// create a 'custom' world
+        auto w		     = RT::world();
+        auto const pt_light  = RT::point_light(RT::create_point(0.0, 0.0, -10.0), RT::color_white());
+        auto const sphere_01 = std::make_shared<RT::sphere>();
+        auto sphere_02	     = std::make_shared<RT::sphere>();
+        sphere_02->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 10.0));
+
+        /// add the objects
+        w.add(pt_light);
+        w.add(sphere_01);
+        w.add(sphere_02);
+
+        /// and a ray
+        auto const r_origin    = raytracer::create_point(0.0, 0.0, 5.0);
+        auto const r_direction = raytracer::create_vector(0.0, 0.0, 1.0);
+        auto const r	       = raytracer::ray_t(r_origin, r_direction);
+
+        /// an intersection record
+        auto const xs_01 = RT::intersection_record(4.0, sphere_02);
+
+        /// check the computed vs expected color
+        auto const comps     = r.prepare_computations(xs_01);
+        auto const got_color = w.shade_hit(comps);
+        auto const exp_color = RT::color(0.1, 0.1, 0.1);
 
         CHECK(got_color == exp_color);
 }

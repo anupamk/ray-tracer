@@ -45,7 +45,8 @@ namespace raytracer
 				 material const& surface_material,  /// material
 				 point_light const& incident_light, /// light illuminating the scene
 				 tuple const& eye_vector,	    /// camera || viewer
-				 tuple const& surface_normal)	    /// normal at intersection
+				 tuple const& surface_normal,	    /// normal at intersection
+                                 bool is_shadowed)                  /// is the point shadowed ?
 	{
 		/// combine surface-color with incident light's color
 		auto const effective_color = surface_material.get_color() * incident_light.get_color();
@@ -57,9 +58,16 @@ namespace raytracer
                  * now compute contributions of various components in the model
                 **/
 
-		/// --------------------------------------------------------------------------------
+		/// ------------------------------------------------------------
 		/// ambient lighting
 		auto const ambient_lighting = effective_color * surface_material.get_ambient();
+
+		if (is_shadowed) {
+			/// ----------------------------------------------------
+			/// when a point is shadowed, only ambient lighting will
+			/// contribute to overall color...
+			return ambient_lighting;
+		}
 
 		/// cosine of angle between the incident-light and surface normal-vector.
 		float const light_dot_normal = dot(incident_light_dir, surface_normal);
@@ -68,14 +76,13 @@ namespace raytracer
 			return ambient_lighting;
 		}
 
-		/// --------------------------------------------------------------------------------
+		/// ------------------------------------------------------------
 		/// diffuse reflection component
 		auto const diffuse = effective_color * surface_material.get_diffuse() * light_dot_normal;
 
-		///
+		/// ------------------------------------------------------------
 		/// reflect_dot_eye represents the cosine of angle between the
 		/// reflection vector and eye vector
-		///
 		auto const reflection_vector = reflect(-incident_light_dir, surface_normal);
 		float const reflect_dot_eye  = dot(reflection_vector, eye_vector);
 
@@ -84,14 +91,13 @@ namespace raytracer
 			return ambient_lighting + diffuse;
 		}
 
-		/// --------------------------------------------------------------------------------
+		/// ------------------------------------------------------------
 		/// compute specular reflection
 		auto const factor   = std::pow(reflect_dot_eye, surface_material.get_shininess());
 		auto const specular = incident_light.get_color() * surface_material.get_specular() * factor;
  
-		/// get the final (clamped) color from individual contributions               
-                auto const final_color = ambient_lighting + diffuse + specular;
-                return clamp(final_color);
+		/// get the final color from individual contributions               
+                return ambient_lighting + diffuse + specular;
 	}
         
 } // namespace raytracer

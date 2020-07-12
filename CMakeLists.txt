@@ -15,6 +15,9 @@ set (CMAKE_CXX_STANDARD 17)
 # verbose builds
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
+# create the compilation-database (compile_commands.json)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_compile_options(
   -fdiagnostics-color=never
   -g

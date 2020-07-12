@@ -1,6 +1,6 @@
 /*
- * this program implements a single-threaded and multi-threaded world-rendering
- * through a camera
+ * this program implements a single/multi threaded world-rendering through a
+ * camera.
 **/
 
 /// c++ includes
@@ -64,8 +64,8 @@ struct render_work {
 /// file specific functions
 static RT::world create_world();
 static RT::camera create_camera();
-static void st_render_world(RT::world const&, RT::camera const&);
-static void mt_render_world(RT::world const&, RT::camera const&);
+static void st_render_world(RT::world const&, RT::camera const&, std::string const& dst_fname = "");
+static void mt_render_world(RT::world const&, RT::camera const&, std::string const& dst_fname = "");
 static void coloring_worker(int, CQ::ConcurrentQueue<render_work>&, RT::world const&, RT::canvas&);
 
 int main(int argc, char** argv)
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 
 /// ----------------------------------------------------------------------------
 /// this function is called to render the world. this is the single threaded renderer.
-static inline void st_render_world(RT::world const& w, RT::camera const& c)
+static inline void st_render_world(RT::world const& w, RT::camera const& c, std::string const& dst_fname)
 {
 	/// convenience
 	auto const render_start_time = HR_CLOCK::now();
@@ -98,17 +98,22 @@ static inline void st_render_world(RT::world const& w, RT::camera const& c)
 	// clang-format on
 	LOG_INFO("total render time: %ld (ms)", render_time_ms);
 
-	rendered_canvas.show();
+	if (!dst_fname.empty()) {
+		rendered_canvas.save(dst_fname);
+		LOG_INFO("saved canvas in: '%s'", dst_fname.c_str());
+	} else {
+		rendered_canvas.show();
+	}
 
 	return;
 }
 
 /// ----------------------------------------------------------------------------
 /// this function is called to render the world. this is the multi-threaded renderer.
-static inline void mt_render_world(RT::world const& w, RT::camera const& c)
+static inline void mt_render_world(RT::world const& w, RT::camera const& c, std::string const& dst_fname)
 {
-	RT::canvas dst_canvas = RT::canvas::create_binary(c.hsize(), c.vsize());
-	LOG_INFO("canvas information: '%s'", dst_canvas.stringify().c_str());
+	RT::canvas rendered_canvas = RT::canvas::create_binary(c.hsize(), c.vsize());
+	LOG_INFO("canvas information: '%s'", rendered_canvas.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// concurrent queue contains multiple instances of render_work defined
@@ -141,11 +146,11 @@ static inline void mt_render_world(RT::world const& w, RT::camera const& c)
 	/// start the coloring threads
 	std::vector<std::thread> coloring_threads(MAX_COLOR_THREADS);
 	for (auto thread_id = 0; thread_id < MAX_COLOR_THREADS; thread_id++) {
-		coloring_threads[thread_id] = std::thread(coloring_worker,	 /// rendering-function
-							  thread_id,		 /// thread-id
-							  std::ref(work_queue),	 /// work-queue
-							  w,			 /// the world
-							  std::ref(dst_canvas)); /// canvas
+		coloring_threads[thread_id] = std::thread(coloring_worker,	      /// rendering-function
+							  thread_id,		      /// thread-id
+							  std::ref(work_queue),	      /// work-queue
+							  w,			      /// the world
+							  std::ref(rendered_canvas)); /// canvas
 	}
 
 	/// convenience
@@ -160,8 +165,12 @@ static inline void mt_render_world(RT::world const& w, RT::camera const& c)
 
 	LOG_INFO("total render time: %ld (ms)", render_time_ms);
 
-	/// let's see what we did here
-	dst_canvas.show();
+	if (!dst_fname.empty()) {
+		rendered_canvas.save(dst_fname);
+		LOG_INFO("saved canvas in: '%s'", dst_fname.c_str());
+	} else {
+		rendered_canvas.show();
+	}
 
 	return;
 }
@@ -204,14 +213,14 @@ static void coloring_worker(int thread_id,				  /// for logging
 /// primitives from the camera.
 static RT::world create_world()
 {
-        /// --------------------------------------------------------------------
-        /// floor material
-        auto const wall_material = RT::material().set_color(RT::color(1.0, 0.9, 0.9)).set_specular(0.0);
-        
+	/// --------------------------------------------------------------------
+	/// wall material
+	auto const wall_material = RT::material().set_color(RT::color(1.0, 0.9, 0.9)).set_specular(0.0);
+
 	/// --------------------------------------------------------------------
 	/// 01: floor sphere
 	auto floor = std::make_shared<RT::sphere>();
-	floor->transform(RT_XFORM::create_3d_scaling_matrix(10.0, 0.01, 10.0));
+	floor->transform(RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
 	floor->set_material(wall_material);
 
 	/// --------------------------------------------------------------------
@@ -220,7 +229,7 @@ static RT::world create_world()
 	left_wall->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 5.0) *
 			     RT_XFORM::create_roty_matrix(-RT::PI_BY_4F) *
 			     RT_XFORM::create_rotx_matrix(RT::PI_BY_2F) *
-			     RT_XFORM::create_3d_scaling_matrix(10.0, 0.01, 10.0));
+			     RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
 	left_wall->set_material(wall_material);
 
 	/// --------------------------------------------------------------------
@@ -229,59 +238,77 @@ static RT::world create_world()
 	right_wall->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 5.0) *
 			      RT_XFORM::create_roty_matrix(RT::PI_BY_4F) *
 			      RT_XFORM::create_rotx_matrix(RT::PI_BY_2F) *
-			      RT_XFORM::create_3d_scaling_matrix(10.0, 0.01, 10.0));
+			      RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
 	right_wall->set_material(wall_material);
 
 	/// --------------------------------------------------------------------
-	/// 04: middle sphere
-	auto middle_sphere = std::make_shared<RT::sphere>();
-	middle_sphere->transform(RT_XFORM::create_3d_translation_matrix(-0.5, 1.0, 0.5));
+	/// sphere-01
+	auto sphere_01 = std::make_shared<RT::sphere>();
+	sphere_01->transform(RT_XFORM::create_3d_translation_matrix(-3.0, 3.0, -2.0) *
+			     RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
 
 	// clang-format off
-	middle_sphere->set_material(RT::material().set_color(RT::color(0.1, 1.0, 0.5))
-                                                  .set_diffuse(0.7)
-                                                  .set_specular(0.3));
+	sphere_01->set_material(RT::material()
+                                .set_color(RT::color(1.0, 0.0, 0.0))
+                                .set_diffuse(0.8)
+                                .set_specular(0.3));
 	// clang-format on
 
 	/// --------------------------------------------------------------------
-	/// 05: right sphere
-	auto right_sphere = std::make_shared<RT::sphere>();
-	right_sphere->transform(RT_XFORM::create_3d_translation_matrix(1.5, 0.5, -0.5) *
-				RT_XFORM::create_3d_scaling_matrix(0.5, 0.5, 0.5));
+	/// sphere-02
+	auto sphere_02 = std::make_shared<RT::sphere>();
+	sphere_02->transform(RT_XFORM::create_3d_translation_matrix(-10.0, 3.0, -12.0) *
+			     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
 	// clang-format off
-	right_sphere->set_material(RT::material().set_color(RT::color(0.5, 1.0, 0.1))
-                                                 .set_diffuse(0.7)
-                                                 .set_specular(0.3));
+	sphere_02->set_material(RT::material()
+                                .set_color(RT::color(0.0, 1.0, 0.0))
+                                .set_diffuse(0.7)
+                                .set_specular(0.3));
 	// clang-format on
 
 	/// --------------------------------------------------------------------
-	/// 06: left sphere
-	auto left_sphere = std::make_shared<RT::sphere>();
-	left_sphere->transform(RT_XFORM::create_3d_translation_matrix(-1.5, 0.33, -0.75) *
-			       RT_XFORM::create_3d_scaling_matrix(0.33, 0.33, 0.33));
+	/// sphere-03
+	auto sphere_03 = std::make_shared<RT::sphere>();
+	sphere_03->transform(RT_XFORM::create_3d_translation_matrix(5.0, 4.0, -7.0) *
+			     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
 	// clang-format off
-        left_sphere->set_material(RT::material().set_color(RT::color(1.0, 0.8, 0.1))
-                                                .set_diffuse(0.7)
-                                                .set_specular(0.3));
+	sphere_03->set_material(RT::material()
+                                .set_color(RT::color(0.0, 0.0, 1.0))
+                                .set_diffuse(0.7)
+                                .set_specular(0.3));
+	// clang-format on
+
+	/// --------------------------------------------------------------------
+	/// 04: sphere-04
+	auto sphere_04 = std::make_shared<RT::sphere>();
+	sphere_04->transform(RT_XFORM::create_3d_translation_matrix(-5.5, 2.0, -18.0) *
+			     RT_XFORM::create_3d_scaling_matrix(1.5, 1.5, 1.5));
+
+	// clang-format off
+	sphere_04->set_material(RT::material()
+                                .set_color(RT::color(225.0/255.0, 213.0/255.0, 0.0/255.0))
+                                .set_diffuse(0.7)
+                                .set_specular(0.3));
 	// clang-format on
 
 	/// --------------------------------------------------------------------
 	/// the world light
-	auto world_light_01 = RT::point_light(RT::create_point(-10.0, 10.0, -10.0), RT::color_white());
+	auto world_light_01 = RT::point_light(RT::create_point(-20.0, 10.0, -20.0), RT::color_white());
 
 	/// --------------------------------------------------------------------
 	/// now create the world...
 	auto world = RT::world();
 	world.add(world_light_01);
-        
+
 	world.add(floor);
 	world.add(left_wall);
 	world.add(right_wall);
-	world.add(middle_sphere);
-	world.add(right_sphere);
-	world.add(left_sphere);
+	world.add(sphere_01);
+	world.add(sphere_02);
+	world.add(sphere_03);
+	world.add(sphere_04);
 
 	LOG_DEBUG("world details:\n%s\n", world.stringify().c_str());
 
@@ -293,15 +320,13 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto c_01	    = RT::camera(1280, 1024, RT::PI_BY_3F);
-	auto c_01_look_from = RT::create_point(0.0, 1.0, -5.0);
-	auto c_01_look_to   = RT::create_point(0.0, 1.0, 0.0);
-	auto c_01_up_vector = RT::create_vector(0.0, 1.0, 0.0);
+	auto camera_01	   = RT::camera(1280, 1024, RT::PI_BY_2F);
+	auto look_from	   = RT::create_point(-7.5, 5.0, -25.0);
+	auto look_to	   = RT::create_point(0.0, -1.0, 5.0);
+	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
+	auto xform	   = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
+        
+	camera_01.transform(xform);
 
-	auto c_01_xform = RT_XFORM::create_view_transform(c_01_look_from,  /// from
-							  c_01_look_to,	   /// to
-							  c_01_up_vector); /// up-vector
-	c_01.transform(c_01_xform);
-
-	return c_01;
+	return camera_01;
 }

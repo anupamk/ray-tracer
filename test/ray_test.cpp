@@ -9,9 +9,11 @@
 #include "tuple.hpp"
 #include "intersection_record.hpp"
 #include "sphere.hpp"
+#include "matrix_transformations.hpp"
 
 /// convenience
-namespace RT = raytracer;
+namespace RT   = raytracer;
+using RT_XFORM = RT::matrix_transformations_t;
 
 /// ray creation test
 TEST_CASE("testing ray creation")
@@ -59,8 +61,8 @@ TEST_CASE("ray::prepare_computations(...) test")
         auto const r	       = RT::ray_t(r_origin, r_direction);
 
         /// create sphere and setup the intersection
-        auto const the_sphere  = std::make_shared<RT::sphere>();
-        auto const xs_01       = RT::intersection_record(4.0, the_sphere);
+        auto const the_sphere = std::make_shared<RT::sphere>();
+        auto const xs_01      = RT::intersection_record(4.0, the_sphere);
 
         /// --------------------------------------------------------------------
         auto const xs_info = r.prepare_computations(xs_01);
@@ -85,8 +87,8 @@ TEST_CASE("ray::prepare_computations(...) test")
         auto const r	       = RT::ray_t(r_origin, r_direction);
 
         /// create sphere and setup the intersection
-        auto const the_sphere  = std::make_shared<RT::sphere>();
-        auto const xs_01       = RT::intersection_record(1.0, the_sphere);
+        auto const the_sphere = std::make_shared<RT::sphere>();
+        auto const xs_01      = RT::intersection_record(1.0, the_sphere);
 
         /// --------------------------------------------------------------------
         auto const xs_info = r.prepare_computations(xs_01);
@@ -99,4 +101,27 @@ TEST_CASE("ray::prepare_computations(...) test")
         CHECK(xs_info.eye_vector() == RT::create_vector(0.0, 0.0, -1.0));
         CHECK(xs_info.normal_vector() == RT::create_vector(0.0, 0.0, -1.0));
         CHECK(xs_info.inside() == true);
+}
+
+/// ----------------------------------------------------------------------------
+/// hit should offset the point
+TEST_CASE("ray::prepare_computations(...) test")
+{
+        /// create the ray
+        auto const r_origin    = RT::create_point(0.0, 0.0, -5.0);
+        auto const r_direction = RT::create_vector(0.0, 0.0, 1.0);
+        auto const r	       = RT::ray_t(r_origin, r_direction);
+
+        /// create sphere and setup the intersection
+        auto the_sphere = std::make_shared<RT::sphere>();
+        the_sphere->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 1.0));
+
+        /// an intersection record
+        auto const xs_01 = RT::intersection_record(5.0, the_sphere);
+
+        /// check compute point of intersection
+        auto const comps = r.prepare_computations(xs_01);
+
+        CHECK(comps.over_position().z() < -RT::EPSILON/2.0);
+        CHECK(comps.position().z() > comps.over_position().z());
 }

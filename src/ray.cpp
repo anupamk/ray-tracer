@@ -94,13 +94,15 @@ namespace raytracer
 
                 /// intersection is inside or outside ?
                 if (raytracer::dot(normal_at_xs, retval.eye_vector()) < 0) {
-                        retval.inside(true)
-                                .normal_vector(-normal_at_xs);
+                        retval.inside(true).normal_vector(-normal_at_xs);
+                } else {
+                        retval.inside(false).normal_vector(normal_at_xs);
                 }
-                else {
-                        retval.inside(false)
-                                .normal_vector(normal_at_xs);
-                }
+
+                /// over-point is slightly above the actual point of
+                /// intersection
+                auto const over_point = retval.position() + retval.normal_vector() * EPSILON;
+                retval.over_position(over_point);
 
                 return retval;
         }

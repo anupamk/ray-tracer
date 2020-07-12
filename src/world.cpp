@@ -2,6 +2,8 @@
 
 /// c++ includes
 #include <algorithm>
+#include <ios>
+#include <iostream>
 #include <memory>
 #include <ostream>
 #include <sstream>
@@ -15,6 +17,8 @@
 #include "matrix_transformations.hpp"
 #include "sphere.hpp"
 #include "phong_illumination.hpp"
+#include "intersection_record.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {
@@ -134,15 +138,17 @@ namespace raytracer
         ///
         color world::shade_hit(intersection_info_t const& xs_info) const
         {
-                color shade_color = color_black();
+                color shade_color    = color_black();
+                auto point_in_shadow = is_shadowed(xs_info.over_position());
 
                 // clang-format off
-                for (auto const world_light : light_list_) {
-                        shade_color +=  phong_illumination(xs_info.position(),                    /// where intersection happens
-                                                           xs_info.what_object()->get_material(), /// object-material
-                                                           world_light,				  /// the light
-                                                           xs_info.eye_vector(),		  /// eye
-                                                           xs_info.normal_vector());		  /// normal
+                for (auto const a_light : light_list_) {
+                        shade_color += phong_illumination(xs_info.over_position(),               /// point of intersection
+                                                          xs_info.what_object()->get_material(), /// object-material
+                                                          a_light,				 /// the light
+                                                          xs_info.eye_vector(),                  /// eye
+                                                          xs_info.normal_vector(),		 /// normal
+                                                          point_in_shadow);			 /// shadowed ?
                 }
                 // clang-format on
 
@@ -157,7 +163,7 @@ namespace raytracer
                 auto const xs_list	 = intersect(r);
                 auto const vis_xs_record = visible_intersection(xs_list);
 
-                if (vis_xs_record.has_value()) {
+                if (vis_xs_record) {
                         /// ok, so there seems to be a visible intersection. compute the
                         /// color
                         auto const xs_info = r.prepare_computations(vis_xs_record.value());
@@ -191,6 +197,39 @@ namespace raytracer
                 }
 
                 return ss.str();
+        }
+
+        /// --------------------------------------------------------------------
+        /// returns true if the point(pt), is in shadow w.r.t the light sources
+        /// making up the entire scene. returns false otherwise.
+        bool world::is_shadowed(tuple const& pt) const
+        {
+                /// ------------------------------------------------------------
+                /// cast a ray, called shadow-ray, from the point towards the
+                /// light source.
+                ///
+                /// if shadow-ray intersects something between point, and
+                /// light-source, then the point is considered to be in shadow.
+                for (auto const light : light_list_) {
+                        auto const pt_to_light = light.position() - pt;
+                        auto const shadow_ray  = ray_t(pt, normalize(pt_to_light));
+                        auto const shadow_xs   = intersect(shadow_ray);
+                        auto const hit	       = visible_intersection(shadow_xs);
+
+                        if (!hit) {
+                                continue;
+                        }
+
+                        /// ok, we have an intersection
+                        auto const shadow_hit_where = hit.value().where();
+                        auto const dist_to_light    = magnitude(pt_to_light);
+
+                        if (shadow_hit_where > 0.0 && shadow_hit_where < dist_to_light) {
+                                return true;
+                        }
+                }
+
+                return false;
         }
 
         /*
