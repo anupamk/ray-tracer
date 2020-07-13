@@ -22,17 +22,17 @@ Simple ray-tracer with some tests
         executable files are generated:
 
             - build/test/ray-tracer-test ........................ ray tracer tests
-            - build/src/virtual-cannon .......................... trace path of virtual cannonball
-            - build/src/ray-tracer .............................. just a place holder
-            - build/src/clock-dial .............................. clock dial using matrix transforms
-            - build/src/sphere-silhouette ....................... silhouette of a sphere
-            - build/src/st-phong-sphere ......................... phong shaded sphere
-            - build/src/mt-phong-sphere ......................... multi-threaded phong shaded sphere
+            - build/src/ch-02-virtual-cannon .................... trace path of virtual cannonball
+            - build/src/ch-04-clock-dial ........................ clock dial using matrix transforms
+            - build/src/ch-05-sphere-silhouette ................. silhouette of a sphere
+            - build/src/ch-06-st-phong-sphere ................... single-threaded phong-illuminated sphere
+            - build/src/ch-06-mt-phong-sphere ................... multi-threaded phong-illuminated sphere
+            - build/src/ch-08-making-a-scene .................... single+multi threaded phong-illuminated scene with shadows
 
         Just run any program as you would normally !
 
-    B. Brief note on 'mt-phong-sphere'
-       -------------------------------
+    B. Brief note on 'ch-06-mt-phong-sphere'
+       -------------------------------------
        For this particular case, i am using a concurrent mpmc lockless
        queue, aka 'work-queue' for dispatching work items to
        workers/renderers.
@@ -64,7 +64,7 @@ Simple ray-tracer with some tests
        took, a log of which looks like so:
 
        ,----
-       | INFO   | 2020-06-21 12:00:08.576 | /home/anupam/source-code/c++/ray-tracer/src/phong_sphere_main.cpp : 00063 | total render time: 848 (ms)
+       | INFO   | 2020-06-21 12:00:08.576 | /home/anupam/source-code/c++/ray-tracer/src/st_phong_sphere_main.cpp : 00063 | total render time: 848 (ms)
        `----
 
        Thus, it took '848' milliseconds to render a scene. This is
