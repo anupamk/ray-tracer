@@ -40,7 +40,9 @@ set (RAYTRACER_LIB_SOURCES
   intersection_info.hpp
   intersection_info.cpp
   camera.hpp
-  camera.cpp)
+  camera.cpp
+  plane.hpp
+  plane.cpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES} )
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
@@ -101,3 +103,15 @@ target_link_libraries(ch-08-making-a-scene PRIVATE common)
 target_link_libraries(ch-08-making-a-scene PRIVATE raytracer_lib)
 target_link_libraries(ch-08-making-a-scene PRIVATE concurrentqueue)
 target_link_libraries(ch-08-making-a-scene PRIVATE pthread)
+
+# ------------------------------------------------------------------------------
+# chapter-09: render with planes
+#
+# render a scene with multiple objects, light sources and shadows using planes
+#
+# both single and multi threaded rendering is supported.
+add_executable(ch-09-render-with-plane render_with_plane.cpp)
+target_link_libraries(ch-09-render-with-plane PRIVATE common)
+target_link_libraries(ch-09-render-with-plane PRIVATE raytracer_lib)
+target_link_libraries(ch-09-render-with-plane PRIVATE concurrentqueue)
+target_link_libraries(ch-09-render-with-plane PRIVATE pthread)
