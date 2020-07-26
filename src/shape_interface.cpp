@@ -10,7 +10,7 @@ namespace raytracer
         shape_interface::shape_interface()
             : xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , inv_xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
-            , material_(material())
+            , material_()
         {
         }
 
@@ -30,6 +30,14 @@ namespace raytracer
                 this->inv_xform_ = inverse(M);
 
                 return;
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to return object-space coordinates of a
+        /// specific point on the shape.
+        tuple shape_interface::world_to_local(tuple const& world_pt) const
+        {
+                return inv_transform() * world_pt;
         }
 
         ///

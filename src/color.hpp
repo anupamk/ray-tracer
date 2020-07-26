@@ -89,10 +89,17 @@ namespace raytracer
         }
 
         /// scalar multiplication
-        constexpr color operator*(color a, float f)
+        constexpr color operator*(color a, double f)
         {
                 return color(a.R() * f, a.G() * f, a.B() * f);
         }
+
+        /// scalar addition
+        constexpr color operator+(color a, double f)
+        {
+                return color(a.R() + f, a.G() + f, a.B() + f);
+        }
+
 
         ///
         /// hadamard/schur product of 'color * color', just multiply

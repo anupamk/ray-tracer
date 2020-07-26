@@ -13,6 +13,7 @@
 #include "tuple.hpp"
 #include "ray.hpp"
 #include "assert_utils.h"
+#include "uv_point.hpp"
 
 namespace raytracer
 {
@@ -37,6 +38,11 @@ namespace raytracer
                 /// normal vector at a give point on the plane (in local
                 /// coordinates)
                 tuple normal_at_local(tuple const&) const override;
+
+                /// ------------------------------------------------------------
+                /// map a point on the surface of the plane to a corresponding
+                /// uv-value (on a texture)
+                uv_point map_to_uv(tuple const&) const override;
         };
 
         std::ostream& operator<<(std::ostream& os, plane const& P);

@@ -37,8 +37,6 @@ namespace raytracer
         {
                 auto col_index = 0;
                 for (const auto ith_row : row_list) {
-                        ASSERT(ith_row.size() == cols_);
-
                         std::copy(ith_row.begin(), ith_row.end(), &data_[col_index]);
                         col_index += cols_;
                 }
@@ -186,7 +184,6 @@ namespace raytracer
         ///
         fsize_dense2d_matrix_t& fsize_dense2d_matrix_t::operator*=(fsize_dense2d_matrix_t const& rhs)
         {
-                ASSERT(this->num_cols() == rhs.num_rows());
                 fsize_dense2d_matrix_t lhs(this->num_rows(), rhs.num_cols());
 
                 if (likely((lhs.num_cols() == 4) && (lhs.num_rows() == 4))) {
@@ -274,9 +271,6 @@ namespace raytracer
         ///
         tuple operator*(fsize_dense2d_matrix_t const& M, tuple const& N)
         {
-                ASSERT(M.num_rows() == 4);
-                ASSERT(M.num_cols() == 4);
-
                 /// ------------------------------------------------------------
                 /// an 'unrolled' specialization can be used i.e. no
                 /// need to go through elaborate/generic matrix-tuple
@@ -315,9 +309,6 @@ namespace raytracer
         ///
         fsize_dense2d_matrix_t submatrix(fsize_dense2d_matrix_t const& M, size_t rm_row, size_t rm_col)
         {
-                ASSERT(rm_row <= M.num_rows());
-                ASSERT(rm_col <= M.num_cols());
-
                 fsize_dense2d_matrix_t ret(M.num_rows() - 1, M.num_cols() - 1);
 
                 for (size_t src_i = 0, dst_i = 0; src_i < M.num_rows(); src_i++) {
@@ -348,9 +339,6 @@ namespace raytracer
         ///
         static inline double compute_2x2_matrix_determinant_(fsize_dense2d_matrix_t const& M)
         {
-                ASSERT(M.num_rows() == 2);
-                ASSERT(M.num_cols() == 2);
-
                 auto const result = (M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0));
                 return result;
         }
@@ -360,8 +348,6 @@ namespace raytracer
         ///
         double determinant(fsize_dense2d_matrix_t const& M)
         {
-                /// input matrix must be a square-matrix !
-                ASSERT(M.num_rows() == M.num_cols());
                 double result = 0.0;
 
                 /// base case

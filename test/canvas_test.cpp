@@ -75,10 +75,6 @@ TEST_CASE("canvas::save(...)")
         auto const canvas_fname = "/tmp/rt-test-canvas";
         c.save(canvas_fname);
 
-        /*
-        **/
-
-
         /// expected data format
         const std::vector<std::string> have = {
                 "P3",

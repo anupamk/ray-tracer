@@ -68,7 +68,7 @@ Simple ray-tracer with some tests
        `----
 
        Thus, it took '848' milliseconds to render a scene. This is
-       '$13' by the way in awk parlance [**].
+       '$13' by the way in awk parlance [AWK-REF].
 
        Multiple such runs (as explained below) are then used to
        compute both the mean, and standard-deviation of rendering
@@ -89,7 +89,7 @@ Simple ray-tracer with some tests
        The core of mean+standard deviation numbers reported above are
        computed via the following quickly hacked awk snippet:
 
-       ,---- [ for $13 see above ** ]
+       ,---- [ for $13 see AWK-REF above ]
        | awk '{sum += $13; sum_square += $13 * $13} END {mean = sum/NR; std_dev = sqrt(sum_square/NR - (sum/NR)^2); printf("mean:%f, std-dev:%f\n", mean, std_dev)}' | ${log-file}
        `----
 

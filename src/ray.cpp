@@ -71,7 +71,7 @@ namespace raytracer
         /// this function is called to return the result of a ray intersecting a
         /// shape
         ///
-        std::optional<intersection_records> ray_t::intersect(std::shared_ptr<shape_interface> const& S) const
+        std::optional<intersection_records> ray_t::intersect(std::shared_ptr<const shape_interface> const& S) const
         {
                 const auto inv_ray = this->transform(S->inv_transform());
                 return S->intersect({}, inv_ray);

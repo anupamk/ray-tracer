@@ -14,6 +14,7 @@
 #include "color.hpp"
 #include "sphere.hpp"
 #include "matrix_transformations.hpp"
+#include "solid_pattern.hpp"
 
 namespace raytracer
 {
@@ -65,8 +66,8 @@ namespace raytracer
                 /// --------------------------------------------------------------------------------
                 /// setup sphere
                 auto sphere_material	= material();
-                auto const sphere_color = color(1.0, 0.2, 1.0);
-                sphere_material.set_color(sphere_color).set_specular(0.7);
+                auto const sphere_pattern = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.2, 1.0));
+                sphere_material.set_pattern(sphere_pattern).set_specular(0.7);
 
                 auto sphere_01 = std::make_shared<raytracer::sphere>();
                 sphere_01->set_material(sphere_material);

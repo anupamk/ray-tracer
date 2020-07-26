@@ -42,7 +42,25 @@ set (RAYTRACER_LIB_SOURCES
   camera.hpp
   camera.cpp
   plane.hpp
-  plane.cpp)
+  plane.cpp
+  pattern_interface.hpp
+  pattern_interface.cpp
+  binary_pattern.hpp
+  solid_pattern.hpp
+  striped_pattern.hpp
+  gradient_pattern.hpp
+  ring_pattern.hpp
+  checkers_pattern.hpp
+  gradient_ring_pattern.hpp
+  blended_pattern.hpp
+  perlin_noise.hpp
+  perlin_noise_pattern.hpp
+  texture_2d_pattern.hpp
+  uv_pattern_interface.hpp
+  uv_point.cpp
+  uv_point.hpp
+  uv_checkers.hpp
+  uv_noise_texture.hpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES} )
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
@@ -115,3 +133,39 @@ target_link_libraries(ch-09-render-with-plane PRIVATE common)
 target_link_libraries(ch-09-render-with-plane PRIVATE raytracer_lib)
 target_link_libraries(ch-09-render-with-plane PRIVATE concurrentqueue)
 target_link_libraries(ch-09-render-with-plane PRIVATE pthread)
+
+# ------------------------------------------------------------------------------
+# chapter-10: render with patterns
+#
+# render a scene with multiple objects, light sources and shadows
+# using planes and different patterns
+#
+# both single and multi threaded rendering is supported.
+add_executable(ch-10-render-with-patterns render_with_patterns.cpp)
+target_link_libraries(ch-10-render-with-patterns PRIVATE common)
+target_link_libraries(ch-10-render-with-patterns PRIVATE raytracer_lib)
+target_link_libraries(ch-10-render-with-patterns PRIVATE concurrentqueue)
+target_link_libraries(ch-10-render-with-patterns PRIVATE pthread)
+
+# ------------------------------------------------------------------------------
+# chapter-10: render textures
+#
+# render a scene with perlin noise
+#
+# both single and multi threaded rendering is supported.
+add_executable(ch-10-render-textures render_textures.cpp)
+target_link_libraries(ch-10-render-textures PRIVATE common)
+target_link_libraries(ch-10-render-textures PRIVATE raytracer_lib)
+
+# ------------------------------------------------------------------------------
+# chapter-10: render with patterns
+#
+# render a scene with multiple objects, light sources and shadows
+# using planes and different patterns
+#
+# both single and multi threaded rendering is supported.
+add_executable(ch-10-render-with-textures render_with_textures.cpp)
+target_link_libraries(ch-10-render-with-textures PRIVATE common)
+target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_lib)
+target_link_libraries(ch-10-render-with-textures PRIVATE concurrentqueue)
+target_link_libraries(ch-10-render-with-textures PRIVATE pthread)

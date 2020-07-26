@@ -48,7 +48,7 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// a ray can intersect the plane at only a single
                 /// point. co-planar rays are not interesting at all
-                auto const xs_point = -R.origin().y()/ray_y_dir;
+                auto const xs_point = -R.origin().y() / ray_y_dir;
 
                 return intersection_records{intersection_record(xs_point, shared_from_this())};
         }
@@ -59,6 +59,17 @@ namespace raytracer
         {
                 /// for an xz-plane, the normal is always along the y-axis
                 return create_vector(0.0, 1.0, 0.0);
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to map a point on the plane to corresponding
+        /// uv-value (on a texture)
+        uv_point plane::map_to_uv(tuple const& pt) const
+        {
+                auto const u_val = modulus(pt.x(), 1.0);
+                auto const v_val = modulus(pt.z(), 1.0);
+
+                return uv_point(u_val, v_val);
         }
 
         /// --------------------------------------------------------------------

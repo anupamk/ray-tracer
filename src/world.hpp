@@ -21,7 +21,7 @@ namespace raytracer
         {
             private:
                 std::vector<point_light> light_list_;
-                std::vector<std::shared_ptr<shape_interface>> shape_list_;
+                std::vector<std::shared_ptr<const shape_interface>> shape_list_;
 
             public:
                 world();
@@ -35,12 +35,11 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// shape operations
-                void add(std::shared_ptr<shape_interface>);
-                std::vector<std::shared_ptr<shape_interface>>& modify_shapes();
+                void add(const std::shared_ptr<const shape_interface>);
 
             public:
                 std::vector<point_light> const& lights() const;
-                std::vector<std::shared_ptr<shape_interface>> const& shapes() const;
+                std::vector<std::shared_ptr<const shape_interface>> const& shapes() const;
 
                 /// sorted list of intersections that a ray makes in this world
                 intersection_records intersect(ray_t const&) const;

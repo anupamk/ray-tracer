@@ -9,6 +9,7 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+#include <cmath>
 
 /// our includes
 #include "sphere.hpp"
@@ -84,6 +85,44 @@ namespace raytracer
         {
                 return create_vector(P.x(), P.y(), P.z());
         }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to map a point on the surface of the sphere
+        /// to a corresponding uv-value. this can then be used to determine the
+        /// color of the sphere at that point (via a uv-texture)
+        uv_point sphere::map_to_uv(tuple const& P) const
+        {
+                /// ------------------------------------------------------------
+                /// compute the azimuthal (along the x-z axis) angle theta,
+                /// which varies over the range (-π..π]
+                ///
+                /// theta increases clockwise when viewed from above. but this
+                /// will be fixed later.
+                auto const theta = std::atan2(P.x(), P.z());
+
+                /// ------------------------------------------------------------
+                /// compute the polar (along the y-x axis) angle which varies
+                /// over the range [0..π].
+                auto const phi = std::acos(P.y()/radius());
+
+                /// ------------------------------------------------------------
+                /// 0.5 < raw_u ≤ 0.5
+                auto const raw_u = theta / (2 * PI);
+
+                /// ------------------------------------------------------------
+                /// fix the direction as well i.e subtract from 1 so that it
+                /// increases counter-clockwise (when viewed from above)
+                auto const u = 1 - (raw_u + 0.5);
+
+                /// ------------------------------------------------------------
+                /// polar angle is '0' at the south pole of the sphere and is
+                /// '1' at the north pole. so we flip it over
+                auto const v = 1.0 - phi / PI;
+
+                return uv_point(u, v);
+        }
+
+
 
         ///
         /// 'reasonably' formatted information of the sphere

@@ -1,6 +1,7 @@
 #include "world.hpp"
 
 /// c++ includes
+#include "solid_pattern.hpp"
 #include <algorithm>
 #include <ios>
 #include <iostream>
@@ -19,6 +20,7 @@
 #include "phong_illumination.hpp"
 #include "intersection_record.hpp"
 #include "tuple.hpp"
+#include "solid_pattern.hpp"
 
 namespace raytracer
 {
@@ -78,18 +80,10 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// this function is called to add a light to the world
-        void world::add(std::shared_ptr<shape_interface> s)
+        void world::add(const std::shared_ptr<const shape_interface> s)
         {
                 shape_list_.push_back(s);
                 return;
-        }
-
-        /// --------------------------------------------------------------------
-        /// this function returns a reference to the list of shapes for further
-        /// modification
-        std::vector<std::shared_ptr<shape_interface>>& world::modify_shapes()
-        {
-                return shape_list_;
         }
 
         /// --------------------------------------------------------------------
@@ -101,7 +95,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// shapes in the world
-        std::vector<std::shared_ptr<shape_interface>> const& world::shapes() const
+        std::vector<std::shared_ptr<const shape_interface>> const& world::shapes() const
         {
                 return shape_list_;
         }
@@ -143,12 +137,12 @@ namespace raytracer
 
                 // clang-format off
                 for (auto const a_light : light_list_) {
-                        shade_color += phong_illumination(xs_info.over_position(),               /// point of intersection
-                                                          xs_info.what_object()->get_material(), /// object-material
-                                                          a_light,				 /// the light
-                                                          xs_info.eye_vector(),                  /// eye
-                                                          xs_info.normal_vector(),		 /// normal
-                                                          point_in_shadow);			 /// shadowed ?
+                        shade_color += phong_illumination(xs_info.what_object(),   /// object-material
+                                                          xs_info.over_position(), /// point of intersection
+                                                          a_light,		   /// the light
+                                                          xs_info.eye_vector(),    /// eye
+                                                          xs_info.normal_vector(), /// normal
+                                                          point_in_shadow);	   /// shadowed ?
                 }
                 // clang-format on
 
@@ -255,7 +249,8 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// default unit sphere, with elaborate properties
                 auto sphere_01                = std::make_shared<raytracer::sphere>();
-                auto const sphere_01_material = material().set_color(color(0.8, 1.0, 0.6))
+                auto sphere_01_pattern        = std::make_shared<solid_pattern>(color(0.8, 1.0, 0.6));
+                auto const sphere_01_material = material().set_pattern(sphere_01_pattern)
                                                           .set_diffuse(0.7)
                                                           .set_specular(0.2);
 

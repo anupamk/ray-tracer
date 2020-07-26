@@ -155,27 +155,6 @@ TEST_CASE("world::color_at(...) test")
 }
 
 /// ----------------------------------------------------------------------------
-/// color with an intersection behind the ray
-TEST_CASE("world::color_at(...) test")
-{
-        /// a default world with modified material
-        auto w = RT::world::create_default_world();
-        w.modify_shapes()[0]->set_material(RT::material().set_ambient(1.0));
-        w.modify_shapes()[1]->set_material(RT::material().set_ambient(1.0));
-
-        /// and a ray
-        auto const r_origin    = RT::create_point(0.0, 0.0, 0.75);
-        auto const r_direction = RT::create_vector(0.0, 0.0, -1.0);
-        auto const r	       = RT::ray_t(r_origin, r_direction);
-
-        /// intersection
-        auto const got_color = w.color_at(r);
-        auto const exp_color = w.shapes()[1]->get_material().get_color();
-
-        CHECK(got_color == exp_color);
-}
-
-/// ----------------------------------------------------------------------------
 /// is a point in shadow ? case-1 : when nothing is co-linear between point and
 /// light.
 TEST_CASE("world::is_shadowed(...) test")

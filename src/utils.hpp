@@ -11,7 +11,6 @@
 /// our includes
 #include "constants.hpp"
 
-
 namespace raytracer
 {
 ///
@@ -110,10 +109,31 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// ensure that 'value' lies in [min_val, max_val] range
         template <typename T>
-        constexpr typename std::enable_if_t<std::is_arithmetic_v<T>, T>
-        clamp_in_range(T value, T min_val, T max_val)
+        constexpr typename std::enable_if_t<std::is_arithmetic_v<T>, T> clamp_in_range(T value, T min_val,
+                                                                                       T max_val)
         {
                 return std::max(min_val, std::min(value, max_val));
+        }
+
+        /// --------------------------------------------------------------------
+        /// faster floor function ?
+        constexpr int32_t fast_floor(float val)
+        {
+                int32_t int_val = static_cast<int32_t>(val);
+                return (val < int_val) ? (int_val - 1) : (int_val);
+        }
+
+        /// --------------------------------------------------------------------
+        /// compute floating-point modulus
+        inline double modulus(double num, double denom)
+        {
+                auto const val_mod = fmod(num, denom);
+
+                if (val_mod < 0.0) {
+                        return val_mod + denom;
+                }
+
+                return val_mod;
         }
 
 } // namespace raytracer

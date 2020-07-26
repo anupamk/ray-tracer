@@ -118,6 +118,11 @@ namespace raytracer
                 return (a * -1.0);
         }
 
+        constexpr tuple operator+(tuple a, double f)
+        {
+                return tuple(a.x() + f, a.y() + f, a.z() + f, a.tuple_type());
+        }
+
         /// create a point using tuple as the underlying interface.
         constexpr tuple create_point(double x, double y, double z)
         {

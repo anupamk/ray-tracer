@@ -215,9 +215,9 @@ static RT::color color_pixel(uint32_t x_coord,		     /// x-coordinate
 	auto hit_position   = ray_to_wall.position(hit_record.where());
 	auto surface_normal = hit_record.what_object()->normal_at_world(hit_position);
 
-	return RT::phong_illumination(hit_position,		    /// hit-point
-				      params.shape->get_material(), /// shape's material
-				      params.light,		    /// light
-				      viewer_at,		    /// viewer
-				      surface_normal);		    /// normal at hit-point
+	return RT::phong_illumination(params.shape,    /// shape
+				      hit_position,    /// hit-point
+				      params.light,    /// light
+				      viewer_at,       /// viewer
+				      surface_normal); /// normal at hit-point
 }

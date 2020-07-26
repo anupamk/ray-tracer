@@ -5,12 +5,14 @@
 #include <algorithm>
 #include <memory>
 #include <optional>
+#include <string>
 
 /// our includes
 #include "intersection_record.hpp"
 #include "matrix.hpp"
 #include "material.hpp"
 #include "badge.hpp"
+#include "uv_point.hpp"
 
 namespace raytracer
 {
@@ -68,6 +70,10 @@ namespace raytracer
 		///
 		tuple normal_at_world(tuple const&) const;
 
+                /// ------------------------------------------------------------
+                /// convert world-space coordinates into local
+                tuple world_to_local(tuple const&) const;
+
 		///
 		/// adjust material properties of a shape
 		///
@@ -77,6 +83,11 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// stringified representation of a shape
                 virtual std::string stringify() const = 0;
+
+                /// ------------------------------------------------------------
+                /// map a point on the surface of the shape to a corresponding
+                /// uv-value (on a texture)
+                virtual uv_point map_to_uv(tuple const&) const = 0;
 	};
 } // namespace raytracer
 

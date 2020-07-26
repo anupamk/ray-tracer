@@ -20,7 +20,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_options(
   -fdiagnostics-color=never
-  -g
+  -ggdb
   -O2
   -pipe
   -std=c++17

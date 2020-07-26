@@ -45,7 +45,7 @@ namespace raytracer
                 tuple position(double t) const;
                 ray_t transform(fsize_dense2d_matrix_t const& M) const;
                 std::string stringify() const;
-                std::optional<intersection_records> intersect(std::shared_ptr<shape_interface> const&) const;
+                std::optional<intersection_records> intersect(std::shared_ptr<const shape_interface> const&) const;
 
                 /// return some information about the intersection
                 intersection_info_t prepare_computations(intersection_record) const;

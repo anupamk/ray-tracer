@@ -31,6 +31,7 @@
 #include "sphere.hpp"
 #include "shape_interface.hpp"
 #include "logging.h"
+#include "solid_pattern.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
@@ -215,7 +216,8 @@ static RT::world create_world()
 {
 	/// --------------------------------------------------------------------
 	/// wall material
-	auto const wall_material = RT::material().set_color(RT::color(1.0, 0.9, 0.9)).set_specular(0.0);
+	auto const wall_pattern	 = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.9, 0.9));
+	auto const wall_material = RT::material().set_pattern(wall_pattern).set_specular(0.0);
 
 	/// --------------------------------------------------------------------
 	/// 01: floor sphere
@@ -243,52 +245,62 @@ static RT::world create_world()
 
 	/// --------------------------------------------------------------------
 	/// sphere-01
-	auto sphere_01 = std::make_shared<RT::sphere>();
+	auto sphere_01	       = std::make_shared<RT::sphere>();
+	auto sphere_01_pattern = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.0, 0.0));
+
 	sphere_01->transform(RT_XFORM::create_3d_translation_matrix(-3.0, 3.0, -2.0) *
 			     RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
 
 	// clang-format off
 	sphere_01->set_material(RT::material()
-                                .set_color(RT::color(1.0, 0.0, 0.0))
+                                .set_pattern(sphere_01_pattern)
                                 .set_diffuse(0.8)
                                 .set_specular(0.3));
 	// clang-format on
 
 	/// --------------------------------------------------------------------
 	/// sphere-02
-	auto sphere_02 = std::make_shared<RT::sphere>();
+	auto sphere_02	       = std::make_shared<RT::sphere>();
+	auto sphere_02_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 1.0, 0.0));
+
 	sphere_02->transform(RT_XFORM::create_3d_translation_matrix(-10.0, 3.0, -12.0) *
 			     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
 	// clang-format off
 	sphere_02->set_material(RT::material()
-                                .set_color(RT::color(0.0, 1.0, 0.0))
+                                .set_pattern(sphere_02_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
 	// clang-format on
 
 	/// --------------------------------------------------------------------
 	/// sphere-03
-	auto sphere_03 = std::make_shared<RT::sphere>();
+	auto sphere_03	       = std::make_shared<RT::sphere>();
+	auto sphere_03_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 0.0, 1.0));
+
 	sphere_03->transform(RT_XFORM::create_3d_translation_matrix(5.0, 4.0, -7.0) *
 			     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
 	// clang-format off
 	sphere_03->set_material(RT::material()
-                                .set_color(RT::color(0.0, 0.0, 1.0))
+                                .set_pattern(sphere_03_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
 	// clang-format on
 
 	/// --------------------------------------------------------------------
 	/// 04: sphere-04
-	auto sphere_04 = std::make_shared<RT::sphere>();
+	auto sphere_04	       = std::make_shared<RT::sphere>();
+	auto sphere_04_pattern = std::make_shared<RT::solid_pattern>(RT::color(225.0 / 255.0, /// red
+									       213.0 / 255.0, /// green
+									       0.0 / 255.0)); /// blue
+
 	sphere_04->transform(RT_XFORM::create_3d_translation_matrix(-5.5, 2.0, -18.0) *
 			     RT_XFORM::create_3d_scaling_matrix(1.5, 1.5, 1.5));
 
 	// clang-format off
 	sphere_04->set_material(RT::material()
-                                .set_color(RT::color(225.0/255.0, 213.0/255.0, 0.0/255.0))
+                                .set_pattern(sphere_04_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
 	// clang-format on
@@ -325,7 +337,7 @@ static RT::camera create_camera()
 	auto look_to	   = RT::create_point(0.0, -1.0, 5.0);
 	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
 	auto xform	   = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
-        
+
 	camera_01.transform(xform);
 
 	return camera_01;
