@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
         /// now write the canvas data out.
         auto const img_fname = "virtual-cannon.ppm";
-        canvas.save(img_fname);
+        canvas.write(img_fname);
 
         LOG_INFO("image-file: '%s' generated", img_fname);
 

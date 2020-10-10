@@ -54,7 +54,7 @@ namespace raytracer
                 ss << "{"
                    << "width: "  << this->width_  << ", "
                    << "height: " << this->height_ << ", "
-                   << "type: "   << this->canvas_type_str_[type_index]
+                   << "type: "   << canvas_type_str_[type_index]
                    << "}";
                 // clang-format on
 
@@ -63,15 +63,15 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// save a canvas to persistent store
-        void canvas::save(std::string const& fname) const
+        void canvas::write(std::string const& fname) const
         {
                 switch (this->type_) {
                 case PPM_CANVAS_BINARY:
-                        this->save_binary(fname);
+                        this->write_binary(fname);
                         break;
 
                 case PPM_CANVAS_ASCII:
-                        this->save_ascii(fname);
+                        this->write_ascii(fname);
                         break;
 
                 default:
@@ -201,7 +201,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// save canvas data in binary format i.e. P6
-        void canvas::save_binary(std::string const& fname) const
+        void canvas::write_binary(std::string const& fname) const
         {
                 FILE* dst_file = fopen(fname.c_str(), "wb"); /// 'b' ==> binary
 
@@ -221,7 +221,7 @@ namespace raytracer
 
                 /// step-2 : add image data (row at a time)
                 for (size_t i = 0; i < this->height_; i++) {
-                        auto raw_data	  = std::move(get_ppm_row(i));
+                        auto raw_data	  = get_ppm_row(i);
                         auto raw_data_buf = raw_data.get();
 
                         fwrite(raw_data_buf, sizeof(unsigned char), ppm_num_values(), dst_file);
@@ -236,7 +236,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// save canvas data in ascii format i.e. P3
-        void canvas::save_ascii(std::string const& fname) const
+        void canvas::write_ascii(std::string const& fname) const
         {
                 /// ------------------------------------------------------------
                 /// generate a ppm-fmt representation of a row of pixels

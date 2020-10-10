@@ -100,7 +100,7 @@ static inline void st_render_world(RT::world const& w, RT::camera const& c, std:
 	LOG_INFO("total render time: %ld (ms)", render_time_ms);
 
 	if (!dst_fname.empty()) {
-		rendered_canvas.save(dst_fname);
+		rendered_canvas.write(dst_fname);
 		LOG_INFO("saved canvas in: '%s'", dst_fname.c_str());
 	} else {
 		rendered_canvas.show();
@@ -167,7 +167,7 @@ static inline void mt_render_world(RT::world const& w, RT::camera const& c, std:
 	LOG_INFO("total render time: %ld (ms)", render_time_ms);
 
 	if (!dst_fname.empty()) {
-		rendered_canvas.save(dst_fname);
+		rendered_canvas.write(dst_fname);
 		LOG_INFO("saved canvas in: '%s'", dst_fname.c_str());
 	} else {
 		rendered_canvas.show();

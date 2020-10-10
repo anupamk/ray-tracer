@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 
 	/// write canvas data out
 	auto const img_fname = "clock-face.ppm";
-	canvas.save(img_fname);
+	canvas.write(img_fname);
 	LOG_INFO("image-file: '%s' generated", img_fname);
 
 	return 0;

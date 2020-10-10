@@ -15,33 +15,33 @@
 /// c++ includes
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 
 /// our includes
 #include "color.hpp"
 #include "logging.h"
 
-
 namespace raytracer
 {
+	/// ------------------------------------------------------------
+	/// what types of canvas we support
+	enum canvas_type {
+		PPM_CANVAS_INVALID = 0,
+		PPM_CANVAS_ASCII   = 1,
+		PPM_CANVAS_BINARY  = 2,
+	};
+
+	const char* const canvas_type_str_[PPM_CANVAS_BINARY + 1] = {
+		[PPM_CANVAS_INVALID] = "PPM_CANVAS_INVALID",
+		[PPM_CANVAS_ASCII]   = "PPM_CANVAS_ASCII",
+		[PPM_CANVAS_BINARY]  = "PPM_CANVAS_BINARY",
+	};
+
 	/// ----------------------------------------------------------------------------
 	/// netpbm based color canvas
 	class canvas
 	{
-	    private:
-		/// what types of canvas we support
-		enum canvas_type {
-			PPM_CANVAS_INVALID = 0,
-			PPM_CANVAS_ASCII   = 1,
-			PPM_CANVAS_BINARY  = 2,
-		};
-
-		const char* const canvas_type_str_[PPM_CANVAS_BINARY + 1] = {
-			[PPM_CANVAS_INVALID] = "PPM_CANVAS_INVALID",
-			[PPM_CANVAS_ASCII]   = "PPM_CANVAS_ASCII",
-			[PPM_CANVAS_BINARY]  = "PPM_CANVAS_BINARY",
-		};
-
 	    private:
 		std::size_t const width_{0};
 		std::size_t const height_{0};
@@ -49,14 +49,19 @@ namespace raytracer
 		std::unique_ptr<color[]> buf_{nullptr};
 
 	    public:
+		/// ------------------------------------------------------------
 		/// named constructors
 		static canvas create_ascii(std::size_t width, std::size_t height);
 		static canvas create_binary(std::size_t width, std::size_t height);
 
+		/// ------------------------------------------------------------
+		/// read a ppm file and generate a canvas
+		static std::optional<canvas> load_from_file(std::string file_name);
+
 	    public:
 		/// ------------------------------------------------------------
 		/// ACCESSORS
-                
+
 		constexpr std::size_t width() const
 		{
 			return this->width_;
@@ -76,7 +81,7 @@ namespace raytracer
 		std::string stringify() const;
 
 		/// save canvas to a persistent store
-		void save(std::string const& fname) const;
+		void write(std::string const& fname) const;
 
 		/// display contents of canvas using sdl2
 		void show() const;
@@ -104,12 +109,14 @@ namespace raytracer
 		/// ∵ named-constructor idiom
 		canvas(std::size_t width, std::size_t height, canvas_type type);
 
+	    private:
+		/// ------------------------------------------------------------
 		/// save the to a persistent store
-		void save_binary(std::string const&) const;
-		void save_ascii(std::string const&) const;
+		void write_binary(std::string const&) const;
+		void write_ascii(std::string const&) const;
 
 		void ppm_color_at(size_t x, size_t y, unsigned char& r, unsigned char& g,
-				  unsigned char& b) const;
+		                  unsigned char& b) const;
 
 		std::unique_ptr<unsigned char[]> get_ppm_row(size_t y) const;
 	};

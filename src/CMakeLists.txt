@@ -17,6 +17,8 @@ set (RAYTRACER_LIB_SOURCES
   color.cpp
   canvas.hpp
   canvas.cpp
+  canvas_ppm_writer.cpp
+  canvas_ppm_reader.cpp
   matrix.hpp
   matrix.cpp
   matrix_transformations.hpp
