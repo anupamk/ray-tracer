@@ -46,12 +46,12 @@ namespace raytracer
          *     and viewer (or eye) vector and is controlled by the 'shininess'
          *     of the surface.
         **/
-	color phong_illumination(shared_shape_interface shape,	    /// shape
-				 tuple const& surface_point,	    /// where ray intersects surface
-				 point_light const& incident_light, /// light illuminating the scene
-				 tuple const& eye_vector,	    /// camera || viewer
-				 tuple const& surface_normal,	    /// normal at intersection
-				 bool is_shadowed)		    /// is the point shadowed ?
+	color phong_illumination(shared_shape_interface shape,      /// shape
+	                         tuple const& surface_point,        /// where ray intersects surface
+	                         point_light const& incident_light, /// light illuminating the scene
+	                         tuple const& eye_vector,           /// camera || viewer
+	                         tuple const& surface_normal,       /// normal at intersection
+	                         bool is_shadowed)                  /// is the point shadowed ?
 	{
 		// clang-format off
 

@@ -38,7 +38,8 @@ namespace raytracer
 		/// this function is called to return zero or more intersections
 		/// of a shape with a ray 'R'
 		///
-		virtual std::optional<intersection_records> intersect(the_badge<ray_t>, ray_t const& R) const = 0;
+		virtual std::optional<intersection_records> intersect(the_badge<ray_t>,
+		                                                      ray_t const& R) const = 0;
 
 		///
 		/// this function is called to return the current transform
@@ -70,9 +71,9 @@ namespace raytracer
 		///
 		tuple normal_at_world(tuple const&) const;
 
-                /// ------------------------------------------------------------
-                /// convert world-space coordinates into local
-                tuple world_to_local(tuple const&) const;
+		/// ------------------------------------------------------------
+		/// convert world-space coordinates into local
+		tuple world_to_local(tuple const&) const;
 
 		///
 		/// adjust material properties of a shape
@@ -80,14 +81,14 @@ namespace raytracer
 		material get_material() const;
 		void set_material(material const&);
 
-                /// ------------------------------------------------------------
-                /// stringified representation of a shape
-                virtual std::string stringify() const = 0;
+		/// ------------------------------------------------------------
+		/// stringified representation of a shape
+		virtual std::string stringify() const = 0;
 
-                /// ------------------------------------------------------------
-                /// map a point on the surface of the shape to a corresponding
-                /// uv-value (on a texture)
-                virtual uv_point map_to_uv(tuple const&) const = 0;
+		/// ------------------------------------------------------------
+		/// map a point on the surface of the shape to a corresponding
+		/// uv-value (on a texture)
+		virtual uv_point map_to_uv(tuple const&) const = 0;
 	};
 } // namespace raytracer
 

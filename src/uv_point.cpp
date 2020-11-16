@@ -14,26 +14,26 @@
 
 namespace raytracer
 {
-        /// --------------------------------------------------------------------
-        /// stringified representation of a uv_point
-        std::string uv_point::stringify() const
-        {
-                std::stringstream ss("");
+	/// --------------------------------------------------------------------
+	/// stringified representation of a uv_point
+	std::string uv_point::stringify() const
+	{
+		std::stringstream ss("");
 
-                // clang-format off
+		// clang-format off
                 ss << std::fixed << std::left
                    << "u: " << this->u() << ", "
                    << "v: " << this->v();
-                // clang-format on
+		// clang-format on
 
-                return ss.str();
-        }
+		return ss.str();
+	}
 
-        /// --------------------------------------------------------------------
-        /// 'reasonably' formatted output
-        std::ostream& operator<<(std::ostream& os, uv_point const& a)
-        {
-                return os << a.stringify();
-        }
+	/// --------------------------------------------------------------------
+	/// 'reasonably' formatted output
+	std::ostream& operator<<(std::ostream& os, uv_point const& a)
+	{
+		return os << a.stringify();
+	}
 
 } // namespace raytracer

@@ -15,7 +15,7 @@
 
 namespace raytracer
 {
-        /*
+	/*
          * this defines a ray and it's attributes using parametric form of the
          * equation of a straight line.
          *
@@ -28,31 +28,32 @@ namespace raytracer
          *       t : +ve ==> point 'in front' of origin
          *       t : -ve ==> point 'behind' the origin
         **/
-        class ray_t
-        {
-            private:
-                tuple origin_;
-                tuple direction_;
+	class ray_t
+	{
+	    private:
+		tuple origin_;
+		tuple direction_;
 
-            public:
-                ray_t(tuple origin, tuple direction);
+	    public:
+		ray_t(tuple origin, tuple direction);
 
-            public:
-                tuple origin() const;
-                tuple direction() const;
+	    public:
+		tuple origin() const;
+		tuple direction() const;
 
-            public:
-                tuple position(double t) const;
-                ray_t transform(fsize_dense2d_matrix_t const& M) const;
-                std::string stringify() const;
-                std::optional<intersection_records> intersect(std::shared_ptr<const shape_interface> const&) const;
+	    public:
+		tuple position(double t) const;
+		ray_t transform(fsize_dense2d_matrix_t const& M) const;
+		std::string stringify() const;
+		std::optional<intersection_records>
+		intersect(std::shared_ptr<const shape_interface> const&) const;
 
-                /// return some information about the intersection
-                intersection_info_t prepare_computations(intersection_record) const;
-        };
+		/// return some information about the intersection
+		intersection_info_t prepare_computations(intersection_record) const;
+	};
 
-        bool operator==(ray_t const& lhs, ray_t const& rhs);
-        std::ostream& operator<<(std::ostream& os, ray_t const& R);
+	bool operator==(ray_t const& lhs, ray_t const& rhs);
+	std::ostream& operator<<(std::ostream& os, ray_t const& R);
 
 } // namespace raytracer
 

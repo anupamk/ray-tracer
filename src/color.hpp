@@ -16,138 +16,136 @@
 
 namespace raytracer
 {
-        /*
+	/*
          * a color is composite of (r)ed, (g)reen, and (b)lue colors,
          * represented via a tuple (point)
         **/
-        class color
-        {
-            private:
-                tuple rgb_;
+	class color
+	{
+	    private:
+		tuple rgb_;
 
-            public:
-                constexpr explicit color()
-                    : color(0.0, 0.0, 0.0)
-                {
-                }
+	    public:
+		constexpr explicit color()
+		    : color(0.0, 0.0, 0.0)
+		{
+		}
 
-                constexpr explicit color(float r, float g, float b)
-                    : rgb_(create_point(r, g, b))
-                {
-                }
+		constexpr explicit color(float r, float g, float b)
+		    : rgb_(create_point(r, g, b))
+		{
+		}
 
-            public:
-                /// get the values out
-                constexpr float R() const
-                {
-                        return this->rgb_.x();
-                }
+	    public:
+		/// get the values out
+		constexpr float R() const
+		{
+			return this->rgb_.x();
+		}
 
-                constexpr float G() const
-                {
-                        return this->rgb_.y();
-                }
+		constexpr float G() const
+		{
+			return this->rgb_.y();
+		}
 
-                constexpr float B() const
-                {
-                        return this->rgb_.z();
-                }
+		constexpr float B() const
+		{
+			return this->rgb_.z();
+		}
 
-                constexpr tuple RGB() const
-                {
-                        return this->rgb_;
-                }
+		constexpr tuple RGB() const
+		{
+			return this->rgb_;
+		}
 
-            public:
-                /// some operators
-                color& operator+=(color);
-                color& operator-=(color);
+	    public:
+		/// some operators
+		color& operator+=(color);
+		color& operator-=(color);
 
-                /// conversion from color -> string
-                std::string stringify() const;
-        };
+		/// conversion from color -> string
+		std::string stringify() const;
+	};
 
-        color operator+(color a, color b);
-        color operator-(color a, color b);
-        std::ostream& operator<<(std::ostream& os, color const& C);
+	color operator+(color a, color b);
+	color operator-(color a, color b);
+	std::ostream& operator<<(std::ostream& os, color const& C);
 
-        ///
-        /// epsilon equality comparison of two tuples
-        ///
-        constexpr bool operator==(color lhs, color rhs)
-        {
-                // clang-format off
+	///
+	/// epsilon equality comparison of two tuples
+	///
+	constexpr bool operator==(color lhs, color rhs)
+	{
+		// clang-format off
                 return (epsilon_equal(lhs.R(), rhs.R())      &&
                         epsilon_equal(lhs.G(), rhs.G())      &&
                         epsilon_equal(lhs.B(), rhs.B()));
-                // clang-format on
-        }
+		// clang-format on
+	}
 
-        constexpr bool operator!=(color lhs, color rhs)
-        {
-                return !(lhs == rhs);
-        }
+	constexpr bool operator!=(color lhs, color rhs)
+	{
+		return !(lhs == rhs);
+	}
 
-        /// scalar multiplication
-        constexpr color operator*(color a, double f)
-        {
-                return color(a.R() * f, a.G() * f, a.B() * f);
-        }
+	/// scalar multiplication
+	constexpr color operator*(color a, double f)
+	{
+		return color(a.R() * f, a.G() * f, a.B() * f);
+	}
 
-        /// scalar addition
-        constexpr color operator+(color a, double f)
-        {
-                return color(a.R() + f, a.G() + f, a.B() + f);
-        }
+	/// scalar addition
+	constexpr color operator+(color a, double f)
+	{
+		return color(a.R() + f, a.G() + f, a.B() + f);
+	}
 
+	///
+	/// hadamard/schur product of 'color * color', just multiply
+	/// corresponding components from each color
+	///
+	constexpr color operator*(color a, color b)
+	{
+		return color(a.R() * b.R(),  // red
+		             a.G() * b.G(),  // green
+		             a.B() * b.B()); // blue
+	}
 
-        ///
-        /// hadamard/schur product of 'color * color', just multiply
-        /// corresponding components from each color
-        ///
-        constexpr color operator*(color a, color b)
-        {
-                return color(a.R() * b.R(),  // red
-                             a.G() * b.G(),  // green
-                             a.B() * b.B()); // blue
-        }
+	/// --------------------------------------------------------------------
+	/// return 'clamped' values of color. all color components must be
+	/// between [0.0 ... 1.0]
+	constexpr color clamp(color c)
+	{
+		/// the '0.0f/1.0f' is specifically there for type deduction
+		return color(clamp_in_range(c.R(), 0.0f, 1.0f), clamp_in_range(c.G(), 0.0f, 1.0f),
+		             clamp_in_range(c.B(), 0.0f, 1.0f));
+	}
 
-        /// --------------------------------------------------------------------
-        /// return 'clamped' values of color. all color components must be
-        /// between [0.0 ... 1.0]
-        constexpr color clamp(color c)
-        {
-                /// the '0.0f/1.0f' is specifically there for type deduction
-                return color(clamp_in_range(c.R(), 0.0f, 1.0f),
-                             clamp_in_range(c.G(), 0.0f, 1.0f),
-                             clamp_in_range(c.B(), 0.0f, 1.0f));
-        }
+	/// some well known colors
+	constexpr color color_black()
+	{
+		return color{0.0, 0.0, 0.0};
+	}
 
-        /// some well known colors
-        constexpr color color_black()
-        {
-                return color{0.0, 0.0, 0.0};
-        }
+	constexpr color color_white()
+	{
+		return color{1.0, 1.0, 1.0};
+	}
 
-        constexpr color color_white()
-        {
-                return color{1.0, 1.0, 1.0};
-        }
+	constexpr color color_red()
+	{
+		return color{1.0, 0.0, 0.0};
+	}
 
-        constexpr color color_red()
-        {
-                return color{1.0, 0.0, 0.0};
-        }
+	constexpr color color_green()
+	{
+		return color{0.0, 1.0, 0.0};
+	}
 
-        constexpr color color_green()
-        {
-                return color{0.0, 1.0, 0.0};
-        }
-
-        constexpr color color_blue()
-        {
-                return color{0.0, 0.0, 1.0};
-        }
+	constexpr color color_blue()
+	{
+		return color{0.0, 0.0, 1.0};
+	}
 
 } // namespace raytracer
 

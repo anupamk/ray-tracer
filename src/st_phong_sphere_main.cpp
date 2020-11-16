@@ -39,14 +39,14 @@ static RT::color color_pixel(uint32_t X, uint32_t Y, RT::scene_params const& par
 int main(int argc, char** argv)
 {
 	auto const scene_params = RT::create_scene_params();
-	RT::canvas dst_canvas	= RT::canvas::create_binary(scene_params.canvas_dim_x,	/// x-resolution
-							    scene_params.canvas_dim_y); /// y-resolution
+	RT::canvas dst_canvas   = RT::canvas::create_binary(scene_params.canvas_dim_x,  /// x-resolution
+                                                          scene_params.canvas_dim_y); /// y-resolution
 	LOG_INFO("canvas information: '%s'", dst_canvas.stringify().c_str());
 
 	/// convenience
-	namespace CHRONO	     = std::chrono;
-	using HR_CLOCK		     = std::chrono::high_resolution_clock;
-	using CHRONO_MS		     = std::chrono::milliseconds;
+	namespace CHRONO             = std::chrono;
+	using HR_CLOCK               = std::chrono::high_resolution_clock;
+	using CHRONO_MS              = std::chrono::milliseconds;
 	auto const render_start_time = HR_CLOCK::now();
 
 	/// for each pixel on the wall do
@@ -71,9 +71,9 @@ int main(int argc, char** argv)
 /*
  * this function is called to color a specific pixel on the canvas
 **/
-static inline RT::color color_pixel(uint32_t x_coord,		    /// x-coordinate
-				    uint32_t y_coord,		    /// y-coordinate
-				    RT::scene_params const& params) /// scene-params
+static inline RT::color color_pixel(uint32_t x_coord,               /// x-coordinate
+                                    uint32_t y_coord,               /// y-coordinate
+                                    RT::scene_params const& params) /// scene-params
 {
 	auto wall_x_coord   = -params.wall_half_xsize() + params.wall_xpixel_size() * x_coord;
 	auto wall_y_coord   = params.wall_half_ysize() - params.wall_ypixel_size() * y_coord;
@@ -81,7 +81,7 @@ static inline RT::color color_pixel(uint32_t x_coord,		    /// x-coordinate
 
 	/// parametric equation of ray towards the wall
 	auto normalized_ray_dir = RT::normalize(wall_xyz_coord - params.camera_position);
-	auto ray_to_wall	= RT::ray_t(params.camera_position, normalized_ray_dir);
+	auto ray_to_wall        = RT::ray_t(params.camera_position, normalized_ray_dir);
 
 	// clang-format off
         /// find intersection point of ray with the sphere
@@ -117,8 +117,8 @@ static inline RT::color color_pixel(uint32_t x_coord,		    /// x-coordinate
 	auto surface_normal = hit_record.what_object()->normal_at_world(hit_position);
 
 	return RT::phong_illumination(params.shape,    /// shape
-				      hit_position,    /// hit-point
-				      params.light,    /// light
-				      viewer_at,       /// viewer
-				      surface_normal); /// normal at hit-point
+	                              hit_position,    /// hit-point
+	                              params.light,    /// light
+	                              viewer_at,       /// viewer
+	                              surface_normal); /// normal at hit-point
 }

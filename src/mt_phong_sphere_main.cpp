@@ -58,8 +58,8 @@ static void coloring_worker(int, CQ::ConcurrentQueue<render_work>&, RT::scene_pa
 int main(int argc, char** argv)
 {
 	const auto scene_params = RT::create_scene_params();
-	RT::canvas dst_canvas	= RT::canvas::create_binary(scene_params.canvas_dim_x,	/// x-resolution
-							    scene_params.canvas_dim_y); /// y-resolution
+	RT::canvas dst_canvas   = RT::canvas::create_binary(scene_params.canvas_dim_x,  /// x-resolution
+                                                          scene_params.canvas_dim_y); /// y-resolution
 	LOG_INFO("canvas information: '%s'", dst_canvas.stringify().c_str());
 
 	/// --------------------------------------------------------------------
@@ -98,22 +98,22 @@ int main(int argc, char** argv)
 
 	for (auto thread_id = 0; thread_id < MAX_COLOR_THREADS; thread_id++) {
 		coloring_threads[thread_id] = std::thread(coloring_worker,
-							  thread_id,		 /// thread-id
-							  std::ref(work_queue),	 /// work-queue
-							  scene_params,		 /// scene-params
-							  std::ref(dst_canvas)); /// canvas
+		                                          thread_id,             /// thread-id
+		                                          std::ref(work_queue),  /// work-queue
+		                                          scene_params,          /// scene-params
+		                                          std::ref(dst_canvas)); /// canvas
 	}
 
 	/// convenience
-	namespace CHRONO	     = std::chrono;
-	using HR_CLOCK		     = CHRONO::high_resolution_clock;
+	namespace CHRONO             = std::chrono;
+	using HR_CLOCK               = CHRONO::high_resolution_clock;
 	auto const render_start_time = HR_CLOCK::now();
 
 	/// wait for all of them to terminate
 	std::for_each(coloring_threads.begin(), coloring_threads.end(), std::mem_fn(&std::thread::join));
 
 	/// some stats
-	using CHRONO_MS	     = std::chrono::milliseconds;
+	using CHRONO_MS      = std::chrono::milliseconds;
 	auto render_end_time = HR_CLOCK::now();
 	long render_time_ms  = CHRONO::duration_cast<CHRONO_MS>(render_end_time - render_start_time).count();
 
@@ -132,9 +132,9 @@ int main(int argc, char** argv)
 /// --------------------------------------------------------------------------------
 /// this function is called to color n-rows in an image.
 static void coloring_worker(int thread_id, CQ::ConcurrentQueue<render_work>& work_queue,
-			    RT::scene_params const& params, RT::canvas& dst_canvas)
+                            RT::scene_params const& params, RT::canvas& dst_canvas)
 {
-	bool all_done	      = false;
+	bool all_done         = false;
 	size_t items_rendered = 0;
 
 	do {
@@ -170,9 +170,9 @@ static void coloring_worker(int thread_id, CQ::ConcurrentQueue<render_work>& wor
 /// --------------------------------------------------------------------------------
 /// this function is called to color a pixel (using phong-illumination model) on
 /// the canvas
-static RT::color color_pixel(uint32_t x_coord,		     /// x-coordinate
-			     uint32_t y_coord,		     /// y-coordinate
-			     RT::scene_params const& params) /// scene-params
+static RT::color color_pixel(uint32_t x_coord,               /// x-coordinate
+                             uint32_t y_coord,               /// y-coordinate
+                             RT::scene_params const& params) /// scene-params
 {
 	auto wall_x_coord   = -params.wall_half_xsize() + params.wall_xpixel_size() * x_coord;
 	auto wall_y_coord   = params.wall_half_ysize() - params.wall_ypixel_size() * y_coord;
@@ -180,7 +180,7 @@ static RT::color color_pixel(uint32_t x_coord,		     /// x-coordinate
 
 	/// parametric equation of ray towards the wall
 	auto normalized_ray_dir = RT::normalize(wall_xyz_coord - params.camera_position);
-	auto ray_to_wall	= RT::ray_t(params.camera_position, normalized_ray_dir);
+	auto ray_to_wall        = RT::ray_t(params.camera_position, normalized_ray_dir);
 
 	// clang-format off
         /// find intersection point of ray with the sphere
@@ -216,8 +216,8 @@ static RT::color color_pixel(uint32_t x_coord,		     /// x-coordinate
 	auto surface_normal = hit_record.what_object()->normal_at_world(hit_position);
 
 	return RT::phong_illumination(params.shape,    /// shape
-				      hit_position,    /// hit-point
-				      params.light,    /// light
-				      viewer_at,       /// viewer
-				      surface_normal); /// normal at hit-point
+	                              hit_position,    /// hit-point
+	                              params.light,    /// light
+	                              viewer_at,       /// viewer
+	                              surface_normal); /// normal at hit-point
 }

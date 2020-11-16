@@ -210,8 +210,8 @@ static scene_params create_scene_params()
         LOG_INFO("phong-sphere scene description '%s'", scene_descr.c_str());
 	// clang-format on
 
-	return scene_params{canvas_dim_x, canvas_dim_y,	   WALL_ZPOS, WALL_XSIZE,
-			    WALL_YSIZE,	  CAMERA_POSITION, sphere,    scene_light};
+	return scene_params{canvas_dim_x, canvas_dim_y,    WALL_ZPOS, WALL_XSIZE,
+	                    WALL_YSIZE,   CAMERA_POSITION, sphere,    scene_light};
 }
 
 /// --------------------------------------------------------------------------------
@@ -252,13 +252,13 @@ static void color_n_rows(uint32_t start_row, uint32_t end_row, scene_params cons
 /// this function is called to render the scene on the sdl-canvas
 static void render_scene(scene_params const& params)
 {
-	bool all_done	= false;
+	bool all_done   = false;
 	auto the_canvas = RT::sdl2_canvas(params.canvas_dim_x, params.canvas_dim_y);
 	std::vector<pixel_color> dq_px_list(Q_BULK_DEQUEUE_THRESH);
 
 	/// convenience
 	namespace CHRONO = std::chrono;
-	using HR_CLOCK	 = std::chrono::high_resolution_clock;
+	using HR_CLOCK   = std::chrono::high_resolution_clock;
 
 	auto const render_start_time = HR_CLOCK::now();
 
@@ -268,7 +268,7 @@ static void render_scene(scene_params const& params)
 			the_canvas.write_pixel(dq_px_list[i].x(), dq_px_list[i].y(), dq_px_list[i].color());
 		}
 
-                /*
+		/*
                  * rendering thread is done, when there are no active coloring
                  * threads, and when all the messages that they have enqueued
                  * onto the queue are all processed here.
@@ -282,7 +282,7 @@ static void render_scene(scene_params const& params)
 	} while (!all_done);
 
 	/// some stats
-	using CHRONO_MS	     = std::chrono::milliseconds;
+	using CHRONO_MS      = std::chrono::milliseconds;
 	auto render_end_time = HR_CLOCK::now();
 	long render_time_ms  = CHRONO::duration_cast<CHRONO_MS>(render_end_time - render_start_time).count();
 
@@ -292,15 +292,14 @@ static void render_scene(scene_params const& params)
 	the_canvas.show_canvas();
 
 	return;
-
 }
 
 /// --------------------------------------------------------------------------------
 /// this function is called to color a pixel (using phong-illumination model) on
 /// the canvas
-static RT::color color_pixel(uint32_t x_coord,		 /// x-coordinate
-			     uint32_t y_coord,		 /// y-coordinate
-			     scene_params const& params) /// scene-params
+static RT::color color_pixel(uint32_t x_coord,           /// x-coordinate
+                             uint32_t y_coord,           /// y-coordinate
+                             scene_params const& params) /// scene-params
 {
 	auto wall_x_coord   = -params.wall_half_xsize() + params.wall_xpixel_size() * x_coord;
 	auto wall_y_coord   = params.wall_half_ysize() - params.wall_ypixel_size() * y_coord;
@@ -308,7 +307,7 @@ static RT::color color_pixel(uint32_t x_coord,		 /// x-coordinate
 
 	/// parametric equation of ray towards the wall
 	auto normalized_ray_dir = RT::normalize(wall_xyz_coord - params.camera_position);
-	auto ray_to_wall	= RT::ray_t(params.camera_position, normalized_ray_dir);
+	auto ray_to_wall        = RT::ray_t(params.camera_position, normalized_ray_dir);
 
 	// clang-format off
         /// find intersection point of ray with the sphere
@@ -343,9 +342,9 @@ static RT::color color_pixel(uint32_t x_coord,		 /// x-coordinate
 	auto hit_position   = ray_to_wall.position(hit_record.where());
 	auto surface_normal = hit_record.what_object()->normal_at_world(hit_position);
 
-	return RT::phong_illumination(hit_position,		    /// hit-point
-				      params.shape->get_material(), /// shape's material
-				      params.light,		    /// light
-				      viewer_at,		    /// viewer
-				      surface_normal);		    /// normal at hit-point
+	return RT::phong_illumination(hit_position,                 /// hit-point
+	                              params.shape->get_material(), /// shape's material
+	                              params.light,                 /// light
+	                              viewer_at,                    /// viewer
+	                              surface_normal);              /// normal at hit-point
 }

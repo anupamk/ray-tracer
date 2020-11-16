@@ -21,7 +21,7 @@ namespace raytracer
 	class intersection_record
 	{
 	    private:
-		double where_;				      /// where intersection happened
+		double where_;                                /// where intersection happened
 		std::shared_ptr<shape_interface const> what_; /// what object was intersected
 
 	    public:

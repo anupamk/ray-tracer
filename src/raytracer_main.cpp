@@ -9,6 +9,6 @@ log_level_t LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 int main(int argc, char** argv)
 {
-        LOG_INFO("starting ray-tracing. it will be awesome !");
-        return 0;
+	LOG_INFO("starting ray-tracing. it will be awesome !");
+	return 0;
 }

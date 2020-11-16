@@ -27,7 +27,7 @@ namespace raytracer
 		}
 
 		gradient_ring_pattern(std::shared_ptr<pattern_interface> pattern_a,
-				      std::shared_ptr<pattern_interface> pattern_b)
+		                      std::shared_ptr<pattern_interface> pattern_b)
 		    : binary_pattern(pattern_a, pattern_b)
 		{
 		}
@@ -39,10 +39,10 @@ namespace raytracer
 		{
 			auto const pt_x_squared = pt.x() * pt.x();
 			auto const pt_z_squared = pt.z() * pt.z();
-			auto const magnitude	= std::sqrt(pt_x_squared + pt_z_squared);
-			auto const color_a_val	= color_a(pt);
-			auto const color_b_val	= color_b(pt);
-			auto const delta_color	= color_b_val - color_a_val;
+			auto const magnitude    = std::sqrt(pt_x_squared + pt_z_squared);
+			auto const color_a_val  = color_a(pt);
+			auto const color_b_val  = color_b(pt);
+			auto const delta_color  = color_b_val - color_a_val;
 
 			return color_a_val + delta_color * magnitude;
 		}

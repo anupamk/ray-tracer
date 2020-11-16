@@ -24,118 +24,118 @@
 
 namespace raytracer
 {
-        world::world()
-            : light_list_() /// darkness...no light
-            , shape_list_() /// and no shapes
-        {
-        }
+	world::world()
+	    : light_list_() /// darkness...no light
+	    , shape_list_() /// and no shapes
+	{
+	}
 
-        /// --------------------------------------------------------------------
-        /// this function is called to return a default world i.e a world with a
-        /// single light, and 2 spheres...
-        world world::create_default_world()
-        {
-                world w;
+	/// --------------------------------------------------------------------
+	/// this function is called to return a default world i.e a world with a
+	/// single light, and 2 spheres...
+	world world::create_default_world()
+	{
+		world w;
 
-                /// add light
-                w.add(create_default_light());
+		/// add light
+		w.add(create_default_light());
 
-                /// and shapes
-                auto shape_list = create_default_shapes();
-                for (auto s : shape_list) {
-                        w.add(s);
-                }
+		/// and shapes
+		auto shape_list = create_default_shapes();
+		for (auto s : shape_list) {
+			w.add(s);
+		}
 
-                return w;
-        }
+		return w;
+	}
 
-        /// --------------------------------------------------------------------
-        /// this function is called to add a light to the world
-        void world::add(point_light p)
-        {
-                light_list_.push_back(p);
-                return;
-        }
+	/// --------------------------------------------------------------------
+	/// this function is called to add a light to the world
+	void world::add(point_light p)
+	{
+		light_list_.push_back(p);
+		return;
+	}
 
-        /// --------------------------------------------------------------------
-        /// this function is called to delete the top-most light-source in the
-        /// world.
-        void world::pop_light()
-        {
-                if (light_list_.empty()) {
-                        return;
-                }
+	/// --------------------------------------------------------------------
+	/// this function is called to delete the top-most light-source in the
+	/// world.
+	void world::pop_light()
+	{
+		if (light_list_.empty()) {
+			return;
+		}
 
-                light_list_.erase(light_list_.begin());
-                return;
-        }
+		light_list_.erase(light_list_.begin());
+		return;
+	}
 
-        /// --------------------------------------------------------------------
-        /// this function returns a reference to the list of light sources for
-        /// further modification
-        std::vector<point_light>& world::modify_lights()
-        {
-                return light_list_;
-        }
+	/// --------------------------------------------------------------------
+	/// this function returns a reference to the list of light sources for
+	/// further modification
+	std::vector<point_light>& world::modify_lights()
+	{
+		return light_list_;
+	}
 
-        /// --------------------------------------------------------------------
-        /// this function is called to add a light to the world
-        void world::add(const std::shared_ptr<const shape_interface> s)
-        {
-                shape_list_.push_back(s);
-                return;
-        }
+	/// --------------------------------------------------------------------
+	/// this function is called to add a light to the world
+	void world::add(const std::shared_ptr<const shape_interface> s)
+	{
+		shape_list_.push_back(s);
+		return;
+	}
 
-        /// --------------------------------------------------------------------
-        /// lights in the world
-        std::vector<point_light> const& world::lights() const
-        {
-                return light_list_;
-        }
+	/// --------------------------------------------------------------------
+	/// lights in the world
+	std::vector<point_light> const& world::lights() const
+	{
+		return light_list_;
+	}
 
-        /// --------------------------------------------------------------------
-        /// shapes in the world
-        std::vector<std::shared_ptr<const shape_interface>> const& world::shapes() const
-        {
-                return shape_list_;
-        }
+	/// --------------------------------------------------------------------
+	/// shapes in the world
+	std::vector<std::shared_ptr<const shape_interface>> const& world::shapes() const
+	{
+		return shape_list_;
+	}
 
-        /// --------------------------------------------------------------------
-        /// this function is called to return a sorted list of intersections
-        /// that a ray makes when it hits objects / shapes in this world
-        intersection_records world::intersect(ray_t const& R) const
-        {
-                intersection_records xs_result;
+	/// --------------------------------------------------------------------
+	/// this function is called to return a sorted list of intersections
+	/// that a ray makes when it hits objects / shapes in this world
+	intersection_records world::intersect(ray_t const& R) const
+	{
+		intersection_records xs_result;
 
-                for (auto const& shape : shape_list_) {
-                        auto shape_xs_record = R.intersect(shape);
+		for (auto const& shape : shape_list_) {
+			auto shape_xs_record = R.intersect(shape);
 
-                        /// no intersections
-                        if (!shape_xs_record) {
-                                continue;
-                        }
+			/// no intersections
+			if (!shape_xs_record) {
+				continue;
+			}
 
-                        /// one or more intersections
-                        auto xs_list = shape_xs_record.value();
-                        for (auto& xs : xs_list) {
-                                xs_result.push_back(xs);
-                        }
-                }
+			/// one or more intersections
+			auto xs_list = shape_xs_record.value();
+			for (auto& xs : xs_list) {
+				xs_result.push_back(xs);
+			}
+		}
 
-                /// sort whatever we got
-                std::sort(xs_result.begin(), xs_result.end());
+		/// sort whatever we got
+		std::sort(xs_result.begin(), xs_result.end());
 
-                return xs_result;
-        }
+		return xs_result;
+	}
 
-        /// --------------------------------------------------------------------
-        ///
-        color world::shade_hit(intersection_info_t const& xs_info) const
-        {
-                color shade_color    = color_black();
-                auto point_in_shadow = is_shadowed(xs_info.over_position());
+	/// --------------------------------------------------------------------
+	///
+	color world::shade_hit(intersection_info_t const& xs_info) const
+	{
+		color shade_color    = color_black();
+		auto point_in_shadow = is_shadowed(xs_info.over_position());
 
-                // clang-format off
+		// clang-format off
                 for (auto const a_light : light_list_) {
                         shade_color += phong_illumination(xs_info.what_object(),   /// object-material
                                                           xs_info.over_position(), /// point of intersection
@@ -144,107 +144,107 @@ namespace raytracer
                                                           xs_info.normal_vector(), /// normal
                                                           point_in_shadow);	   /// shadowed ?
                 }
-                // clang-format on
+		// clang-format on
 
-                return shade_color;
-        }
+		return shade_color;
+	}
 
-        /// --------------------------------------------------------------------
-        /// compute the color due a ray intersecting a shape in the world
-        color world::color_at(ray_t const& r) const
-        {
-                /// compute the visible intersection
-                auto const xs_list	 = intersect(r);
-                auto const vis_xs_record = visible_intersection(xs_list);
+	/// --------------------------------------------------------------------
+	/// compute the color due a ray intersecting a shape in the world
+	color world::color_at(ray_t const& r) const
+	{
+		/// compute the visible intersection
+		auto const xs_list       = intersect(r);
+		auto const vis_xs_record = visible_intersection(xs_list);
 
-                if (vis_xs_record) {
-                        /// ok, so there seems to be a visible intersection. compute the
-                        /// color
-                        auto const xs_info = r.prepare_computations(vis_xs_record.value());
+		if (vis_xs_record) {
+			/// ok, so there seems to be a visible intersection. compute the
+			/// color
+			auto const xs_info = r.prepare_computations(vis_xs_record.value());
 
-                        return shade_hit(xs_info);
-                }
+			return shade_hit(xs_info);
+		}
 
-                /// no visible intersection
-                return color_black();
-        }
+		/// no visible intersection
+		return color_black();
+	}
 
-        /// --------------------------------------------------------------------
-        /// stringified representation of the world
-        std::string world::stringify() const
-        {
-                std::stringstream ss("");
+	/// --------------------------------------------------------------------
+	/// stringified representation of the world
+	std::string world::stringify() const
+	{
+		std::stringstream ss("");
 
-                /// first all the lights
-                ss << "* lights [" << light_list_.size() << "]" << std::endl;
+		/// first all the lights
+		ss << "* lights [" << light_list_.size() << "]" << std::endl;
 
-                for (auto const l : light_list_) {
-                        ss << l.stringify() << std::endl;
-                }
+		for (auto const l : light_list_) {
+			ss << l.stringify() << std::endl;
+		}
 
-                ss << std::endl;
+		ss << std::endl;
 
-                /// next all the shapes
-                ss << "* shapes [" << shape_list_.size() << "]" << std::endl;
-                for (auto const s : shape_list_) {
-                        ss << s->stringify() << std::endl;
-                }
+		/// next all the shapes
+		ss << "* shapes [" << shape_list_.size() << "]" << std::endl;
+		for (auto const s : shape_list_) {
+			ss << s->stringify() << std::endl;
+		}
 
-                return ss.str();
-        }
+		return ss.str();
+	}
 
-        /// --------------------------------------------------------------------
-        /// returns true if the point(pt), is in shadow w.r.t the light sources
-        /// making up the entire scene. returns false otherwise.
-        bool world::is_shadowed(tuple const& pt) const
-        {
-                /// ------------------------------------------------------------
-                /// cast a ray, called shadow-ray, from the point towards the
-                /// light source.
-                ///
-                /// if shadow-ray intersects something between point, and
-                /// light-source, then the point is considered to be in shadow.
-                for (auto const light : light_list_) {
-                        auto const pt_to_light = light.position() - pt;
-                        auto const shadow_ray  = ray_t(pt, normalize(pt_to_light));
-                        auto const shadow_xs   = intersect(shadow_ray);
-                        auto const hit	       = visible_intersection(shadow_xs);
+	/// --------------------------------------------------------------------
+	/// returns true if the point(pt), is in shadow w.r.t the light sources
+	/// making up the entire scene. returns false otherwise.
+	bool world::is_shadowed(tuple const& pt) const
+	{
+		/// ------------------------------------------------------------
+		/// cast a ray, called shadow-ray, from the point towards the
+		/// light source.
+		///
+		/// if shadow-ray intersects something between point, and
+		/// light-source, then the point is considered to be in shadow.
+		for (auto const light : light_list_) {
+			auto const pt_to_light = light.position() - pt;
+			auto const shadow_ray  = ray_t(pt, normalize(pt_to_light));
+			auto const shadow_xs   = intersect(shadow_ray);
+			auto const hit         = visible_intersection(shadow_xs);
 
-                        if (!hit) {
-                                continue;
-                        }
+			if (!hit) {
+				continue;
+			}
 
-                        /// ok, we have an intersection
-                        auto const shadow_hit_where = hit.value().where();
-                        auto const dist_to_light    = magnitude(pt_to_light);
+			/// ok, we have an intersection
+			auto const shadow_hit_where = hit.value().where();
+			auto const dist_to_light    = magnitude(pt_to_light);
 
-                        if (shadow_hit_where > 0.0 && shadow_hit_where < dist_to_light) {
-                                return true;
-                        }
-                }
+			if (shadow_hit_where > 0.0 && shadow_hit_where < dist_to_light) {
+				return true;
+			}
+		}
 
-                return false;
-        }
+		return false;
+	}
 
-        /*
+	/*
          * only private functions from this point onwards
         **/
 
-        /// --------------------------------------------------------------------
-        /// create a default light for the world
-        point_light world::create_default_light()
-        {
-                auto const light_position = create_point(-10.0, 10.0, -10.0);
-                auto const light_color	  = color(1.0, 1.0, 1.0);
+	/// --------------------------------------------------------------------
+	/// create a default light for the world
+	point_light world::create_default_light()
+	{
+		auto const light_position = create_point(-10.0, 10.0, -10.0);
+		auto const light_color    = color(1.0, 1.0, 1.0);
 
-                return point_light(light_position, light_color);
-        }
+		return point_light(light_position, light_color);
+	}
 
-        /// --------------------------------------------------------------------
-        /// create default shapes that are always present in the world
-        std::vector<std::shared_ptr<shape_interface>> world::create_default_shapes()
-        {
-                // clang-format off
+	/// --------------------------------------------------------------------
+	/// create default shapes that are always present in the world
+	std::vector<std::shared_ptr<shape_interface>> world::create_default_shapes()
+	{
+		// clang-format off
 
                 /// ------------------------------------------------------------
                 /// default unit sphere, with elaborate properties
@@ -256,16 +256,16 @@ namespace raytracer
 
                 sphere_01->set_material(sphere_01_material);
 
-                // clang-format on
+		// clang-format on
 
-                /// ------------------------------------------------------------
-                /// default unit sphere with a radius of 0.5 units
-                auto sphere_02 = std::make_shared<raytracer::sphere>();
-                sphere_02->transform(matrix_transformations_t::create_3d_scaling_matrix(0.5, 0.5, 0.5));
+		/// ------------------------------------------------------------
+		/// default unit sphere with a radius of 0.5 units
+		auto sphere_02 = std::make_shared<raytracer::sphere>();
+		sphere_02->transform(matrix_transformations_t::create_3d_scaling_matrix(0.5, 0.5, 0.5));
 
-                /// ok we are done here
-                std::vector<std::shared_ptr<shape_interface>> retval = {sphere_01, sphere_02};
-                return retval;
-        }
+		/// ok we are done here
+		std::vector<std::shared_ptr<shape_interface>> retval = {sphere_01, sphere_02};
+		return retval;
+	}
 
 } // namespace raytracer

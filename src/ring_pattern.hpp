@@ -25,7 +25,7 @@ namespace raytracer
 		}
 
 		ring_pattern(std::shared_ptr<pattern_interface> pattern_a,
-			     std::shared_ptr<pattern_interface> pattern_b)
+		             std::shared_ptr<pattern_interface> pattern_b)
 		    : binary_pattern(pattern_a, pattern_b)
 		{
 		}
@@ -37,7 +37,7 @@ namespace raytracer
 		{
 			auto pt_x_squared = pt.x() * pt.x();
 			auto pt_z_squared = pt.z() * pt.z();
-			auto magnitude	  = std::sqrt(pt_x_squared + pt_z_squared);
+			auto magnitude    = std::sqrt(pt_x_squared + pt_z_squared);
 
 			if (fast_floor(magnitude) % 2 == 0) {
 				return color_a(pt);

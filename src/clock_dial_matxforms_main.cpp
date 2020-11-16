@@ -55,8 +55,8 @@ int main(int argc, char** argv)
         **/
 	constexpr auto area_alpha    = std::min(0.2, alpha_max);
 	constexpr auto scaled_radius = std::sqrt((canvas_area * area_alpha) / RT::PI);
-	constexpr auto x_midpt	     = canvas_dim_x / 2;
-	constexpr auto y_midpt	     = canvas_dim_y / 2;
+	constexpr auto x_midpt       = canvas_dim_x / 2;
+	constexpr auto y_midpt       = canvas_dim_y / 2;
 
 	/// the transformation matrices
 	const auto dial_scale_mat  = RT_XFORM::create_3d_scaling_matrix(scaled_radius, scaled_radius, 0.0);

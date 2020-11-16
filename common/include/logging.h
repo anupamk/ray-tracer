@@ -16,24 +16,25 @@
 **/
 static inline std::string log_ts_string()
 {
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
 
-        /* round off to nearest second */
-        uint16_t msec = lrint(tv.tv_usec / 1000.0);
-        if (msec >= 1000) {
-                msec -= 1000;
-                tv.tv_sec += 1;
-        }
+	/* round off to nearest millisecond */
+	uint16_t msec = lrint(tv.tv_usec / 1000.0);
+	if (msec >= 1000) {
+		msec -= 1000;
+		tv.tv_sec += 1;
+	}
 
-        /* stringify */
-        char fmt_time_buf[64];
+	/* stringify */
+	constexpr uint8_t bufsize = 64;
+	char fmt_time_buf[bufsize];
 
-        struct tm* tm_info  = localtime(&tv.tv_sec);
-        const size_t offset = strftime(fmt_time_buf, 64, "%Y-%m-%d %H:%M:%S", tm_info);
-        snprintf(fmt_time_buf + offset, 64, ".%03d", msec);
+	struct tm* tm_info  = localtime(&tv.tv_sec);
+	const size_t offset = strftime(fmt_time_buf, bufsize, "%Y-%m-%d %H:%M:%S", tm_info);
+	snprintf(fmt_time_buf + offset, (bufsize - offset), ".%03d", msec);
 
-        return std::string(fmt_time_buf);
+	return std::string(fmt_time_buf);
 }
 
 /*
@@ -41,10 +42,10 @@ static inline std::string log_ts_string()
  * 8 levels. that just seems too inordinate.
  */
 typedef enum {
-        LOG_LEVEL_FATAL = 1,
-        LOG_LEVEL_ERROR = 2,
-        LOG_LEVEL_INFO	= 3,
-        LOG_LEVEL_DEBUG = 4,
+	LOG_LEVEL_FATAL = 1,
+	LOG_LEVEL_ERROR = 2,
+	LOG_LEVEL_INFO  = 3,
+	LOG_LEVEL_DEBUG = 4,
 } log_level_t;
 
 /* where do we log ? */

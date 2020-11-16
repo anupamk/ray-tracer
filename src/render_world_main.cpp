@@ -40,12 +40,12 @@
 log_level_t LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly
-namespace RT	 = raytracer;
-using RT_XFORM	 = RT::matrix_transformations_t;
-namespace CQ	 = moodycamel;
+namespace RT     = raytracer;
+using RT_XFORM   = RT::matrix_transformations_t;
+namespace CQ     = moodycamel;
 namespace CHRONO = std::chrono;
-using HR_CLOCK	 = std::chrono::high_resolution_clock;
-using CHRONO_MS	 = std::chrono::milliseconds;
+using HR_CLOCK   = std::chrono::high_resolution_clock;
+using CHRONO_MS  = std::chrono::milliseconds;
 
 /// --------------------------------------------------------------------
 /// - a render-work item is a ray at a specific place on the canvas
@@ -119,7 +119,7 @@ static inline void mt_render_world(RT::world const& w, RT::camera const& c, std:
 	/// --------------------------------------------------------------------
 	/// concurrent queue contains multiple instances of render_work defined
 	/// above.
-	int const MAX_COLOR_THREADS	= std::thread::hardware_concurrency();
+	int const MAX_COLOR_THREADS     = std::thread::hardware_concurrency();
 	int const TOTAL_RAYS_PER_THREAD = c.hsize() / MAX_COLOR_THREADS;
 	CQ::ConcurrentQueue<render_work> work_queue(TOTAL_RAYS_PER_THREAD * c.vsize());
 
@@ -131,8 +131,8 @@ static inline void mt_render_world(RT::world const& w, RT::camera const& c, std:
 
 			for (int i = 0; i < TOTAL_RAYS_PER_THREAD; i++) {
 				render_work_item tmp{
-					x + i,			  /// x-pixel
-					y,			  /// y-pixel
+					x + i,                    /// x-pixel
+					y,                        /// y-pixel
 					c.ray_for_pixel(x + i, y) /// ray-at-(x,y)
 				};
 
@@ -147,11 +147,11 @@ static inline void mt_render_world(RT::world const& w, RT::camera const& c, std:
 	/// start the coloring threads
 	std::vector<std::thread> coloring_threads(MAX_COLOR_THREADS);
 	for (auto thread_id = 0; thread_id < MAX_COLOR_THREADS; thread_id++) {
-		coloring_threads[thread_id] = std::thread(coloring_worker,	      /// rendering-function
-							  thread_id,		      /// thread-id
-							  std::ref(work_queue),	      /// work-queue
-							  w,			      /// the world
-							  std::ref(rendered_canvas)); /// canvas
+		coloring_threads[thread_id] = std::thread(coloring_worker,            /// rendering-function
+		                                          thread_id,                  /// thread-id
+		                                          std::ref(work_queue),       /// work-queue
+		                                          w,                          /// the world
+		                                          std::ref(rendered_canvas)); /// canvas
 	}
 
 	/// convenience
@@ -179,12 +179,12 @@ static inline void mt_render_world(RT::world const& w, RT::camera const& c, std:
 /// ----------------------------------------------------------------------------
 /// this is coloring-worker i.e. the thread function responsible for rendering a
 /// bunch of rays on the canvas
-static void coloring_worker(int thread_id,				  /// for logging
-			    CQ::ConcurrentQueue<render_work>& work_queue, /// work-item-queue
-			    RT::world const& w,				  /// world
-			    RT::canvas& dst_canvas)			  /// destination-canvas
+static void coloring_worker(int thread_id,                                /// for logging
+                            CQ::ConcurrentQueue<render_work>& work_queue, /// work-item-queue
+                            RT::world const& w,                           /// world
+                            RT::canvas& dst_canvas)                       /// destination-canvas
 {
-	bool all_done	      = false;
+	bool all_done         = false;
 	size_t items_rendered = 0;
 
 	/// do some work
@@ -216,7 +216,7 @@ static RT::world create_world()
 {
 	/// --------------------------------------------------------------------
 	/// wall material
-	auto const wall_pattern	 = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.9, 0.9));
+	auto const wall_pattern  = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.9, 0.9));
 	auto const wall_material = RT::material().set_pattern(wall_pattern).set_specular(0.0);
 
 	/// --------------------------------------------------------------------
@@ -229,27 +229,27 @@ static RT::world create_world()
 	/// 02: left wall
 	auto left_wall = std::make_shared<RT::sphere>();
 	left_wall->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 5.0) *
-			     RT_XFORM::create_roty_matrix(-RT::PI_BY_4F) *
-			     RT_XFORM::create_rotx_matrix(RT::PI_BY_2F) *
-			     RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
+	                     RT_XFORM::create_roty_matrix(-RT::PI_BY_4F) *
+	                     RT_XFORM::create_rotx_matrix(RT::PI_BY_2F) *
+	                     RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
 	left_wall->set_material(wall_material);
 
 	/// --------------------------------------------------------------------
 	/// 03: right wall
 	auto right_wall = std::make_shared<RT::sphere>();
 	right_wall->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 5.0) *
-			      RT_XFORM::create_roty_matrix(RT::PI_BY_4F) *
-			      RT_XFORM::create_rotx_matrix(RT::PI_BY_2F) *
-			      RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
+	                      RT_XFORM::create_roty_matrix(RT::PI_BY_4F) *
+	                      RT_XFORM::create_rotx_matrix(RT::PI_BY_2F) *
+	                      RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
 	right_wall->set_material(wall_material);
 
 	/// --------------------------------------------------------------------
 	/// sphere-01
-	auto sphere_01	       = std::make_shared<RT::sphere>();
+	auto sphere_01         = std::make_shared<RT::sphere>();
 	auto sphere_01_pattern = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.0, 0.0));
 
 	sphere_01->transform(RT_XFORM::create_3d_translation_matrix(-3.0, 3.0, -2.0) *
-			     RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
+	                     RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
 
 	// clang-format off
 	sphere_01->set_material(RT::material()
@@ -260,11 +260,11 @@ static RT::world create_world()
 
 	/// --------------------------------------------------------------------
 	/// sphere-02
-	auto sphere_02	       = std::make_shared<RT::sphere>();
+	auto sphere_02         = std::make_shared<RT::sphere>();
 	auto sphere_02_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 1.0, 0.0));
 
 	sphere_02->transform(RT_XFORM::create_3d_translation_matrix(-10.0, 3.0, -12.0) *
-			     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
+	                     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
 	// clang-format off
 	sphere_02->set_material(RT::material()
@@ -275,11 +275,11 @@ static RT::world create_world()
 
 	/// --------------------------------------------------------------------
 	/// sphere-03
-	auto sphere_03	       = std::make_shared<RT::sphere>();
+	auto sphere_03         = std::make_shared<RT::sphere>();
 	auto sphere_03_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 0.0, 1.0));
 
 	sphere_03->transform(RT_XFORM::create_3d_translation_matrix(5.0, 4.0, -7.0) *
-			     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
+	                     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
 	// clang-format off
 	sphere_03->set_material(RT::material()
@@ -290,13 +290,13 @@ static RT::world create_world()
 
 	/// --------------------------------------------------------------------
 	/// 04: sphere-04
-	auto sphere_04	       = std::make_shared<RT::sphere>();
+	auto sphere_04         = std::make_shared<RT::sphere>();
 	auto sphere_04_pattern = std::make_shared<RT::solid_pattern>(RT::color(225.0 / 255.0, /// red
-									       213.0 / 255.0, /// green
-									       0.0 / 255.0)); /// blue
+	                                                                       213.0 / 255.0, /// green
+	                                                                       0.0 / 255.0)); /// blue
 
 	sphere_04->transform(RT_XFORM::create_3d_translation_matrix(-5.5, 2.0, -18.0) *
-			     RT_XFORM::create_3d_scaling_matrix(1.5, 1.5, 1.5));
+	                     RT_XFORM::create_3d_scaling_matrix(1.5, 1.5, 1.5));
 
 	// clang-format off
 	sphere_04->set_material(RT::material()
@@ -332,11 +332,11 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto camera_01	   = RT::camera(1280, 1024, RT::PI_BY_2F);
-	auto look_from	   = RT::create_point(-7.5, 5.0, -25.0);
-	auto look_to	   = RT::create_point(0.0, -1.0, 5.0);
+	auto camera_01     = RT::camera(1280, 1024, RT::PI_BY_2F);
+	auto look_from     = RT::create_point(-7.5, 5.0, -25.0);
+	auto look_to       = RT::create_point(0.0, -1.0, 5.0);
 	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
-	auto xform	   = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
+	auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
 
 	camera_01.transform(xform);
 

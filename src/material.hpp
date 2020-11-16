@@ -55,8 +55,8 @@ namespace raytracer
 		std::string stringify() const;
 	};
 
-        /// --------------------------------------------------------------------
-        /// few useful overloaded operators
+	/// --------------------------------------------------------------------
+	/// few useful overloaded operators
 	bool operator==(material const& lhs, material const& rhs);
 	std::ostream& operator<<(std::ostream& os, material const& M);
 
