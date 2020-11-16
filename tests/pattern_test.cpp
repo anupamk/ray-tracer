@@ -22,6 +22,9 @@
 #include "material.hpp"
 #include "tuple.hpp"
 #include "phong_illumination.hpp"
+#include "logging.h"
+
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
 /// convenience
 namespace RT   = raytracer;

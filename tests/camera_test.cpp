@@ -15,6 +15,9 @@
 #include "utils.hpp"
 #include "matrix_transformations.hpp"
 #include "world.hpp"
+#include "logging.h"
+
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
 /// convenience
 namespace RT = raytracer;

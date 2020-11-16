@@ -22,6 +22,9 @@
 #include "phong_illumination.hpp"
 #include "ray.hpp"
 #include "matrix_transformations.hpp"
+#include "logging.h"
+
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
 /// convenience
 namespace RT   = raytracer;

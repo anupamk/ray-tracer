@@ -14,7 +14,7 @@
 
 #define ASSERT_MESSAGE__(cond, msg, ...)                                \
         if (!(cond)) {                                                  \
-                LOG_ERROR(msg, ##__VA_ARGS__);                          \
+                LOG_FATAL(msg, ##__VA_ARGS__);                          \
                                                                         \
                 /* die die die */                                       \
                 assert(cond);                                           \

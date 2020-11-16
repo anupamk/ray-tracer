@@ -1,13 +1,14 @@
 # project name
 project(ray-tracer CXX)
 
-#
+# ------------------------------------------------------------------------------
 # find sdl2 package : required for sdl2_canvas implementation
-#
 INCLUDE(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 
-# all the sources that we are testing, go into it's own static library
+# ------------------------------------------------------------------------------
+# these files make the core of the ray-tracer. compiled into a static
+# library, and then linked as required to produce different executables.
 set (RAYTRACER_LIB_SOURCES
   constants.hpp
   utils.hpp
@@ -64,7 +65,7 @@ set (RAYTRACER_LIB_SOURCES
   uv_checkers.hpp
   uv_noise_texture.hpp)
 
-add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES} )
+add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
 target_link_libraries(raytracer_lib PRIVATE common ${SDL2_LIBRARIES})
 

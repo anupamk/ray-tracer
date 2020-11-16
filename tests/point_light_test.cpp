@@ -3,6 +3,11 @@
 /// 3rdparty testing library
 #include "doctest.h"
 
+/// our headers
+#include "logging.h"
+
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
+
 /// convenience
 namespace RT = raytracer;
 

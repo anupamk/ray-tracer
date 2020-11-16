@@ -16,6 +16,9 @@
 #include "point_light.hpp"
 #include "phong_illumination.hpp"
 #include "plane.hpp"
+#include "logging.h"
+
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
 /// convenience
 namespace RT = raytracer;

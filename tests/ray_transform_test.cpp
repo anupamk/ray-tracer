@@ -10,6 +10,8 @@
 #include "tuple.hpp"
 #include "matrix_transformations.hpp"
 
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
+
 TEST_CASE("test ray.transform(...) results")
 {
 	/// convenience

@@ -11,6 +11,8 @@
 #include "sphere.hpp"
 #include "matrix_transformations.hpp"
 
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
+
 /// convenience
 namespace RT   = raytracer;
 using RT_XFORM = RT::matrix_transformations_t;

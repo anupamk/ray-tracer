@@ -54,7 +54,7 @@ typedef enum {
 #endif
 
 /* log level */
-extern log_level_t LOG_LEVEL_NOW;
+extern log_level_t GLOBAL_LOG_LEVEL_NOW;
 
 /*
  * logging format string (left -> right)
@@ -72,7 +72,7 @@ extern log_level_t LOG_LEVEL_NOW;
  * as convention, if default-log-level == x, all logs from
  * log-level-[x..0] are logged.
 **/
-#define LOGGING_ENABLED_AT_LEVEL(ll) ((ll) <= (LOG_LEVEL_NOW))
+#define LOGGING_ENABLED_AT_LEVEL(ll) ((ll) <= (GLOBAL_LOG_LEVEL_NOW))
 
 // clang-format off
 #define DO_LOG__(log_level, log_level_str, fmt, ...)                    \

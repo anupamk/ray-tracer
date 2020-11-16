@@ -7,6 +7,9 @@
 /// our own thing
 #include "constants.hpp"
 #include "tuple.hpp"
+#include "logging.h"
+
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
 /// point-tuple test
 TEST_CASE("testing tuple's point functionality")

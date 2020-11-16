@@ -6,6 +6,11 @@ cmake_minimum_required(VERSION 3.6)
 # project name
 project(the-ray-tracer CXX)
 
+# ------------------------------------------------------------------------------
+# enable testing
+include(CTest)
+enable_testing()
+
 # disable colors : they don't help much
 set (CMAKE_COLOR_MAKEFILE 0)
 
@@ -30,14 +35,15 @@ add_compile_options(
   -march=native
   )
 
-#
+# ------------------------------------------------------------------------------
 # all the subdirs making up this project i.e the following:
 #    - 3rd-party/doctest   : for tests
 #    - common              : commonly used utilities
 #    - src                 : actual sources
-#    - test                : the tests
-#
 add_subdirectory(3rd-party)
 add_subdirectory(common)
 add_subdirectory(src)
-add_subdirectory(test)
+
+# ------------------------------------------------------------------------------
+# tests are all together in this sub-directory
+add_subdirectory(tests)

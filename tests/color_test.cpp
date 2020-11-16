@@ -8,6 +8,9 @@
 /// our own thing
 #include "constants.hpp"
 #include "color.hpp"
+#include "logging.h"
+
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
 /// color creation test
 TEST_CASE("color creation")
