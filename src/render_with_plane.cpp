@@ -5,8 +5,6 @@
 
 /// c++ includes
 #include <algorithm>
-#include <atomic>
-#include <chrono>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -15,9 +13,6 @@
 #include <thread>
 #include <utility>
 #include <vector>
-
-/// 3rd-party libraries
-#include "concurrentqueue.h"
 
 /// our includes
 #include "camera.hpp"
@@ -33,6 +28,8 @@
 #include "shape_interface.hpp"
 #include "logging.h"
 #include "solid_pattern.hpp"
+#include "raytracer_renderer.hpp"
+#include "benchmark.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
@@ -41,40 +38,39 @@
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly
-namespace RT     = raytracer;
-using RT_XFORM   = RT::matrix_transformations_t;
-namespace CQ     = moodycamel;
-namespace CHRONO = std::chrono;
-using HR_CLOCK   = std::chrono::high_resolution_clock;
-using CHRONO_MS  = std::chrono::milliseconds;
-
-/// --------------------------------------------------------------------
-/// - a render-work item is a ray at a specific place on the canvas
-///
-/// - a bunch of render-work items is what is what gets handled by a
-/// single rendering thread.
-struct render_work_item {
-	uint32_t x;
-	uint32_t y;
-	RT::ray_t r;
-};
-
-struct render_work {
-	std::vector<render_work_item> work_list;
-};
+namespace RT   = raytracer;
+using RT_XFORM = RT::matrix_transformations_t;
 
 /// file specific functions
 static RT::world create_world();
 static RT::camera create_camera();
-static void st_render_world(RT::world const&, RT::camera const&, std::string const& dst_fname = "");
-static void mt_render_world(RT::world const&, RT::camera const&, std::string const& dst_fname = "");
-static void coloring_worker(int, CQ::ConcurrentQueue<render_work>&, RT::world const&, RT::canvas&);
 
 int main(int argc, char** argv)
 {
-	auto const w = create_world();
-	auto const c = create_camera();
-	mt_render_world(w, c);
+	auto const world  = create_world();
+	auto const camera = create_camera();
+	auto dst_fname    = "render-with-plane.ppm";
+
+	LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
+	         "destination: '%s'}",
+	         camera.hsize(), camera.vsize(), dst_fname);
+
+	/// --------------------------------------------------------------------
+	/// benchmark the render with '10' renders performed, and throwing away
+	/// the results from '1' of them
+	Benchmark<> render_bm(10, 1);
+	LOG_INFO("benchmark details: '%s'", render_bm.stringify().c_str());
+
+	/// --------------------------------------------------------------------
+	/// just use the first [0] result only please
+	auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
+	rendered_canvas.write(dst_fname);
+
+	/// --------------------------------------------------------------------
+	/// show what we got
+	LOG_INFO("benchmark details : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+	         render_bm.mean(),                /// mean-usec
+	         render_bm.standard_deviation()); /// stddev-usec
 
 	return 0;
 }
@@ -82,133 +78,6 @@ int main(int argc, char** argv)
 /*
  * only file specific functions from this point onwards
 **/
-
-/// ----------------------------------------------------------------------------
-/// this function is called to render the world. this is the single threaded renderer.
-static inline void st_render_world(RT::world const& w, RT::camera const& c, std::string const& dst_fname)
-{
-	/// convenience
-	auto const render_start_time = HR_CLOCK::now();
-
-	/// render the scene
-	auto rendered_canvas = c.render(w);
-
-	// clang-format off
-        auto render_end_time = HR_CLOCK::now();
-        long render_time_ms =  CHRONO::duration_cast<CHRONO_MS>(render_end_time -
-                                                                render_start_time).count();
-	// clang-format on
-	LOG_INFO("total render time: %ld (ms)", render_time_ms);
-
-	if (!dst_fname.empty()) {
-		rendered_canvas.write(dst_fname);
-		LOG_INFO("saved canvas in: '%s'", dst_fname.c_str());
-	} else {
-		rendered_canvas.show();
-	}
-
-	return;
-}
-
-/// ----------------------------------------------------------------------------
-/// this function is called to render the world. this is the multi-threaded renderer.
-static inline void mt_render_world(RT::world const& w, RT::camera const& c, std::string const& dst_fname)
-{
-	RT::canvas rendered_canvas = RT::canvas::create_binary(c.hsize(), c.vsize());
-	LOG_INFO("canvas information: '%s'", rendered_canvas.stringify().c_str());
-
-	/// --------------------------------------------------------------------
-	/// concurrent queue contains multiple instances of render_work defined
-	/// above.
-	int const MAX_COLOR_THREADS     = std::thread::hardware_concurrency();
-	int const TOTAL_RAYS_PER_THREAD = c.hsize() / MAX_COLOR_THREADS;
-	CQ::ConcurrentQueue<render_work> work_queue(TOTAL_RAYS_PER_THREAD * c.vsize());
-
-	/// start pushing work out into the queue
-	for (uint32_t y = 0; y < c.vsize(); y++) {
-		for (uint32_t x = 0; x < c.hsize(); x += TOTAL_RAYS_PER_THREAD) {
-			render_work work_item;
-			work_item.work_list.reserve(TOTAL_RAYS_PER_THREAD);
-
-			for (int i = 0; i < TOTAL_RAYS_PER_THREAD; i++) {
-				render_work_item tmp{
-					x + i,                    /// x-pixel
-					y,                        /// y-pixel
-					c.ray_for_pixel(x + i, y) /// ray-at-(x,y)
-				};
-
-				work_item.work_list.push_back(tmp);
-			}
-
-			work_queue.enqueue(work_item);
-		}
-	}
-
-	/// --------------------------------------------------------------------
-	/// start the coloring threads
-	std::vector<std::thread> coloring_threads(MAX_COLOR_THREADS);
-	for (auto thread_id = 0; thread_id < MAX_COLOR_THREADS; thread_id++) {
-		coloring_threads[thread_id] = std::thread(coloring_worker,            /// rendering-function
-		                                          thread_id,                  /// thread-id
-		                                          std::ref(work_queue),       /// work-queue
-		                                          w,                          /// the world
-		                                          std::ref(rendered_canvas)); /// canvas
-	}
-
-	/// convenience
-	auto const render_start_time = HR_CLOCK::now();
-
-	/// wait for all of them to terminate
-	std::for_each(coloring_threads.begin(), coloring_threads.end(), std::mem_fn(&std::thread::join));
-
-	/// some stats
-	auto render_end_time = HR_CLOCK::now();
-	long render_time_ms  = CHRONO::duration_cast<CHRONO_MS>(render_end_time - render_start_time).count();
-
-	LOG_INFO("total render time: %ld (ms)", render_time_ms);
-
-	if (!dst_fname.empty()) {
-		rendered_canvas.write(dst_fname);
-		LOG_INFO("saved canvas in: '%s'", dst_fname.c_str());
-	} else {
-		rendered_canvas.show();
-	}
-
-	return;
-}
-
-/// ----------------------------------------------------------------------------
-/// this is coloring-worker i.e. the thread function responsible for rendering a
-/// bunch of rays on the canvas
-static void coloring_worker(int thread_id,                                /// for logging
-                            CQ::ConcurrentQueue<render_work>& work_queue, /// work-item-queue
-                            RT::world const& w,                           /// world
-                            RT::canvas& dst_canvas)                       /// destination-canvas
-{
-	bool all_done         = false;
-	size_t items_rendered = 0;
-
-	/// do some work
-	do {
-		render_work rw;
-		if (work_queue.try_dequeue(rw)) {
-			for (auto work : rw.work_list) {
-				auto r_color = w.color_at(work.r);
-				dst_canvas.write_pixel(work.x, work.y, r_color);
-			}
-			items_rendered += 1;
-		}
-
-		/// ------------------------------------------------------------
-		/// are there more items in work-queue ?
-		auto items_in_q = work_queue.size_approx();
-		if (items_in_q == 0) {
-			all_done = true;
-		}
-	} while (!all_done);
-
-	LOG_DEBUG("thread: %d done, total work done: %ld", thread_id, items_rendered);
-}
 
 /// ---------------------------------------------------------------------------
 /// this function is called to create a world which is then rendered using

@@ -70,6 +70,19 @@ target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SD
 target_link_libraries(raytracer_lib PRIVATE common ${SDL2_LIBRARIES})
 
 # ------------------------------------------------------------------------------
+# these files make the core of rendering routines in the raytracer
+set (RAYTRACER_RENDER_LIB_SOURCES
+  raytracer_renderer.hpp
+  single_threaded_renderer.cpp
+  multi_threaded_renderer.cpp)
+
+add_library(raytracer_render_lib STATIC ${RAYTRACER_RENDER_LIB_SOURCES})
+target_include_directories(raytracer_render_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(raytracer_render_lib PRIVATE concurrentqueue)
+target_link_libraries(raytracer_render_lib PRIVATE pthread)
+target_link_libraries(raytracer_render_lib PRIVATE common)
+
+# ------------------------------------------------------------------------------
 # chapter-02: drawing on a canvas.
 #
 # use drawing primitives to render path of cannonball from a virtual cannon.
@@ -122,8 +135,7 @@ target_link_libraries(ch-06-mt-phong-sphere PRIVATE pthread)
 add_executable(ch-08-making-a-scene render_world_main.cpp)
 target_link_libraries(ch-08-making-a-scene PRIVATE common)
 target_link_libraries(ch-08-making-a-scene PRIVATE raytracer_lib)
-target_link_libraries(ch-08-making-a-scene PRIVATE concurrentqueue)
-target_link_libraries(ch-08-making-a-scene PRIVATE pthread)
+target_link_libraries(ch-08-making-a-scene PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-09: render with planes
@@ -134,8 +146,7 @@ target_link_libraries(ch-08-making-a-scene PRIVATE pthread)
 add_executable(ch-09-render-with-plane render_with_plane.cpp)
 target_link_libraries(ch-09-render-with-plane PRIVATE common)
 target_link_libraries(ch-09-render-with-plane PRIVATE raytracer_lib)
-target_link_libraries(ch-09-render-with-plane PRIVATE concurrentqueue)
-target_link_libraries(ch-09-render-with-plane PRIVATE pthread)
+target_link_libraries(ch-09-render-with-plane PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render with patterns
@@ -147,8 +158,7 @@ target_link_libraries(ch-09-render-with-plane PRIVATE pthread)
 add_executable(ch-10-render-with-patterns render_with_patterns.cpp)
 target_link_libraries(ch-10-render-with-patterns PRIVATE common)
 target_link_libraries(ch-10-render-with-patterns PRIVATE raytracer_lib)
-target_link_libraries(ch-10-render-with-patterns PRIVATE concurrentqueue)
-target_link_libraries(ch-10-render-with-patterns PRIVATE pthread)
+target_link_libraries(ch-10-render-with-patterns PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render textures
@@ -170,5 +180,5 @@ target_link_libraries(ch-10-render-textures PRIVATE raytracer_lib)
 add_executable(ch-10-render-with-textures render_with_textures.cpp)
 target_link_libraries(ch-10-render-with-textures PRIVATE common)
 target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_lib)
-target_link_libraries(ch-10-render-with-textures PRIVATE concurrentqueue)
-target_link_libraries(ch-10-render-with-textures PRIVATE pthread)
+target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_render_lib)
+

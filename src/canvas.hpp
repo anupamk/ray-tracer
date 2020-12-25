@@ -2,14 +2,14 @@
 #define RAYTRACER_SRC_CANVAS_HPP__
 
 /*
- * this file implements the canvas i.e. a virtual drawing board on which to
+ * this file implements the canvas i.e. the virtual drawing board on which we
  * visualize our creations !
  *
  * canvas generates images in the ppm (portable pixmap) format. specifically
- * both ppm3 and ppm6 i.e. ascii and binary encoded images (respectively) are
- * supported.
+ * both ppm3 (ascii) and ppm6 (binary) encoded images are supported.
  *
- * canvas can also render its current state using sdl2 as well.
+ * sdl2 based renderer can be brought to bear (beer ?) for 'online'
+ * visualization as well.
 **/
 
 /// c++ includes
@@ -46,7 +46,7 @@ namespace raytracer
 		std::size_t const width_{0};
 		std::size_t const height_{0};
 		canvas_type const type_{PPM_CANVAS_INVALID};
-		std::unique_ptr<color[]> buf_{nullptr};
+		std::vector<color> buf_;
 
 	    public:
 		/// ------------------------------------------------------------

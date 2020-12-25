@@ -70,7 +70,6 @@ namespace raytracer
 	canvas camera::render(world const& w) const
 	{
 		auto dst_canvas = canvas::create_binary(horiz_size_, vert_size_);
-		LOG_INFO("canvas information: '%s'", dst_canvas.stringify().c_str());
 
 		for (uint32_t y = 0; y < vert_size_; y++) {
 			for (uint32_t x = 0; x < horiz_size_; x++) {
