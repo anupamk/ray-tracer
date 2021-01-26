@@ -183,3 +183,14 @@ target_link_libraries(ch-10-render-with-textures PRIVATE common)
 target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_lib)
 target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_render_lib)
 
+# ------------------------------------------------------------------------------
+# chapter-10: render with canvas on sphere
+#
+# render a ppm texture on a sphere.
+#
+# both single and multi threaded rendering is supported.
+add_executable(ch-10-render-nasa-blue-earth render_nasa_blue_earth.cpp)
+target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE common)
+target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE raytracer_lib)
+target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE raytracer_render_lib)
+

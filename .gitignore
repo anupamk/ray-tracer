@@ -7,3 +7,4 @@ build/*
 .clangd/*
 .cache/*
 compile_commands.json
+textures/*.ppm

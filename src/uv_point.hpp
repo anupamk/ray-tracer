@@ -27,8 +27,6 @@ namespace raytracer
 		    : u_(u)
 		    , v_(v)
 		{
-			ASSERT((u >= 0.0) && (u <= 1.0));
-			ASSERT((v >= 0.0) && (v <= 1.0));
 		}
 
 	    public:
