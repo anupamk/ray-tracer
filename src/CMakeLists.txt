@@ -63,7 +63,8 @@ set (RAYTRACER_LIB_SOURCES
   uv_point.cpp
   uv_point.hpp
   uv_checkers.hpp
-  uv_noise_texture.hpp)
+  uv_noise_texture.hpp
+  uv_image_pattern.hpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})

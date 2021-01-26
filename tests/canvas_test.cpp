@@ -19,6 +19,7 @@
 #include "color.hpp"
 #include "canvas.hpp"
 #include "logging.h"
+#include "uv_image_pattern.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
@@ -364,6 +365,62 @@ TEST_CASE("canvas::load_from_file(...) parsing respects the scale setting")
 	for (auto const& tc_expected : tc_list) {
 		auto got_pixel_color = ppm_canvas.read_pixel(tc_expected.x, tc_expected.y);
 		CHECK(got_pixel_color == tc_expected.pixel_color);
+	}
+
+	return;
+}
+
+/// ----------------------------------------------------------------------------
+/// test checkers pattern as 2d canvas
+TEST_CASE("uv_image checkers patterned canvas")
+{
+	std::string_view ppm_data = R"""(P3
+10 10
+10
+0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9
+1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0
+2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1
+3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2
+4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3
+5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4
+6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5
+7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6
+8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7
+9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8
+)""";
+
+	std::string ppm_fname = fill_file_with_data(ppm_data);
+	CHECK(ppm_fname.size() != 0);
+
+	auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);
+	CHECK(maybe_ppm_canvas.has_value() == true);
+	unlink(ppm_fname.c_str());
+
+	auto ppm_canvas = maybe_ppm_canvas.value();
+	CHECK(ppm_canvas.width() == 10);
+	CHECK(ppm_canvas.height() == 10);
+
+	/// --------------------------------------------------------------------
+	/// (u, v) point on the image
+	struct {
+		float u;
+		float v;
+		RT::color pixel_color;
+	} const tc_list[] = {
+		{0.0, 0.0, RT::color{0.9, 0.9, 0.9}},
+		{0.3, 0.0, RT::color{0.2, 0.2, 0.2}},
+		{0.6, 0.3, RT::color{0.1, 0.1, 0.1}},
+		{1.0, 1.0, RT::color{0.9, 0.9, 0.9}},
+	};
+
+	RT::uv_image const test_uv_img(ppm_canvas);
+
+	for (auto const& tc_expected : tc_list) {
+		auto const got_uv_pixel_color =
+			test_uv_img.uv_pattern_color_at(RT::uv_point{tc_expected.u,   /// u-value
+		                                                     tc_expected.v}); /// v-value
+
+		CHECK(got_uv_pixel_color == tc_expected.pixel_color);
 	}
 
 	return;
