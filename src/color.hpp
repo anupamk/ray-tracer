@@ -36,6 +36,16 @@ namespace raytracer
 		{
 		}
 
+		/// ------------------------------------------------------------
+		/// create a color by specifying rgb values. we cannot use
+		/// an equivalent constructor due to ambiguous overload between
+		/// `float` and `uint8_t`, which leads to explicit qualification
+		/// at usage points. so ↓ is arguably better.
+		static constexpr color RGB(uint8_t r, uint8_t g, uint8_t b)
+		{
+			return color(r / 255.0f, g / 255.0f, b / 255.0f);
+		}
+
 	    public:
 		/// get the values out
 		constexpr float R() const
