@@ -65,9 +65,10 @@ TEST_CASE("ray::prepare_computations(...) test")
 	/// create sphere and setup the intersection
 	auto const the_sphere = std::make_shared<RT::sphere>();
 	auto const xs_01      = RT::intersection_record(4.0, the_sphere);
+	auto const xs_list    = RT::intersection_records{xs_01};
 
 	/// --------------------------------------------------------------------
-	auto const xs_info = r.prepare_computations(xs_01);
+	auto const xs_info = r.prepare_computations(xs_list);
 
 	/// --------------------------------------------------------------------
 	/// validate
@@ -91,9 +92,10 @@ TEST_CASE("ray::prepare_computations(...) test")
 	/// create sphere and setup the intersection
 	auto const the_sphere = std::make_shared<RT::sphere>();
 	auto const xs_01      = RT::intersection_record(1.0, the_sphere);
+	auto const xs_list    = RT::intersection_records{xs_01};
 
 	/// --------------------------------------------------------------------
-	auto const xs_info = r.prepare_computations(xs_01);
+	auto const xs_info = r.prepare_computations(xs_list);
 
 	/// --------------------------------------------------------------------
 	/// validate
@@ -119,10 +121,11 @@ TEST_CASE("ray::prepare_computations(...) test")
 	the_sphere->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 1.0));
 
 	/// an intersection record
-	auto const xs_01 = RT::intersection_record(5.0, the_sphere);
+	auto const xs_01   = RT::intersection_record(5.0, the_sphere);
+	auto const xs_list = RT::intersection_records{xs_01};
 
 	/// check compute point of intersection
-	auto const comps = r.prepare_computations(xs_01);
+	auto const comps = r.prepare_computations(xs_list);
 
 	CHECK(comps.over_position().z() < -RT::EPSILON / 2.0);
 	CHECK(comps.position().z() > comps.over_position().z());

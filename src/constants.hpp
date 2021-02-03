@@ -7,7 +7,8 @@
 namespace raytracer
 {
 	/// floating point approx comparison
-	constexpr auto EPSILON = 1.0e-5;
+	constexpr auto EPSILON       = 1.0e-5;
+	constexpr auto EPSILON_BY_2F = EPSILON / 2.0;
 
 	/// max + min color values
 	constexpr uint8_t PPM_MAX_COLOR_VALUE = 255; /// for colors ≥ 1.0

@@ -59,6 +59,10 @@ namespace raytracer
 
 	std::ostream& operator<<(std::ostream& os, sphere const& S);
 
+	/// --------------------------------------------------------------------
+	/// create a glass sphere
+	std::shared_ptr<shape_interface> glass_sphere();
+
 } // namespace raytracer
 
 #endif /// RAYTRACER_SPHERE_HPP__

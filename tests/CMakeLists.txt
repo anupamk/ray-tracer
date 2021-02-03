@@ -14,7 +14,8 @@ SET(RT_TEST_SRC_FILES
   world_test.cpp
   camera_test.cpp
   plane_test.cpp
-  pattern_test.cpp)
+  pattern_test.cpp
+  reflection_refraction_test.cpp)
 
 # ------------------------------------------------------------------------------
 # no user serviceable parts here ↓

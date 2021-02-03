@@ -31,19 +31,17 @@ namespace raytracer
 		return this->direction_;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// compute the position of a point at a distance 't' (from origin) on
 	/// this ray
-	///
 	tuple ray_t::position(double t) const
 	{
 		return this->origin() + this->direction() * t;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to apply a transformation matrix on a ray,
 	/// and it returns a new ray instance
-	///
 	ray_t ray_t::transform(fsize_dense2d_matrix_t const& M) const
 	{
 		auto const new_origin    = M * this->origin();
@@ -52,9 +50,8 @@ namespace raytracer
 		return ray_t(new_origin, new_direction);
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// stringified representation of a ray
-	///
 	std::string ray_t::stringify() const
 	{
 		std::stringstream ss("");
@@ -67,10 +64,9 @@ namespace raytracer
 		return ss.str();
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to return the result of a ray intersecting a
 	/// shape
-	///
 	std::optional<intersection_records>
 	ray_t::intersect(std::shared_ptr<const shape_interface> const& S) const
 	{
@@ -79,39 +75,92 @@ namespace raytracer
 	}
 
 	/// --------------------------------------------------------------------
-	/// this function is called to return some information about the intersection
-	intersection_info_t ray_t::prepare_computations(intersection_record xs_data) const
+	/// this function is called to return meta-information about a specific
+	/// intersection.
+	intersection_info_t ray_t::prepare_computations(intersection_records const& xs_data,
+	                                                size_t index) const
 	{
 		intersection_info_t retval;
+		auto const& current_xs = xs_data[index];
 
 		/// set some trivial values
-		retval.point(xs_data.where())
-			.what_object(xs_data.what_object())
-			.position(position(xs_data.where()))
+		retval.point(current_xs.where())
+			.what_object(current_xs.what_object())
+			.position(position(current_xs.where()))
 			.eye_vector(-direction());
 
+		/// ------------------------------------------------------------
 		/// compute normal at intersection
-		auto const normal_at_xs = xs_data.what_object()->normal_at_world(retval.position());
+		auto normal_at_xs = current_xs.what_object()->normal_at_world(retval.position());
 
 		/// intersection is inside or outside ?
 		if (raytracer::dot(normal_at_xs, retval.eye_vector()) < 0) {
 			retval.inside(true).normal_vector(-normal_at_xs);
 		} else {
-			retval.inside(false).normal_vector(normal_at_xs);
+			retval.inside(false).normal_vector(std::move(normal_at_xs));
 		}
 
-		/// over-point is slightly above the actual point of
-		/// intersection
-		auto const over_point = retval.position() + retval.normal_vector() * EPSILON;
-		retval.over_position(over_point);
+		/// ------------------------------------------------------------
+		/// over-point and under-point are epsilon above and below the
+		/// intersection respectively.
+		auto over_point  = retval.position() + retval.normal_vector() * EPSILON;
+		auto under_point = retval.position() - retval.normal_vector() * EPSILON;
+		retval.over_position(std::move(over_point)).under_position(std::move(under_point));
+
+		/// ------------------------------------------------------------
+		/// compute reflection vector
+		auto refl_vec = reflect(this->direction(), retval.normal_vector());
+		retval.reflection_vector(std::move(refl_vec));
+
+		/// ------------------------------------------------------------
+		/// for a given intersection, find the refractive index of the
+		/// material the ray is passing from (n1) and the refractive
+		/// index of the material the ray is passing into (n2)
+		std::vector<std::shared_ptr<shape_interface const>> shape_list;
+		for (auto const& xs_i : xs_data) {
+			auto const hit_current = (xs_i == current_xs);
+			auto const xs_i_obj    = xs_i.what_object();
+
+			/// --------------------------------------------
+			/// step-01
+			if (hit_current) {
+				auto n1_val =
+					shape_list.empty() ?
+                                                material::RI_VACCUM :
+                                                shape_list.back()->get_material().get_refractive_index();
+
+				retval.n1(n1_val);
+			}
+
+			/// --------------------------------------------
+			/// step-02
+			auto iter = std::find(shape_list.begin(), shape_list.end(), xs_i_obj);
+
+			if (iter != shape_list.end()) {
+				shape_list.erase(iter);
+			} else {
+				shape_list.push_back(xs_i_obj);
+			}
+
+			/// --------------------------------------------
+			/// step-03
+			if (hit_current) {
+				auto n2_val =
+					shape_list.empty() ?
+                                                material::RI_VACCUM :
+                                                shape_list.back()->get_material().get_refractive_index();
+
+				retval.n2(n2_val);
+				break;
+			}
+		}
 
 		return retval;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// compare two rays, and return true iff both origin and direction of
 	/// the rays are same. false otherwise
-	///
 	bool operator==(ray_t const& lhs, ray_t const& rhs)
 	{
 		// clang-format off
@@ -120,9 +169,8 @@ namespace raytracer
 		// clang-format on
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// 'reasonably' formatted output for the ray
-	///
 	std::ostream& operator<<(std::ostream& os, ray_t const& R)
 	{
 		return os << R.stringify();

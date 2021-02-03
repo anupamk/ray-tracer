@@ -61,10 +61,15 @@ namespace raytracer
 	///
 	std::optional<intersection_record> visible_intersection(intersection_records const& ixns_list)
 	{
-		for (auto const& xs : ixns_list) {
+		uint32_t idx = 0;
+
+		for (auto xs : ixns_list) {
 			if (xs.where() >= 0.0) {
+				xs.index(idx);
 				return xs;
 			}
+
+			idx += 1;
 		}
 
 		/// no visible intersections

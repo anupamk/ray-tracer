@@ -23,6 +23,12 @@ namespace raytracer
 		std::vector<point_light> light_list_;
 		std::vector<std::shared_ptr<const shape_interface>> shape_list_;
 
+		/// ------------------------------------------------------------
+		/// avoid bouncing rays between reflective surfaces till
+		/// infinity. this limits max number of reflections/refractions
+		/// to some sane number
+		static inline constexpr uint8_t MAX_RECURSION_DEPTH = 5;
+
 	    public:
 		world();
 		static world create_default_world();
@@ -45,16 +51,24 @@ namespace raytracer
 		intersection_records intersect(ray_t const&) const;
 
 		/// compute the color when a ray hits the world
-		color shade_hit(intersection_info_t const&) const;
+		color shade_hit(intersection_info_t const&, uint8_t remaining = MAX_RECURSION_DEPTH) const;
 
 		/// compute the color due to a ray.
-		color color_at(ray_t const&) const;
+		color color_at(ray_t const&, uint8_t remaining = MAX_RECURSION_DEPTH) const;
 
 		/// stringified representation of the world
 		std::string stringify() const;
 
 		/// return true if point 'pt' is in shadow w.r.t a light source.
 		bool is_shadowed(tuple const& pt) const;
+
+		/// compute the reflected color
+		color reflected_color(intersection_info_t const&,
+		                      uint8_t remaining = MAX_RECURSION_DEPTH) const;
+
+		/// compute the refracted color
+		color refracted_color(intersection_info_t const&,
+		                      uint8_t remaining = MAX_RECURSION_DEPTH) const;
 
 	    private:
 		static point_light create_default_light();

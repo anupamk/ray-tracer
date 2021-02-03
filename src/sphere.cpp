@@ -129,4 +129,19 @@ namespace raytracer
 	{
 		return os << S.stringify();
 	}
+
+	/// --------------------------------------------------------------------
+	/// this function is called to return an instance of a glassy sphere
+	std::shared_ptr<shape_interface> glass_sphere()
+	{
+		auto tmp_sphere      = std::make_shared<sphere>();
+		auto glassy_material = material()
+					       .set_transparency(1.0)                     /// transparent
+					       .set_refractive_index(material::RI_GLASS); /// made-of-glass
+
+		tmp_sphere->set_material(glassy_material);
+
+		return tmp_sphere;
+	}
+
 } // namespace raytracer

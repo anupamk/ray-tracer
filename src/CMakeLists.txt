@@ -194,3 +194,17 @@ target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE common)
 target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE raytracer_lib)
 target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE raytracer_render_lib)
 
+# ------------------------------------------------------------------------------
+# chapter-11: render with transparency and reflections
+add_executable(ch-11-render-with-reflections render_with_reflections.cpp)
+target_link_libraries(ch-11-render-with-reflections PRIVATE common)
+target_link_libraries(ch-11-render-with-reflections PRIVATE raytracer_lib)
+target_link_libraries(ch-11-render-with-reflections PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# chapter-11: render with transparency(t) and reflections(r) and refractions(r)
+add_executable(ch-11-render-with-t3r render_with_t3r.cpp)
+target_link_libraries(ch-11-render-with-t3r PRIVATE common)
+target_link_libraries(ch-11-render-with-t3r PRIVATE raytracer_lib)
+target_link_libraries(ch-11-render-with-t3r PRIVATE raytracer_render_lib)
+

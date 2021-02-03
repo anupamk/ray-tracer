@@ -21,13 +21,23 @@ namespace raytracer
 	class intersection_record
 	{
 	    private:
-		double where_;                                /// where intersection happened
-		std::shared_ptr<shape_interface const> what_; /// what object was intersected
+		/// ------------------------------------------------------------
+		/// where intersection happened
+		double where_;
+
+		/// ------------------------------------------------------------
+		/// what object was intersected
+		std::shared_ptr<shape_interface const> what_;
+
+		/// ------------------------------------------------------------
+		/// HACK: index of this record in the intersection-list
+		uint32_t index_;
 
 	    public:
 		intersection_record(double t, std::shared_ptr<shape_interface const> a_shape)
 		    : where_(t)
 		    , what_(a_shape)
+		    , index_(0)
 		{
 		}
 
@@ -40,6 +50,19 @@ namespace raytracer
 		std::shared_ptr<shape_interface const> what_object() const
 		{
 			return this->what_;
+		}
+
+	    public:
+		/// ------------------------------------------------------------
+		/// HACK HACK HACK
+		constexpr uint32_t index() const
+		{
+			return this->index_;
+		}
+
+		void index(uint32_t idx)
+		{
+			this->index_ = idx;
 		}
 
 		/// stringified representation of an intersection record

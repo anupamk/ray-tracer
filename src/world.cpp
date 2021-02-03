@@ -1,7 +1,6 @@
 #include "world.hpp"
 
 /// c++ includes
-#include "solid_pattern.hpp"
 #include <algorithm>
 #include <ios>
 #include <iostream>
@@ -10,6 +9,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 /// our includes
 #include "shape_interface.hpp"
@@ -129,8 +129,8 @@ namespace raytracer
 	}
 
 	/// --------------------------------------------------------------------
-	///
-	color world::shade_hit(intersection_info_t const& xs_info) const
+	///compute the color when a ray hits the world
+	color world::shade_hit(intersection_info_t const& xs_info, uint8_t remaining) const
 	{
 		color shade_color    = color_black();
 		auto point_in_shadow = is_shadowed(xs_info.over_position());
@@ -146,23 +146,37 @@ namespace raytracer
                 }
 		// clang-format on
 
-		return shade_color;
+		auto const reflect_color = reflected_color(xs_info, remaining);
+		auto const refract_color = refracted_color(xs_info, remaining);
+
+		/// ------------------------------------------------------------
+		/// employ reflectance with reflection and refraction
+		auto const mat = xs_info.what_object()->get_material();
+		if ((mat.get_reflective() > 0.0) && (mat.get_transparency() > 0.0)) {
+			auto const reflectance = xs_info.schlick_approx();
+
+			return shade_color                              /// phong-color
+			       + (reflect_color * reflectance)          /// reflection+reflectance
+			       + (refract_color * (1.0 - reflectance)); /// refract+reflectance
+		}
+
+		return (shade_color + reflect_color + refract_color);
 	}
 
 	/// --------------------------------------------------------------------
 	/// compute the color due a ray intersecting a shape in the world
-	color world::color_at(ray_t const& r) const
+	color world::color_at(ray_t const& r, uint8_t remaining) const
 	{
 		/// compute the visible intersection
-		auto const xs_list       = intersect(r);
-		auto const vis_xs_record = visible_intersection(xs_list);
+		auto xs_list       = intersect(r);
+		auto vis_xs_record = visible_intersection(xs_list);
 
 		if (vis_xs_record) {
 			/// ok, so there seems to be a visible intersection. compute the
 			/// color
-			auto const xs_info = r.prepare_computations(vis_xs_record.value());
-
-			return shade_hit(xs_info);
+			auto xs_record     = vis_xs_record.value();
+			auto const xs_info = r.prepare_computations(xs_list, xs_record.index());
+			return shade_hit(xs_info, remaining);
 		}
 
 		/// no visible intersection
@@ -224,6 +238,59 @@ namespace raytracer
 		}
 
 		return false;
+	}
+
+	/// --------------------------------------------------------------------
+	/// compute the color for reflections
+	color world::reflected_color(intersection_info_t const& xs_info, uint8_t remaining) const
+	{
+		auto const xs_obj_material = xs_info.what_object()->get_material();
+		auto const mat_reflective  = xs_obj_material.get_reflective();
+
+		/// surprise: non reflective objects reflect no color at all.
+		if ((mat_reflective == 0.0) || (remaining < 1)) {
+			return color_black();
+		}
+
+		ray_t const reflected_ray(xs_info.over_position(), xs_info.reflection_vector());
+		return color_at(reflected_ray, remaining - 1) * mat_reflective;
+	}
+
+	/// --------------------------------------------------------------------
+	/// compute the refracted color
+	color world::refracted_color(intersection_info_t const& xs_info, uint8_t remaining) const
+	{
+		auto const xs_obj_material  = xs_info.what_object()->get_material();
+		auto const mat_transparency = xs_obj_material.get_transparency();
+
+		/// surprise: non transparent objects have no refracted-color
+		/// component at all
+		if ((mat_transparency == 0.0) || (remaining < 1)) {
+			return color_black();
+		}
+
+		/// ------------------------------------------------------------
+		/// account for total-internal-reflection using Snell's Law
+		double const ri_ratio  = xs_info.n1() / xs_info.n2();
+		double const cos_i     = dot(xs_info.eye_vector(), xs_info.normal_vector());
+		double const sin_sqr_t = (ri_ratio * ri_ratio) * (1.0 - (cos_i * cos_i));
+
+		if (sin_sqr_t > 1.0) {
+			return color_black();
+		}
+
+		/// ------------------------------------------------------------
+		/// figure out the refracted-ray (rr) and compute its
+		/// color.
+		double const cos_t      = std::sqrt(1.0 - sin_sqr_t);
+		auto const rr_direction = xs_info.normal_vector() * (ri_ratio * cos_i - cos_t) -
+					  (xs_info.eye_vector() * ri_ratio);
+
+		/// refracted-ray originates at a point just-under the point of
+		/// intersection...
+		auto const refracted_ray = ray_t(xs_info.under_position(), rr_direction);
+
+		return color_at(refracted_ray, remaining - 1) * mat_transparency;
 	}
 
 	/*

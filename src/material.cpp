@@ -22,6 +22,9 @@ namespace raytracer
 	    , diffuse_(0.9)
 	    , specular_(0.9)
 	    , shininess_(200.0)
+	    , reflective_(0.0)
+	    , refractive_index_(RI_VACCUM)
+	    , transparency_(0.0)
 	    , pattern_(std::make_shared<solid_pattern>())
 	{
 	}
@@ -49,6 +52,21 @@ namespace raytracer
 		return this->shininess_;
 	}
 
+	float material::get_reflective() const
+	{
+		return this->reflective_;
+	}
+
+	float material::get_refractive_index() const
+	{
+		return this->refractive_index_;
+	}
+
+	float material::get_transparency() const
+	{
+		return this->transparency_;
+	}
+
 	color material::get_color(std::shared_ptr<shape_interface const> a_shape, tuple const& pt) const
 	{
 		return this->pattern_->color_at_shape(a_shape, pt);
@@ -67,10 +85,13 @@ namespace raytracer
 
 		// clang-format off
                 ss << std::fixed << std::left
-                   << "ambient: "   << this->get_ambient()         << ", "
-                   << "diffuse: "   << this->get_diffuse()         << ", "
-                   << "specular: "  << this->get_specular()        << ", "
-                   << "shininess: " << this->get_shininess()
+                   << "ambient: "    << this->get_ambient()                << ", "
+                   << "diffuse: "    << this->get_diffuse()                << ", "
+                   << "specular: "   << this->get_specular()               << ", "
+                   << "shininess: "  << this->get_shininess()              << ", "
+                   << "reflective: " << this->get_reflective()             << ", "
+                   << "refractive-index: " << this->get_refractive_index() << ", "
+                   << "transparency: " << this->get_transparency()
                    ;
 		// clang-format on
 
@@ -104,6 +125,24 @@ namespace raytracer
 		return *this;
 	}
 
+	material& material::set_reflective(float val)
+	{
+		this->reflective_ = val;
+		return *this;
+	}
+
+	material& material::set_refractive_index(float val)
+	{
+		this->refractive_index_ = val;
+		return *this;
+	}
+
+	material& material::set_transparency(float val)
+	{
+		this->transparency_ = val;
+		return *this;
+	}
+
 	material& material::set_pattern(std::shared_ptr<pattern_interface> val)
 	{
 		this->pattern_ = val;
@@ -128,11 +167,14 @@ namespace raytracer
 		auto const rhs_color = rhs.get_pattern()->color_at_point(origin);
 
 		// clang-format off
-                return ((lhs.get_ambient()    == rhs.get_ambient())    &&
-                        (lhs.get_diffuse()    == rhs.get_diffuse())    &&
-                        (lhs.get_specular()   == rhs.get_specular())   &&
-                        (lhs.get_shininess()  == rhs.get_shininess())  &&
-                        (lhs_color            == rhs_color));
+                return ((lhs.get_ambient()          == rhs.get_ambient())          &&
+                        (lhs.get_diffuse()          == rhs.get_diffuse())          &&
+                        (lhs.get_specular()         == rhs.get_specular())         &&
+                        (lhs.get_shininess()        == rhs.get_shininess())        &&
+                        (lhs.get_reflective()       == rhs.get_reflective())       &&
+                        (lhs.get_refractive_index() == rhs.get_refractive_index()) &&
+                        (lhs.get_transparency()     == rhs.get_transparency())     &&
+                        (lhs_color                  == rhs_color));
 		// clang-format on
 	}
 
