@@ -1,6 +1,6 @@
 /*
  *  implement raytracer shape material
-**/
+ **/
 
 /// c++ includes
 #include "tuple.hpp"

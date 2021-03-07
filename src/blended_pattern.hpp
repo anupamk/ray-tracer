@@ -8,16 +8,16 @@
 #include <string>
 
 /// our includes
-#include "pattern_interface.hpp"
-#include "color.hpp"
 #include "binary_pattern.hpp"
+#include "color.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements the blended-pattern where color is half the sum
-         * of individual colors.
-        **/
+	 * this class implements the blended-pattern where color is half the sum
+	 * of individual colors.
+	 **/
 	class blended_pattern final : public binary_pattern<blended_pattern>
 	{
 	    public:

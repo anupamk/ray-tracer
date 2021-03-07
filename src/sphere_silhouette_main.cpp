@@ -1,7 +1,7 @@
 /*
  * this program uses sphere and ray intersections to draw the silhouette of a
  * sphere on the canvas.
-**/
+ **/
 
 /// c++ includes
 #include <cstdint>
@@ -9,18 +9,18 @@
 #include <string>
 
 /// our includes
-#include "color.hpp"
-#include "tuple.hpp"
-#include "sphere.hpp"
-#include "ray.hpp"
-#include "logging.h"
 #include "canvas.hpp"
+#include "color.hpp"
+#include "logging.h"
 #include "matrix_transformations.hpp"
+#include "ray.hpp"
+#include "sphere.hpp"
+#include "tuple.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
  * later to more appropriate values.
-**/
+ **/
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly

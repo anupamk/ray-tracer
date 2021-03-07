@@ -15,7 +15,6 @@
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
-
 /// conveniences
 using rt_matrix_t = raytracer::fsize_dense2d_matrix_t;
 

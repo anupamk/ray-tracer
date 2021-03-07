@@ -1,6 +1,6 @@
 /*
  * implement the raytracer matrix
-**/
+ **/
 /// c++ includes
 #include <algorithm>
 #include <cstddef>
@@ -17,9 +17,8 @@
 
 namespace raytracer
 {
-	///
+	/// --------------------------------------------------------------------
 	/// create a (possibly default) initialized matrix
-	///
 	fsize_dense2d_matrix_t::fsize_dense2d_matrix_t(size_t rows, size_t cols, double init_val)
 	    : rows_{rows}
 	    , cols_{cols}
@@ -27,9 +26,8 @@ namespace raytracer
 	{
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// create matrix via an initializer-list
-	///
 	fsize_dense2d_matrix_t::fsize_dense2d_matrix_t(dense_2d_init_list_t const& row_list)
 	    : rows_{row_list.size()}
 	    , cols_{row_list.begin()->size()}
@@ -42,9 +40,8 @@ namespace raytracer
 		}
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to create an identity matrix of a specific size.
-	///
 	fsize_dense2d_matrix_t fsize_dense2d_matrix_t::create_identity_matrix(size_t sz)
 	{
 		fsize_dense2d_matrix_t ident_mat(sz, sz);
@@ -55,9 +52,8 @@ namespace raytracer
 		return ident_mat;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to return a specific row
-	///
 	std::vector<double> fsize_dense2d_matrix_t::get_row(size_t row_num) const
 	{
 		const auto data_start = this->data_.begin();
@@ -68,18 +64,16 @@ namespace raytracer
 		return ret;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// bounds-checked get_row
-	///
 	std::vector<double> fsize_dense2d_matrix_t::checked_get_row(size_t row_num) const
 	{
 		this->check_row_bounds_(row_num);
 		return get_row(row_num);
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to return a specific column
-	///
 	std::vector<double> fsize_dense2d_matrix_t::get_column(size_t col_num) const
 	{
 		std::vector<double> ret(this->num_rows());
@@ -91,6 +85,7 @@ namespace raytracer
 		return ret;
 	}
 
+	/// --------------------------------------------------------------------
 	/// runtime-bounds-checked get_column
 	std::vector<double> fsize_dense2d_matrix_t::checked_get_column(size_t col_num) const
 	{
@@ -98,9 +93,8 @@ namespace raytracer
 		return get_column(col_num);
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// stringified representation of a matrix
-	///
 	std::string fsize_dense2d_matrix_t::stringify() const
 	{
 		std::stringstream ss("");
@@ -123,25 +117,22 @@ namespace raytracer
 		return ss.str();
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// fotran style element access
-	///
 	double fsize_dense2d_matrix_t::operator()(size_t i, size_t j) const
 	{
 		return this->data_[this->get_elem_index_(i, j)];
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// fortran style element assignment
-	///
 	double& fsize_dense2d_matrix_t::operator()(size_t i, size_t j)
 	{
 		return this->data_[this->get_elem_index_(i, j)];
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// bounds-checked access
-	///
 	double fsize_dense2d_matrix_t::checked_get_elem(size_t i, size_t j) const
 	{
 		this->check_row_bounds_(i);
@@ -150,9 +141,8 @@ namespace raytracer
 		return (*this)(i, j);
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// bounds-checked assignment
-	///
 	void fsize_dense2d_matrix_t::checked_set_elem(size_t i, size_t j, double val)
 	{
 		this->check_row_bounds_(i);
@@ -162,9 +152,8 @@ namespace raytracer
 		return;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to compute the transpose of the matrix.
-	///
 	fsize_dense2d_matrix_t fsize_dense2d_matrix_t::transpose() const
 	{
 		fsize_dense2d_matrix_t ret(this->num_cols(), this->num_rows());
@@ -178,10 +167,9 @@ namespace raytracer
 		return ret;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to compute the product of this matrix by
 	/// another.
-	///
 	fsize_dense2d_matrix_t& fsize_dense2d_matrix_t::operator*=(fsize_dense2d_matrix_t const& rhs)
 	{
 		fsize_dense2d_matrix_t lhs(this->num_rows(), rhs.num_cols());
@@ -213,18 +201,16 @@ namespace raytracer
 		return *this;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// 'reasonably' formatted output for the matrix
-	///
 	std::ostream& operator<<(std::ostream& os, fsize_dense2d_matrix_t const& M)
 	{
 		return os << M.stringify();
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return 'true' if M == N, 'false' otherwise. this is an
 	/// 'epsilon_equal(...)' comparison for each M(i,j) and N(i,j)
-	///
 	bool operator==(fsize_dense2d_matrix_t const& M, fsize_dense2d_matrix_t const& N)
 	{
 		// clang-format off
@@ -247,28 +233,25 @@ namespace raytracer
 		return true;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return 'true' if M != N, 'false' otherwise. this is an
 	/// 'epsilon_equal(...)' comparison for each M(i,j) and N(i,j)
-	///
 	bool operator!=(fsize_dense2d_matrix_t const& M, fsize_dense2d_matrix_t const& N)
 	{
 		return !(M == N);
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return the product of two matrices M and N such that
 	///   C(m, p) = M(m, n) * N(n, p)
-	///
 	fsize_dense2d_matrix_t operator*(fsize_dense2d_matrix_t const& M, fsize_dense2d_matrix_t const& N)
 	{
 		fsize_dense2d_matrix_t ret(M);
 		return ret *= N;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to multiply a matrix by a tuple.
-	///
 	tuple operator*(fsize_dense2d_matrix_t const& M, tuple const& N)
 	{
 		/// ------------------------------------------------------------
@@ -303,10 +286,9 @@ namespace raytracer
 		             N.tuple_type()};
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return the sub-matrix of a given matrix i.e. from 'M' remove (row,
 	/// column) and thereby reduce it's dimension by 1.
-	///
 	fsize_dense2d_matrix_t submatrix(fsize_dense2d_matrix_t const& M, size_t rm_row, size_t rm_col)
 	{
 		fsize_dense2d_matrix_t ret(M.num_rows() - 1, M.num_cols() - 1);
@@ -334,18 +316,16 @@ namespace raytracer
 		return ret;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to compute the determinant of a 2x2 matrix.
-	///
 	static inline double compute_2x2_matrix_determinant_(fsize_dense2d_matrix_t const& M)
 	{
 		auto const result = (M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0));
 		return result;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function recursively computes the determinant of a nxn matrix
-	///
 	double determinant(fsize_dense2d_matrix_t const& M)
 	{
 		double result = 0.0;
@@ -365,7 +345,8 @@ namespace raytracer
                      } X;
                      X.col_ < M.num_cols();                 /// go over all columns
                      X.col_++, X.sign_ *= -1.0) {           /// sign alternates
-                        ///
+                        
+                        /// ----------------------------------------------------
                         /// so for a matrix, M, like so:
                         ///
                         ///  col-0  col-1 col-2 col-3
@@ -378,7 +359,6 @@ namespace raytracer
                         ///         - M(0,1) * (det(submatrix(M, 0, 1)))
                         ///         + M(0,2) * (det(submatrix(M, 0, 2)))
                         ///         - M(0,3) * (det(submatrix(M, 0, 3)))
-                        ///
                         result += X.sign_
                                 * M(0, X.col_)
                                 * determinant(submatrix(M, 0, X.col_));
@@ -388,17 +368,15 @@ namespace raytracer
 		return result;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to return the minor of a matrix.
-	///
 	double minor(fsize_dense2d_matrix_t const& M, size_t i, size_t j)
 	{
 		return determinant(submatrix(M, i, j));
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to compute the cofactor of a matrix.
-	///
 	double cofactor(fsize_dense2d_matrix_t const& M, size_t i, size_t j)
 	{
 		double const sign = ((i + j) % 2 == 0) ? 1.0 : -1.0;
@@ -406,9 +384,8 @@ namespace raytracer
 		return sign * minor(M, i, j);
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to compute the inverse of a matrix.
-	///
 	fsize_dense2d_matrix_t inverse(fsize_dense2d_matrix_t const& M)
 	{
 		double const m_det = determinant(M);

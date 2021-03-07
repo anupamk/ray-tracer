@@ -1,6 +1,6 @@
 /*
  * this file tests the 'world' class interfaces.
-**/
+ **/
 
 /// c++ includes
 #include "sphere.hpp"
@@ -13,16 +13,16 @@
 #include "doctest.h"
 
 /// our includes
-#include "constants.hpp"
-#include "world.hpp"
 #include "color.hpp"
-#include "tuple.hpp"
-#include "material.hpp"
-#include "point_light.hpp"
-#include "phong_illumination.hpp"
-#include "ray.hpp"
-#include "matrix_transformations.hpp"
+#include "constants.hpp"
 #include "logging.h"
+#include "material.hpp"
+#include "matrix_transformations.hpp"
+#include "phong_illumination.hpp"
+#include "point_light.hpp"
+#include "ray.hpp"
+#include "tuple.hpp"
+#include "world.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

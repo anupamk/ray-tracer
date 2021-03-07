@@ -4,9 +4,9 @@
 namespace raytracer
 {
 	/*
-         * this defines a 'badge' and allows for finer grained access to public
-         * api's without too much performance overhead
-         **/
+	 * this defines a 'badge' and allows for finer grained access to public
+	 * api's without too much performance overhead
+	 **/
 	template <typename T>
 	class the_badge
 	{

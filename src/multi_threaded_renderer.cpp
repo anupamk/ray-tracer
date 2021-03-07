@@ -1,18 +1,18 @@
 /*
  * implement multi-threaded rendering of a scene.
-**/
+ **/
 
 /// c++ includes
-#include <vector>
 #include <thread>
+#include <vector>
 
 /// 3rd-party libraries
 #include "concurrentqueue.h"
 
 /// our includes
-#include "raytracer_renderer.hpp"
-#include "ray.hpp"
 #include "logging.h"
+#include "ray.hpp"
+#include "raytracer_renderer.hpp"
 
 namespace raytracer
 {
@@ -50,10 +50,10 @@ namespace raytracer
 	                            canvas&);                                /// canvas-details
 
 	/*
-         * this implements a single threaded rendering of scene in a world 'W'
-         * that is looked at by a camera 'C' with the generated image stored in
-         * a file 'dst_fname'
-        **/
+	 * this implements a single threaded rendering of scene in a world 'W'
+	 * that is looked at by a camera 'C' with the generated image stored in
+	 * a file 'dst_fname'
+	 **/
 	canvas multi_threaded_renderer(world W, camera C)
 	{
 		canvas rendered_canvas = canvas::create_ascii(C.hsize(), C.vsize());
@@ -109,13 +109,13 @@ namespace raytracer
 	}
 
 	/*
-         * file specific functions from this point
-         **/
+	 * file specific functions from this point
+	 **/
 
 	/*
-         * this function is the workhorse for rendering a bunch of work-items
-         * picked from a concurrent queue
-        **/
+	 * this function is the workhorse for rendering a bunch of work-items
+	 * picked from a concurrent queue
+	 **/
 	static void coloring_worker(int thread_id,
 	                            CQ::ConcurrentQueue<render_work_items>& work_queue, /// queue-of-work
 	                            world const& W,                                     /// scene-details

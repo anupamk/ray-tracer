@@ -7,16 +7,16 @@
 #include <string>
 
 /// our includes
-#include "pattern_interface.hpp"
-#include "color.hpp"
 #include "binary_pattern.hpp"
+#include "color.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements the striped pattern i.e. color/pattern
-         * alternating from one to next.
-        **/
+	 * this class implements the striped pattern i.e. color/pattern
+	 * alternating from one to next.
+	 **/
 	class striped_pattern final : public binary_pattern<striped_pattern>
 	{
 	    public:

@@ -2,9 +2,9 @@
 #define RAYTRACER_TUPLE_HPP__
 
 /// c++ includes
+#include <cmath>
 #include <ostream>
 #include <string>
-#include <cmath>
 
 /// our includes
 #include "utils.hpp"
@@ -18,11 +18,11 @@ namespace raytracer
 	};
 
 	/*
-         * we are following the left-handed-coordinate system as follows
-         *    - x : +ve x points to the right
-         *    - y : +ve y points up
-         *    - z : +ve z points inside the screen
-        **/
+	 * we are following the left-handed-coordinate system as follows
+	 *    - x : +ve x points to the right
+	 *    - y : +ve y points up
+	 *    - z : +ve z points inside the screen
+	 **/
 	class tuple
 	{
 	    private:
@@ -87,9 +87,8 @@ namespace raytracer
 	tuple operator-(tuple a, tuple b);
 	std::ostream& operator<<(std::ostream& os, tuple const& a);
 
-	///
+	/// --------------------------------------------------------------------
 	/// epsilon equality comparison of two tuples
-	///
 	constexpr bool operator==(tuple lhs, tuple rhs)
 	{
 		// clang-format off
@@ -100,9 +99,8 @@ namespace raytracer
 		// clang-format on
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// scalar operations multiply, divide, negation
-	///
 	constexpr tuple operator*(tuple a, double f)
 	{
 		return tuple(a.x() * f, a.y() * f, a.z() * f, a.tuple_type());
@@ -140,17 +138,15 @@ namespace raytracer
 		return std::sqrt(a.x() * a.x() + a.y() * a.y() + a.z() * a.z());
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return a tuple such that it's magnitude is '1'
-	///
 	inline tuple normalize(tuple a)
 	{
 		return a / magnitude(a);
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return the dot product of two vectors
-	///
 	constexpr double dot(tuple a, tuple b)
 	{
 		return ((a.x() * b.x()) + // x
@@ -158,9 +154,8 @@ namespace raytracer
 		        (a.z() * b.z())); // z
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return the cross product of two vectors
-	///
 	constexpr tuple cross(tuple a, tuple b)
 	{
 		return create_vector((a.y() * b.z()) - (a.z() * b.y()),  // x
@@ -168,9 +163,8 @@ namespace raytracer
 		                     (a.x() * b.y()) - (a.y() * b.x())); // z
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// return the reflection vector of a vector 'in' at the normal 'N'
-	///
 	tuple reflect(tuple in, tuple N);
 
 } // namespace raytracer

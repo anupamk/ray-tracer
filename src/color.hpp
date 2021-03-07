@@ -4,7 +4,7 @@
 /*
  * this file implements the representation of color with which various image
  * pixels will be drawn.
-**/
+ **/
 
 /// c++ includes
 #include <ostream>
@@ -17,9 +17,9 @@
 namespace raytracer
 {
 	/*
-         * a color is composite of (r)ed, (g)reen, and (b)lue colors,
-         * represented via a tuple (point)
-        **/
+	 * a color is composite of (r)ed, (g)reen, and (b)lue colors,
+	 * represented via a tuple (point)
+	 **/
 	class color
 	{
 	    private:

@@ -8,16 +8,16 @@
 #include <string>
 
 /// our includes
-#include "pattern_interface.hpp"
-#include "color.hpp"
 #include "binary_pattern.hpp"
+#include "color.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements a gradient pattern where the color varies
-         * smoothly from one color/pattern to another.
-        **/
+	 * this class implements a gradient pattern where the color varies
+	 * smoothly from one color/pattern to another.
+	 **/
 	class gradient_pattern final : public binary_pattern<gradient_pattern>
 	{
 	    public:

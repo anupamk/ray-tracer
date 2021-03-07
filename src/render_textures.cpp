@@ -1,20 +1,20 @@
 /*
  * this program generates various textures procedurally.
-**/
+ **/
 
 /// c++ includes
 #include <cstddef>
 
 /// our includes
-#include "color.hpp"
 #include "canvas.hpp"
+#include "color.hpp"
 #include "constants.hpp"
 #include "perlin_noise.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
  * later to more appropriate values.
-**/
+ **/
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly

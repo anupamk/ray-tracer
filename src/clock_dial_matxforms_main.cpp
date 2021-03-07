@@ -1,7 +1,7 @@
 /*
  * this program uses matrix transformations (rotation, scaling etc) to draw a
  * simple clock-dial face.
-**/
+ **/
 
 /// c++ includes
 #include <algorithm>
@@ -10,14 +10,14 @@
 #include <vector>
 
 /// our includes
-#include "matrix_transformations.hpp"
-#include "logging.h"
 #include "canvas.hpp"
+#include "logging.h"
+#include "matrix_transformations.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
  * later to more appropriate values.
-**/
+ **/
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly
@@ -45,14 +45,14 @@ int main(int argc, char** argv)
 	constexpr auto alpha_max   = dial_area / canvas_area;
 
 	/*
-         * ok, so we want the AREA of the clock-face to be let's say
-         *      0.0 < α ≦ alpha_max
-         * of the total canvas.
-         *                       _______________________
-         * so, scaled-radius == √ (canvas_area * α) / PI
-         *
-         * moreover, the clock is drawn in the middle of the canvas.
-        **/
+	 * ok, so we want the AREA of the clock-face to be let's say
+	 *      0.0 < α ≦ alpha_max
+	 * of the total canvas.
+	 *                       _______________________
+	 * so, scaled-radius == √ (canvas_area * α) / PI
+	 *
+	 * moreover, the clock is drawn in the middle of the canvas.
+	 **/
 	constexpr auto area_alpha    = std::min(0.2, alpha_max);
 	constexpr auto scaled_radius = std::sqrt((canvas_area * area_alpha) / RT::PI);
 	constexpr auto x_midpt       = canvas_dim_x / 2;

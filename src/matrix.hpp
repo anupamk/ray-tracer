@@ -9,16 +9,16 @@
 #include <vector>
 
 /// our includes
-#include "tuple.hpp"
 #include "assert_utils.h"
+#include "tuple.hpp"
 
 namespace raytracer
 {
 	/*
-         * this is a trivial row-major implementation of a fixed-size dense-2d
-         * matrix, using std::vector<double> as the underlying representation of
-         * it's contents.
-         **/
+	 * this is a trivial row-major implementation of a fixed-size dense-2d
+	 * matrix, using std::vector<double> as the underlying representation of
+	 * it's contents.
+	 **/
 	class fsize_dense2d_matrix_t
 	{
 		using dense_2d_init_list_t = std::initializer_list<std::initializer_list<double> >;
@@ -40,32 +40,41 @@ namespace raytracer
 		// clang-format on
 
 	    public:
+		/// ------------------------------------------------------------
 		/// return a specific row and column
 		std::vector<double> get_row(size_t row_num) const;
 		std::vector<double> checked_get_row(size_t row_num) const;
 
+		/// ------------------------------------------------------------
 		/// return a specific column
 		std::vector<double> get_column(size_t col_num) const;
 		std::vector<double> checked_get_column(size_t col_num) const;
 
+		/// ------------------------------------------------------------
 		/// stringified representation of a matrix
 		std::string stringify() const;
 
+		/// ------------------------------------------------------------
 		/// fotran style (unchecked) access
 		double operator()(size_t i, size_t j) const;
 
+		/// ------------------------------------------------------------
 		/// fortran style (unchecked) assignment
 		double& operator()(size_t i, size_t j);
 
+		/// ------------------------------------------------------------
 		/// bounds-checked get element
 		double checked_get_elem(size_t i, size_t j) const;
 
+		/// ------------------------------------------------------------
 		/// bounds-checked set element
 		void checked_set_elem(size_t i, size_t j, double val);
 
+		/// ------------------------------------------------------------
 		/// transpose the matrix
 		fsize_dense2d_matrix_t transpose() const;
 
+		/// ------------------------------------------------------------
 		/// multiply matrices together
 		fsize_dense2d_matrix_t& operator*=(fsize_dense2d_matrix_t const& rhs);
 
@@ -87,18 +96,16 @@ namespace raytracer
 		}
 	};
 
-	///
+	/// --------------------------------------------------------------------
 	/// all non-member operators(...)
-	///
 	std::ostream& operator<<(std::ostream& os, fsize_dense2d_matrix_t const& M);
 	bool operator==(fsize_dense2d_matrix_t const& M, fsize_dense2d_matrix_t const& N);
 	bool operator!=(fsize_dense2d_matrix_t const& M, fsize_dense2d_matrix_t const& N);
 	fsize_dense2d_matrix_t operator*(fsize_dense2d_matrix_t const& M, fsize_dense2d_matrix_t const& N);
 	tuple operator*(fsize_dense2d_matrix_t const& M, tuple const& N);
 
-	///
+	/// --------------------------------------------------------------------
 	/// all non-member functions
-	///
 	fsize_dense2d_matrix_t submatrix(fsize_dense2d_matrix_t const& M, size_t rm_row, size_t rm_col);
 	double determinant(fsize_dense2d_matrix_t const& M);
 	double minor(fsize_dense2d_matrix_t const& M, size_t i, size_t j);

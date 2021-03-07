@@ -1,7 +1,7 @@
 /*
  * this program implements a single/multi threaded world-rendering through a
  * camera.
-**/
+ **/
 
 /// c++ includes
 #include <algorithm>
@@ -15,26 +15,26 @@
 #include <vector>
 
 /// our includes
+#include "benchmark.hpp"
 #include "camera.hpp"
 #include "color.hpp"
 #include "constants.hpp"
+#include "logging.h"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
+#include "plane.hpp"
 #include "point_light.hpp"
+#include "raytracer_renderer.hpp"
+#include "shape_interface.hpp"
+#include "solid_pattern.hpp"
+#include "sphere.hpp"
 #include "tuple.hpp"
 #include "world.hpp"
-#include "sphere.hpp"
-#include "plane.hpp"
-#include "shape_interface.hpp"
-#include "logging.h"
-#include "solid_pattern.hpp"
-#include "raytracer_renderer.hpp"
-#include "benchmark.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
  * later to more appropriate values.
-**/
+ **/
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 
 /*
  * only file specific functions from this point onwards
-**/
+ **/
 
 /// ---------------------------------------------------------------------------
 /// this function is called to create a world which is then rendered using

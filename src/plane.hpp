@@ -8,18 +8,18 @@
 #include <string>
 
 /// our includes
-#include "shape_interface.hpp"
-#include "intersection_record.hpp"
-#include "tuple.hpp"
-#include "ray.hpp"
 #include "assert_utils.h"
+#include "intersection_record.hpp"
+#include "ray.hpp"
+#include "shape_interface.hpp"
+#include "tuple.hpp"
 #include "uv_point.hpp"
 
 namespace raytracer
 {
 	/*
-         * this defines a xz-plane
-        **/
+	 * this defines a xz-plane
+	 **/
 	class plane final : public shape_interface
 	{
 	    public:

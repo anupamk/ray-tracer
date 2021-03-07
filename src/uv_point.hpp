@@ -12,10 +12,10 @@
 namespace raytracer
 {
 	/*
-         * this describes a 2d point on a texture. where
-         *    - u : varies from 0.0 .. 1.0 along x-axis
-         *    - v : varies from 0.0 .. 1.0 along y-axis
-        **/
+	 * this describes a 2d point on a texture. where
+	 *    - u : varies from 0.0 .. 1.0 along x-axis
+	 *    - v : varies from 0.0 .. 1.0 along y-axis
+	 **/
 	class uv_point
 	{
 	    private:

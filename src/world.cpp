@@ -2,6 +2,7 @@
 
 /// c++ includes
 #include <algorithm>
+#include <cmath>
 #include <ios>
 #include <iostream>
 #include <memory>
@@ -9,18 +10,17 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <cmath>
 
 /// our includes
-#include "shape_interface.hpp"
-#include "point_light.hpp"
 #include "color.hpp"
-#include "matrix_transformations.hpp"
-#include "sphere.hpp"
-#include "phong_illumination.hpp"
 #include "intersection_record.hpp"
-#include "tuple.hpp"
+#include "matrix_transformations.hpp"
+#include "phong_illumination.hpp"
+#include "point_light.hpp"
+#include "shape_interface.hpp"
 #include "solid_pattern.hpp"
+#include "sphere.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {
@@ -129,7 +129,7 @@ namespace raytracer
 	}
 
 	/// --------------------------------------------------------------------
-	///compute the color when a ray hits the world
+	/// compute the color when a ray hits the world
 	color world::shade_hit(intersection_info_t const& xs_info, uint8_t remaining) const
 	{
 		color shade_color    = color_black();
@@ -294,8 +294,8 @@ namespace raytracer
 	}
 
 	/*
-         * only private functions from this point onwards
-        **/
+	 * only private functions from this point onwards
+	 **/
 
 	/// --------------------------------------------------------------------
 	/// create a default light for the world

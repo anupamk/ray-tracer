@@ -5,15 +5,19 @@
 #ifndef BENCHMARK_HPP__
 #define BENCHMARK_HPP__
 
+/// c++ includes
 #include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <limits>
 #include <numeric>
-#include <vector>
-#include <thread>
 #include <sstream>
 #include <string>
+#include <thread>
+#include <vector>
+
+/// our includes
+#include "logging.h"
 
 template <typename TimeT = std::chrono::milliseconds>
 class Benchmark

@@ -1,14 +1,14 @@
 /*
  * implement the raytracer plane
-**/
+ **/
 
 /// c++ includes
 #include "constants.hpp"
 #include "tuple.hpp"
 
 /// our includes
-#include "plane.hpp"
 #include "intersection_record.hpp"
+#include "plane.hpp"
 
 #include <cmath>
 #include <iostream>

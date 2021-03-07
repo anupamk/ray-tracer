@@ -1,19 +1,19 @@
 /*
  * implement the raytracer sphere
-**/
+ **/
 
 /// c++ includes
+#include <cmath>
 #include <ios>
 #include <memory>
 #include <optional>
 #include <ostream>
 #include <sstream>
 #include <string>
-#include <cmath>
 
 /// our includes
-#include "sphere.hpp"
 #include "intersection_record.hpp"
+#include "sphere.hpp"
 
 namespace raytracer
 {
@@ -39,22 +39,22 @@ namespace raytracer
 	}
 
 	/*
-         * this function is called to compute the result of a ray 'R'
-         * intersecting a sphere of radius 'r' centered at origin.
-         *
-         * intuitively, the point of intersection 'P', must lie on both the ray
-         * and the sphere. therefore, it must satisfy their equations
-         * simultaneously.
-         *
-         * in parametric form, the sphere and ray equations respectively, are:
-         *
-         *     P^2 - r^2 = 0 ................................. (1)
-         *     P = R.origin + t * R.direction ................ (2)
-         *
-         * substituting (2) in (1) gives a quadratic equation in 't'. the
-         * solution of which (via canonical means) gives us the desired
-         * intersection points.
-         **/
+	 * this function is called to compute the result of a ray 'R'
+	 * intersecting a sphere of radius 'r' centered at origin.
+	 *
+	 * intuitively, the point of intersection 'P', must lie on both the ray
+	 * and the sphere. therefore, it must satisfy their equations
+	 * simultaneously.
+	 *
+	 * in parametric form, the sphere and ray equations respectively, are:
+	 *
+	 *     P^2 - r^2 = 0 ................................. (1)
+	 *     P = R.origin + t * R.direction ................ (2)
+	 *
+	 * substituting (2) in (1) gives a quadratic equation in 't'. the
+	 * solution of which (via canonical means) gives us the desired
+	 * intersection points.
+	 **/
 	std::optional<intersection_records> sphere::intersect(the_badge<ray_t>, ray_t const& R) const
 	{
 		/// vector from sphere's center to the ray-origin

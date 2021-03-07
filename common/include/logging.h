@@ -2,9 +2,9 @@
 #define COMMON_INCLUDE_LOGGING_H__
 
 /* system includes */
-#include <stdio.h>
-#include <stdint.h>
 #include <math.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <sys/time.h>
 #include <time.h>
 
@@ -13,7 +13,7 @@
 
 /*
  * return current time upto ms resolution in a static buffer
-**/
+ **/
 static inline std::string log_ts_string()
 {
 	struct timeval tv;
@@ -62,7 +62,7 @@ extern log_level_t GLOBAL_LOG_LEVEL_NOW;
  *    '%-23s'    -> current-time (upto ms resolution)
  *    '%-15s'    -> file-name
  *    '%05d:%s'  -> line:function
-**/
+ **/
 #define LOGGING_FMT__(fmt) "%-6s | %-23s | %-20s : %05d | " fmt "\n"
 
 /*
@@ -71,7 +71,7 @@ extern log_level_t GLOBAL_LOG_LEVEL_NOW;
  *
  * as convention, if default-log-level == x, all logs from
  * log-level-[x..0] are logged.
-**/
+ **/
 #define LOGGING_ENABLED_AT_LEVEL(ll) ((ll) <= (GLOBAL_LOG_LEVEL_NOW))
 
 // clang-format off

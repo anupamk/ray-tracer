@@ -5,19 +5,19 @@
 #include <cstdint>
 
 /// our includes
-#include "uv_pattern_interface.hpp"
 #include "color.hpp"
-#include "utils.hpp"
 #include "gradient_perlin_noise_pattern.hpp"
+#include "utils.hpp"
+#include "uv_pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this computes perlin-noise-perturbed uv color at a specific
-         * uv-point. since this is quite similar to a gradient-perlin noise, we
-         * just create an instance of 'gradient_perlin_noise_pattern' and let
-         * that handle all the computations
-         **/
+	 * this computes perlin-noise-perturbed uv color at a specific
+	 * uv-point. since this is quite similar to a gradient-perlin noise, we
+	 * just create an instance of 'gradient_perlin_noise_pattern' and let
+	 * that handle all the computations
+	 **/
 	class uv_noise final : public uv_pattern_interface
 	{
 	    private:

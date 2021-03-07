@@ -6,15 +6,15 @@
 #include <string>
 
 /// our includes
-#include "pattern_interface.hpp"
 #include "color.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements the canonical solid pattern i.e. one where
-         * color is a constant throughout
-        **/
+	 * this class implements the canonical solid pattern i.e. one where
+	 * color is a constant throughout
+	 **/
 	class solid_pattern final : public pattern_interface
 	{
 	    private:

@@ -7,8 +7,8 @@
 #include <string>
 
 /// our includes
-#include "matrix.hpp"
 #include "color.hpp"
+#include "matrix.hpp"
 #include "tuple.hpp"
 
 namespace raytracer
@@ -17,9 +17,9 @@ namespace raytracer
 	class shape_interface;
 
 	/*
-         * this defines a common pattern interface, which is then implemented by
-         * every new type of pattern that we support.
-        **/
+	 * this defines a common pattern interface, which is then implemented by
+	 * every new type of pattern that we support.
+	 **/
 	class pattern_interface : public std::enable_shared_from_this<pattern_interface>
 	{
 	    private:

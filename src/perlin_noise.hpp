@@ -2,21 +2,21 @@
 #define RAYTRACER_PERLIN_NOISE_HPP__
 
 #include "tuple.hpp"
-#include <iterator>
-#include <vector>
+#include <algorithm>
 #include <array>
 #include <cmath>
+#include <iterator>
 #include <random>
-#include <algorithm>
+#include <vector>
 
-#include "pattern_interface.hpp"
 #include "constants.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements the improved 3d perlin noise.
-         **/
+	 * this class implements the improved 3d perlin noise.
+	 **/
 	class perlin_noise
 	{
 	    private:

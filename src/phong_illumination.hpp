@@ -3,10 +3,10 @@
 
 /// our includes
 #include "color.hpp"
-#include "point_light.hpp"
-#include "tuple.hpp"
 #include "material.hpp"
+#include "point_light.hpp"
 #include "shape_interface.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {

@@ -1,6 +1,6 @@
 /*
  * implement the raytracer uv_point for procedural textures
-**/
+ **/
 
 /// c++ includes
 #include <ios>

@@ -6,15 +6,15 @@
 #include <string>
 
 /// our includes
-#include "pattern_interface.hpp"
-#include "color.hpp"
 #include "binary_pattern.hpp"
+#include "color.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements the checkers or the chessboard pattern.
-        **/
+	 * this class implements the checkers or the chessboard pattern.
+	 **/
 	class checkers_pattern final : public binary_pattern<checkers_pattern>
 	{
 	    public:

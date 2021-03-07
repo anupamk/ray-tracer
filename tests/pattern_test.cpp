@@ -8,21 +8,21 @@
 
 /// ----------------------------------------------------------------------------
 /// our includes, first what we are testing
+#include "checkers_pattern.hpp"
+#include "gradient_pattern.hpp"
 #include "pattern_interface.hpp"
+#include "ring_pattern.hpp"
 #include "solid_pattern.hpp"
 #include "striped_pattern.hpp"
-#include "gradient_pattern.hpp"
-#include "ring_pattern.hpp"
-#include "checkers_pattern.hpp"
 
 /// ... and then everything else
-#include "matrix_transformations.hpp"
 #include "color.hpp"
-#include "sphere.hpp"
-#include "material.hpp"
-#include "tuple.hpp"
-#include "phong_illumination.hpp"
 #include "logging.h"
+#include "material.hpp"
+#include "matrix_transformations.hpp"
+#include "phong_illumination.hpp"
+#include "sphere.hpp"
+#include "tuple.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

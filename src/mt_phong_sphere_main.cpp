@@ -1,6 +1,6 @@
 /*
  * this program uses multiple threads for phong-illumination of a sphere.
-**/
+ **/
 
 /// c++ includes
 #include <algorithm>
@@ -19,24 +19,24 @@
 #include "concurrentqueue.h"
 
 /// our includes
-#include "color.hpp"
-#include "tuple.hpp"
-#include "sphere.hpp"
-#include "ray.hpp"
-#include "logging.h"
+#include "assert_utils.h"
 #include "canvas.hpp"
+#include "color.hpp"
+#include "intersection_record.hpp"
+#include "logging.h"
+#include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "phong_illumination.hpp"
-#include "material.hpp"
 #include "point_light.hpp"
-#include "assert_utils.h"
-#include "intersection_record.hpp"
+#include "ray.hpp"
 #include "scene_params.hpp" /// for, well, scene-parameters
+#include "sphere.hpp"
+#include "tuple.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
  * later to more appropriate values.
-**/
+ **/
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
 
 /*
  * file specific functions
-**/
+ **/
 
 /// --------------------------------------------------------------------------------
 /// this function is called to color n-rows in an image.
@@ -200,12 +200,12 @@ static RT::color color_pixel(uint32_t x_coord,               /// x-coordinate
 	ASSERT((hit_record.what_object() != nullptr) && "ray hit null objekt !");
 
 	/*
-         * ok, so, if we are here, ray did intersect the sphere.
-         *
-         * lets now figure out various properties associated
-         * with this intersection f.e. hit-position,
-         * surface-normal, surface-color etc.
-         **/
+	 * ok, so, if we are here, ray did intersect the sphere.
+	 *
+	 * lets now figure out various properties associated
+	 * with this intersection f.e. hit-position,
+	 * surface-normal, surface-color etc.
+	 **/
 
 	/// where is the viewer
 	auto viewer_at = -ray_to_wall.direction();

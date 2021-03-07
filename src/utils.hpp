@@ -70,7 +70,7 @@ namespace raytracer
 	/// real roots of a quadratic equation
 	using real_roots_t = std::pair<double, double>;
 
-	///
+	/// --------------------------------------------------------------------
 	/// This function is called to return the real roots of the canonical
 	/// quadratic equation:
 	///
@@ -104,7 +104,6 @@ namespace raytracer
 	///
 	/// No extra work is required in using the above, as opposed to blindly
 	/// using either (1.sol) or (2.sol)
-	///
 	inline const std::optional<real_roots_t> quadratic_real_roots(double A, double B, double C)
 	{
 		const auto discriminant = B * B - 4.0 * A * C;

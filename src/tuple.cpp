@@ -1,6 +1,6 @@
 /*
  * implement the raytracer tuple
-**/
+ **/
 
 /// c++ includes
 #include <ios>
@@ -10,14 +10,13 @@
 #include <string>
 
 /// our includes
-#include "tuple.hpp"
 #include "assert_utils.h"
+#include "tuple.hpp"
 
 namespace raytracer
 {
-	///
+	/// --------------------------------------------------------------------
 	/// implement 'a += b' where both 'a' and 'b' are tuples
-	///
 	tuple& tuple::operator+=(tuple other)
 	{
 		/// this.point + other.point == undefined
@@ -41,9 +40,8 @@ namespace raytracer
 		return *this;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// implement 'a -= b' where both 'a' and 'b' are tuples
-	///
 	tuple& tuple::operator-=(tuple other)
 	{
 		/// this.vector - this.point == undefined
@@ -70,9 +68,8 @@ namespace raytracer
 		return *this;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// stringified representation of a tuple
-	///
 	std::string tuple::stringify() const
 	{
 		int const tuple_type_val = (this->tuple_type() == tuple_type_t::VECTOR) ? 0 : 1;
@@ -89,11 +86,10 @@ namespace raytracer
 		return ss.str();
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// we are better off reducing the number of functions that need access
 	/// to class internals, so, just define binary '+', '-' in terms of '+='
 	/// and '-='.
-	///
 	tuple operator+(tuple a, tuple b)
 	{
 		return a += b;
@@ -104,18 +100,16 @@ namespace raytracer
 		return a -= b;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// 'reasonably' formatted output for the tuple
-	///
 	std::ostream& operator<<(std::ostream& os, tuple const& a)
 	{
 		return os << a.stringify();
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to return the reflection of a vector 'in'
 	/// around the normal vector 'N'
-	///
 	tuple reflect(tuple in, tuple N)
 	{
 		ASSERT(in.is_vector() && N.is_vector());

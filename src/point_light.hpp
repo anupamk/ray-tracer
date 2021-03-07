@@ -12,9 +12,9 @@
 namespace raytracer
 {
 	/*
-         * this defines a 'point-light' type i.e. a light source with no size
-         * and existing at a single point in space.
-        **/
+	 * this defines a 'point-light' type i.e. a light source with no size
+	 * and existing at a single point in space.
+	 **/
 	class point_light final
 	{
 	    private:

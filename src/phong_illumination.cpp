@@ -1,18 +1,18 @@
 /*
  * implement phong_illumination(...) model
-**/
+ **/
 
 /// c++ includes
-#include <memory>
 #include <cmath>
+#include <memory>
 
 /// our includes
 #include "color.hpp"
-#include "point_light.hpp"
-#include "tuple.hpp"
-#include "material.hpp"
 #include "logging.h"
+#include "material.hpp"
+#include "point_light.hpp"
 #include "shape_interface.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {
@@ -20,32 +20,32 @@ namespace raytracer
 	using shared_shape_interface = std::shared_ptr<shape_interface const>;
 
 	/*
-         * this function implements the phong reflection model, a brief
-         * description of which follows:
-         *
-         * phong reflection model, is an empirical model of local
-         * illumination. it emulates surface reflection of light via interaction
-         * between three different types of lighting:
-         *
-         *   - ambient lighting: this is the background lighting.
-         *
-         *     under this model ambient lighting is treated as a constant and it
-         *     colors all points on the surface equally.
-         *
-         *   - diffuse reflection: this is the light reflected from matte
-         *     surfaces.
-         *
-         *     it depends on the cosine-of-angle between the light source and
-         *     the surface normal at the point of illumination.
-         *
-         *   - specular reflection: this is the reflection of the light source
-         *     itself and causes a 'specular highlight' i.e. the bright spot on
-         *     a curved surface.
-         *
-         *     it depends on the cosine-of-angle between the reflection vector
-         *     and viewer (or eye) vector and is controlled by the 'shininess'
-         *     of the surface.
-        **/
+	 * this function implements the phong reflection model, a brief
+	 * description of which follows:
+	 *
+	 * phong reflection model, is an empirical model of local
+	 * illumination. it emulates surface reflection of light via interaction
+	 * between three different types of lighting:
+	 *
+	 *   - ambient lighting: this is the background lighting.
+	 *
+	 *     under this model ambient lighting is treated as a constant and it
+	 *     colors all points on the surface equally.
+	 *
+	 *   - diffuse reflection: this is the light reflected from matte
+	 *     surfaces.
+	 *
+	 *     it depends on the cosine-of-angle between the light source and
+	 *     the surface normal at the point of illumination.
+	 *
+	 *   - specular reflection: this is the reflection of the light source
+	 *     itself and causes a 'specular highlight' i.e. the bright spot on
+	 *     a curved surface.
+	 *
+	 *     it depends on the cosine-of-angle between the reflection vector
+	 *     and viewer (or eye) vector and is controlled by the 'shininess'
+	 *     of the surface.
+	 **/
 	color phong_illumination(shared_shape_interface shape,      /// shape
 	                         tuple const& surface_point,        /// where ray intersects surface
 	                         point_light const& incident_light, /// light illuminating the scene
@@ -67,8 +67,8 @@ namespace raytracer
 		auto const incident_light_dir = normalize(incident_light.position() - surface_point);
 
 		/*
-                 * now compute contributions of various components in the model
-                **/
+		 * now compute contributions of various components in the model
+		 **/
 
 		/// ------------------------------------------------------------
 		/// ambient lighting

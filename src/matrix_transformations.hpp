@@ -2,15 +2,15 @@
 #define RAYTRACER_SRC_MATRIX_TRANSFORMATIONS_HPP__
 
 /// our includes
-#include "matrix.hpp"
 #include "assert_utils.h"
+#include "matrix.hpp"
 #include "tuple.hpp"
 
 namespace raytracer
 {
 	/*
-         * this implements various matrix transformations
-        **/
+	 * this implements various matrix transformations
+	 **/
 	class matrix_transformations_t
 	{
 	    public:

@@ -1,6 +1,6 @@
 /*
  * implement the raytracer color
-**/
+ **/
 
 /// c++ includes
 #include <ios>
@@ -13,9 +13,8 @@
 
 namespace raytracer
 {
-	///
+	/// --------------------------------------------------------------------
 	/// implement 'a += b' where both 'a' and 'b' are colors
-	///
 	color& color::operator+=(color other)
 	{
 		const auto new_r = this->R() + other.R();
@@ -26,9 +25,8 @@ namespace raytracer
 		return *this;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// implement 'a -= b' where both 'a' and 'b' are colors
-	///
 	color& color::operator-=(color other)
 	{
 		const auto new_r = this->R() - other.R();
@@ -39,9 +37,8 @@ namespace raytracer
 		return *this;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// stringified representation of a color
-	///
 	std::string color::stringify() const
 	{
 		std::stringstream ss("");
@@ -57,11 +54,10 @@ namespace raytracer
 		return ss.str();
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// we are better off reducing the number of functions that need access
 	/// to class internals, so, just define binary '+', '-' in terms of '+='
 	/// and '-='.
-	///
 	color operator+(color a, color b)
 	{
 		return a += b;
@@ -72,9 +68,8 @@ namespace raytracer
 		return a -= b;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// 'reasonably' formatted output for color
-	///
 	std::ostream& operator<<(std::ostream& os, color const& C)
 	{
 		return os << C.stringify();

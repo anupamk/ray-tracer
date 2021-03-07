@@ -10,22 +10,22 @@
 #include <string>
 
 /// our includes
-#include "world.hpp"
 #include "camera.hpp"
+#include "world.hpp"
 
 namespace raytracer
 {
 	/*
-         * single threaded rendering of a scene. once the rendering is complete,
-         * the rendered canvas is returned to the callee.
-        **/
+	 * single threaded rendering of a scene. rendered canvas is returned
+	 * on completion.
+	 **/
 	canvas single_threaded_renderer(raytracer::world,   /// the world
 	                                raytracer::camera); /// the camera
 
 	/*
-         * multi threaded rendering of a scene. once the rendering is complete,
-         * the rendered canvas is returned to the callee.
-        **/
+	 * multi threaded rendering of a scene. rendered canvas is returned
+	 * on completion.
+	 **/
 	canvas multi_threaded_renderer(raytracer::world,   /// the world
 	                               raytracer::camera); /// the camera
 

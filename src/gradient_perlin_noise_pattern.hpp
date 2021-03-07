@@ -2,26 +2,26 @@
 #define RAYTRACER_GRADIENT_PERLIN_NOISE_PATTERN_HPP__
 
 /// c++ includes
-#include <iterator>
-#include <vector>
+#include <algorithm>
 #include <array>
 #include <cmath>
+#include <iterator>
 #include <random>
-#include <algorithm>
+#include <vector>
 
 /// our includes
-#include "tuple.hpp"
-#include "pattern_interface.hpp"
 #include "binary_pattern.hpp"
-#include "perlin_noise.hpp"
 #include "constants.hpp"
+#include "pattern_interface.hpp"
+#include "perlin_noise.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements the improved perlin noise pattern i.e. one
-         * where the color is perturbed using perlin noise.
-        **/
+	 * this class implements the improved perlin noise pattern i.e. one
+	 * where the color is perturbed using perlin noise.
+	 **/
 	class gradient_perlin_noise_pattern final : public binary_pattern<gradient_perlin_noise_pattern>
 	{
 	    private:

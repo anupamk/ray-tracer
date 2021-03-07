@@ -1,6 +1,6 @@
 /*
  * implement the raytracer canvas
-**/
+ **/
 
 /// c++ includes
 #include <algorithm>
@@ -129,8 +129,8 @@ namespace raytracer
 	}
 
 	/*
-         * only private functions from this point onwards
-         **/
+	 * only private functions from this point onwards
+	 **/
 
 	/// --------------------------------------------------------------------
 	/// create a canvas using named-ctor-idiom

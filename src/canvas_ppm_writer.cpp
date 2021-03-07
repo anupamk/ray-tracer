@@ -1,6 +1,6 @@
 /*
  * implement the raytracer canvas ppm writer
-**/
+ **/
 
 /// c++ includes
 #include <algorithm>
@@ -44,8 +44,8 @@ namespace raytracer
 	}
 
 	/*
-         * only private functions from this point onwards
-         **/
+	 * only private functions from this point onwards
+	 **/
 
 	/// --------------------------------------------------------------------
 	/// save canvas data in binary format i.e. P6

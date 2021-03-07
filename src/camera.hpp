@@ -6,25 +6,42 @@
 #include <string>
 
 /// our includes
+#include "canvas.hpp"
 #include "matrix.hpp"
 #include "ray.hpp"
 #include "world.hpp"
-#include "canvas.hpp"
 
 namespace raytracer
 {
 	/// --------------------------------------------------------------------
-	/// this desscribes a virtual camera which let's us take 'pictures' of a
+	/// this describes a virtual camera which let's us take 'pictures' of a
 	/// scene f.e. allowing us easily to zoom in/out, rotate camera etc.
 	class camera
 	{
 	    private:
+		/// ------------------------------------------------------------
+		/// horizontal and vertical size (in pixels) of the canvas that
+		/// the picture will be rendered to.
 		uint32_t const horiz_size_;
 		uint32_t const vert_size_;
+
+		/// ------------------------------------------------------------
+		/// how much can the camera "see", with small values, the view
+		/// will be zoomed in, magnifying a small area
 		double const field_of_view_;
+
+		/// ------------------------------------------------------------
+		/// half-width and half-height of the canvas (in world-space)
+		/// units.
 		double half_width_;
 		double half_height_;
+
+		/// ------------------------------------------------------------
+		/// size (in world-space) units of pixels on the canvas
 		double pixel_size_;
+
+		/// ------------------------------------------------------------
+		/// how the world is oriented relative to the camera.
 		fsize_dense2d_matrix_t transform_;
 		fsize_dense2d_matrix_t inv_transform_;
 

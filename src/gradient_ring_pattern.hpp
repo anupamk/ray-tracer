@@ -8,16 +8,16 @@
 #include <string>
 
 /// our includes
-#include "pattern_interface.hpp"
-#include "color.hpp"
 #include "binary_pattern.hpp"
+#include "color.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements a gradient-ring pattern, where the
-         * color/pattern varies smoothly from color-a -> color-b in a ring.
-        **/
+	 * this class implements a gradient-ring pattern, where the
+	 * color/pattern varies smoothly from color-a -> color-b in a ring.
+	 **/
 	class gradient_ring_pattern final : public binary_pattern<gradient_ring_pattern>
 	{
 	    public:

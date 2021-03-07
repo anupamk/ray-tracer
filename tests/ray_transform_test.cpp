@@ -6,9 +6,9 @@
 #include "doctest.h"
 
 /// our own thing
+#include "matrix_transformations.hpp"
 #include "ray.hpp"
 #include "tuple.hpp"
-#include "matrix_transformations.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

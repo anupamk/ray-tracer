@@ -18,9 +18,9 @@ namespace raytracer
 	class shape_interface;
 
 	/*
-         * this defines a 2d texture pattern, which ofcourse needs to be
-         * associated with a shape (around/over which) it will be 'wrapped'.
-        **/
+	 * this defines a 2d texture pattern, which ofcourse needs to be
+	 * associated with a shape (around/over which) it will be 'wrapped'.
+	 **/
 	class texture_2d_pattern final : public pattern_interface
 	{
 	    private:

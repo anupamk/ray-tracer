@@ -89,8 +89,8 @@ PenaltyReturnTypeOnItsOwnLine                  : 60
 DerivePointerAlignment                         : false
 PointerAlignment                               : Left
 
-ReflowComments                                 : false
-SortIncludes                                   : false
+ReflowComments                                 : true
+SortIncludes                                   : true
 #SortUsingDeclarations                         : false # Unknown to clang-format-4.0
 SpaceAfterCStyleCast                           : false
 SpaceAfterTemplateKeyword                      : true

@@ -8,28 +8,28 @@
 #include <string>
 
 // our includes
-#include "tuple.hpp"
+#include "intersection_info.hpp"
 #include "matrix.hpp"
 #include "shape_interface.hpp"
-#include "intersection_info.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class defines a ray and it's attributes. a ray is described
-         * using parametric form of the equation of a straight line, which looks
-         * like this:
-         *
-         *       P(t) = R.origin() + R.direction() * t
-         * where:
-         *       a point 't' on the ray 'R' which originates at 'origin' and has
-         * a specific direction. 
-         *
-         * ofcourse, the ray extends infinitely on both the sides of it's
-         * origin, and therefore, 't' can be both positive and negative:
-         *       +ve ==> point 'in front' of origin
-         *       -ve ==> point 'behind' the origin
-        **/
+	 * this class defines a ray and it's attributes. a ray is described
+	 * using parametric form of the equation of a straight line, which looks
+	 * like this:
+	 *
+	 *       P(t) = R.origin() + R.direction() * t
+	 * where:
+	 *       a point 't' on the ray 'R' which originates at 'origin' and has
+	 * a specific direction.
+	 *
+	 * ofcourse, the ray extends infinitely on both the sides of it's
+	 * origin, and therefore, 't' can be both positive and negative:
+	 *       +ve ==> point 'in front' of origin
+	 *       -ve ==> point 'behind' the origin
+	 **/
 	class ray_t
 	{
 	    private:

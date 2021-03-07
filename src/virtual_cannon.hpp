@@ -5,7 +5,7 @@
 
 /*
  * an environment contains both gravity and wind.
-**/
+ **/
 struct env_params {
 	raytracer::tuple gravity_;
 	raytracer::tuple wind_;
@@ -29,7 +29,7 @@ struct env_params {
 
 /*
  * a projectile has both a position and a velocity
-**/
+ **/
 struct projectile {
 	raytracer::tuple pos_;
 	raytracer::tuple velocity_;

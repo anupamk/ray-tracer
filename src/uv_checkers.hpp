@@ -5,9 +5,9 @@
 #include <cstdint>
 
 /// our includes
-#include "uv_pattern_interface.hpp"
 #include "color.hpp"
 #include "utils.hpp"
+#include "uv_pattern_interface.hpp"
 
 namespace raytracer
 {

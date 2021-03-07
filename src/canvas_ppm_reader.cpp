@@ -1,15 +1,15 @@
 /*
  * implement the raytracer canvas ppm reader
-**/
+ **/
 
 /// c includes
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 /// c++ includes
 #include <algorithm>

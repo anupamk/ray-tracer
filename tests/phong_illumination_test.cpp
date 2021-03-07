@@ -1,6 +1,6 @@
 /*
  * this file tests the phong_illumination(...) api
-**/
+ **/
 
 /// c++ includes
 #include <memory>
@@ -11,12 +11,12 @@
 
 /// our includes
 #include "color.hpp"
-#include "tuple.hpp"
+#include "logging.h"
 #include "material.hpp"
-#include "point_light.hpp"
 #include "phong_illumination.hpp"
 #include "plane.hpp"
-#include "logging.h"
+#include "point_light.hpp"
+#include "tuple.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

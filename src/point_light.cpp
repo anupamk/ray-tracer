@@ -1,6 +1,6 @@
 /*
  * implement raytracer point-light
-**/
+ **/
 
 /// c++ includes
 #include <ostream>
@@ -8,8 +8,8 @@
 #include <string>
 
 /// our includes
-#include "tuple.hpp"
 #include "point_light.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {

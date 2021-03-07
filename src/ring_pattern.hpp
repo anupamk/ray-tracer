@@ -6,16 +6,16 @@
 #include <string>
 
 /// our includes
-#include "pattern_interface.hpp"
-#include "color.hpp"
 #include "binary_pattern.hpp"
+#include "color.hpp"
+#include "pattern_interface.hpp"
 
 namespace raytracer
 {
 	/*
-         * this class implements the ring pattern i.e. colors/pattern
-         * alternating in a ring.
-        **/
+	 * this class implements the ring pattern i.e. colors/pattern
+	 * alternating in a ring.
+	 **/
 	class ring_pattern final : public binary_pattern<ring_pattern>
 	{
 	    public:

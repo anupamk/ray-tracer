@@ -8,11 +8,11 @@
 
 /// our includes
 #include "camera.hpp"
-#include "ray.hpp"
-#include "world.hpp"
 #include "canvas.hpp"
 #include "matrix.hpp"
+#include "ray.hpp"
 #include "tuple.hpp"
+#include "world.hpp"
 
 namespace raytracer
 {
@@ -102,8 +102,8 @@ namespace raytracer
 	}
 
 	/*
-         * only private functions from this point onwards
-        **/
+	 * only private functions from this point onwards
+	 **/
 
 	/// --------------------------------------------------------------------
 	/// this function is called to compute miscellaneous items that are used

@@ -7,9 +7,9 @@
 #include <vector>
 
 /// our includes
-#include "shape_interface.hpp"
-#include "point_light.hpp"
 #include "intersection_info.hpp"
+#include "point_light.hpp"
+#include "shape_interface.hpp"
 
 namespace raytracer
 {

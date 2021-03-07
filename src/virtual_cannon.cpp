@@ -6,7 +6,7 @@
  * single tick.
  *
  * it returns the new position of the projectile
-**/
+ **/
 projectile tick(env_params env, projectile proj)
 {
 	const auto new_pos = proj.position() + proj.velocity();

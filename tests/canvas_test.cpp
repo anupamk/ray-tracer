@@ -1,23 +1,23 @@
 /// c includes
-#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 /// c++ includes
 #include <cstddef>
 #include <fstream>
-#include <string>
-#include <vector>
 #include <iostream>
+#include <string>
 #include <string_view>
+#include <vector>
 
 /// 3rdparty testing library
 #include "doctest.h"
 
 /// our own thing
-#include "constants.hpp"
-#include "color.hpp"
 #include "canvas.hpp"
+#include "color.hpp"
+#include "constants.hpp"
 #include "logging.h"
 #include "uv_image_pattern.hpp"
 

@@ -10,7 +10,7 @@
  *
  * sdl2 based renderer can be brought to bear (beer ?) for 'online'
  * visualization as well.
-**/
+ **/
 
 /// c++ includes
 #include <cstddef>

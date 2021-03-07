@@ -1,6 +1,6 @@
 /*
  * implement the raytracer ray
-**/
+ **/
 
 /// c++ includes
 #include "tuple.hpp"
@@ -10,8 +10,8 @@
 #include <string>
 
 /// our includes
-#include "ray.hpp"
 #include "intersection_record.hpp"
+#include "ray.hpp"
 
 namespace raytracer
 {

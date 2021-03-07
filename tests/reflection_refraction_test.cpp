@@ -10,17 +10,17 @@
 #include "doctest.h"
 
 /// our includes
-#include "plane.hpp"
-#include "sphere.hpp"
-#include "ray.hpp"
-#include "intersection_record.hpp"
 #include "constants.hpp"
+#include "intersection_record.hpp"
 #include "material.hpp"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"
+#include "plane.hpp"
+#include "ray.hpp"
+#include "solid_pattern.hpp"
+#include "sphere.hpp"
 #include "tuple.hpp"
 #include "world.hpp"
-#include "solid_pattern.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

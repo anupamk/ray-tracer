@@ -7,14 +7,14 @@
 #include <string>
 
 /// our includes
-#include "tuple.hpp"
+#include "color.hpp"
+#include "material.hpp"
+#include "matrix_transformations.hpp"
 #include "point_light.hpp"
 #include "shape_interface.hpp"
-#include "material.hpp"
-#include "color.hpp"
-#include "sphere.hpp"
-#include "matrix_transformations.hpp"
 #include "solid_pattern.hpp"
+#include "sphere.hpp"
+#include "tuple.hpp"
 
 namespace raytracer
 {

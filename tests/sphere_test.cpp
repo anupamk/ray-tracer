@@ -10,13 +10,13 @@
 #include "doctest.h"
 
 /// our includes
-#include "sphere.hpp"
-#include "ray.hpp"
-#include "intersection_record.hpp"
 #include "constants.hpp"
+#include "intersection_record.hpp"
 #include "material.hpp"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"
+#include "ray.hpp"
+#include "sphere.hpp"
 #include "tuple.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
@@ -87,9 +87,9 @@ TEST_CASE("test visible_intersection(...) results")
 	auto const the_sphere = std::make_shared<RT::sphere>();
 
 	/*
-         * there is slight duplication here. specifically, the ixns_list as well
-         * as exp_vis_xs contain 1 record which is common to both
-        **/
+	 * there is slight duplication here. specifically, the ixns_list as well
+	 * as exp_vis_xs contain 1 record which is common to both
+	 **/
 	struct {
 		RT::intersection_records ixns_list;
 		std::optional<RT::intersection_record> exp_vis_xs;

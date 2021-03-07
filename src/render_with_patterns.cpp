@@ -1,7 +1,7 @@
 /*
  * this program implements a single/multi threaded world-rendering through a
  * camera.
-**/
+ **/
 
 /// c++ includes
 #include <algorithm>
@@ -15,32 +15,32 @@
 #include <vector>
 
 /// our includes
+#include "benchmark.hpp"
+#include "blended_pattern.hpp"
 #include "camera.hpp"
+#include "checkers_pattern.hpp"
 #include "color.hpp"
 #include "constants.hpp"
+#include "gradient_pattern.hpp"
+#include "gradient_ring_pattern.hpp"
+#include "logging.h"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
+#include "plane.hpp"
 #include "point_light.hpp"
+#include "raytracer_renderer.hpp"
+#include "ring_pattern.hpp"
+#include "shape_interface.hpp"
+#include "solid_pattern.hpp"
+#include "sphere.hpp"
+#include "striped_pattern.hpp"
 #include "tuple.hpp"
 #include "world.hpp"
-#include "sphere.hpp"
-#include "plane.hpp"
-#include "shape_interface.hpp"
-#include "logging.h"
-#include "solid_pattern.hpp"
-#include "striped_pattern.hpp"
-#include "gradient_pattern.hpp"
-#include "ring_pattern.hpp"
-#include "checkers_pattern.hpp"
-#include "gradient_ring_pattern.hpp"
-#include "blended_pattern.hpp"
-#include "raytracer_renderer.hpp"
-#include "benchmark.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
  * later to more appropriate values.
-**/
+ **/
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /// convenience mostly
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 
 /*
  * only file specific functions from this point onwards
-**/
+ **/
 
 /// ---------------------------------------------------------------------------
 /// this function is called to create a world which is then rendered using

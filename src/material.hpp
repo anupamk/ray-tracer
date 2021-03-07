@@ -13,10 +13,10 @@
 namespace raytracer
 {
 	/*
-         * this defines the material which makes up a shape. it contains
-         * attributes from the phong reflection model as well the pattern that
-         * makes up the material.
-        **/
+	 * this defines the material which makes up a shape. it contains
+	 * attributes from the phong reflection model as well the pattern that
+	 * makes up the material.
+	 **/
 	class material
 	{
 	    private:
