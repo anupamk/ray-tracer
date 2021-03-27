@@ -1,0 +1,93 @@
+* Raytracer Enhancements
+
+This document describes a bunch of enhancements that can be taken up
+as part of evolving the ray-tracer. These vary in difficulty level,
+and are generally not described in that order.
+
+** Raytracer Enhancements
+
+   + Ray Debug Tracing
+
+     The general idea is to choose a point on the canvas, and let the
+     ray-tracer dump all steps that happen to render that pixel. 
+
+     Should allow for easy debugging of the ray-tracer, when it will
+     inevitably be needed.
+
+   + Estimate Time To Render
+
+     For larger scenes, it might be a good idea to provide a
+     running-estimate of number of seconds / milliseconds it might
+     take to finish the render.
+
+   + Shape Without Shadows
+
+     For some shapes / scenarios it might be worthwhile for the shape
+     to not cast any shadow i.e. instances of shapes should be able to
+     opt out of casting a shadow.
+
+     This is useful, f.e. when looking through the surface of a pond
+     at some rocks beneath. If the pond surface actually cast a
+     shadow, it would mess the scene up, completely. Adding light
+     sources beneath the surface is also not a good idea, because that
+     would cast weird shadows etc.
+
+   + Anti-Aliasing
+
+     Because pixels have a finite size, diagonal lines, under
+     sufficient magnification will appear jagged (or stair-step). One
+     approach to fix this problem is called /super-sampling/. Instead
+     of casting a single ray per pixel, we cast multiple rays. Each
+     ray passes through a different (random) point offset from the
+     center of the pixel. The resulting color is then averaged to
+     compute the color of the pixel.
+
+     This can be done intelligently as well, instead of a brute force
+     approach where N rays per pixels are *always* cast. We can start
+     by casting 5 rays as follows
+
+       - 4 at each of the corners of the pixel and
+       - 1 at the center of the pixel
+
+     If any of the corner-colors differ from the center-color by some
+     threshold then sub-divide that quarter of pixel, and repeat the
+     procedure recursively (for some sensible recursion depth).
+
+     Depending on the scene, this has the potential to offer
+     /significant/ savings.
+
+   + Camera Aperture
+
+     Our camera is an ideal pin-hole camera which casts 1 ray per
+     pixel. This needs to change.
+
+   + More Primitive Shapes
+
+     Enhance the ray-tracer to support more primitive shapes. This can
+     include, for example, support for
+     
+     - cube
+     - cylinder
+     - cone
+     - triangle
+     - torus
+     - ...
+
+   + Scene Description Via Configuration
+
+     Every scene is hardcoded with respect to placement of the camera,
+     the light sources, the objects that make up the world
+     etc. etc. 
+
+     Ideally these parameters should be loaded via a YAML
+     configuration, making the whole thing more programmatic.
+
+   + OBJ File Support
+
+     Add support for loading scenes by parsing Wavefront's OBJ file
+     format. 
+
+   + Acceleration Structures
+
+     Add support for axis-aligned-bounding-boxes for faster rendering
+     of scenes.
