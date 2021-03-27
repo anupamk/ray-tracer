@@ -20,19 +20,9 @@
 
 namespace raytracer
 {
-	plane::plane()
+	plane::plane(bool cast_shadow)
+	    : shape_interface(cast_shadow)
 	{
-	}
-
-	/// --------------------------------------------------------------------
-	/// stringified representation of a plane
-	std::string plane::stringify() const
-	{
-		std::stringstream ss("");
-
-		ss << "XZ-PLANE";
-
-		return ss.str();
 	}
 
 	/// --------------------------------------------------------------------
@@ -70,6 +60,38 @@ namespace raytracer
 		auto const v_val = modulus(pt.z(), 1.0);
 
 		return uv_point(u_val, v_val);
+	}
+
+	/// --------------------------------------------------------------------
+	/// return 'true' iff 'R' can intersect the plane before
+	/// 'distance'.
+	///
+	/// return 'false' otherwise.
+	bool plane::has_intersection_before(the_badge<ray_t>, ray_t const& R, double distance) const
+	{
+		auto const ray_y_dir = R.direction().y();
+
+		if (std::abs(ray_y_dir) < EPSILON) {
+			return false;
+		}
+
+		/// ------------------------------------------------------------
+		/// a ray can intersect the plane at only a single
+		/// point. co-planar rays are not interesting at all
+		auto const xs_point = -R.origin().y() / ray_y_dir;
+
+		return ((xs_point >= EPSILON) && (xs_point < distance));
+	}
+
+	/// --------------------------------------------------------------------
+	/// stringified representation of a plane
+	std::string plane::stringify() const
+	{
+		std::stringstream ss("");
+
+		ss << "XZ-PLANE";
+
+		return ss.str();
 	}
 
 	/// --------------------------------------------------------------------

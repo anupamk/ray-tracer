@@ -142,7 +142,7 @@ static RT::world create_world()
 	}
 
 	/// --------------------------------------------------------------------
-	/// fuzzy-sphere
+	/// moon-sphere
 	auto fuzzy_sphere_01 = std::make_shared<RT::sphere>();
 	{
 		auto noisy_solid_pattern = std::make_shared<RT::perlin_noise_pattern>(
@@ -163,7 +163,7 @@ static RT::world create_world()
 	}
 
 	/// --------------------------------------------------------------------
-	/// fuzzy-sphere
+	/// red-sphere
 	auto fuzzy_sphere_02 = std::make_shared<RT::sphere>();
 	{
 		auto fuzzy_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(

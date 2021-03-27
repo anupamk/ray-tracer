@@ -203,8 +203,14 @@ target_link_libraries(ch-11-render-with-reflections PRIVATE raytracer_render_lib
 
 # ------------------------------------------------------------------------------
 # chapter-11: render with transparency(t) and reflections(r) and refractions(r)
-add_executable(ch-11-render-with-t3r render_with_t3r.cpp)
-target_link_libraries(ch-11-render-with-t3r PRIVATE common)
-target_link_libraries(ch-11-render-with-t3r PRIVATE raytracer_lib)
-target_link_libraries(ch-11-render-with-t3r PRIVATE raytracer_render_lib)
+add_executable(render-with-t3r render_with_t3r.cpp)
+target_link_libraries(render-with-t3r PRIVATE common)
+target_link_libraries(render-with-t3r PRIVATE raytracer_lib)
+target_link_libraries(render-with-t3r PRIVATE raytracer_render_lib)
 
+# ------------------------------------------------------------------------------
+# render nested glass spheres
+add_executable(nested-glass-spheres render_nested_glass_spheres.cpp)
+target_link_libraries(nested-glass-spheres PRIVATE common)
+target_link_libraries(nested-glass-spheres PRIVATE raytracer_lib)
+target_link_libraries(nested-glass-spheres PRIVATE raytracer_render_lib)

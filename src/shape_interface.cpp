@@ -7,8 +7,9 @@
 
 namespace raytracer
 {
-	shape_interface::shape_interface()
-	    : xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
+	shape_interface::shape_interface(bool cast_shadow)
+	    : cast_shadow(cast_shadow)
+	    , xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
 	    , inv_xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
 	    , material_()
 	{
@@ -40,10 +41,9 @@ namespace raytracer
 		return inv_transform() * world_pt;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to return the normal at a point on
 	/// the shape. 'point' is in world-space coordinates
-	///
 	tuple shape_interface::normal_at_world(tuple const& world_pt) const
 	{
 		/// first convert the world-point to object space, and determine
@@ -58,19 +58,17 @@ namespace raytracer
 		return world_normal;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to get the current material associated with
 	/// the shape
-	///
 	material shape_interface::get_material() const
 	{
 		return this->material_;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to set the current material associated with
 	/// the shape
-	///
 	void shape_interface::set_material(material const& M)
 	{
 		this->material_ = M;

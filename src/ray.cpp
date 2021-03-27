@@ -158,6 +158,29 @@ namespace raytracer
 		return retval;
 	}
 
+	/// ------------------------------------------------------------
+	/// returns 'true' if this ray intersects an object from the list of
+	/// world-objects before 'distance'.
+	///
+	/// returns 'false' otherwise.
+	bool ray_t::has_intersection_before(
+		std::vector<std::shared_ptr<const shape_interface>> const& world_object_list,
+		double distance) const
+	{
+		for (auto const& obj : world_object_list) {
+			if (!obj->cast_shadow) {
+				continue;
+			}
+
+			const auto inv_ray = transform(obj->inv_transform());
+			if (obj->has_intersection_before({}, inv_ray, distance)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	/// --------------------------------------------------------------------
 	/// compare two rays, and return true iff both origin and direction of
 	/// the rays are same. false otherwise

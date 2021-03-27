@@ -60,7 +60,7 @@ namespace raytracer
 		std::string stringify() const;
 
 		/// return true if point 'pt' is in shadow w.r.t a light source.
-		bool is_shadowed(tuple const& pt) const;
+		bool is_shadowed(tuple const& pt, point_light const& light) const;
 
 		/// compute the reflected color
 		color reflected_color(intersection_info_t const&,

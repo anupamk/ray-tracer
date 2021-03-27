@@ -17,25 +17,11 @@
 
 namespace raytracer
 {
-	sphere::sphere(double radius)
-	    : radius_(radius)
+	sphere::sphere(bool cast_shadow, double radius)
+	    : shape_interface(cast_shadow)
+	    , radius_(radius)
 	{
 		ASSERT(radius >= 0.0);
-	}
-
-	std::string sphere::stringify() const
-	{
-		std::stringstream ss("");
-
-		// clang-format off
-                ss << std::fixed    << std::left
-                   << "center: ("   << this->center()       << "), "
-                   << "radius: "    << this->radius()       << ", "
-                   << "material: (" << this->get_material() << ")"
-                   ;
-		// clang-format on
-
-		return ss.str();
 	}
 
 	/*
@@ -77,10 +63,9 @@ namespace raytracer
 		return std::nullopt;
 	}
 
-	///
+	/// --------------------------------------------------------------------
 	/// this function is called to return the normal at a point 'P' on
 	/// the surface of the sphere
-	///
 	tuple sphere::normal_at_local(tuple const& P) const
 	{
 		return create_vector(P.x(), P.y(), P.z());
@@ -122,9 +107,52 @@ namespace raytracer
 		return uv_point(u, v);
 	}
 
+	/// --------------------------------------------------------------------
+	/// return 'true' iff 'R' can intersect this sphere before
+	/// 'distance'.
 	///
+	/// return 'false' otherwise
+	bool sphere::has_intersection_before(the_badge<ray_t>, ray_t const& R, double distance) const
+	{
+		/// vector from sphere's center to the ray-origin
+		const auto sphere_to_ray = R.origin() - this->center();
+		const auto ray_dir       = R.direction();
+
+		/// compute the coefficients of the quadratic equation
+		const auto A = dot(ray_dir, ray_dir);
+		const auto B = 2.0 * dot(ray_dir, sphere_to_ray);
+		const auto C = dot(sphere_to_ray, sphere_to_ray) - 1;
+
+		if (auto const roots = quadratic_real_roots(A, B, C)) {
+			auto const root_1 = roots->first;
+			auto const root_2 = roots->second;
+
+			return (((root_1 >= EPSILON) && (root_1 < distance)) ||
+			        ((root_2 >= EPSILON) && (root_2 < distance)));
+		}
+
+		return false;
+	}
+
+	/// --------------------------------------------------------------------
+	/// stringified representation of sphere's information
+	std::string sphere::stringify() const
+	{
+		std::stringstream ss("");
+
+		// clang-format off
+                ss << std::fixed    << std::left
+                   << "center: ("   << this->center()       << "), "
+                   << "radius: "    << this->radius()       << ", "
+                   << "material: (" << this->get_material() << ")"
+                   ;
+		// clang-format on
+
+		return ss.str();
+	}
+
+	/// --------------------------------------------------------------------
 	/// 'reasonably' formatted information of the sphere
-	///
 	std::ostream& operator<<(std::ostream& os, sphere const& S)
 	{
 		return os << S.stringify();

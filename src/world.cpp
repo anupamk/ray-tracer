@@ -132,11 +132,12 @@ namespace raytracer
 	/// compute the color when a ray hits the world
 	color world::shade_hit(intersection_info_t const& xs_info, uint8_t remaining) const
 	{
-		color shade_color    = color_black();
-		auto point_in_shadow = is_shadowed(xs_info.over_position());
+		color shade_color = color_black();
 
 		// clang-format off
-                for (auto const a_light : light_list_) {
+                for (auto const& a_light : light_list_) {
+                        auto point_in_shadow = is_shadowed(xs_info.over_position(), a_light);
+                        
                         shade_color += phong_illumination(xs_info.what_object(),   /// object-material
                                                           xs_info.over_position(), /// point of intersection
                                                           a_light,		   /// the light
@@ -200,7 +201,7 @@ namespace raytracer
 
 		/// next all the shapes
 		ss << "* shapes [" << shape_list_.size() << "]" << std::endl;
-		for (auto const s : shape_list_) {
+		for (auto const& s : shape_list_) {
 			ss << s->stringify() << std::endl;
 		}
 
@@ -210,34 +211,19 @@ namespace raytracer
 	/// --------------------------------------------------------------------
 	/// returns true if the point(pt), is in shadow w.r.t the light sources
 	/// making up the entire scene. returns false otherwise.
-	bool world::is_shadowed(tuple const& pt) const
+	///
+	/// cast a ray, called shadow-ray, from the point towards the light
+	/// source.
+	///
+	/// if shadow-ray intersects something between point, and light-source,
+	/// then the point is considered to be in shadow.
+	bool world::is_shadowed(tuple const& pt, point_light const& light) const
 	{
-		/// ------------------------------------------------------------
-		/// cast a ray, called shadow-ray, from the point towards the
-		/// light source.
-		///
-		/// if shadow-ray intersects something between point, and
-		/// light-source, then the point is considered to be in shadow.
-		for (auto const light : light_list_) {
-			auto const pt_to_light = light.position() - pt;
-			auto const shadow_ray  = ray_t(pt, normalize(pt_to_light));
-			auto const shadow_xs   = intersect(shadow_ray);
-			auto const hit         = visible_intersection(shadow_xs);
+		auto const pt_to_light   = light.position() - pt;
+		auto const dist_to_light = magnitude(pt_to_light);
+		auto const shadow_ray    = ray_t(pt, normalize(pt_to_light));
 
-			if (!hit) {
-				continue;
-			}
-
-			/// ok, we have an intersection
-			auto const shadow_hit_where = hit.value().where();
-			auto const dist_to_light    = magnitude(pt_to_light);
-
-			if (shadow_hit_where > 0.0 && shadow_hit_where < dist_to_light) {
-				return true;
-			}
-		}
-
-		return false;
+		return shadow_ray.has_intersection_before(shapes(), dist_to_light);
 	}
 
 	/// --------------------------------------------------------------------

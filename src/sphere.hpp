@@ -26,7 +26,7 @@ namespace raytracer
 		double radius_      = 0.0;
 
 	    public:
-		sphere(double radius = 1.0);
+		sphere(bool cast_shadow = true, double radius = 1.0);
 
 	    public:
 		constexpr tuple center() const
@@ -55,6 +55,14 @@ namespace raytracer
 		/// map a point on the surface of the sphere to a corresponding
 		/// uv-value (on a texture)
 		uv_point map_to_uv(tuple const&) const override;
+
+		/// ------------------------------------------------------------
+		/// compute intersection of a ray with the sphere, and return
+		/// 'true' iff 'R' intersects before 'distance'.
+		///
+		/// return 'false' otherwise
+		bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
+		                             double distance) const override;
 	};
 
 	std::ostream& operator<<(std::ostream& os, sphere const& S);

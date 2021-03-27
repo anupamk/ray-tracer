@@ -23,7 +23,7 @@ namespace raytracer
 	class plane final : public shape_interface
 	{
 	    public:
-		plane();
+		plane(bool cast_shadow = true);
 
 	    public:
 		/// ------------------------------------------------------------
@@ -44,6 +44,14 @@ namespace raytracer
 		/// map a point on the surface of the plane to a corresponding
 		/// uv-value (on a texture)
 		uv_point map_to_uv(tuple const&) const override;
+
+		/// ------------------------------------------------------------
+		/// compute intersection of a ray with the plane, and return
+		/// 'true' iff 'R' intersects before 'distance'.
+		///
+		/// return 'false' otherwise
+		bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
+		                             double distance) const override;
 	};
 
 	std::ostream& operator<<(std::ostream& os, plane const& P);

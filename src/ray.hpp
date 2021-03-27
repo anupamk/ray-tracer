@@ -77,6 +77,13 @@ namespace raytracer
 		/// (and where), normal at point of intersection, reflection
 		/// vector etc. etc.
 		intersection_info_t prepare_computations(intersection_records const&, size_t index = 0) const;
+
+		/// ------------------------------------------------------------
+		/// returns 'true' if this ray intersects the list of
+		/// world-objects before 'distance'. returns 'false' otherwise.
+		bool has_intersection_before(
+			std::vector<std::shared_ptr<const shape_interface>> const& world_objects,
+			double distance) const;
 	};
 
 	/// --------------------------------------------------------------------

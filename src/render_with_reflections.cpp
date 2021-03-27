@@ -119,16 +119,16 @@ static RT::world create_world()
 	}
 
 	/// --------------------------------------------------------------------
-	/// red-planet
-	auto red_planet = std::make_shared<RT::sphere>();
+	/// red-planet without the shadow ('false')
+	auto red_planet = std::make_shared<RT::sphere>(false);
 	{
 		auto fuzzy_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
-			RT::color(0.5, 0.0, 0.0),                 /// u
-			RT::color(1.0, 0.6, 0.6),                 /// v
+			RT::color(0.2, 0.0, 0.0),                 /// u
+			RT::color(0.8, 0.4, 0.4),                 /// v
 			std::default_random_engine::default_seed, /// seed
 			16);                                      /// octaves
 
-		red_planet->transform(RT_XFORM::create_3d_scaling_matrix(3.0, 3.0, 3.0) *
+		red_planet->transform(RT_XFORM::create_3d_scaling_matrix(3.3, 3.3, 3.3) *
 		                      RT_XFORM::create_3d_translation_matrix(2.0, 1.5, 3.0) *
 		                      RT_XFORM::create_roty_matrix(RT::PI_BY_2F) *
 		                      RT_XFORM::create_rotz_matrix(-RT::PI));
@@ -143,7 +143,7 @@ static RT::world create_world()
 
 	/// --------------------------------------------------------------------
 	/// the world light
-	auto world_light_01 = RT::point_light(RT::create_point(2.0, 3.0, -10.0), RT::color_white());
+	auto world_light_01 = RT::point_light(RT::create_point(-2.0, 3.0, -10.0), RT::color_white());
 
 	/// --------------------------------------------------------------------
 	/// now create the world...
