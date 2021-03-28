@@ -20,17 +20,20 @@ and are generally not described in that order.
      running-estimate of number of seconds / milliseconds it might
      take to finish the render.
 
-   + Shape Without Shadows
+     If a time-left-to-render is hard, a percentage of scene completed
+     etc. would be just as useful.
 
-     For some shapes / scenarios it might be worthwhile for the shape
-     to not cast any shadow i.e. instances of shapes should be able to
-     opt out of casting a shadow.
+   + +Shape Without Shadows+ (DONE : 5e7e97301c228d25)
+                                   
+     +For some shapes / scenarios it might be worthwhile for the shape+
+     +to not cast any shadow i.e. instances of shapes should be able to+
+     +opt out of casting a shadow+.
 
-     This is useful, f.e. when looking through the surface of a pond
-     at some rocks beneath. If the pond surface actually cast a
-     shadow, it would mess the scene up, completely. Adding light
-     sources beneath the surface is also not a good idea, because that
-     would cast weird shadows etc.
+     +This is useful, f.e. when looking through the surface of a pond+
+     +at some rocks beneath. If the pond surface actually cast a+
+     +shadow, it would mess the scene up, completely. Adding light+
+     +sources beneath the surface is also not a good idea, because that+
+     +would cast weird shadows etc.+
 
    + Anti-Aliasing
 
