@@ -49,8 +49,8 @@ and are generally not described in that order.
      approach where N rays per pixels are *always* cast. We can start
      by casting 5 rays as follows
 
-       - 4 at each of the corners of the pixel and
-       - 1 at the center of the pixel
+     - 4 at each of the corners of the pixel and
+     - 1 at the center of the pixel
 
      If any of the corner-colors differ from the center-color by some
      threshold then sub-divide that quarter of pixel, and repeat the
@@ -69,7 +69,7 @@ and are generally not described in that order.
      Enhance the ray-tracer to support more primitive shapes. This can
      include, for example, support for
      
-     - cube
+     - +cube+ (DONE)
      - cylinder
      - cone
      - triangle
@@ -94,3 +94,8 @@ and are generally not described in that order.
 
      Add support for axis-aligned-bounding-boxes for faster rendering
      of scenes.
+
+   + Use LLVM
+
+     Build the whole thing using clang, fixing issues as they come
+     up. Hopefully not too many :)

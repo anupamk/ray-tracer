@@ -165,7 +165,7 @@ static RT::world create_world()
 
 	/// --------------------------------------------------------------------
 	/// red-sphere
-	auto fuzzy_sphere_02 = std::make_shared<RT::sphere>();
+	auto fuzzy_sphere_02 = std::make_shared<RT::sphere>(false);
 	{
 		auto fuzzy_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
 			RT::color(0.5, 0.0, 0.0),                 /// u

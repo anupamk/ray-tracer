@@ -514,7 +514,7 @@ TEST_CASE("inverse of a matrix")
         };
 	// clang-format on
 
-	for (auto const tc : mat_inv_tc) {
+	for (auto tc : mat_inv_tc) {
 		auto const got_inv_mat = inverse(tc.m_);
 		CHECK(got_inv_mat == tc.expected_m_inv_);
 	}

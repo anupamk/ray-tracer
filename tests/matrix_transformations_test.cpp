@@ -370,7 +370,7 @@ TEST_CASE("reflection about x/y/z axis test")
 	auto const pt = raytracer::create_point(pt_x, pt_y, pt_z);
 
 	/// let the reflections begin
-	for (auto const tc : tc_list) {
+	for (auto const& tc : tc_list) {
 		auto const got_pt = tc.mat_ * pt;
 		CHECK(got_pt == tc.exp_reflected_pt_);
 	}
@@ -426,7 +426,7 @@ TEST_CASE("test shearing")
 	auto const pt = raytracer::create_point(2.0, 3.0, 4.0);
 
 	/// let the shearing begin
-	for (auto const tc : shearing_tc) {
+	for (auto const& tc : shearing_tc) {
 		// clang-format off
                 auto const tc_shear_mat = rt_matrix_xforms_t::create_shearing_matrix(tc.xy_, tc.xz_,
                                                                                      tc.yx_, tc.yz_,

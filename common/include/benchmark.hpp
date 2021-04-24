@@ -71,7 +71,7 @@ class Benchmark
 		for (auto i = 0; i < n; i++) {
 			/// ----------------------------------------------------
 			/// log something otherwise it gets lonely
-			LOG_INFO("running %04d / %04d", i + 1, n);
+			LOG_DEBUG("running %04d / %04d", i + 1, n);
 
 			auto pair = measure_execution(std::forward<Fun>(fun), std::forward<Args>(args)...);
 			num_times_.push_back(pair.first);

@@ -2,10 +2,8 @@
 #define RAYTRACER_TEXTURE_2D_PATTERN_HPP__
 
 /// c++ includes
-#include <algorithm>
 #include <functional>
 #include <memory>
-#include <string>
 
 /// our includes
 #include "pattern_interface.hpp"

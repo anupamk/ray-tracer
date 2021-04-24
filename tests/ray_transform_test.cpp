@@ -38,7 +38,7 @@ TEST_CASE("test ray.transform(...) results")
 		},
 	};
 
-	for (auto const tc : tc_list) {
+	for (auto const& tc : tc_list) {
 		auto const got_ray = tc.ray.transform(tc.transform_matrix);
 		CHECK(got_ray == tc.expected_ray);
 	}

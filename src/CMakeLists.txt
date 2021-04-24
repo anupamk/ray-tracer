@@ -66,7 +66,11 @@ set (RAYTRACER_LIB_SOURCES
   uv_noise_texture.hpp
   uv_image_pattern.hpp
   uv_mapper.hpp
-  uv_mapper.cpp)
+  uv_mapper.cpp
+  cube.hpp
+  cube.cpp
+  cube_map_texture.hpp
+  cube_map_texture.cpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
@@ -216,3 +220,41 @@ add_executable(nested-glass-spheres render_nested_glass_spheres.cpp)
 target_link_libraries(nested-glass-spheres PRIVATE common)
 target_link_libraries(nested-glass-spheres PRIVATE raytracer_lib)
 target_link_libraries(nested-glass-spheres PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# render cuboid shapes and associated images
+
+# ------------------------------------------------------------------------------
+# cubes-align-check
+add_executable(cube-align-check render_align_check_plane.cpp)
+target_link_libraries(cube-align-check PRIVATE common)
+target_link_libraries(cube-align-check PRIVATE raytracer_lib)
+target_link_libraries(cube-align-check PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# cubes-checkered
+add_executable(cube-checkered render_checkered_cubes.cpp)
+target_link_libraries(cube-checkered PRIVATE common)
+target_link_libraries(cube-checkered PRIVATE raytracer_lib)
+target_link_libraries(cube-checkered PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# cube-skybox : map cross-format texture images on cube
+add_executable(cube-skybox render_skybox.cpp)
+target_link_libraries(cube-skybox PRIVATE common)
+target_link_libraries(cube-skybox PRIVATE raytracer_lib)
+target_link_libraries(cube-skybox PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# cube-skybox-movie : a movie of a rotating cube with cross-format
+# texture images on cube
+add_executable(cube-skybox-movie render_skybox_movie.cpp)
+target_link_libraries(cube-skybox-movie
+  PRIVATE rt-lib)
+
+# ------------------------------------------------------------------------------
+# cube-scene : a simple scene with cubes as predominant shape
+add_executable(cube-scene render_cube_scene.cpp)
+target_link_libraries(cube-scene PRIVATE common)
+target_link_libraries(cube-scene PRIVATE raytracer_lib)
+target_link_libraries(cube-scene PRIVATE raytracer_render_lib)
