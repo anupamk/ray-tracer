@@ -21,7 +21,7 @@ namespace raytracer
 	{
 		/// this.point + other.point == undefined
 		if (other.is_point() && this->is_point()) {
-			throw std::domain_error("tuple::opertor+=(...) adding points !");
+			ASSERT_FAIL("tuple::opertor+=(...) adding points !");
 		}
 
 		/// whether we get a point or a vector, tuple components can be
@@ -46,7 +46,7 @@ namespace raytracer
 	{
 		/// this.vector - this.point == undefined
 		if (this->is_vector() && other.is_point()) {
-			throw std::domain_error("tuple::opertor-=(...) subtracting point from vector !");
+			ASSERT_FAIL("tuple::opertor-=(...) subtracting point from vector !");
 		}
 
 		/// whether we get a point or a vector, tuple components can be

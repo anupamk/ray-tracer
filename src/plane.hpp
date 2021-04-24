@@ -2,13 +2,13 @@
 #define RAYTRACER_PLANE_HPP__
 
 /// c++ includes
-#include "badge.hpp"
 #include <optional>
 #include <ostream>
 #include <string>
 
 /// our includes
 #include "assert_utils.h"
+#include "badge.hpp"
 #include "intersection_record.hpp"
 #include "ray.hpp"
 #include "shape_interface.hpp"
@@ -41,17 +41,17 @@ namespace raytracer
 		tuple normal_at_local(tuple const&) const override;
 
 		/// ------------------------------------------------------------
-		/// map a point on the surface of the plane to a corresponding
-		/// uv-value (on a texture)
-		uv_point map_to_uv(tuple const&) const override;
-
-		/// ------------------------------------------------------------
 		/// compute intersection of a ray with the plane, and return
 		/// 'true' iff 'R' intersects before 'distance'.
 		///
 		/// return 'false' otherwise
 		bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
 		                             double distance) const override;
+
+	    private:
+		/// ------------------------------------------------------------
+		/// actual workhorse for computing ray-plane intersections
+		std::optional<intersection_records> compute_intersections_(ray_t const&) const;
 	};
 
 	std::ostream& operator<<(std::ostream& os, plane const& P);

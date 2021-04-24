@@ -18,9 +18,17 @@ namespace raytracer
 	 **/
 	class uv_pattern_interface : std::enable_shared_from_this<uv_pattern_interface>
 	{
+	    protected:
+		/// ------------------------------------------------------------
+		/// don't allow deletion through a base
+		virtual ~uv_pattern_interface()
+		{
+		}
+
 	    public:
 		virtual color uv_pattern_color_at(uv_point const& uv) const = 0;
 	};
+
 } // namespace raytracer
 
 #endif /// RAYTRACER_UV_PATTERN_INTERFACE_HPP__

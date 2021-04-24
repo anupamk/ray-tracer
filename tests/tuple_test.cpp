@@ -149,19 +149,6 @@ TEST_CASE("tuple::operator+=(...) test")
 		CHECK(vec_0.is_point() == false);
 		CHECK(vec_0.is_vector() == true);
 	}
-
-	/// point + point
-	{
-		raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
-		raytracer::tuple pt_2 = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			pt_1 += pt_2;
-		}
-		catch (std::domain_error& e) {
-			/// not much to do
-		}
-	}
 }
 
 /// test operator+=(...)
@@ -191,19 +178,6 @@ TEST_CASE("tuple::operator+(...) test")
 		CHECK(vec_new.z() == 7.0);
 		CHECK(vec_new.is_point() == false);
 		CHECK(vec_new.is_vector() == true);
-	}
-
-	/// point + point
-	{
-		raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
-		raytracer::tuple pt_2 = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			const auto pt_new = pt_1 + pt_2;
-		}
-		catch (std::domain_error& e) {
-			/// not much to do
-		}
 	}
 }
 
@@ -251,19 +225,6 @@ TEST_CASE("tuple::operator-=(...) test")
 		CHECK(vec_0.is_point() == false);
 		CHECK(vec_0.is_vector() == true);
 	}
-
-	/// vector - point
-	{
-		raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
-		raytracer::tuple pt_1  = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			vec_1 -= pt_1;
-		}
-		catch (std::domain_error& e) {
-			/// not much to do
-		}
-	}
 }
 
 /// test binary operator-=(...)
@@ -307,19 +268,6 @@ TEST_CASE("tuple::operator-(...) test")
 		CHECK(vec_ret.z() == -1.0);
 		CHECK(vec_ret.is_point() == false);
 		CHECK(vec_ret.is_vector() == true);
-	}
-
-	/// vector - point
-	{
-		raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
-		raytracer::tuple pt_1  = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			const auto vec_ret = vec_1 - pt_1;
-		}
-		catch (std::domain_error& e) {
-			/// not much to do
-		}
 	}
 }
 
@@ -397,15 +345,6 @@ TEST_CASE("magnitude(tuple)")
 	raytracer::tuple vec_1 = raytracer::create_vector(1.0, 0.0, 0.0);
 	const auto vec_mag     = magnitude(vec_1);
 	CHECK(vec_mag == 1.0);
-
-	/// magnitude of point not so much
-	raytracer::tuple pt_1 = raytracer::create_vector(1.0, 0.0, 0.0);
-	try {
-		magnitude(pt_1);
-	}
-	catch (std::domain_error& e) {
-		/// not much to do
-	}
 }
 
 /// test normalize of vector
@@ -443,30 +382,6 @@ TEST_CASE("dot(tuple, tuple)")
 
 		CHECK(dot_prod == 20.0);
 	}
-
-	/// error cases next dot(<vector>, <point>)
-	{
-		raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
-		raytracer::tuple pt_2  = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			const auto dot_prod = dot(vec_1, pt_2);
-		}
-		catch (std::domain_error& e) {
-		}
-	}
-
-	/// error cases next dot(<point>, <point>)
-	{
-		raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
-		raytracer::tuple pt_2 = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			const auto dot_prod = dot(pt_1, pt_2);
-		}
-		catch (std::domain_error& e) {
-		}
-	}
 }
 
 /// test cross-product of vector, vector
@@ -496,30 +411,6 @@ TEST_CASE("cross(tuple, tuple)")
 		CHECK(cross_prod.z() == 1.0);
 		CHECK(cross_prod.is_point() == false);
 		CHECK(cross_prod.is_vector() == true);
-	}
-
-	/// error cases next cross(<vector>, <point>)
-	{
-		raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
-		raytracer::tuple pt_2  = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			const auto cross_prod = cross(vec_1, pt_2);
-		}
-		catch (std::domain_error& e) {
-		}
-	}
-
-	/// error cases next cross(<point>, <point>)
-	{
-		raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
-		raytracer::tuple pt_2 = raytracer::create_point(2.0, 3.0, 4.0);
-
-		try {
-			const auto cross_prod = cross(pt_1, pt_2);
-		}
-		catch (std::domain_error& e) {
-		}
 	}
 }
 

@@ -39,6 +39,7 @@
 #include "texture_2d_pattern.hpp"
 #include "tuple.hpp"
 #include "uv_checkers.hpp"
+#include "uv_mapper.hpp"
 #include "uv_noise_texture.hpp"
 #include "world.hpp"
 
@@ -146,8 +147,9 @@ static RT::world create_world()
 	{
 		auto sp_01_noisy_texture = std::make_shared<RT::uv_noise>(RT::color(0.0, 0.0, 0.3),  /// u
 		                                                          RT::color(1.0, 1.0, 1.0)); /// v
+
 		auto sp_01_noisy_pattern =
-			std::make_shared<RT::texture_2d_pattern>(sp_01_noisy_texture, sphere_01);
+			std::make_shared<RT::texture_2d_pattern>(sp_01_noisy_texture, RT::spherical_map);
 
 		sphere_01->transform(RT_XFORM::create_3d_translation_matrix(0.125, 1.0, -1.0));
 		sphere_01->set_material(RT::material()
@@ -186,10 +188,12 @@ static RT::world create_world()
 		auto sp_03_uv_texture = std::make_shared<RT::uv_checkers>(20, RT::color(0.3, 0.0, 0.0),  /// u
 		                                                          10, RT::color(1.0, 1.0, 1.0)); /// v
 
-		auto sp_03_texture = std::make_shared<RT::texture_2d_pattern>(sp_03_uv_texture, sphere_03);
+		auto sp_03_texture =
+			std::make_shared<RT::texture_2d_pattern>(sp_03_uv_texture, RT::spherical_map);
 
 		sphere_03->transform(RT_XFORM::create_3d_scaling_matrix(0.9, 0.9, 0.9) *
 		                     RT_XFORM::create_3d_translation_matrix(-4.5, 1.0, 2.9));
+
 		sphere_03->set_material(RT::material()
 		                                .set_pattern(sp_03_texture) /// pattern
 		                                .set_ambient(0.1)           /// ambient

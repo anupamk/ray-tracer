@@ -18,6 +18,13 @@ namespace raytracer
 		std::shared_ptr<pattern_interface> const pattern_a_;
 		std::shared_ptr<pattern_interface> const pattern_b_;
 
+	    protected:
+		/// ------------------------------------------------------------
+		/// don't allow deletion through base
+		virtual ~binary_pattern()
+		{
+		}
+
 	    public:
 		binary_pattern(color a, color b)
 		    : binary_pattern(std::make_shared<solid_pattern>(a), /// convert-to-solid-pattern
@@ -47,6 +54,7 @@ namespace raytracer
 			return pattern_b_->color_at_point(pattern_b_->inv_transform() * P);
 		}
 	};
+
 } // namespace raytracer
 
 #endif ///

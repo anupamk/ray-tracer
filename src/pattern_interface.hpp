@@ -26,6 +26,13 @@ namespace raytracer
 		fsize_dense2d_matrix_t xform_;
 		fsize_dense2d_matrix_t inv_xform_;
 
+	    protected:
+		/// ------------------------------------------------------------
+		/// don't allow deletion through a base
+		virtual ~pattern_interface()
+		{
+		}
+
 	    public:
 		pattern_interface();
 

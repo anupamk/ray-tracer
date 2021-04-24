@@ -435,8 +435,8 @@ TEST_CASE("scenario: refracted color for a refracted ray")
 	auto world_shape_01 = std::const_pointer_cast<RT::shape_interface>(W.shapes()[0]);
 	{
 		auto shape_01_mat = RT::material()            /// default-material
-					    .set_ambient(1.0) /// with specific
-					    .set_pattern(std::make_shared<test_pattern>()); /// properties
+		                            .set_ambient(1.0) /// with specific
+		                            .set_pattern(std::make_shared<test_pattern>()); /// properties
 
 		world_shape_01->set_material(shape_01_mat);
 	}
@@ -445,8 +445,8 @@ TEST_CASE("scenario: refracted color for a refracted ray")
 	auto world_shape_02 = std::const_pointer_cast<RT::shape_interface>(W.shapes()[1]);
 	{
 		auto shape_02_mat = RT::material()                      /// default material
-					    .set_transparency(1.0)      /// with specific
-					    .set_refractive_index(1.5); /// properties
+		                            .set_transparency(1.0)      /// with specific
+		                            .set_refractive_index(1.5); /// properties
 
 		world_shape_02->set_material(shape_02_mat);
 	}

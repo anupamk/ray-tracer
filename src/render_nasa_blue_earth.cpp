@@ -40,6 +40,7 @@
 #include "tuple.hpp"
 #include "uv_checkers.hpp"
 #include "uv_image_pattern.hpp"
+#include "uv_mapper.hpp"
 #include "uv_noise_texture.hpp"
 #include "world.hpp"
 
@@ -126,7 +127,7 @@ static RT::world create_world()
 
 		auto sp_01_earth_texture = std::make_shared<RT::uv_image>(earth_map_canvas);
 		auto sp_01_earth_pattern =
-			std::make_shared<RT::texture_2d_pattern>(sp_01_earth_texture, earth_sphere);
+			std::make_shared<RT::texture_2d_pattern>(sp_01_earth_texture, RT::spherical_map);
 
 		earth_sphere->transform(RT_XFORM::create_3d_scaling_matrix(3.75, 3.75, 3.75) *
 		                        RT_XFORM::create_3d_translation_matrix(2.0, 1.3, 0.5) *

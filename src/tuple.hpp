@@ -133,18 +133,6 @@ namespace raytracer
 		return tuple(x, y, z, tuple_type_t::VECTOR);
 	}
 
-	inline double magnitude(tuple a)
-	{
-		return std::sqrt(a.x() * a.x() + a.y() * a.y() + a.z() * a.z());
-	}
-
-	/// --------------------------------------------------------------------
-	/// return a tuple such that it's magnitude is '1'
-	inline tuple normalize(tuple a)
-	{
-		return a / magnitude(a);
-	}
-
 	/// --------------------------------------------------------------------
 	/// return the dot product of two vectors
 	constexpr double dot(tuple a, tuple b)
@@ -161,6 +149,18 @@ namespace raytracer
 		return create_vector((a.y() * b.z()) - (a.z() * b.y()),  // x
 		                     (a.z() * b.x()) - (a.x() * b.z()),  // y
 		                     (a.x() * b.y()) - (a.y() * b.x())); // z
+	}
+
+	inline double magnitude(tuple a)
+	{
+		return std::sqrt(dot(a, a));
+	}
+
+	/// --------------------------------------------------------------------
+	/// return a tuple such that it's magnitude is '1'
+	inline tuple normalize(tuple a)
+	{
+		return a / magnitude(a);
 	}
 
 	/// --------------------------------------------------------------------

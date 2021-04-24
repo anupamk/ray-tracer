@@ -270,7 +270,7 @@ namespace raytracer
 		/// color.
 		double const cos_t      = std::sqrt(1.0 - sin_sqr_t);
 		auto const rr_direction = xs_info.normal_vector() * (ri_ratio * cos_i - cos_t) -
-					  (xs_info.eye_vector() * ri_ratio);
+		                          (xs_info.eye_vector() * ri_ratio);
 
 		/// refracted-ray originates at a point just-under the point of
 		/// intersection...

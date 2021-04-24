@@ -42,10 +42,16 @@ namespace raytracer
 		/// the material which makes up the shape
 		material material_;
 
+	    protected:
+		/// ------------------------------------------------------------
+		/// don't allow deletion through a base
+		virtual ~shape_interface()
+		{
+		}
+
 	    public:
 		shape_interface(bool cast_shadow);
 
-	    public:
 		/// ------------------------------------------------------------
 		/// this function is called to return zero or more intersections
 		/// of a shape with a ray 'R'
@@ -60,11 +66,6 @@ namespace raytracer
 		/// ------------------------------------------------------------
 		/// stringified representation of a shape
 		virtual std::string stringify() const = 0;
-
-		/// ------------------------------------------------------------
-		/// map a point on the surface of the shape to a corresponding
-		/// uv-value (on a texture)
-		virtual uv_point map_to_uv(tuple const&) const = 0;
 
 		/// ------------------------------------------------------------
 		/// return true if a ray can intersect a shape before

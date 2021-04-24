@@ -24,43 +24,11 @@ namespace raytracer
 		ASSERT(radius >= 0.0);
 	}
 
-	/*
-	 * this function is called to compute the result of a ray 'R'
-	 * intersecting a sphere of radius 'r' centered at origin.
-	 *
-	 * intuitively, the point of intersection 'P', must lie on both the ray
-	 * and the sphere. therefore, it must satisfy their equations
-	 * simultaneously.
-	 *
-	 * in parametric form, the sphere and ray equations respectively, are:
-	 *
-	 *     P^2 - r^2 = 0 ................................. (1)
-	 *     P = R.origin + t * R.direction ................ (2)
-	 *
-	 * substituting (2) in (1) gives a quadratic equation in 't'. the
-	 * solution of which (via canonical means) gives us the desired
-	 * intersection points.
-	 **/
+	/// --------------------------------------------------------------------
+	/// just forward the computatio to the actual workhorse.
 	std::optional<intersection_records> sphere::intersect(the_badge<ray_t>, ray_t const& R) const
 	{
-		/// vector from sphere's center to the ray-origin
-		const auto sphere_to_ray = R.origin() - this->center();
-		const auto ray_dir       = R.direction();
-
-		/// compute the coefficients of the quadratic equation
-		const auto A = dot(ray_dir, ray_dir);
-		const auto B = 2.0 * dot(ray_dir, sphere_to_ray);
-		const auto C = dot(sphere_to_ray, sphere_to_ray) - 1;
-
-		/// aaand get the roots
-		if (auto const roots = quadratic_real_roots(A, B, C)) {
-			return intersection_records{
-				intersection_record(roots->first, shared_from_this()),
-				intersection_record(roots->second, shared_from_this()),
-			};
-		}
-
-		return std::nullopt;
+		return compute_intersections_(R);
 	}
 
 	/// --------------------------------------------------------------------
@@ -72,63 +40,23 @@ namespace raytracer
 	}
 
 	/// --------------------------------------------------------------------
-	/// this function is called to map a point on the surface of the sphere
-	/// to a corresponding uv-value. this can then be used to determine the
-	/// color of the sphere at that point (via a uv-texture)
-	uv_point sphere::map_to_uv(tuple const& P) const
-	{
-		/// ------------------------------------------------------------
-		/// compute the azimuthal (along the x-z axis) angle theta,
-		/// which varies over the range (-π..π]
-		///
-		/// theta increases clockwise when viewed from above. but this
-		/// will be fixed later.
-		auto const theta = std::atan2(P.x(), P.z());
-
-		/// ------------------------------------------------------------
-		/// compute the polar (along the y-x axis) angle which varies
-		/// over the range [0..π].
-		auto const phi = std::acos(P.y() / radius());
-
-		/// ------------------------------------------------------------
-		/// 0.5 < raw_u ≤ 0.5
-		auto const raw_u = theta / (2 * PI);
-
-		/// ------------------------------------------------------------
-		/// fix the direction as well i.e subtract from 1 so that it
-		/// increases counter-clockwise (when viewed from above)
-		auto const u = 1 - (raw_u + 0.5);
-
-		/// ------------------------------------------------------------
-		/// polar angle is '0' at the south pole of the sphere and is
-		/// '1' at the north pole. so we flip it over
-		auto const v = 1.0 - phi / PI;
-
-		return uv_point(u, v);
-	}
-
-	/// --------------------------------------------------------------------
-	/// return 'true' iff 'R' can intersect this sphere before
-	/// 'distance'.
+	/// return 'true' iff 'R' can intersect this sphere before 'distance'.
 	///
 	/// return 'false' otherwise
-	bool sphere::has_intersection_before(the_badge<ray_t>, ray_t const& R, double distance) const
+	bool sphere::has_intersection_before(the_badge<ray_t> b, ray_t const& R, double distance) const
 	{
-		/// vector from sphere's center to the ray-origin
-		const auto sphere_to_ray = R.origin() - this->center();
-		const auto ray_dir       = R.direction();
+		auto maybe_xs_records = compute_intersections_(R);
 
-		/// compute the coefficients of the quadratic equation
-		const auto A = dot(ray_dir, ray_dir);
-		const auto B = 2.0 * dot(ray_dir, sphere_to_ray);
-		const auto C = dot(sphere_to_ray, sphere_to_ray) - 1;
+		if (!maybe_xs_records.has_value()) {
+			return false;
+		}
 
-		if (auto const roots = quadratic_real_roots(A, B, C)) {
-			auto const root_1 = roots->first;
-			auto const root_2 = roots->second;
-
-			return (((root_1 >= EPSILON) && (root_1 < distance)) ||
-			        ((root_2 >= EPSILON) && (root_2 < distance)));
+		auto const& xs_records = maybe_xs_records.value();
+		for (auto const& xs_i : xs_records) {
+			auto const where = xs_i.where();
+			if ((where >= EPSILON) && (where < distance)) {
+				return true;
+			}
 		}
 
 		return false;
@@ -152,6 +80,44 @@ namespace raytracer
 	}
 
 	/// --------------------------------------------------------------------
+	/// this function is called to compute the result of a ray 'R'
+	/// intersecting a sphere of radius 'r' centered at origin.
+	///
+	/// intuitively, the point of intersection 'P', must lie on both the ray
+	/// and the sphere. therefore, it must satisfy their equations
+	/// simultaneously.
+	///
+	/// in parametric form, the sphere and ray equations respectively, are:
+	///
+	///            P^2 - r^2 = 0 ................................. (1)
+	///            P = R.origin + t * R.direction ................ (2)
+	///
+	/// substituting (2) in (1) gives a quadratic equation in 't'. the
+	/// solution of which (via canonical means) gives us the desired
+	/// intersection points.
+	std::optional<intersection_records> sphere::compute_intersections_(ray_t const& R) const
+	{
+		/// vector from sphere's center to the ray-origin
+		const auto sphere_to_ray = R.origin() - this->center();
+		const auto ray_dir       = R.direction();
+
+		/// compute the coefficients of the quadratic equation
+		const auto A = dot(ray_dir, ray_dir);
+		const auto B = 2.0 * dot(ray_dir, sphere_to_ray);
+		const auto C = dot(sphere_to_ray, sphere_to_ray) - 1;
+
+		/// aaand get the roots
+		if (auto const roots = quadratic_real_roots(A, B, C)) {
+			return intersection_records{
+				intersection_record(roots->first, shared_from_this()),
+				intersection_record(roots->second, shared_from_this()),
+			};
+		}
+
+		return std::nullopt;
+	}
+
+	/// --------------------------------------------------------------------
 	/// 'reasonably' formatted information of the sphere
 	std::ostream& operator<<(std::ostream& os, sphere const& S)
 	{
@@ -164,8 +130,8 @@ namespace raytracer
 	{
 		auto tmp_sphere      = std::make_shared<sphere>();
 		auto glassy_material = material()
-					       .set_transparency(1.0)                     /// transparent
-					       .set_refractive_index(material::RI_GLASS); /// made-of-glass
+		                               .set_transparency(1.0)                     /// transparent
+		                               .set_refractive_index(material::RI_GLASS); /// made-of-glass
 
 		tmp_sphere->set_material(glassy_material);
 
