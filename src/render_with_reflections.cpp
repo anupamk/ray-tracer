@@ -72,19 +72,19 @@ int main(int argc, char** argv)
 	///   - record timings for 'num_iterations' renderings
 	///   - from these records, discard 'num_discards' samples
 	/// and then compute mean and standard-deviation
-	auto const num_iterations = 1;
-	auto const num_discards   = 0;
+	auto const num_iterations = 10;
+	auto const num_discards   = 1;
 	Benchmark<> render_bm(num_iterations, num_discards);
-	LOG_INFO("benchmark details: '%s'", render_bm.stringify().c_str());
+	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// just use the first [0] result only please (they are all identical)
-	auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+	auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
 	rendered_canvas.write(dst_fname);
 
 	/// --------------------------------------------------------------------
 	/// show what we got
-	LOG_INFO("benchmark details : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
 	         render_bm.mean(),                /// mean-usec
 	         render_bm.standard_deviation()); /// stddev-usec
 

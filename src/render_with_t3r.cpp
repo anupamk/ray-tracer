@@ -72,10 +72,10 @@ int main(int argc, char** argv)
 	///   - record timings for 'num_iterations' renderings
 	///   - from these records, discard 'num_discards' samples
 	/// and then compute mean and standard-deviation
-	auto const num_iterations = 1;
-	auto const num_discards   = 0;
+	auto const num_iterations = 10;
+	auto const num_discards   = 3;
 	Benchmark<> render_bm(num_iterations, num_discards);
-	LOG_INFO("benchmark details: '%s'", render_bm.stringify().c_str());
+	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// just use the first [0] result only please (they are all identical)
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 
 	/// --------------------------------------------------------------------
 	/// show what we got
-	LOG_INFO("benchmark details : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
 	         render_bm.mean(),                /// mean-usec
 	         render_bm.standard_deviation()); /// stddev-usec
 
@@ -110,11 +110,11 @@ static RT::world create_world()
 	wall_pattern->transform(wall_xform);
 
 	auto wall_material = RT::material()             /// canonical-material
-				     .set_ambient(0.0)  /// with
-				     .set_diffuse(0.4)  /// special
-				     .set_specular(0.0) /// properties
-				     .set_reflective(0.3)
-				     .set_pattern(wall_pattern);
+	                             .set_ambient(0.0)  /// with
+	                             .set_diffuse(0.4)  /// special
+	                             .set_specular(0.0) /// properties
+	                             .set_reflective(0.3)
+	                             .set_pattern(wall_pattern);
 
 	/// --------------------------------------------------------------------
 	/// and now we describe the elements of the scene
@@ -151,8 +151,8 @@ static RT::world create_world()
 		west_wall->set_material(wall_material);
 
 		auto west_wall_xform = RT_XFORM::create_3d_translation_matrix(-5.0, 0.0, 0.0) *
-				       RT_XFORM::create_rotz_matrix(1.5708) * /// rotate-to-vertical
-				       RT_XFORM::create_roty_matrix(1.5708);  /// orient-texture
+		                       RT_XFORM::create_rotz_matrix(1.5708) * /// rotate-to-vertical
+		                       RT_XFORM::create_roty_matrix(1.5708);  /// orient-texture
 		west_wall->transform(west_wall_xform);
 	}
 
@@ -162,8 +162,8 @@ static RT::world create_world()
 		east_wall->set_material(wall_material);
 
 		auto east_wall_xform = RT_XFORM::create_3d_translation_matrix(5.0, 0.0, 0.0) *
-				       RT_XFORM::create_rotz_matrix(1.5708) * /// rotate-to-vertical
-				       RT_XFORM::create_roty_matrix(1.5708);  /// orient-texture
+		                       RT_XFORM::create_rotz_matrix(1.5708) * /// rotate-to-vertical
+		                       RT_XFORM::create_roty_matrix(1.5708);  /// orient-texture
 
 		east_wall->transform(east_wall_xform);
 	}
@@ -174,7 +174,7 @@ static RT::world create_world()
 		north_wall->set_material(wall_material);
 
 		auto north_wall_xform = RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 5.0) *
-					RT_XFORM::create_rotx_matrix(1.5708); /// rotate-to-vertical
+		                        RT_XFORM::create_rotx_matrix(1.5708); /// rotate-to-vertical
 
 		north_wall->transform(north_wall_xform);
 	}
@@ -185,7 +185,7 @@ static RT::world create_world()
 		south_wall->set_material(wall_material);
 
 		auto south_wall_xform = RT_XFORM::create_3d_translation_matrix(0.0, 0.0, -5.0) *
-					RT_XFORM::create_rotx_matrix(1.5708); /// rotate-to-vertical
+		                        RT_XFORM::create_rotx_matrix(1.5708); /// rotate-to-vertical
 
 		south_wall->transform(south_wall_xform);
 	}
@@ -203,7 +203,7 @@ static RT::world create_world()
 		bg_ball_01->set_material(bg_ball_01_mat);
 
 		auto bg_ball_01_xform = RT_XFORM::create_3d_translation_matrix(4.6, 0.4, 1.0) *
-					RT_XFORM::create_3d_scaling_matrix(0.4, 0.4, 0.4);
+		                        RT_XFORM::create_3d_scaling_matrix(0.4, 0.4, 0.4);
 
 		bg_ball_01->transform(bg_ball_01_xform);
 	}
@@ -217,7 +217,7 @@ static RT::world create_world()
 		bg_ball_02->set_material(bg_ball_02_mat);
 
 		auto bg_ball_02_xform = RT_XFORM::create_3d_translation_matrix(4.7, 0.3, 0.4) *
-					RT_XFORM::create_3d_scaling_matrix(0.3, 0.3, 0.3);
+		                        RT_XFORM::create_3d_scaling_matrix(0.3, 0.3, 0.3);
 
 		bg_ball_02->transform(bg_ball_02_xform);
 	}
@@ -231,7 +231,7 @@ static RT::world create_world()
 		bg_ball_03->set_material(bg_ball_03_mat);
 
 		auto bg_ball_03_xform = RT_XFORM::create_3d_translation_matrix(-1.0, 0.5, 4.5) *
-					RT_XFORM::create_3d_scaling_matrix(0.5, 0.5, 0.5);
+		                        RT_XFORM::create_3d_scaling_matrix(0.5, 0.5, 0.5);
 
 		bg_ball_03->transform(bg_ball_03_xform);
 	}
@@ -245,7 +245,7 @@ static RT::world create_world()
 		bg_ball_04->set_material(bg_ball_04_mat);
 
 		auto bg_ball_04_xform = RT_XFORM::create_3d_translation_matrix(-1.7, 0.3, 4.7) *
-					RT_XFORM::create_3d_scaling_matrix(0.3, 0.3, 0.3);
+		                        RT_XFORM::create_3d_scaling_matrix(0.3, 0.3, 0.3);
 
 		bg_ball_04->transform(bg_ball_04_xform);
 	}
@@ -271,20 +271,20 @@ static RT::world create_world()
 	{
 		/// blue-glass
 		auto fg_ball_02_mat = RT::material()
-					      .set_ambient(0.0)
-					      .set_diffuse(0.4)
-					      .set_specular(0.9)
-					      .set_shininess(300)
-					      .set_reflective(0.9)
-					      .set_transparency(0.9)
-					      .set_refractive_index(1.5);
+		                              .set_ambient(0.0)
+		                              .set_diffuse(0.4)
+		                              .set_specular(0.9)
+		                              .set_shininess(300)
+		                              .set_reflective(0.9)
+		                              .set_transparency(0.9)
+		                              .set_refractive_index(1.5);
 
 		auto fg_ball_02_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 0.0, 0.2));
 		fg_ball_02_mat.set_pattern(fg_ball_02_pattern);
 		fg_ball_02->set_material(fg_ball_02_mat);
 
 		auto fg_ball_02_xform = RT_XFORM::create_3d_translation_matrix(0.6, 0.7, -0.6) *
-					RT_XFORM::create_3d_scaling_matrix(0.7, 0.7, 0.7);
+		                        RT_XFORM::create_3d_scaling_matrix(0.7, 0.7, 0.7);
 
 		fg_ball_02->transform(fg_ball_02_xform);
 	}
@@ -294,20 +294,20 @@ static RT::world create_world()
 	{
 		/// green-glass
 		auto fg_ball_03_mat = RT::material()
-					      .set_ambient(0.0)
-					      .set_diffuse(0.4)
-					      .set_specular(0.9)
-					      .set_shininess(300)
-					      .set_reflective(0.9)
-					      .set_transparency(0.9)
-					      .set_refractive_index(1.5);
+		                              .set_ambient(0.0)
+		                              .set_diffuse(0.4)
+		                              .set_specular(0.9)
+		                              .set_shininess(300)
+		                              .set_reflective(0.9)
+		                              .set_transparency(0.9)
+		                              .set_refractive_index(1.5);
 
 		auto fg_ball_03_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 0.2, 0.0));
 		fg_ball_03_mat.set_pattern(fg_ball_03_pattern);
 		fg_ball_03->set_material(fg_ball_03_mat);
 
 		auto fg_ball_03_xform = RT_XFORM::create_3d_translation_matrix(-0.7, 0.5, -0.8) *
-					RT_XFORM::create_3d_scaling_matrix(0.5, 0.5, 0.5);
+		                        RT_XFORM::create_3d_scaling_matrix(0.5, 0.5, 0.5);
 
 		fg_ball_03->transform(fg_ball_03_xform);
 	}

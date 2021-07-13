@@ -32,8 +32,8 @@ int main(int argc, char** argv)
 	auto dial_hour_pos = compute_dial_positions(100);
 
 	/// ----------------------------------------------------------------
-	constexpr auto canvas_dim_x = 640;
-	constexpr auto canvas_dim_y = 480;
+	constexpr auto canvas_dim_x = 1280;
+	constexpr auto canvas_dim_y = 1024;
 
 	/// maximum size of dial cannot exceed 90% of the half of minimum of the
 	/// canvas, so that we can see something

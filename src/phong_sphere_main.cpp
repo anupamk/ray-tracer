@@ -1,10 +1,11 @@
 /*
- * this program implements a single/multi threaded world-rendering through a
- * camera.
+ * single-threaded as well as multi-threaded rendering of a phong sphere.
  **/
 
 /// c++ includes
 #include <algorithm>
+#include <atomic>
+#include <chrono>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -14,21 +15,27 @@
 #include <utility>
 #include <vector>
 
+/// 3rd-party libraries
+#include "concurrentqueue.h"
+
 /// our includes
-#include "align_check_pattern.hpp"
+#include "assert_utils.h"
 #include "benchmark.hpp"
-#include "blended_pattern.hpp"
 #include "camera.hpp"
-#include "checkers_pattern.hpp"
+#include "canvas.hpp"
 #include "color.hpp"
-#include "constants.hpp"
+#include "intersection_record.hpp"
 #include "logging.h"
+#include "material.hpp"
 #include "matrix_transformations.hpp"
-#include "plane.hpp"
+#include "phong_illumination.hpp"
 #include "point_light.hpp"
+#include "ray.hpp"
 #include "raytracer_renderer.hpp"
-#include "texture_2d_pattern.hpp"
-#include "uv_mapper.hpp"
+#include "solid_pattern.hpp"
+#include "sphere.hpp"
+#include "tuple.hpp"
+#include "world.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
@@ -40,31 +47,31 @@ log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 namespace RT   = raytracer;
 using RT_XFORM = RT::matrix_transformations_t;
 
-/// file specific functions
+/// --------------------------------------------------------------------------------
+/// file specific function declarations
 static RT::world create_world();
 static RT::camera create_camera();
 
 int main(int argc, char** argv)
 {
-	auto world     = create_world();
-	auto camera    = create_camera();
-	auto dst_fname = "align-check-plane.ppm";
+	const auto camera = create_camera();
+	const auto world  = create_world();
+	auto dst_fname    = "phong-sphere.ppm";
 
 	LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
 	         "destination: '%s'}",
 	         camera.hsize(), camera.vsize(), dst_fname);
 
 	/// --------------------------------------------------------------------
-	/// benchmark the render with 'num_iterations' renders performed, and
-	/// throwing away the results from 'num_discards' of them
-	auto const num_iterations = 1;
-	auto const num_discards   = 0;
-	Benchmark<> render_bm(num_iterations, num_discards);
+	/// benchmark the render with '10' renders performed, and throwing away
+	/// the results from '1' of them
+	Benchmark<> render_bm(10, 2);
 	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// just use the first [0] result only please
-	auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+	/// auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+	auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
 	rendered_canvas.write(dst_fname);
 
 	/// --------------------------------------------------------------------
@@ -77,7 +84,7 @@ int main(int argc, char** argv)
 }
 
 /*
- * only file specific functions from this point onwards
+ * file specific functions
  **/
 
 /// ---------------------------------------------------------------------------
@@ -85,33 +92,27 @@ int main(int argc, char** argv)
 /// primitives from the camera.
 static RT::world create_world()
 {
+	auto world = RT::world();
+
 	/// --------------------------------------------------------------------
-	/// create the floor with a blended pattern
-	auto floor = std::make_shared<RT::plane>();
+	/// just a sphere
 	{
-		auto floor_pattern = std::make_shared<RT::align_check>(RT::color(1.0, 1.0, 1.0),  /// main
-		                                                       RT::color(1.0, 0.0, 0.0),  /// ul
-		                                                       RT::color(1.0, 1.0, 0.0),  /// ur
-		                                                       RT::color(0.0, 1.0, 0.0),  /// bl
-		                                                       RT::color(0.0, 1.0, 1.0)); /// br
+		auto sphere_01         = std::make_shared<RT::sphere>();
+		auto sphere_01_pattern = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.2, 1.0));
+		sphere_01->set_material(RT::material().set_pattern(sphere_01_pattern).set_specular(0.2));
+		sphere_01->transform(RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
 
-		auto floor_texture = std::make_shared<RT::texture_2d_pattern>(floor_pattern, RT::planar_map);
-
-		floor->set_material(RT::material()
-		                            .set_pattern(floor_texture) /// pattern
-		                            .set_ambient(0.1)           /// ambient
-		                            .set_diffuse(0.8));         /// specular
+		world.add(sphere_01);
 	}
 
 	/// --------------------------------------------------------------------
-	/// the world light
-	auto world_light_01 = RT::point_light(RT::create_point(-10.0, 10.0, 10.0), RT::color_white());
+	/// and a light
+	{
+		auto world_light_01 =
+			RT::point_light(RT::create_point(-20.0, 20.0, -20.0), RT::color_white());
 
-	/// --------------------------------------------------------------------
-	/// now create the world...
-	auto world = RT::world();
-	world.add(world_light_01);
-	world.add(floor);
+		world.add(world_light_01);
+	}
 
 	return world;
 }
@@ -121,9 +122,9 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto camera_01     = RT::camera(1280, 1024, 0.5);
-	auto look_from     = RT::create_point(1.0, 2.0, -5.0);
-	auto look_to       = RT::create_point(0.0, 0.0, 0.0);
+	auto camera_01     = RT::camera(1280, 1024, RT::PI_BY_2F);
+	auto look_from     = RT::create_point(0.0, 0.0, -5.0);
+	auto look_to       = RT::create_point(0.0, -1.0, 5.0);
 	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
 	auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
 

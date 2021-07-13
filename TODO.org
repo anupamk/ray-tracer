@@ -4,15 +4,20 @@ This document describes a bunch of enhancements that can be taken up
 as part of evolving the ray-tracer. These vary in difficulty level,
 and are generally not described in that order.
 
+** Documentation
+
+   + +List of programs and images (320x256) that they generate so that
+     we know whats going on.+
+
 ** Raytracer Enhancements
 
    + Ray Debug Tracing
 
      The general idea is to choose a point on the canvas, and let the
-     ray-tracer dump all steps that happen to render that pixel. 
+     ray-tracer dump all steps that happen to color that pixel. 
 
      Should allow for easy debugging of the ray-tracer, when it will
-     inevitably be needed.
+     /inevitably/ be needed.
 
    + Estimate Time To Render
 
@@ -23,7 +28,7 @@ and are generally not described in that order.
      If a time-left-to-render is hard, a percentage of scene completed
      etc. would be just as useful.
 
-   + +Shape Without Shadows+ (DONE : 5e7e97301c228d25)
+   + +Shape Without Shadows+
                                    
      +For some shapes / scenarios it might be worthwhile for the shape+
      +to not cast any shadow i.e. instances of shapes should be able to+
@@ -37,27 +42,32 @@ and are generally not described in that order.
 
    + Anti-Aliasing
 
-     Because pixels have a finite size, diagonal lines, under
-     sufficient magnification will appear jagged (or stair-step). One
-     approach to fix this problem is called /super-sampling/. Instead
-     of casting a single ray per pixel, we cast multiple rays. Each
-     ray passes through a different (random) point offset from the
-     center of the pixel. The resulting color is then averaged to
-     compute the color of the pixel.
+     Because pixels have a finite size, diagonal lines under
+     sufficient magnification will appear jagged (or stair-step).
 
-     This can be done intelligently as well, instead of a brute force
-     approach where N rays per pixels are *always* cast. We can start
-     by casting 5 rays as follows
+     One approach to fix this problem is called
+     /super-sampling/. Instead of casting a single ray per pixel, we
+     cast multiple rays. Each ray passes through a different (random)
+     point offset from the center of the pixel. The resulting color is
+     then averaged to compute the color of the pixel.
 
-     - 4 at each of the corners of the pixel and
-     - 1 at the center of the pixel
+     Ofcourse, more rays means more computation, and significant
+     increase in rendering times as well.
+
+     Instead of a brute-force approach of *always* casting a /fixed/
+     number of rays per pixel, the same effect can be obtained by
+     casting variable number of rays. For example, we can start by
+     casting 5 rays as follows:
+
+     + 4 at each of the corners of the pixel and \\
+     + 1 at the center of the pixel
 
      If any of the corner-colors differ from the center-color by some
      threshold then sub-divide that quarter of pixel, and repeat the
-     procedure recursively (for some sensible recursion depth).
-
-     Depending on the scene, this has the potential to offer
-     /significant/ savings.
+     procedure recursively (for some sensible recursion
+     depth). Depending on the scene, this has the /potential/ to offer
+     significant savings (as compared to the simplistic brute-force
+     approach as outlined above)
 
    + Camera Aperture
 

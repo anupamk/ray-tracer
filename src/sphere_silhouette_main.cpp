@@ -32,8 +32,8 @@ int main(int argc, char** argv)
 	///
 	/// define some scene specific constants first
 	///
-	uint32_t const canvas_dim_x = 640;
-	uint32_t const canvas_dim_y = 480;
+	uint32_t const canvas_dim_x = 1280;
+	uint32_t const canvas_dim_y = 1024;
 	auto const CAMERA_POSITION  = RT::create_point(0.0, 0.0, -3.0);
 	float const WALL_ZPOS       = 6.0;
 	float const WALL_XSIZE      = 12.0;

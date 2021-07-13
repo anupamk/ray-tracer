@@ -92,46 +92,39 @@ target_link_libraries(raytracer_render_lib PRIVATE common)
 # ------------------------------------------------------------------------------
 # chapter-02: drawing on a canvas.
 #
-# use drawing primitives to render path of cannonball from a virtual cannon.
-add_executable(ch-02-virtual-cannon virtual_cannon_main.cpp virtual_cannon.hpp virtual_cannon.cpp)
-target_link_libraries(ch-02-virtual-cannon PRIVATE common)
-target_link_libraries(ch-02-virtual-cannon PRIVATE raytracer_lib)
+# use drawing primitives to render path of cannonball from a virtual
+# cannon.
+add_executable(virtual-cannon virtual_cannon_main.cpp virtual_cannon.hpp virtual_cannon.cpp)
+target_link_libraries(virtual-cannon PRIVATE common)
+target_link_libraries(virtual-cannon PRIVATE raytracer_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-04: matrix-transformations.
 #
 # use matrices + matrix-transformations to draw a clock-dial
-add_executable(ch-04-clock-dial clock_dial_matxforms_main.cpp)
-target_link_libraries(ch-04-clock-dial PRIVATE common)
-target_link_libraries(ch-04-clock-dial PRIVATE raytracer_lib)
+add_executable(clock-dial clock_dial_matxforms_main.cpp)
+target_link_libraries(clock-dial PRIVATE common)
+target_link_libraries(clock-dial PRIVATE raytracer_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-05: ray-sphere intersections.
 #
 # use ray-sphere intersection to draw silhouette of a sphere
-add_executable(ch-05-sphere-silhouette sphere_silhouette_main.cpp)
-target_link_libraries(ch-05-sphere-silhouette PRIVATE common)
-target_link_libraries(ch-05-sphere-silhouette PRIVATE raytracer_lib)
-
-# ------------------------------------------------------------------------------
-# chapter-06: light and shading.
-#
-# use phong-illumination to draw a realistic sphere. this is the
-# single-threaded version
-add_executable(ch-06-st-phong-sphere st_phong_sphere_main.cpp)
-target_link_libraries(ch-06-st-phong-sphere PRIVATE common)
-target_link_libraries(ch-06-st-phong-sphere PRIVATE raytracer_lib)
+add_executable(sphere-silhouette sphere_silhouette_main.cpp)
+target_link_libraries(sphere-silhouette PRIVATE common)
+target_link_libraries(sphere-silhouette PRIVATE raytracer_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-06: light and shading.
 #
 # use phong-illumination to draw a realistic sphere. this is the
 # multi-threaded version
-add_executable(ch-06-mt-phong-sphere mt_phong_sphere_main.cpp)
-target_link_libraries(ch-06-mt-phong-sphere PRIVATE common)
-target_link_libraries(ch-06-mt-phong-sphere PRIVATE raytracer_lib)
-target_link_libraries(ch-06-mt-phong-sphere PRIVATE concurrentqueue)
-target_link_libraries(ch-06-mt-phong-sphere PRIVATE pthread)
+add_executable(phong-sphere phong_sphere_main.cpp)
+target_link_libraries(phong-sphere PRIVATE common)
+target_link_libraries(phong-sphere PRIVATE raytracer_lib)
+target_link_libraries(phong-sphere PRIVATE concurrentqueue)
+target_link_libraries(phong-sphere PRIVATE pthread)
+target_link_libraries(phong-sphere PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-07: making a scene; chapter-08: shadows
@@ -139,10 +132,10 @@ target_link_libraries(ch-06-mt-phong-sphere PRIVATE pthread)
 # render a scene with multiple objects, light sources and shadows.
 #
 # both single and multi threaded rendering is supported.
-add_executable(ch-08-making-a-scene render_world_main.cpp)
-target_link_libraries(ch-08-making-a-scene PRIVATE common)
-target_link_libraries(ch-08-making-a-scene PRIVATE raytracer_lib)
-target_link_libraries(ch-08-making-a-scene PRIVATE raytracer_render_lib)
+add_executable(making-a-scene render_world_main.cpp)
+target_link_libraries(making-a-scene PRIVATE common)
+target_link_libraries(making-a-scene PRIVATE raytracer_lib)
+target_link_libraries(making-a-scene PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-09: render with planes
@@ -150,10 +143,10 @@ target_link_libraries(ch-08-making-a-scene PRIVATE raytracer_render_lib)
 # render a scene with multiple objects, light sources and shadows using planes
 #
 # both single and multi threaded rendering is supported.
-add_executable(ch-09-render-with-plane render_with_plane.cpp)
-target_link_libraries(ch-09-render-with-plane PRIVATE common)
-target_link_libraries(ch-09-render-with-plane PRIVATE raytracer_lib)
-target_link_libraries(ch-09-render-with-plane PRIVATE raytracer_render_lib)
+add_executable(render-with-plane render_with_plane.cpp)
+target_link_libraries(render-with-plane PRIVATE common)
+target_link_libraries(render-with-plane PRIVATE raytracer_lib)
+target_link_libraries(render-with-plane PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render with patterns
@@ -162,10 +155,10 @@ target_link_libraries(ch-09-render-with-plane PRIVATE raytracer_render_lib)
 # using planes and different patterns
 #
 # both single and multi threaded rendering is supported.
-add_executable(ch-10-render-with-patterns render_with_patterns.cpp)
-target_link_libraries(ch-10-render-with-patterns PRIVATE common)
-target_link_libraries(ch-10-render-with-patterns PRIVATE raytracer_lib)
-target_link_libraries(ch-10-render-with-patterns PRIVATE raytracer_render_lib)
+add_executable(render-with-patterns render_with_patterns.cpp)
+target_link_libraries(render-with-patterns PRIVATE common)
+target_link_libraries(render-with-patterns PRIVATE raytracer_lib)
+target_link_libraries(render-with-patterns PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render textures
@@ -173,9 +166,9 @@ target_link_libraries(ch-10-render-with-patterns PRIVATE raytracer_render_lib)
 # render a scene with perlin noise
 #
 # both single and multi threaded rendering is supported.
-add_executable(ch-10-render-textures render_textures.cpp)
-target_link_libraries(ch-10-render-textures PRIVATE common)
-target_link_libraries(ch-10-render-textures PRIVATE raytracer_lib)
+add_executable(render-textures render_textures.cpp)
+target_link_libraries(render-textures PRIVATE common)
+target_link_libraries(render-textures PRIVATE raytracer_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render with patterns
@@ -184,10 +177,10 @@ target_link_libraries(ch-10-render-textures PRIVATE raytracer_lib)
 # using planes and different patterns
 #
 # both single and multi threaded rendering is supported.
-add_executable(ch-10-render-with-textures render_with_textures.cpp)
-target_link_libraries(ch-10-render-with-textures PRIVATE common)
-target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_lib)
-target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_render_lib)
+add_executable(render-with-textures render_with_textures.cpp)
+target_link_libraries(render-with-textures PRIVATE common)
+target_link_libraries(render-with-textures PRIVATE raytracer_lib)
+target_link_libraries(render-with-textures PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render with canvas on sphere
@@ -195,17 +188,17 @@ target_link_libraries(ch-10-render-with-textures PRIVATE raytracer_render_lib)
 # render a ppm texture on a sphere.
 #
 # both single and multi threaded rendering is supported.
-add_executable(ch-10-render-nasa-blue-earth render_nasa_blue_earth.cpp)
-target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE common)
-target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE raytracer_lib)
-target_link_libraries(ch-10-render-nasa-blue-earth PRIVATE raytracer_render_lib)
+add_executable(render-nasa-blue-earth render_nasa_blue_earth.cpp)
+target_link_libraries(render-nasa-blue-earth PRIVATE common)
+target_link_libraries(render-nasa-blue-earth PRIVATE raytracer_lib)
+target_link_libraries(render-nasa-blue-earth PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-11: render with transparency and reflections
-add_executable(ch-11-render-with-reflections render_with_reflections.cpp)
-target_link_libraries(ch-11-render-with-reflections PRIVATE common)
-target_link_libraries(ch-11-render-with-reflections PRIVATE raytracer_lib)
-target_link_libraries(ch-11-render-with-reflections PRIVATE raytracer_render_lib)
+add_executable(render-with-reflections render_with_reflections.cpp)
+target_link_libraries(render-with-reflections PRIVATE common)
+target_link_libraries(render-with-reflections PRIVATE raytracer_lib)
+target_link_libraries(render-with-reflections PRIVATE raytracer_render_lib)
 
 # ------------------------------------------------------------------------------
 # chapter-11: render with transparency(t) and reflections(r) and refractions(r)
@@ -258,3 +251,10 @@ add_executable(cube-scene render_cube_scene.cpp)
 target_link_libraries(cube-scene PRIVATE common)
 target_link_libraries(cube-scene PRIVATE raytracer_lib)
 target_link_libraries(cube-scene PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# cube-lighting : playing with light inside a cube
+add_executable(cube-light-scene render_cube_light_scene.cpp)
+target_link_libraries(cube-light-scene PRIVATE common)
+target_link_libraries(cube-light-scene PRIVATE raytracer_lib)
+target_link_libraries(cube-light-scene PRIVATE raytracer_render_lib)

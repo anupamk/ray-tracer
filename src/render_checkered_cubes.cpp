@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 	auto const num_iterations = 1;
 	auto const num_discards   = 0;
 	Benchmark<> render_bm(num_iterations, num_discards);
-	LOG_INFO("benchmark details: '%s'", render_bm.stringify().c_str());
+	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// just use the first [0] result only please
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 
 	/// --------------------------------------------------------------------
 	/// show what we got
-	LOG_INFO("benchmark details : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
 	         render_bm.mean(),                /// mean-usec
 	         render_bm.standard_deviation()); /// stddev-usec
 

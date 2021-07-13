@@ -23,9 +23,6 @@
 #include <typeindex>
 #include <utility>
 
-/// sdl2 includes
-#include <SDL2/SDL.h>
-
 /// our includes
 #include "canvas.hpp"
 #include "color.hpp"
@@ -156,11 +153,11 @@ namespace raytracer
 		    , mmapped_data(mmap_data)
 		    , mmapped_bytes(num_bytes)
 		{
+			close(mmapped_fd);
 		}
 
 		~mmap_unmapper()
 		{
-			close(mmapped_fd);
 			munmap(mmapped_data, mmapped_bytes);
 		}
 	};
@@ -180,6 +177,12 @@ namespace raytracer
 		int ppm_fd = open(file_name.c_str(), O_RDONLY, S_IRUSR);
 		{
 			if (ppm_fd == -1) {
+				auto open_err_str = strerror(errno);
+
+				close(ppm_fd);
+				LOG_ERROR("%s(...) open(%s, ...) failed, reason:%s", __PRETTY_FUNCTION__,
+				          file_name.c_str(), open_err_str);
+
 				return std::nullopt;
 			}
 		}
@@ -188,23 +191,43 @@ namespace raytracer
 		/// get file size
 		struct stat ppm_file_info = {};
 		{
+			errno = 0;
 			if (fstat(ppm_fd, &ppm_file_info) == -1) {
+				auto fstat_err_str = strerror(errno);
+
+				close(ppm_fd);
+				LOG_ERROR("%s(...) fstat(%d, ...) failed, reason:%s", __PRETTY_FUNCTION__,
+				          ppm_fd, fstat_err_str);
+
 				return std::nullopt;
 			}
 		}
 
 		/// --------------------------------------------------------------------
 		/// mmap(...) the file
-		void* mmapped_addr = mmap(nullptr,               /// kernel-decides-map-addr
-		                          ppm_file_info.st_size, /// number-of-bytes-to-map
-		                          PROT_READ,             /// for reading
-		                          MAP_PRIVATE,           /// no modifications
-		                          ppm_fd,                /// fd-to-map
-		                          0);                    /// start-filemap-offset
+		void* mmapped_addr = nullptr;
+		{
+			errno = 0;
 
-		if (mmapped_addr == MAP_FAILED) {
-			close(ppm_fd);
-			return std::nullopt;
+			int const MMAP_FLAGS = (MAP_POPULATE | /// populate page tables for mapping
+			                        MAP_PRIVATE);  /// private c.o.w mapping
+
+			mmapped_addr = mmap(nullptr,               /// kernel-decides-map-addr
+			                    ppm_file_info.st_size, /// number-of-bytes-to-map
+			                    PROT_READ,             /// for reading
+			                    MMAP_FLAGS,            /// see above
+			                    ppm_fd,                /// fd-to-map
+			                    0);                    /// start-filemap-offset
+
+			if (mmapped_addr == MAP_FAILED) {
+				auto mmap_err_str = strerror(errno);
+
+				close(ppm_fd);
+				LOG_ERROR("%s(...) mmap(...) failed, reason:%s", __PRETTY_FUNCTION__,
+				          mmap_err_str);
+
+				return std::nullopt;
+			}
 		}
 
 		/// let the mmap_unmapper do resource cleanups...
@@ -214,7 +237,7 @@ namespace raytracer
 		/// lets go spelunking
 		char const* ppm_file_data = reinterpret_cast<char const*>(mmapped_addr);
 		size_t ci                 = 0;                     /// current-index (into raw-data)
-		size_t ei                 = ppm_file_info.st_size; /// end-index (of raw-data)
+		size_t const ei           = ppm_file_info.st_size; /// end-index (of raw-data)
 		token_context_t ppm_token = {};
 
 		/// --------------------------------------------------------------------
@@ -376,13 +399,13 @@ namespace raytracer
 			for (size_t y = 0; y < img_header.height.data; y++) {
 				for (size_t x = 0; x < img_header.width.data; x++) {
 					float const r_value = (1.0 * READ_NEXT_UINT_TOKEN("R pixel")) /
-							      (1.0 * img_header.color_scale.data);
+					                      (1.0 * img_header.color_scale.data);
 
 					float const g_value = (1.0 * READ_NEXT_UINT_TOKEN("G pixel")) /
-							      (1.0 * img_header.color_scale.data);
+					                      (1.0 * img_header.color_scale.data);
 
 					float const b_value = (1.0 * READ_NEXT_UINT_TOKEN("B pixel")) /
-							      (1.0 * img_header.color_scale.data);
+					                      (1.0 * img_header.color_scale.data);
 
 					color const pixel_color{r_value, g_value, b_value};
 					ppm_img_retval.write_pixel(x, y, pixel_color);

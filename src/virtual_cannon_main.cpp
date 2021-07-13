@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
 	/// create projectile
 	const auto start_point = RT::create_point(0.0, 1.0, 0.0);
-	auto velocity          = RT::normalize(RT::create_vector(1.0, 1.8, 0.0)) * 11.25;
+	auto velocity          = RT::normalize(RT::create_vector(78.5, 102.0, 0.0)) * 12.25;
 	projectile proj(start_point, velocity);
 
 	/// create the environment
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 	env_params env(gravity, wind);
 
 	/// and the canvas where everything will be shown
-	auto canvas = RT::canvas::create_binary(900, 550);
+	auto canvas = RT::canvas::create_binary(1280, 1024);
 
 	int num_ticks = 0;
 	for (; proj.position().y() > 0; ++num_ticks) {
@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 		///
 		/// so, we subtract y-position of the projectil from
 		/// canvas.height()
-		canvas.write_pixel(proj_xpos, canvas.height() - proj_ypos, RT::color_red());
+		canvas.write_pixel(proj_xpos, canvas.height() - proj_ypos, RT::color_white());
 
 		/// next round
 		proj = tick(env, proj);

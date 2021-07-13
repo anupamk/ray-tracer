@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	std::string fname = "simple-noise-" + std::to_string(frequency) + ".ppm";
+	std::string fname = "simple-noise.ppm";
 	canvas_01.write(fname);
 
 	LOG_INFO("saved file: '%s'", fname.c_str());

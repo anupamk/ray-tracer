@@ -71,19 +71,19 @@ int main(int argc, char** argv)
 	/// --------------------------------------------------------------------
 	/// benchmark the render with 'num_iterations' renders performed, and
 	/// throwing away the results from 'num_discards' of them
-	auto const num_iterations = 1;
-	auto const num_discards   = 0;
+	auto const num_iterations = 10;
+	auto const num_discards   = 1;
 	Benchmark<> render_bm(num_iterations, num_discards);
-	LOG_INFO("benchmark details: '%s'", render_bm.stringify().c_str());
+	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// just use the first [0] result only please
-	auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+	auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
 	rendered_canvas.write(dst_fname);
 
 	/// --------------------------------------------------------------------
 	/// show what we got
-	LOG_INFO("benchmark details : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
 	         render_bm.mean(),                /// mean-usec
 	         render_bm.standard_deviation()); /// stddev-usec
 
@@ -120,9 +120,9 @@ static RT::world create_world()
 	/// earth-sphere
 	auto earth_sphere = std::make_shared<RT::sphere>();
 	{
-		auto maybe_earth_map_canvas = RT::canvas::load_from_file("../textures/nasa-blue-marble.ppm");
+		auto texture_fname          = "../textures/nasa-blue-marble.ppm";
+		auto maybe_earth_map_canvas = RT::canvas::load_from_file(texture_fname);
 		ASSERT(maybe_earth_map_canvas.has_value());
-
 		auto earth_map_canvas = maybe_earth_map_canvas.value();
 
 		auto sp_01_earth_texture = std::make_shared<RT::uv_image>(earth_map_canvas);

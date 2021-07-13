@@ -77,19 +77,19 @@ int main(int argc, char** argv)
 	/// --------------------------------------------------------------------
 	/// benchmark the render with 'num_iterations' renders performed, and
 	/// throwing away the results from 'num_discards' of them
-	auto const num_iterations = 1;
-	auto const num_discards   = 0;
+	auto const num_iterations = 10;
+	auto const num_discards   = 1;
 	Benchmark<> render_bm(num_iterations, num_discards);
-	LOG_INFO("benchmark details: '%s'", render_bm.stringify().c_str());
+	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// just use the first [0] result only please
-	auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+	auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
 	rendered_canvas.write(dst_fname);
 
 	/// --------------------------------------------------------------------
 	/// show what we got
-	LOG_INFO("benchmark details : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
 	         render_bm.mean(),                /// mean-usec
 	         render_bm.standard_deviation()); /// stddev-usec
 
@@ -345,13 +345,13 @@ RT::world create_earth_world()
 		/// world.add(floor);
 
 		auto floor_mat = RT::material()
-					 .set_ambient(0.1)
-					 .set_diffuse(0.9)
-					 .set_specular(0.9)
-					 .set_shininess(300)
-					 .set_reflective(0.1)
-					 .set_transparency(1.0)
-					 .set_refractive_index(RT::material::RI_GLASS);
+		                         .set_ambient(0.1)
+		                         .set_diffuse(0.9)
+		                         .set_specular(0.9)
+		                         .set_shininess(300)
+		                         .set_reflective(0.1)
+		                         .set_transparency(1.0)
+		                         .set_refractive_index(RT::material::RI_GLASS);
 
 		auto floor_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.1, 0.1, 0.1));
 
@@ -564,9 +564,9 @@ RT::world create_simple_world()
 /// observed.
 RT::camera create_simple_world_camera()
 {
-	auto camera_01     = RT::camera(320, 256, 0.8);
+	auto camera_01     = RT::camera(320 * 4, 256 * 4, 0.8);
 	auto look_from     = RT::create_point(-2.6, 4.5, -30.0);
-	auto look_to       = RT::create_point(-0.6, 0.1, -0.8);
+	auto look_to       = RT::create_point(-0.6, 0.6, -0.8);
 	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
 	auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
 
