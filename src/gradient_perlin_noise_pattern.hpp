@@ -63,11 +63,9 @@ namespace raytracer
 
 			auto const color_start     = color_a(P) * (noise_max - noise);
 			auto const color_end       = color_b(P) * (noise - noise_min);
-			auto const perturbed_color = color_start + color_end;
+			auto const perturbed_color = (color_start + color_end) / noise_range;
 
-			return color(perturbed_color.R() / noise_range,  /// r
-			             perturbed_color.G() / noise_range,  /// g
-			             perturbed_color.B() / noise_range); /// b
+			return color(perturbed_color.R(), perturbed_color.G(), perturbed_color.B());
 		}
 	};
 

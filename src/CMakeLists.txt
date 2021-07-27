@@ -70,7 +70,11 @@ set (RAYTRACER_LIB_SOURCES
   cube.hpp
   cube.cpp
   cube_map_texture.hpp
-  cube_map_texture.cpp)
+  cube_map_texture.cpp
+  cylinder.hpp
+  cylinder.cpp
+  stock_materials.hpp
+  stock_materials.cpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
@@ -258,3 +262,24 @@ add_executable(cube-light-scene render_cube_light_scene.cpp)
 target_link_libraries(cube-light-scene PRIVATE common)
 target_link_libraries(cube-light-scene PRIVATE raytracer_lib)
 target_link_libraries(cube-light-scene PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# render scene with cylindrical shapes
+add_executable(cylinder-scene render_cylinder_scene.cpp)
+target_link_libraries(cylinder-scene PRIVATE common)
+target_link_libraries(cylinder-scene PRIVATE raytracer_lib)
+target_link_libraries(cylinder-scene PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# render sphere with various supported decorations
+add_executable(decorated-spheres render_spheres_with_decorations.cpp)
+target_link_libraries(decorated-spheres PRIVATE common)
+target_link_libraries(decorated-spheres PRIVATE raytracer_lib)
+target_link_libraries(decorated-spheres PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# textures on cylinders
+add_executable(cylinder-texture-scene render_cylinder_texture_scene.cpp)
+target_link_libraries(cylinder-texture-scene PRIVATE common)
+target_link_libraries(cylinder-texture-scene PRIVATE raytracer_lib)
+target_link_libraries(cylinder-texture-scene PRIVATE raytracer_render_lib)

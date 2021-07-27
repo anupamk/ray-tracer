@@ -11,6 +11,7 @@
 
 /// our includes
 #include "intersection_record.hpp"
+#include "utils.hpp"
 
 namespace raytracer
 {
@@ -34,12 +35,14 @@ namespace raytracer
 	/// --------------------------------------------------------------------
 	/// compare two intersection records, and return true iff both point and
 	/// object of intersection is same.
+	///
+	/// ofcourse point-of-intersection must be epsilon equal
 	bool operator==(intersection_record const& lhs, intersection_record const& rhs)
 	{
-		// clang-format off
-                return ((lhs.where() == rhs.where()) &&
-                        (lhs.what_object() == rhs.what_object()));
-		// clang-format on
+		auto xs_where_eps_equal = epsilon_equal(lhs.where(), rhs.where());
+		auto xs_what_equal      = (lhs.what_object() == rhs.what_object());
+
+		return (xs_where_eps_equal && xs_what_equal);
 	}
 
 	/// --------------------------------------------------------------------

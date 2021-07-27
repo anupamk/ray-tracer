@@ -2,6 +2,7 @@
 #define RAYTRACER_CONSTANTS_HPP__
 
 /// c++ includes
+#include <cmath>
 #include <cstdint>
 
 namespace raytracer
@@ -29,6 +30,9 @@ namespace raytracer
 	constexpr double SQRT_2       = 1.4142135;
 	constexpr double SQRT_2_BY_2F = SQRT_2 / 2.0;
 	constexpr double SQRT_3       = 1.7320508;
+
+	/// easy access numeric constants
+	constexpr float INF = std::numeric_limits<float>::infinity();
 
 } // namespace raytracer
 

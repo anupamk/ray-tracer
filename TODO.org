@@ -14,7 +14,7 @@ and are generally not described in that order.
    + Ray Debug Tracing
 
      The general idea is to choose a point on the canvas, and let the
-     ray-tracer dump all steps that happen to color that pixel. 
+     ray-tracer dump all steps that happen to color that pixel.
 
      Should allow for easy debugging of the ray-tracer, when it will
      /inevitably/ be needed.
@@ -29,7 +29,7 @@ and are generally not described in that order.
      etc. would be just as useful.
 
    + +Shape Without Shadows+
-                                   
+
      +For some shapes / scenarios it might be worthwhile for the shape+
      +to not cast any shadow i.e. instances of shapes should be able to+
      +opt out of casting a shadow+.
@@ -78,9 +78,9 @@ and are generally not described in that order.
 
      Enhance the ray-tracer to support more primitive shapes. This can
      include, for example, support for
-     
+
      - +cube+ (DONE)
-     - cylinder
+     - +cylinder+ (DONE)
      - cone
      - triangle
      - torus
@@ -90,7 +90,7 @@ and are generally not described in that order.
 
      Every scene is hardcoded with respect to placement of the camera,
      the light sources, the objects that make up the world
-     etc. etc. 
+     etc. etc.
 
      Ideally these parameters should be loaded via a YAML
      configuration, making the whole thing more programmatic.
@@ -98,7 +98,7 @@ and are generally not described in that order.
    + OBJ File Support
 
      Add support for loading scenes by parsing Wavefront's OBJ file
-     format. 
+     format.
 
    + Acceleration Structures
 
@@ -109,3 +109,13 @@ and are generally not described in that order.
 
      Build the whole thing using clang, fixing issues as they come
      up. Hopefully not too many :)
+
+   + Improvements To Perlin Noise
+
+     Currently, perlin noise generates noisy textures based on either
+     a generic pattern interface instance or a color (which is also a
+     pattern instance i.e. solid pattern).
+
+     It would be nice to have a list of interpolators (which are just
+     functions) f.e. quadratic, bezier etc. which can be applied to
+     the generated noise value.

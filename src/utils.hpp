@@ -164,7 +164,7 @@ namespace raytracer
 	/// compute floating-point modulus
 	inline double modulus(double num, double denom)
 	{
-		auto const val_mod = fmod(num, denom);
+		auto const val_mod = std::fmod(num, denom);
 
 		if (val_mod < 0.0) {
 			return val_mod + denom;

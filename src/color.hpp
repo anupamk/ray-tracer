@@ -122,6 +122,16 @@ namespace raytracer
 	}
 
 	/// --------------------------------------------------------------------
+	/// similar to the '*' operator above, we just divide instead of a
+	/// multiply...
+	constexpr color operator/(color a, double d)
+	{
+		return color(a.R() / d,  // red
+		             a.G() / d,  // green
+		             a.B() / d); // blue
+	}
+
+	/// --------------------------------------------------------------------
 	/// return 'clamped' values of color. all color components must be
 	/// between [0.0 ... 1.0]
 	constexpr color clamp(color c)

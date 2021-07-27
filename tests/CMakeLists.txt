@@ -17,7 +17,8 @@ SET(RT_TEST_SRC_FILES
   pattern_test.cpp
   reflection_refraction_test.cpp
   cube_test.cpp
-  uv_pattern_test.cpp)
+  uv_pattern_test.cpp
+  cylinder_test.cpp)
 
 # ------------------------------------------------------------------------------
 # no user serviceable parts here ↓

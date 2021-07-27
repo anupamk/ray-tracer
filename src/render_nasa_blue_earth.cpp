@@ -71,14 +71,14 @@ int main(int argc, char** argv)
 	/// --------------------------------------------------------------------
 	/// benchmark the render with 'num_iterations' renders performed, and
 	/// throwing away the results from 'num_discards' of them
-	auto const num_iterations = 10;
-	auto const num_discards   = 1;
+	auto const num_iterations = 1;
+	auto const num_discards   = 0;
 	Benchmark<> render_bm(num_iterations, num_discards);
 	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
 	/// --------------------------------------------------------------------
 	/// just use the first [0] result only please
-	auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
+	auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
 	rendered_canvas.write(dst_fname);
 
 	/// --------------------------------------------------------------------
@@ -207,7 +207,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto camera_01     = RT::camera(1280, 1024, 0.8);
+	auto camera_01     = RT::camera(3840, 2160, 0.8);
 	auto look_from     = RT::create_point(-10.0, 2.0, -25.0);
 	auto look_to       = RT::create_point(0.0, 1.1, 0.0);
 	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

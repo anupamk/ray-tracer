@@ -72,8 +72,8 @@ int main(int argc, char** argv)
 	///   - record timings for 'num_iterations' renderings
 	///   - from these records, discard 'num_discards' samples
 	/// and then compute mean and standard-deviation
-	auto const num_iterations = 10;
-	auto const num_discards   = 3;
+	auto const num_iterations = 1;
+	auto const num_discards   = 0;
 	Benchmark<> render_bm(num_iterations, num_discards);
 	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
@@ -343,7 +343,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto camera_01     = RT::camera(1280, 1024, 1.152);
+	auto camera_01     = RT::camera(1280 * 4, 1024 * 4, 1.152);
 	auto look_from     = RT::create_point(-2.6, 1.5, -3.9);
 	auto look_to       = RT::create_point(-0.6, 1.0, -0.8);
 	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

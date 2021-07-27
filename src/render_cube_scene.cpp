@@ -77,8 +77,8 @@ int main(int argc, char** argv)
 	/// --------------------------------------------------------------------
 	/// benchmark the render with 'num_iterations' renders performed, and
 	/// throwing away the results from 'num_discards' of them
-	auto const num_iterations = 10;
-	auto const num_discards   = 1;
+	auto const num_iterations = 1;
+	auto const num_discards   = 0;
 	Benchmark<> render_bm(num_iterations, num_discards);
 	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 

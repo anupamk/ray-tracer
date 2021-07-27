@@ -21,17 +21,24 @@ namespace raytracer
 
 	/**
 	 * @brief
-	 * map a point 'P' on the surface of a sphere to a corresponding
-	 * uv-point on the texture
+	 *   map a point 'P' on the surface of a sphere to a corresponding
+	 *   uv-point on the texture
 	 **/
 	uv_point spherical_map(tuple const&);
 
 	/**
 	 * @brief
-	 * map a point 'P' on the surface of a plane to a corresponding
-	 * uv-point on the texture
+	 *   map a point 'P' on the surface of a plane to a corresponding
+	 *   uv-point on the texture
 	 **/
 	uv_point planar_map(tuple const&);
+
+	/**
+	 * @brief
+	 *   map a point 'P' on the surface of a cylinder to a corresponding
+	 *   uv-point on the texture
+	 **/
+	uv_point cylindrical_map(tuple const&);
 
 	/// add more mappings ↑
 

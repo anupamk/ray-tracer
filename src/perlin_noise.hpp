@@ -1,7 +1,6 @@
 #ifndef RAYTRACER_PERLIN_NOISE_HPP__
 #define RAYTRACER_PERLIN_NOISE_HPP__
 
-#include "tuple.hpp"
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -11,6 +10,8 @@
 
 #include "constants.hpp"
 #include "pattern_interface.hpp"
+#include "tuple.hpp"
+#include "utils.hpp"
 
 namespace raytracer
 {
@@ -35,14 +36,6 @@ namespace raytracer
 		static constexpr double lerp(double x, double min, double max)
 		{
 			return min + x * (max - min);
-		}
-
-		/// --------------------------------------------------------------------
-		/// faster floor
-		static constexpr int32_t fast_floor(double val)
-		{
-			int32_t int_val = static_cast<int32_t>(val);
-			return (val < int_val) ? (int_val - 1) : (int_val);
 		}
 
 		/// --------------------------------------------------------------------
