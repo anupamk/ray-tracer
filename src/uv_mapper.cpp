@@ -84,6 +84,35 @@ namespace raytracer
 		return uv_point(u, v);
 	}
 
+	/// --------------------------------------------------------------------
+	/// conical_map(...) maps a point 'P' on the surface of a cone to a
+	/// corresponding uv-point on the texture.
+	uv_point conical_map(tuple const& P)
+	{
+		/// ------------------------------------------------------------
+		/// compute the azimuthal (along the x-z axis) angle theta,
+		/// which varies over the range (-π..π]
+		///
+		/// theta increases clockwise when viewed from above. but this
+		/// will be fixed later.
+		auto const theta = std::atan2(P.x(), P.z());
+
+		/// ------------------------------------------------------------
+		/// 0.5 < raw_u ≤ 0.5
+		auto const raw_u = theta / (2 * PI);
+
+		/// ------------------------------------------------------------
+		/// fix the direction as well i.e subtract from 1.0 so that it
+		/// increases counter-clockwise (when viewed from above)
+		auto const u = 1.0 - (raw_u + 0.5);
+
+		/// ------------------------------------------------------------
+		/// v goes from (0.0 .. 1.0) between whole units of y
+		auto const v = 1.0 - modulus(P.y(), 1.0);
+
+		return uv_point(u, v);
+	}
+
 	/// add more mappings ↑
 
 } // namespace raytracer

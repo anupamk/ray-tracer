@@ -81,7 +81,8 @@ and are generally not described in that order.
 
      - +cube+ (DONE)
      - +cylinder+ (DONE)
-     - cone
+     - +cone+ (DONE)
+     - object grouping i.e manipulate objects as a group
      - triangle
      - torus
      - ...

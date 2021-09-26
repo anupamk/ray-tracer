@@ -74,7 +74,9 @@ set (RAYTRACER_LIB_SOURCES
   cylinder.hpp
   cylinder.cpp
   stock_materials.hpp
-  stock_materials.cpp)
+  stock_materials.cpp
+  cone.hpp
+  cone.cpp)
 
 add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
 target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
@@ -283,3 +285,10 @@ add_executable(cylinder-texture-scene render_cylinder_texture_scene.cpp)
 target_link_libraries(cylinder-texture-scene PRIVATE common)
 target_link_libraries(cylinder-texture-scene PRIVATE raytracer_lib)
 target_link_libraries(cylinder-texture-scene PRIVATE raytracer_render_lib)
+
+# ------------------------------------------------------------------------------
+# render scene with conical shapes
+add_executable(cone-scene render_cone_scene.cpp)
+target_link_libraries(cone-scene PRIVATE common)
+target_link_libraries(cone-scene PRIVATE raytracer_lib)
+target_link_libraries(cone-scene PRIVATE raytracer_render_lib)

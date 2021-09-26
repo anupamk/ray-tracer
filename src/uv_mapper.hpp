@@ -40,6 +40,13 @@ namespace raytracer
 	 **/
 	uv_point cylindrical_map(tuple const&);
 
+	/**
+	 * @brief
+	 *   map a point 'P' on the surface of a cone to a corresponding
+	 *   uv-point on the texture
+	 **/
+	uv_point conical_map(tuple const&);
+
 	/// add more mappings ↑
 
 } // namespace raytracer

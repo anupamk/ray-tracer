@@ -2,6 +2,7 @@
 #define RAYTRACER_STOCK_MATERIALS_HPP__
 
 /// our includes
+#include "canvas.hpp"
 #include "color.hpp"
 #include "material.hpp"
 
@@ -23,7 +24,11 @@ namespace raytracer
 	material create_material_matte(color const&);
 
 	/// --------------------------------------------------------------------
-	/// "noisy" material (based on perlin noise)
+	/// generate a noisy texture of a specific size.
+	canvas generate_noisy_texture(size_t canvas_xpixels,    /// x-dim
+	                              size_t canvas_ypixels,    /// y-dim
+	                              color const& start_color, /// start-color
+	                              color const& end_color);  /// end-color
 } // namespace raytracer
 
 #endif /// RAYTRACER_STOCK_MATERIALS_HPP__
