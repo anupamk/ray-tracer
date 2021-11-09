@@ -59,36 +59,36 @@ static RT::camera create_camera();
 
 int main(int argc, char** argv)
 {
-	auto world     = create_world();
-	auto camera    = create_camera();
-	auto dst_fname = "render-red-planet.ppm";
+        auto world     = create_world();
+        auto camera    = create_camera();
+        auto dst_fname = "render-red-planet.ppm";
 
-	LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
-	         "destination: '%s'}",
-	         camera.hsize(), camera.vsize(), dst_fname);
+        LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
+                 "destination: '%s'}",
+                 camera.hsize(), camera.vsize(), dst_fname);
 
-	/// --------------------------------------------------------------------
-	/// benchmark the render as follows:
-	///   - record timings for 'num_iterations' renderings
-	///   - from these records, discard 'num_discards' samples
-	/// and then compute mean and standard-deviation
-	auto const num_iterations = 10;
-	auto const num_discards   = 1;
-	Benchmark<> render_bm(num_iterations, num_discards);
-	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
+        /// --------------------------------------------------------------------
+        /// benchmark the render as follows:
+        ///   - record timings for 'num_iterations' renderings
+        ///   - from these records, discard 'num_discards' samples
+        /// and then compute mean and standard-deviation
+        auto const num_iterations = 10;
+        auto const num_discards   = 1;
+        Benchmark<> render_bm(num_iterations, num_discards);
+        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
-	/// --------------------------------------------------------------------
-	/// just use the first [0] result only please (they are all identical)
-	auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
-	rendered_canvas.write(dst_fname);
+        /// --------------------------------------------------------------------
+        /// just use the first [0] result only please (they are all identical)
+        auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
+        rendered_canvas.write(dst_fname);
 
-	/// --------------------------------------------------------------------
-	/// show what we got
-	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
-	         render_bm.mean(),                /// mean-usec
-	         render_bm.standard_deviation()); /// stddev-usec
+        /// --------------------------------------------------------------------
+        /// show what we got
+        LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+                 render_bm.mean(),                /// mean-usec
+                 render_bm.standard_deviation()); /// stddev-usec
 
-	return 0;
+        return 0;
 }
 
 /*
@@ -100,59 +100,59 @@ int main(int argc, char** argv)
 /// primitives from the camera.
 static RT::world create_world()
 {
-	/// --------------------------------------------------------------------
-	/// create the floor with a blended pattern
-	auto floor = std::make_shared<RT::plane>();
-	{
-		auto floor_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
-			RT::color(RT::color::RGB(56, 167, 252)),  /// color-a
-			RT::color(RT::color::RGB(56, 128, 252)),  /// color-b
-			std::default_random_engine::default_seed, /// seed
-			16);                                      /// octaves
+        /// --------------------------------------------------------------------
+        /// create the floor with a blended pattern
+        auto floor = std::make_shared<RT::plane>();
+        {
+                auto floor_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
+                        RT::color(RT::color::RGB(56, 167, 252)),  /// color-a
+                        RT::color(RT::color::RGB(56, 128, 252)),  /// color-b
+                        std::default_random_engine::default_seed, /// seed
+                        16);                                      /// octaves
 
-		floor->set_material(RT::material()
-		                            .set_pattern(floor_pattern)
-		                            .set_ambient(0.02)
-		                            .set_specular(0.0)
-		                            .set_shininess(0.05)
-		                            .set_reflective(0.5));
-	}
+                floor->set_material(RT::material()
+                                            .set_pattern(floor_pattern)
+                                            .set_ambient(0.02)
+                                            .set_specular(0.0)
+                                            .set_shininess(0.05)
+                                            .set_reflective(0.5));
+        }
 
-	/// --------------------------------------------------------------------
-	/// red-planet without the shadow ('false')
-	auto red_planet = std::make_shared<RT::sphere>(false);
-	{
-		auto fuzzy_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
-			RT::color(0.2, 0.0, 0.0),                 /// u
-			RT::color(0.8, 0.4, 0.4),                 /// v
-			std::default_random_engine::default_seed, /// seed
-			16);                                      /// octaves
+        /// --------------------------------------------------------------------
+        /// red-planet without the shadow ('false')
+        auto red_planet = std::make_shared<RT::sphere>(false);
+        {
+                auto fuzzy_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
+                        RT::color(0.2, 0.0, 0.0),                 /// u
+                        RT::color(0.8, 0.4, 0.4),                 /// v
+                        std::default_random_engine::default_seed, /// seed
+                        16);                                      /// octaves
 
-		red_planet->transform(RT_XFORM::create_3d_scaling_matrix(3.3, 3.3, 3.3) *
-		                      RT_XFORM::create_3d_translation_matrix(2.0, 1.5, 3.0) *
-		                      RT_XFORM::create_roty_matrix(RT::PI_BY_2F) *
-		                      RT_XFORM::create_rotz_matrix(-RT::PI));
+                red_planet->transform(RT_XFORM::create_3d_scaling_matrix(3.3, 3.3, 3.3) *
+                                      RT_XFORM::create_3d_translation_matrix(2.0, 1.5, 3.0) *
+                                      RT_XFORM::create_roty_matrix(RT::PI_BY_2F) *
+                                      RT_XFORM::create_rotz_matrix(-RT::PI));
 
-		red_planet->set_material(RT::material()
-		                                 .set_pattern(fuzzy_pattern)
-		                                 .set_ambient(0.1)
-		                                 .set_diffuse(0.9)
-		                                 .set_shininess(10.0)
-		                                 .set_specular(0.2));
-	}
+                red_planet->set_material(RT::material()
+                                                 .set_pattern(fuzzy_pattern)
+                                                 .set_ambient(0.1)
+                                                 .set_diffuse(0.9)
+                                                 .set_shininess(10.0)
+                                                 .set_specular(0.2));
+        }
 
-	/// --------------------------------------------------------------------
-	/// the world light
-	auto world_light_01 = RT::point_light(RT::create_point(-2.0, 3.0, -10.0), RT::color_white());
+        /// --------------------------------------------------------------------
+        /// the world light
+        auto world_light_01 = RT::point_light(RT::create_point(-2.0, 3.0, -10.0), RT::color_white());
 
-	/// --------------------------------------------------------------------
-	/// now create the world...
-	auto world = RT::world();
-	world.add(world_light_01);
-	world.add(floor);
-	world.add(red_planet);
+        /// --------------------------------------------------------------------
+        /// now create the world...
+        auto world = RT::world();
+        world.add(world_light_01);
+        world.add(floor);
+        world.add(red_planet);
 
-	return world;
+        return world;
 }
 
 /// ----------------------------------------------------------------------------
@@ -160,13 +160,13 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto camera_01     = RT::camera(1280, 1024, 0.8);
-	auto look_from     = RT::create_point(-2.0, 3.0, -25.0);
-	auto look_to       = RT::create_point(0.0, 1.1, 0.0);
-	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
-	auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
+        auto camera_01     = RT::camera(1280, 1024, 0.8);
+        auto look_from     = RT::create_point(-2.0, 3.0, -25.0);
+        auto look_to       = RT::create_point(0.0, 1.1, 0.0);
+        auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
+        auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
 
-	camera_01.transform(xform);
+        camera_01.transform(xform);
 
-	return camera_01;
+        return camera_01;
 }

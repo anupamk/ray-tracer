@@ -47,32 +47,32 @@ static RT::camera create_camera();
 
 int main(int argc, char** argv)
 {
-	auto const world  = create_world();
-	auto const camera = create_camera();
-	auto dst_fname    = "render-with-plane.ppm";
+        auto const world  = create_world();
+        auto const camera = create_camera();
+        auto dst_fname    = "render-with-plane.ppm";
 
-	LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
-	         "destination: '%s'}",
-	         camera.hsize(), camera.vsize(), dst_fname);
+        LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
+                 "destination: '%s'}",
+                 camera.hsize(), camera.vsize(), dst_fname);
 
-	/// --------------------------------------------------------------------
-	/// benchmark the render with '10' renders performed, and throwing away
-	/// the results from '1' of them
-	Benchmark<> render_bm(10, 1);
-	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
+        /// --------------------------------------------------------------------
+        /// benchmark the render with '10' renders performed, and throwing away
+        /// the results from '1' of them
+        Benchmark<> render_bm(10, 1);
+        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
-	/// --------------------------------------------------------------------
-	/// just use the first [0] result only please
-	auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
-	rendered_canvas.write(dst_fname);
+        /// --------------------------------------------------------------------
+        /// just use the first [0] result only please
+        auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+        rendered_canvas.write(dst_fname);
 
-	/// --------------------------------------------------------------------
-	/// show what we got
-	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
-	         render_bm.mean(),                /// mean-usec
-	         render_bm.standard_deviation()); /// stddev-usec
+        /// --------------------------------------------------------------------
+        /// show what we got
+        LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+                 render_bm.mean(),                /// mean-usec
+                 render_bm.standard_deviation()); /// stddev-usec
 
-	return 0;
+        return 0;
 }
 
 /*
@@ -84,107 +84,107 @@ int main(int argc, char** argv)
 /// primitives from the camera.
 static RT::world create_world()
 {
-	/// --------------------------------------------------------------------
-	/// plane material
-	auto const wall_pattern  = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.9, 0.9));
-	auto const wall_material = RT::material().set_pattern(wall_pattern).set_specular(0.0);
+        /// --------------------------------------------------------------------
+        /// plane material
+        auto const wall_pattern  = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.9, 0.9));
+        auto const wall_material = RT::material().set_pattern(wall_pattern).set_specular(0.0);
 
-	/// --------------------------------------------------------------------
-	/// 01: plane
-	auto plane_01 = std::make_shared<RT::plane>();
-	plane_01->transform(RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
-	plane_01->set_material(wall_material);
+        /// --------------------------------------------------------------------
+        /// 01: plane
+        auto plane_01 = std::make_shared<RT::plane>();
+        plane_01->transform(RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0));
+        plane_01->set_material(wall_material);
 
-	/// --------------------------------------------------------------------
-	/// 02: plane
-	auto plane_02 = std::make_shared<RT::plane>();
-	plane_02->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 6.0) *
-	                    RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0) *
-	                    RT_XFORM::create_rotx_matrix(RT::PI_BY_2F));
+        /// --------------------------------------------------------------------
+        /// 02: plane
+        auto plane_02 = std::make_shared<RT::plane>();
+        plane_02->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 6.0) *
+                            RT_XFORM::create_3d_scaling_matrix(100.0, 0.01, 100.0) *
+                            RT_XFORM::create_rotx_matrix(RT::PI_BY_2F));
 
-	plane_02->set_material(wall_material);
+        plane_02->set_material(wall_material);
 
-	/// --------------------------------------------------------------------
-	/// sphere-01
-	auto sphere_01         = std::make_shared<RT::sphere>();
-	auto sphere_01_pattern = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.0, 0.0));
+        /// --------------------------------------------------------------------
+        /// sphere-01
+        auto sphere_01         = std::make_shared<RT::sphere>();
+        auto sphere_01_pattern = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.0, 0.0));
 
-	sphere_01->transform(RT_XFORM::create_3d_translation_matrix(-3.0, 2.0, -2.0) *
-	                     RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
+        sphere_01->transform(RT_XFORM::create_3d_translation_matrix(-3.0, 2.0, -2.0) *
+                             RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
 
-	// clang-format off
+        // clang-format off
 	sphere_01->set_material(RT::material()
                                 .set_pattern(sphere_01_pattern)
                                 .set_diffuse(0.8)
                                 .set_specular(0.3));
-	// clang-format on
+        // clang-format on
 
-	/// --------------------------------------------------------------------
-	/// sphere-02
-	auto sphere_02         = std::make_shared<RT::sphere>();
-	auto sphere_02_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 1.0, 0.0));
+        /// --------------------------------------------------------------------
+        /// sphere-02
+        auto sphere_02         = std::make_shared<RT::sphere>();
+        auto sphere_02_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 1.0, 0.0));
 
-	sphere_02->transform(RT_XFORM::create_3d_translation_matrix(-10.0, 2.5, -12.0) *
-	                     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
+        sphere_02->transform(RT_XFORM::create_3d_translation_matrix(-10.0, 2.5, -12.0) *
+                             RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
-	// clang-format off
+        // clang-format off
 	sphere_02->set_material(RT::material()
                                 .set_pattern(sphere_02_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
-	// clang-format on
+        // clang-format on
 
-	/// --------------------------------------------------------------------
-	/// sphere-03
-	auto sphere_03         = std::make_shared<RT::sphere>();
-	auto sphere_03_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 0.0, 1.0));
+        /// --------------------------------------------------------------------
+        /// sphere-03
+        auto sphere_03         = std::make_shared<RT::sphere>();
+        auto sphere_03_pattern = std::make_shared<RT::solid_pattern>(RT::color(0.0, 0.0, 1.0));
 
-	sphere_03->transform(RT_XFORM::create_3d_translation_matrix(5.0, 2.5, -7.0) *
-	                     RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
+        sphere_03->transform(RT_XFORM::create_3d_translation_matrix(5.0, 2.5, -7.0) *
+                             RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
-	// clang-format off
+        // clang-format off
 	sphere_03->set_material(RT::material()
                                 .set_pattern(sphere_03_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
-	// clang-format on
+        // clang-format on
 
-	/// --------------------------------------------------------------------
-	/// 04: sphere-04
-	auto sphere_04         = std::make_shared<RT::sphere>();
-	auto sphere_04_pattern = std::make_shared<RT::solid_pattern>(RT::color(225.0 / 255.0, /// red
-	                                                                       213.0 / 255.0, /// green
-	                                                                       0.0 / 255.0)); /// blue
+        /// --------------------------------------------------------------------
+        /// 04: sphere-04
+        auto sphere_04         = std::make_shared<RT::sphere>();
+        auto sphere_04_pattern = std::make_shared<RT::solid_pattern>(RT::color(225.0 / 255.0, /// red
+                                                                               213.0 / 255.0, /// green
+                                                                               0.0 / 255.0)); /// blue
 
-	sphere_04->transform(RT_XFORM::create_3d_translation_matrix(-5.5, 1.5, -18.0) *
-	                     RT_XFORM::create_3d_scaling_matrix(1.5, 1.5, 1.5));
+        sphere_04->transform(RT_XFORM::create_3d_translation_matrix(-5.5, 1.5, -18.0) *
+                             RT_XFORM::create_3d_scaling_matrix(1.5, 1.5, 1.5));
 
-	// clang-format off
+        // clang-format off
 	sphere_04->set_material(RT::material()
                                 .set_pattern(sphere_04_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
-	// clang-format on
+        // clang-format on
 
-	/// --------------------------------------------------------------------
-	/// the world light
-	auto world_light_01 = RT::point_light(RT::create_point(-20.0, 10.0, -20.0), RT::color_white());
+        /// --------------------------------------------------------------------
+        /// the world light
+        auto world_light_01 = RT::point_light(RT::create_point(-20.0, 10.0, -20.0), RT::color_white());
 
-	/// --------------------------------------------------------------------
-	/// now create the world...
-	auto world = RT::world();
-	world.add(world_light_01);
+        /// --------------------------------------------------------------------
+        /// now create the world...
+        auto world = RT::world();
+        world.add(world_light_01);
 
-	world.add(plane_01);
-	world.add(plane_02);
-	world.add(sphere_01);
-	world.add(sphere_02);
-	world.add(sphere_03);
-	world.add(sphere_04);
+        world.add(plane_01);
+        world.add(plane_02);
+        world.add(sphere_01);
+        world.add(sphere_02);
+        world.add(sphere_03);
+        world.add(sphere_04);
 
-	LOG_DEBUG("world details:\n%s\n", world.stringify().c_str());
+        LOG_DEBUG("world details:\n%s\n", world.stringify().c_str());
 
-	return world;
+        return world;
 }
 
 /// ----------------------------------------------------------------------------
@@ -192,13 +192,13 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto camera_01     = RT::camera(1280, 1024, RT::PI_BY_2F);
-	auto look_from     = RT::create_point(-7.5, 5.0, -25.0);
-	auto look_to       = RT::create_point(0.0, -1.0, 5.0);
-	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
-	auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
+        auto camera_01     = RT::camera(1280, 1024, RT::PI_BY_2F);
+        auto look_from     = RT::create_point(-7.5, 5.0, -25.0);
+        auto look_to       = RT::create_point(0.0, -1.0, 5.0);
+        auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
+        auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
 
-	camera_01.transform(xform);
+        camera_01.transform(xform);
 
-	return camera_01;
+        return camera_01;
 }

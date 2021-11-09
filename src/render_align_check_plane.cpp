@@ -46,34 +46,34 @@ static RT::camera create_camera();
 
 int main(int argc, char** argv)
 {
-	auto world     = create_world();
-	auto camera    = create_camera();
-	auto dst_fname = "align-check-plane.ppm";
+        auto world     = create_world();
+        auto camera    = create_camera();
+        auto dst_fname = "align-check-plane.ppm";
 
-	LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
-	         "destination: '%s'}",
-	         camera.hsize(), camera.vsize(), dst_fname);
+        LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "
+                 "destination: '%s'}",
+                 camera.hsize(), camera.vsize(), dst_fname);
 
-	/// --------------------------------------------------------------------
-	/// benchmark the render with 'num_iterations' renders performed, and
-	/// throwing away the results from 'num_discards' of them
-	auto const num_iterations = 1;
-	auto const num_discards   = 0;
-	Benchmark<> render_bm(num_iterations, num_discards);
-	LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
+        /// --------------------------------------------------------------------
+        /// benchmark the render with 'num_iterations' renders performed, and
+        /// throwing away the results from 'num_discards' of them
+        auto const num_iterations = 1;
+        auto const num_discards   = 0;
+        Benchmark<> render_bm(num_iterations, num_discards);
+        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
-	/// --------------------------------------------------------------------
-	/// just use the first [0] result only please
-	auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
-	rendered_canvas.write(dst_fname);
+        /// --------------------------------------------------------------------
+        /// just use the first [0] result only please
+        auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+        rendered_canvas.write(dst_fname);
 
-	/// --------------------------------------------------------------------
-	/// show what we got
-	LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
-	         render_bm.mean(),                /// mean-usec
-	         render_bm.standard_deviation()); /// stddev-usec
+        /// --------------------------------------------------------------------
+        /// show what we got
+        LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+                 render_bm.mean(),                /// mean-usec
+                 render_bm.standard_deviation()); /// stddev-usec
 
-	return 0;
+        return 0;
 }
 
 /*
@@ -85,35 +85,35 @@ int main(int argc, char** argv)
 /// primitives from the camera.
 static RT::world create_world()
 {
-	/// --------------------------------------------------------------------
-	/// create the floor with a blended pattern
-	auto floor = std::make_shared<RT::plane>();
-	{
-		auto floor_pattern = std::make_shared<RT::align_check>(RT::color(1.0, 1.0, 1.0),  /// main
-		                                                       RT::color(1.0, 0.0, 0.0),  /// ul
-		                                                       RT::color(1.0, 1.0, 0.0),  /// ur
-		                                                       RT::color(0.0, 1.0, 0.0),  /// bl
-		                                                       RT::color(0.0, 1.0, 1.0)); /// br
+        /// --------------------------------------------------------------------
+        /// create the floor with a blended pattern
+        auto floor = std::make_shared<RT::plane>();
+        {
+                auto floor_pattern = std::make_shared<RT::align_check>(RT::color(1.0, 1.0, 1.0),  /// main
+                                                                       RT::color(1.0, 0.0, 0.0),  /// ul
+                                                                       RT::color(1.0, 1.0, 0.0),  /// ur
+                                                                       RT::color(0.0, 1.0, 0.0),  /// bl
+                                                                       RT::color(0.0, 1.0, 1.0)); /// br
 
-		auto floor_texture = std::make_shared<RT::texture_2d_pattern>(floor_pattern, RT::planar_map);
+                auto floor_texture = std::make_shared<RT::texture_2d_pattern>(floor_pattern, RT::planar_map);
 
-		floor->set_material(RT::material()
-		                            .set_pattern(floor_texture) /// pattern
-		                            .set_ambient(0.1)           /// ambient
-		                            .set_diffuse(0.8));         /// specular
-	}
+                floor->set_material(RT::material()
+                                            .set_pattern(floor_texture) /// pattern
+                                            .set_ambient(0.1)           /// ambient
+                                            .set_diffuse(0.8));         /// specular
+        }
 
-	/// --------------------------------------------------------------------
-	/// the world light
-	auto world_light_01 = RT::point_light(RT::create_point(-10.0, 10.0, 10.0), RT::color_white());
+        /// --------------------------------------------------------------------
+        /// the world light
+        auto world_light_01 = RT::point_light(RT::create_point(-10.0, 10.0, 10.0), RT::color_white());
 
-	/// --------------------------------------------------------------------
-	/// now create the world...
-	auto world = RT::world();
-	world.add(world_light_01);
-	world.add(floor);
+        /// --------------------------------------------------------------------
+        /// now create the world...
+        auto world = RT::world();
+        world.add(world_light_01);
+        world.add(floor);
 
-	return world;
+        return world;
 }
 
 /// ----------------------------------------------------------------------------
@@ -121,13 +121,13 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-	auto camera_01     = RT::camera(1280, 1024, 0.5);
-	auto look_from     = RT::create_point(1.0, 2.0, -5.0);
-	auto look_to       = RT::create_point(0.0, 0.0, 0.0);
-	auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
-	auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
+        auto camera_01     = RT::camera(1280, 1024, 0.5);
+        auto look_from     = RT::create_point(1.0, 2.0, -5.0);
+        auto look_to       = RT::create_point(0.0, 0.0, 0.0);
+        auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
+        auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
 
-	camera_01.transform(xform);
+        camera_01.transform(xform);
 
-	return camera_01;
+        return camera_01;
 }

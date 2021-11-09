@@ -34,68 +34,68 @@ using RT_XFORM = RT::matrix_transformations_t;
 ///
 TEST_CASE("world::world(...) test")
 {
-	auto const w = RT::world();
-	CHECK(w.lights().size() == 0);
-	CHECK(w.shapes().size() == 0);
+        auto const w = RT::world();
+        CHECK(w.lights().size() == 0);
+        CHECK(w.shapes().size() == 0);
 }
 
 /// ----------------------------------------------------------------------------
 ///
 TEST_CASE("world::create_default_world(...) test")
 {
-	auto const w = RT::world::create_default_world();
+        auto const w = RT::world::create_default_world();
 
-	/// simple checks
-	CHECK(w.lights().size() == 1);
-	CHECK(w.shapes().size() == 2);
+        /// simple checks
+        CHECK(w.lights().size() == 1);
+        CHECK(w.shapes().size() == 2);
 }
 
 /// ----------------------------------------------------------------------------
 ///
 TEST_CASE("world::create_default_world(...) intersection test")
 {
-	/// a default world
-	auto const w = RT::world::create_default_world();
+        /// a default world
+        auto const w = RT::world::create_default_world();
 
-	/// and a ray
-	auto const r_origin    = raytracer::create_point(0.0, 0.0, -5.0);
-	auto const r_direction = raytracer::create_vector(0.0, 0.0, 1.0);
-	auto const r           = raytracer::ray_t(r_origin, r_direction);
+        /// and a ray
+        auto const r_origin    = raytracer::create_point(0.0, 0.0, -5.0);
+        auto const r_direction = raytracer::create_vector(0.0, 0.0, 1.0);
+        auto const r           = raytracer::ray_t(r_origin, r_direction);
 
-	/// and their intersections
-	auto const got_xs      = w.intersect(r);
-	auto const expected_xs = std::vector<double>{4.0, 4.5, 5.5, 6.0};
+        /// and their intersections
+        auto const got_xs      = w.intersect(r);
+        auto const expected_xs = std::vector<double>{4.0, 4.5, 5.5, 6.0};
 
-	/// verify
-	CHECK(got_xs.size() == expected_xs.size());
-	for (size_t i = 0; i < got_xs.size(); i++) {
-		CHECK(got_xs[i].where() == expected_xs[i]);
-	}
+        /// verify
+        CHECK(got_xs.size() == expected_xs.size());
+        for (size_t i = 0; i < got_xs.size(); i++) {
+                CHECK(got_xs[i].where() == expected_xs[i]);
+        }
 }
 
 /// ----------------------------------------------------------------------------
 /// shading an intersection from inside
 TEST_CASE("world::shade_hit(...) test")
 {
-	/// a default world
-	auto const w = RT::world::create_default_world();
+        /// a default world
+        auto const w = RT::world::create_default_world();
 
-	/// and a ray
-	auto const r_origin    = raytracer::create_point(0.0, 0.0, -5.0);
-	auto const r_direction = raytracer::create_vector(0.0, 0.0, 1.0);
-	auto const r           = raytracer::ray_t(r_origin, r_direction);
+        /// and a ray
+        auto const r_origin    = raytracer::create_point(0.0, 0.0, -5.0);
+        auto const r_direction = raytracer::create_vector(0.0, 0.0, 1.0);
+        auto const r           = raytracer::ray_t(r_origin, r_direction);
 
-	/// first shape in the world
-	auto const shape_01   = w.shapes()[0];
-	auto const xs_01      = RT::intersection_record(4.0, shape_01);
-	auto const xs_list    = RT::intersection_records{xs_01};
-	auto const xs_01_info = r.prepare_computations(xs_list);
+        /// first shape in the world
+        auto const shape_01   = w.shapes()[0];
+        auto const xs_01      = RT::intersection_record(4.0, shape_01);
+        auto const xs_list    = RT::intersection_records{xs_01};
+        auto const xs_01_info = r.prepare_computations(xs_list);
 
-	/// compute + validate the color
-	auto const got_color = w.shade_hit(xs_01_info);
-	auto const exp_color = RT::color(0.38066, 0.47583, 0.2855);
+        /// compute + validate the color
+        auto const got_color = w.shade_hit(xs_01_info);
+        auto const exp_color = RT::color(0.38066, 0.47583, 0.2855);
 
-	CHECK(got_color == exp_color);
+        CHECK(got_color == exp_color);
 }
 
 #if 0

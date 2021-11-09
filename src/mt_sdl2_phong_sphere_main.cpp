@@ -47,24 +47,24 @@ using RT_XFORM = RT::matrix_transformations_t;
 class scene_params
 {
     public:
-	/// stuff 'outside' the scene
-	uint32_t const canvas_dim_x;
-	uint32_t const canvas_dim_y;
-	float const wall_zpos;
-	float const wall_xsize;
-	float const wall_ysize;
-	RT::tuple const camera_position;
+        /// stuff 'outside' the scene
+        uint32_t const canvas_dim_x;
+        uint32_t const canvas_dim_y;
+        float const wall_zpos;
+        float const wall_xsize;
+        float const wall_ysize;
+        RT::tuple const camera_position;
 
-	/// objects making up the scene
-	std::shared_ptr<RT::shape_interface> const shape;
-	RT::point_light const light;
+        /// objects making up the scene
+        std::shared_ptr<RT::shape_interface> const shape;
+        RT::point_light const light;
 
-	// clang-format off
+        // clang-format off
         float wall_half_xsize()   const { return wall_xsize * 0.5;          }
         float wall_half_ysize()   const { return wall_ysize * 0.5;          }
         float wall_xpixel_size()  const { return wall_xsize / canvas_dim_x; }
         float wall_ypixel_size()  const { return wall_ysize / canvas_dim_y; }
-	// clang-format on
+        // clang-format on
 };
 
 /// --------------------------------------------------------------------------------
@@ -72,25 +72,25 @@ class scene_params
 class pixel_color
 {
     private:
-	uint32_t x_;
-	uint32_t y_;
-	RT::color color_;
+        uint32_t x_;
+        uint32_t y_;
+        RT::color color_;
 
     public:
-	pixel_color()
-	    : pixel_color(0, 0, RT::color_black())
-	{
-	}
+        pixel_color()
+            : pixel_color(0, 0, RT::color_black())
+        {
+        }
 
-	pixel_color(uint32_t x, uint32_t y, RT::color color)
-	    : x_(x)
-	    , y_(y)
-	    , color_(color)
-	{
-	}
+        pixel_color(uint32_t x, uint32_t y, RT::color color)
+            : x_(x)
+            , y_(y)
+            , color_(color)
+        {
+        }
 
     public:
-	// clang-format off
+        // clang-format off
         constexpr uint32_t x()      { return this->x_;     }
         constexpr uint32_t y()      { return this->y_;     }
         constexpr RT::color color() { return this->color_; }
@@ -208,90 +208,90 @@ static scene_params create_scene_params()
                                   std::string("light: {") + scene_light.stringify() + "}");
 
         LOG_INFO("phong-sphere scene description '%s'", scene_descr.c_str());
-	// clang-format on
+        // clang-format on
 
-	return scene_params{canvas_dim_x, canvas_dim_y,    WALL_ZPOS, WALL_XSIZE,
-	                    WALL_YSIZE,   CAMERA_POSITION, sphere,    scene_light};
+        return scene_params{canvas_dim_x, canvas_dim_y,    WALL_ZPOS, WALL_XSIZE,
+                            WALL_YSIZE,   CAMERA_POSITION, sphere,    scene_light};
 }
 
 /// --------------------------------------------------------------------------------
 /// this function is called to color n-rows in an image.
 static void color_n_rows(uint32_t start_row, uint32_t end_row, scene_params const& params)
 {
-	/// let's enqueue in bulk as well
-	size_t pixels_to_flush = 0;
-	std::vector<pixel_color> eq_px_list(Q_BULK_ENQUEUE_THRESH);
+        /// let's enqueue in bulk as well
+        size_t pixels_to_flush = 0;
+        std::vector<pixel_color> eq_px_list(Q_BULK_ENQUEUE_THRESH);
 
-	for (uint32_t y = start_row; y < end_row; y++) {
-		for (uint32_t x = 0; x < params.canvas_dim_x; x++) {
-			/// bulk enqueue
-			if (pixels_to_flush == Q_BULK_ENQUEUE_THRESH) {
-				pixels_to_flush = 0;
-				color_queue.enqueue_bulk(eq_px_list.begin(), Q_BULK_ENQUEUE_THRESH);
-			}
+        for (uint32_t y = start_row; y < end_row; y++) {
+                for (uint32_t x = 0; x < params.canvas_dim_x; x++) {
+                        /// bulk enqueue
+                        if (pixels_to_flush == Q_BULK_ENQUEUE_THRESH) {
+                                pixels_to_flush = 0;
+                                color_queue.enqueue_bulk(eq_px_list.begin(), Q_BULK_ENQUEUE_THRESH);
+                        }
 
-			/// local add
-			auto xy_color = color_pixel(x, y, params);
-			if (xy_color != RT::color_black()) {
-				eq_px_list[pixels_to_flush++] = pixel_color{x, y, xy_color};
-			}
-		}
-	}
+                        /// local add
+                        auto xy_color = color_pixel(x, y, params);
+                        if (xy_color != RT::color_black()) {
+                                eq_px_list[pixels_to_flush++] = pixel_color{x, y, xy_color};
+                        }
+                }
+        }
 
-	/// there might be upto 'pixels_to_flush' stragglers left. let's get
-	/// those also enqueued
-	color_queue.enqueue_bulk(eq_px_list.begin(), pixels_to_flush);
+        /// there might be upto 'pixels_to_flush' stragglers left. let's get
+        /// those also enqueued
+        color_queue.enqueue_bulk(eq_px_list.begin(), pixels_to_flush);
 
-	/// this thread is done.
-	std::atomic_fetch_sub_explicit(&num_active_coloring_threads, 1, std::memory_order_relaxed);
+        /// this thread is done.
+        std::atomic_fetch_sub_explicit(&num_active_coloring_threads, 1, std::memory_order_relaxed);
 
-	return;
+        return;
 }
 
 /// --------------------------------------------------------------------------------
 /// this function is called to render the scene on the sdl-canvas
 static void render_scene(scene_params const& params)
 {
-	bool all_done   = false;
-	auto the_canvas = RT::sdl2_canvas(params.canvas_dim_x, params.canvas_dim_y);
-	std::vector<pixel_color> dq_px_list(Q_BULK_DEQUEUE_THRESH);
+        bool all_done   = false;
+        auto the_canvas = RT::sdl2_canvas(params.canvas_dim_x, params.canvas_dim_y);
+        std::vector<pixel_color> dq_px_list(Q_BULK_DEQUEUE_THRESH);
 
-	/// convenience
-	namespace CHRONO = std::chrono;
-	using HR_CLOCK   = std::chrono::high_resolution_clock;
+        /// convenience
+        namespace CHRONO = std::chrono;
+        using HR_CLOCK   = std::chrono::high_resolution_clock;
 
-	auto const render_start_time = HR_CLOCK::now();
+        auto const render_start_time = HR_CLOCK::now();
 
-	do {
-		size_t count = color_queue.try_dequeue_bulk(dq_px_list.begin(), dq_px_list.size());
-		for (size_t i = 0; i < count; i++) {
-			the_canvas.write_pixel(dq_px_list[i].x(), dq_px_list[i].y(), dq_px_list[i].color());
-		}
+        do {
+                size_t count = color_queue.try_dequeue_bulk(dq_px_list.begin(), dq_px_list.size());
+                for (size_t i = 0; i < count; i++) {
+                        the_canvas.write_pixel(dq_px_list[i].x(), dq_px_list[i].y(), dq_px_list[i].color());
+                }
 
-		/*
-		 * rendering thread is done, when there are no active coloring
-		 * threads, and when all the messages that they have enqueued
-		 * onto the queue are all processed here.
-		 **/
-		// clang-format off
+                /*
+                 * rendering thread is done, when there are no active coloring
+                 * threads, and when all the messages that they have enqueued
+                 * onto the queue are all processed here.
+                 **/
+                // clang-format off
 		auto threads_remaining = std::atomic_load_explicit(&num_active_coloring_threads,
                                                                    std::memory_order_relaxed);
                 auto items_in_q = color_queue.size_approx();
                 all_done = ((threads_remaining == 0) && (items_in_q == 0));
-		// clang-format on
-	} while (!all_done);
+                // clang-format on
+        } while (!all_done);
 
-	/// some stats
-	using CHRONO_MS      = std::chrono::milliseconds;
-	auto render_end_time = HR_CLOCK::now();
-	long render_time_ms  = CHRONO::duration_cast<CHRONO_MS>(render_end_time - render_start_time).count();
+        /// some stats
+        using CHRONO_MS      = std::chrono::milliseconds;
+        auto render_end_time = HR_CLOCK::now();
+        long render_time_ms  = CHRONO::duration_cast<CHRONO_MS>(render_end_time - render_start_time).count();
 
-	LOG_INFO("total render time: '%ld' (ms)", render_time_ms);
+        LOG_INFO("total render time: '%ld' (ms)", render_time_ms);
 
-	/// show what we just rendered
-	the_canvas.show_canvas();
+        /// show what we just rendered
+        the_canvas.show_canvas();
 
-	return;
+        return;
 }
 
 /// --------------------------------------------------------------------------------
@@ -301,50 +301,50 @@ static RT::color color_pixel(uint32_t x_coord,           /// x-coordinate
                              uint32_t y_coord,           /// y-coordinate
                              scene_params const& params) /// scene-params
 {
-	auto wall_x_coord   = -params.wall_half_xsize() + params.wall_xpixel_size() * x_coord;
-	auto wall_y_coord   = params.wall_half_ysize() - params.wall_ypixel_size() * y_coord;
-	auto wall_xyz_coord = RT::create_point(wall_x_coord, wall_y_coord, params.wall_zpos);
+        auto wall_x_coord   = -params.wall_half_xsize() + params.wall_xpixel_size() * x_coord;
+        auto wall_y_coord   = params.wall_half_ysize() - params.wall_ypixel_size() * y_coord;
+        auto wall_xyz_coord = RT::create_point(wall_x_coord, wall_y_coord, params.wall_zpos);
 
-	/// parametric equation of ray towards the wall
-	auto normalized_ray_dir = RT::normalize(wall_xyz_coord - params.camera_position);
-	auto ray_to_wall        = RT::ray_t(params.camera_position, normalized_ray_dir);
+        /// parametric equation of ray towards the wall
+        auto normalized_ray_dir = RT::normalize(wall_xyz_coord - params.camera_position);
+        auto ray_to_wall        = RT::ray_t(params.camera_position, normalized_ray_dir);
 
-	// clang-format off
+        // clang-format off
         /// find intersection point of ray with the sphere
         auto xs_record = ray_to_wall.intersect(params.shape);
         auto xs_point  = (xs_record ?
                           RT::visible_intersection(xs_record.value()) :
                           std::nullopt);
-	// clang-format on
+        // clang-format on
 
-	if (!xs_point) {
-		/// ray never intersected the sphere...
-		return RT::color_black();
-	}
+        if (!xs_point) {
+                /// ray never intersected the sphere...
+                return RT::color_black();
+        }
 
-	/// ray did hit 'something', that cannot be null
-	auto hit_record = xs_point.value();
-	ASSERT((hit_record.what_object() != nullptr) && "ray hit null objekt !");
+        /// ray did hit 'something', that cannot be null
+        auto hit_record = xs_point.value();
+        ASSERT((hit_record.what_object() != nullptr) && "ray hit null objekt !");
 
-	/*
-	 * ok, so, if we are here, ray did intersect the sphere.
-	 *
-	 * lets now figure out various properties associated
-	 * with this intersection f.e. hit-position,
-	 * surface-normal, surface-color etc.
-	 **/
+        /*
+         * ok, so, if we are here, ray did intersect the sphere.
+         *
+         * lets now figure out various properties associated
+         * with this intersection f.e. hit-position,
+         * surface-normal, surface-color etc.
+         **/
 
-	/// where is the viewer
-	auto viewer_at = -ray_to_wall.direction();
+        /// where is the viewer
+        auto viewer_at = -ray_to_wall.direction();
 
-	/// where on the ray did this intersection happen ? and
-	/// what is the surface-normal at that position
-	auto hit_position   = ray_to_wall.position(hit_record.where());
-	auto surface_normal = hit_record.what_object()->normal_at_world(hit_position);
+        /// where on the ray did this intersection happen ? and
+        /// what is the surface-normal at that position
+        auto hit_position   = ray_to_wall.position(hit_record.where());
+        auto surface_normal = hit_record.what_object()->normal_at_world(hit_position);
 
-	return RT::phong_illumination(hit_position,                 /// hit-point
-	                              params.shape->get_material(), /// shape's material
-	                              params.light,                 /// light
-	                              viewer_at,                    /// viewer
-	                              surface_normal);              /// normal at hit-point
+        return RT::phong_illumination(hit_position,                 /// hit-point
+                                      params.shape->get_material(), /// shape's material
+                                      params.light,                 /// light
+                                      viewer_at,                    /// viewer
+                                      surface_normal);              /// normal at hit-point
 }

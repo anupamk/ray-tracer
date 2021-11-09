@@ -9,8 +9,8 @@
  **/
 projectile tick(env_params env, projectile proj)
 {
-	const auto new_pos = proj.position() + proj.velocity();
-	const auto new_vel = proj.velocity() + env.gravity() + env.wind();
+        const auto new_pos = proj.position() + proj.velocity();
+        const auto new_vel = proj.velocity() + env.gravity() + env.wind();
 
-	return projectile(new_pos, new_vel);
+        return projectile(new_pos, new_vel);
 }

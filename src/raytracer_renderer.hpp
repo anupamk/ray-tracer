@@ -15,19 +15,19 @@
 
 namespace raytracer
 {
-	/*
-	 * single threaded rendering of a scene. rendered canvas is returned
-	 * on completion.
-	 **/
-	canvas single_threaded_renderer(raytracer::world,   /// the world
-	                                raytracer::camera); /// the camera
+        /*
+         * single threaded rendering of a scene. rendered canvas is returned
+         * on completion.
+         **/
+        canvas single_threaded_renderer(raytracer::world,   /// the world
+                                        raytracer::camera); /// the camera
 
-	/*
-	 * multi threaded rendering of a scene. rendered canvas is returned
-	 * on completion.
-	 **/
-	canvas multi_threaded_renderer(raytracer::world,   /// the world
-	                               raytracer::camera); /// the camera
+        /*
+         * multi threaded rendering of a scene. rendered canvas is returned
+         * on completion.
+         **/
+        canvas multi_threaded_renderer(raytracer::world,   /// the world
+                                       raytracer::camera); /// the camera
 
 } // namespace raytracer
 
