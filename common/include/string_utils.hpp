@@ -45,4 +45,4 @@ static inline std::string trim_copy(std::string s)
         return s;
 }
 
-#endif
+#endif /// COMMON_INCLUDE_STRING_UTILS_HPP__

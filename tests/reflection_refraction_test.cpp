@@ -7,7 +7,7 @@
 #include <vector>
 
 /// 3rdparty testing library
-#include "doctest.h"
+#include "doctest/include/doctest.h"
 
 /// our includes
 #include "constants.hpp"

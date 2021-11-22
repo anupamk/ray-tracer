@@ -7,14 +7,14 @@
 #include <vector>
 
 /// 3rdparty testing library
-#include "doctest.h"
+#include "doctest/include/doctest.h"
 
 /// our includes
 #include "align_check_pattern.hpp"
 #include "cone.hpp"
 #include "constants.hpp"
 #include "intersection_record.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "material.hpp"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"

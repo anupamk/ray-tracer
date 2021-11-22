@@ -7,7 +7,7 @@
 #include <string>
 
 /// our includes
-#include "assert_utils.h"
+#include "common/include/assert_utils.h"
 #include "badge.hpp"
 #include "intersection_record.hpp"
 #include "ray.hpp"

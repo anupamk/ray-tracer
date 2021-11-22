@@ -2,7 +2,7 @@
 #define RAYTRACER_SRC_MATRIX_TRANSFORMATIONS_HPP__
 
 /// our includes
-#include "assert_utils.h"
+#include "common/include/assert_utils.h"
 #include "matrix.hpp"
 #include "tuple.hpp"
 

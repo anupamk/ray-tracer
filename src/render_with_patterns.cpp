@@ -15,7 +15,7 @@
 #include <vector>
 
 /// our includes
-#include "benchmark.hpp"
+#include "common/include/benchmark.hpp"
 #include "blended_pattern.hpp"
 #include "camera.hpp"
 #include "checkers_pattern.hpp"
@@ -23,7 +23,7 @@
 #include "constants.hpp"
 #include "gradient_pattern.hpp"
 #include "gradient_ring_pattern.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "plane.hpp"

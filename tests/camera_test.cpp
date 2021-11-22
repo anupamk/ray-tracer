@@ -2,14 +2,15 @@
  * this file tests the 'camera' class interfaces.
  **/
 
-/// 3rdparty testing library
 #include "color.hpp"
-#include "doctest.h"
+
+/// 3rdparty testing library
+#include "doctest/include/doctest.h"
 
 /// our includes
 #include "camera.hpp"
+#include "common/include/logging.h"
 #include "constants.hpp"
-#include "logging.h"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"
 #include "ray.hpp"

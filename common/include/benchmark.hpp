@@ -17,7 +17,7 @@
 #include <vector>
 
 /// our includes
-#include "logging.h"
+#include "common/include/logging.h"
 
 template <typename TimeT = std::chrono::milliseconds>
 class Benchmark

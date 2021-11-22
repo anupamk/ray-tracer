@@ -5,7 +5,7 @@
 #include <assert.h>
 
 /* our includes */
-#include "logging.h"
+#include "common/include/logging.h"
 
 // clang-format off
 

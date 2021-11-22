@@ -36,12 +36,17 @@ add_compile_options(
 # generate a single test-target based on the incoming file-name. test
 # executable is called 'rt_<test-file-name>'
 function (generate_one_test_target FNAME)
+
   get_filename_component(FNAME_SANS_EXT ${FNAME} NAME_WLE)
   set(TEST_NAME "rt_${FNAME_SANS_EXT}")
 
   add_executable(${TEST_NAME} ${FNAME} doctest_main.cpp)
-  target_link_libraries(${TEST_NAME} PRIVATE raytracer_lib doctest common)
+  target_link_libraries(${TEST_NAME}
+    PRIVATE rt-lib
+    PRIVATE doctest)
+
   add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME} WORKING_DIRECTORY tests)
+
 endfunction()
 
 # ------------------------------------------------------------------------------

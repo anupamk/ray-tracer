@@ -8,7 +8,7 @@
 
 /// our includes
 #include "color.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "material.hpp"
 #include "point_light.hpp"
 #include "shape_interface.hpp"

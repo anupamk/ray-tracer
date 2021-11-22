@@ -18,7 +18,7 @@
 /// our includes
 #include "canvas.hpp"
 #include "color.hpp"
-#include "string_utils.hpp"
+#include "common/include/string_utils.hpp"
 #include "utils.hpp"
 
 namespace raytracer

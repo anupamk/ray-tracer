@@ -1,15 +1,35 @@
 # project name
 project(ray-tracer CXX)
 
+add_compile_options(
+  -fdiagnostics-color=never
+  -ggdb
+  -O2
+  -pipe
+  -std=c++17
+  -Wall
+  -Werror
+  -march=native
+  -lm
+  )
+
 # ------------------------------------------------------------------------------
 # find sdl2 package : required for sdl2_canvas implementation
 INCLUDE(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 
 # ------------------------------------------------------------------------------
-# these files make the core of the ray-tracer. compiled into a static
-# library, and then linked as required to produce different executables.
+# rt-lib: implement core raytracer primitives f.e. canvas,
+# matrix manipulation, shapes etc. etc.
 set (RAYTRACER_LIB_SOURCES
+  # ----------------------------------------------------------------------------
+  # rendering related utilties
+  raytracer_renderer.hpp
+  single_threaded_renderer.cpp
+  multi_threaded_renderer.cpp
+
+  # ----------------------------------------------------------------------------
+  # "everything" else
   constants.hpp
   utils.hpp
   tuple.hpp
@@ -78,22 +98,18 @@ set (RAYTRACER_LIB_SOURCES
   cone.hpp
   cone.cpp)
 
-add_library(raytracer_lib STATIC ${RAYTRACER_LIB_SOURCES})
-target_include_directories(raytracer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
-target_link_libraries(raytracer_lib PRIVATE common ${SDL2_LIBRARIES})
+add_library(rt-lib STATIC ${RAYTRACER_LIB_SOURCES})
 
-# ------------------------------------------------------------------------------
-# these files make the core of rendering routines in the raytracer
-set (RAYTRACER_RENDER_LIB_SOURCES
-  raytracer_renderer.hpp
-  single_threaded_renderer.cpp
-  multi_threaded_renderer.cpp)
+target_include_directories(rt-lib
+  PUBLIC common
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE ${SDL2_INCLUDE_DIRS})
 
-add_library(raytracer_render_lib STATIC ${RAYTRACER_RENDER_LIB_SOURCES})
-target_include_directories(raytracer_render_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(raytracer_render_lib PRIVATE concurrentqueue)
-target_link_libraries(raytracer_render_lib PRIVATE pthread)
-target_link_libraries(raytracer_render_lib PRIVATE common)
+target_link_libraries(rt-lib
+  PUBLIC common
+  PRIVATE concurrent-queue
+  PRIVATE pthread
+  PRIVATE ${SDL2_LIBRARIES})
 
 # ------------------------------------------------------------------------------
 # chapter-02: drawing on a canvas.
@@ -101,24 +117,21 @@ target_link_libraries(raytracer_render_lib PRIVATE common)
 # use drawing primitives to render path of cannonball from a virtual
 # cannon.
 add_executable(virtual-cannon virtual_cannon_main.cpp virtual_cannon.hpp virtual_cannon.cpp)
-target_link_libraries(virtual-cannon PRIVATE common)
-target_link_libraries(virtual-cannon PRIVATE raytracer_lib)
+target_link_libraries(virtual-cannon PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-04: matrix-transformations.
 #
 # use matrices + matrix-transformations to draw a clock-dial
 add_executable(clock-dial clock_dial_matxforms_main.cpp)
-target_link_libraries(clock-dial PRIVATE common)
-target_link_libraries(clock-dial PRIVATE raytracer_lib)
+target_link_libraries(clock-dial PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-05: ray-sphere intersections.
 #
 # use ray-sphere intersection to draw silhouette of a sphere
 add_executable(sphere-silhouette sphere_silhouette_main.cpp)
-target_link_libraries(sphere-silhouette PRIVATE common)
-target_link_libraries(sphere-silhouette PRIVATE raytracer_lib)
+target_link_libraries(sphere-silhouette PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-06: light and shading.
@@ -126,11 +139,8 @@ target_link_libraries(sphere-silhouette PRIVATE raytracer_lib)
 # use phong-illumination to draw a realistic sphere. this is the
 # multi-threaded version
 add_executable(phong-sphere phong_sphere_main.cpp)
-target_link_libraries(phong-sphere PRIVATE common)
-target_link_libraries(phong-sphere PRIVATE raytracer_lib)
-target_link_libraries(phong-sphere PRIVATE concurrentqueue)
-target_link_libraries(phong-sphere PRIVATE pthread)
-target_link_libraries(phong-sphere PRIVATE raytracer_render_lib)
+target_link_libraries(phong-sphere
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-07: making a scene; chapter-08: shadows
@@ -139,9 +149,8 @@ target_link_libraries(phong-sphere PRIVATE raytracer_render_lib)
 #
 # both single and multi threaded rendering is supported.
 add_executable(making-a-scene render_world_main.cpp)
-target_link_libraries(making-a-scene PRIVATE common)
-target_link_libraries(making-a-scene PRIVATE raytracer_lib)
-target_link_libraries(making-a-scene PRIVATE raytracer_render_lib)
+target_link_libraries(making-a-scene
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-09: render with planes
@@ -150,9 +159,8 @@ target_link_libraries(making-a-scene PRIVATE raytracer_render_lib)
 #
 # both single and multi threaded rendering is supported.
 add_executable(render-with-plane render_with_plane.cpp)
-target_link_libraries(render-with-plane PRIVATE common)
-target_link_libraries(render-with-plane PRIVATE raytracer_lib)
-target_link_libraries(render-with-plane PRIVATE raytracer_render_lib)
+target_link_libraries(render-with-plane
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render with patterns
@@ -162,9 +170,8 @@ target_link_libraries(render-with-plane PRIVATE raytracer_render_lib)
 #
 # both single and multi threaded rendering is supported.
 add_executable(render-with-patterns render_with_patterns.cpp)
-target_link_libraries(render-with-patterns PRIVATE common)
-target_link_libraries(render-with-patterns PRIVATE raytracer_lib)
-target_link_libraries(render-with-patterns PRIVATE raytracer_render_lib)
+target_link_libraries(render-with-patterns
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render textures
@@ -173,8 +180,8 @@ target_link_libraries(render-with-patterns PRIVATE raytracer_render_lib)
 #
 # both single and multi threaded rendering is supported.
 add_executable(render-textures render_textures.cpp)
-target_link_libraries(render-textures PRIVATE common)
-target_link_libraries(render-textures PRIVATE raytracer_lib)
+target_link_libraries(render-textures
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render with patterns
@@ -184,9 +191,8 @@ target_link_libraries(render-textures PRIVATE raytracer_lib)
 #
 # both single and multi threaded rendering is supported.
 add_executable(render-with-textures render_with_textures.cpp)
-target_link_libraries(render-with-textures PRIVATE common)
-target_link_libraries(render-with-textures PRIVATE raytracer_lib)
-target_link_libraries(render-with-textures PRIVATE raytracer_render_lib)
+target_link_libraries(render-with-textures
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-10: render with canvas on sphere
@@ -195,30 +201,26 @@ target_link_libraries(render-with-textures PRIVATE raytracer_render_lib)
 #
 # both single and multi threaded rendering is supported.
 add_executable(render-nasa-blue-earth render_nasa_blue_earth.cpp)
-target_link_libraries(render-nasa-blue-earth PRIVATE common)
-target_link_libraries(render-nasa-blue-earth PRIVATE raytracer_lib)
-target_link_libraries(render-nasa-blue-earth PRIVATE raytracer_render_lib)
+target_link_libraries(render-nasa-blue-earth
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-11: render with transparency and reflections
 add_executable(render-with-reflections render_with_reflections.cpp)
-target_link_libraries(render-with-reflections PRIVATE common)
-target_link_libraries(render-with-reflections PRIVATE raytracer_lib)
-target_link_libraries(render-with-reflections PRIVATE raytracer_render_lib)
+target_link_libraries(render-with-reflections
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # chapter-11: render with transparency(t) and reflections(r) and refractions(r)
 add_executable(render-with-t3r render_with_t3r.cpp)
-target_link_libraries(render-with-t3r PRIVATE common)
-target_link_libraries(render-with-t3r PRIVATE raytracer_lib)
-target_link_libraries(render-with-t3r PRIVATE raytracer_render_lib)
+target_link_libraries(render-with-t3r
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # render nested glass spheres
 add_executable(nested-glass-spheres render_nested_glass_spheres.cpp)
-target_link_libraries(nested-glass-spheres PRIVATE common)
-target_link_libraries(nested-glass-spheres PRIVATE raytracer_lib)
-target_link_libraries(nested-glass-spheres PRIVATE raytracer_render_lib)
+target_link_libraries(nested-glass-spheres
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # render cuboid shapes and associated images
@@ -226,23 +228,20 @@ target_link_libraries(nested-glass-spheres PRIVATE raytracer_render_lib)
 # ------------------------------------------------------------------------------
 # cubes-align-check
 add_executable(cube-align-check render_align_check_plane.cpp)
-target_link_libraries(cube-align-check PRIVATE common)
-target_link_libraries(cube-align-check PRIVATE raytracer_lib)
-target_link_libraries(cube-align-check PRIVATE raytracer_render_lib)
+target_link_libraries(cube-align-check
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # cubes-checkered
 add_executable(cube-checkered render_checkered_cubes.cpp)
-target_link_libraries(cube-checkered PRIVATE common)
-target_link_libraries(cube-checkered PRIVATE raytracer_lib)
-target_link_libraries(cube-checkered PRIVATE raytracer_render_lib)
+target_link_libraries(cube-checkered
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # cube-skybox : map cross-format texture images on cube
 add_executable(cube-skybox render_skybox.cpp)
-target_link_libraries(cube-skybox PRIVATE common)
-target_link_libraries(cube-skybox PRIVATE raytracer_lib)
-target_link_libraries(cube-skybox PRIVATE raytracer_render_lib)
+target_link_libraries(cube-skybox
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # cube-skybox-movie : a movie of a rotating cube with cross-format
@@ -254,41 +253,35 @@ target_link_libraries(cube-skybox-movie
 # ------------------------------------------------------------------------------
 # cube-scene : a simple scene with cubes as predominant shape
 add_executable(cube-scene render_cube_scene.cpp)
-target_link_libraries(cube-scene PRIVATE common)
-target_link_libraries(cube-scene PRIVATE raytracer_lib)
-target_link_libraries(cube-scene PRIVATE raytracer_render_lib)
+target_link_libraries(cube-scene
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # cube-lighting : playing with light inside a cube
 add_executable(cube-light-scene render_cube_light_scene.cpp)
-target_link_libraries(cube-light-scene PRIVATE common)
-target_link_libraries(cube-light-scene PRIVATE raytracer_lib)
-target_link_libraries(cube-light-scene PRIVATE raytracer_render_lib)
+target_link_libraries(cube-light-scene
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # render scene with cylindrical shapes
 add_executable(cylinder-scene render_cylinder_scene.cpp)
-target_link_libraries(cylinder-scene PRIVATE common)
-target_link_libraries(cylinder-scene PRIVATE raytracer_lib)
-target_link_libraries(cylinder-scene PRIVATE raytracer_render_lib)
+target_link_libraries(cylinder-scene
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # render sphere with various supported decorations
 add_executable(decorated-spheres render_spheres_with_decorations.cpp)
-target_link_libraries(decorated-spheres PRIVATE common)
-target_link_libraries(decorated-spheres PRIVATE raytracer_lib)
-target_link_libraries(decorated-spheres PRIVATE raytracer_render_lib)
+target_link_libraries(decorated-spheres
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # textures on cylinders
 add_executable(cylinder-texture-scene render_cylinder_texture_scene.cpp)
-target_link_libraries(cylinder-texture-scene PRIVATE common)
-target_link_libraries(cylinder-texture-scene PRIVATE raytracer_lib)
-target_link_libraries(cylinder-texture-scene PRIVATE raytracer_render_lib)
+target_link_libraries(cylinder-texture-scene
+  PRIVATE rt-lib)
 
 # ------------------------------------------------------------------------------
 # render scene with conical shapes
 add_executable(cone-scene render_cone_scene.cpp)
-target_link_libraries(cone-scene PRIVATE common)
-target_link_libraries(cone-scene PRIVATE raytracer_lib)
-target_link_libraries(cone-scene PRIVATE raytracer_render_lib)
+target_link_libraries(cone-scene
+  PRIVATE rt-lib)

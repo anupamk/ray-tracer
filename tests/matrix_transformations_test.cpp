@@ -6,11 +6,11 @@
 #include <vector>
 
 /// 3rdparty testing library
-#include "doctest.h"
+#include "doctest/include/doctest.h"
 
 /// our own thing
 #include "constants.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"
 #include "tuple.hpp"

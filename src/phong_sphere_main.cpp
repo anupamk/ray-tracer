@@ -15,17 +15,14 @@
 #include <utility>
 #include <vector>
 
-/// 3rd-party libraries
-#include "concurrentqueue.h"
-
 /// our includes
-#include "assert_utils.h"
-#include "benchmark.hpp"
 #include "camera.hpp"
 #include "canvas.hpp"
 #include "color.hpp"
+#include "common/include/assert_utils.h"
+#include "common/include/benchmark.hpp"
+#include "common/include/logging.h"
 #include "intersection_record.hpp"
-#include "logging.h"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "phong_illumination.hpp"

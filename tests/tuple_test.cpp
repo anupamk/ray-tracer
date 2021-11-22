@@ -2,11 +2,11 @@
 #include <stdexcept>
 
 /// 3rdparty testing library
-#include "doctest.h"
+#include "doctest/include/doctest.h"
 
 /// our own thing
 #include "constants.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "tuple.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;

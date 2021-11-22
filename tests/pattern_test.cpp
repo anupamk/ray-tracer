@@ -4,7 +4,7 @@
 #include <memory>
 
 /// 3rdparty testing library
-#include "doctest.h"
+#include "doctest/include/doctest.h"
 
 /// ----------------------------------------------------------------------------
 /// our includes, first what we are testing
@@ -17,7 +17,7 @@
 
 /// ... and then everything else
 #include "color.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "phong_illumination.hpp"

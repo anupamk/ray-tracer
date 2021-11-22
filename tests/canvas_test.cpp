@@ -12,13 +12,13 @@
 #include <vector>
 
 /// 3rdparty testing library
-#include "doctest.h"
+#include "doctest/include/doctest.h"
 
 /// our own thing
 #include "canvas.hpp"
 #include "color.hpp"
+#include "common/include/logging.h"
 #include "constants.hpp"
-#include "logging.h"
 #include "uv_image_pattern.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;

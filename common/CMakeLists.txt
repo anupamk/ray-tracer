@@ -1,7 +1,6 @@
 project (common)
 
-# define a header-only library target
+# ------------------------------------------------------------------------------
+# common utilities f.e. LOGGING, ASSERTIONS etc.
 add_library(common INTERFACE)
-
-# INTERFACE targets only have INTERFACE properties
-target_include_directories(common INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(common INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/..)

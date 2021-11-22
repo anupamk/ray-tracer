@@ -7,10 +7,10 @@
 #include <vector>
 
 /// 3rd-party libraries
-#include "concurrentqueue.h"
+#include "concurrentqueue/concurrentqueue.h"
 
 /// our includes
-#include "logging.h"
+#include "common/include/logging.h"
 #include "ray.hpp"
 #include "raytracer_renderer.hpp"
 

@@ -9,7 +9,7 @@
 #include <vector>
 
 /// our includes
-#include "assert_utils.h"
+#include "common/include/assert_utils.h"
 #include "tuple.hpp"
 
 namespace raytracer

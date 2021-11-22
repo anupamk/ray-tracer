@@ -16,11 +16,11 @@
 #include <SDL2/SDL.h>
 
 /// our includes
-#include "assert_utils.h"
+#include "common/include/assert_utils.h"
 #include "canvas.hpp"
 #include "color.hpp"
 #include "intersection_record.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "phong_illumination.hpp"

@@ -20,7 +20,7 @@
 
 /// our includes
 #include "color.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 
 namespace raytracer
 {

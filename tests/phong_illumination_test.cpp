@@ -7,11 +7,11 @@
 
 /// 3rdparty testing library
 #include "constants.hpp"
-#include "doctest.h"
+#include "doctest/include/doctest.h"
 
 /// our includes
 #include "color.hpp"
-#include "logging.h"
+#include "common/include/logging.h"
 #include "material.hpp"
 #include "phong_illumination.hpp"
 #include "plane.hpp"
