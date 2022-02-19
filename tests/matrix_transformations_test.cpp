@@ -9,8 +9,8 @@
 #include "doctest/doctest.h"
 
 /// our own thing
-#include "constants.hpp"
 #include "common/include/logging.h"
+#include "constants.hpp"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"
 #include "tuple.hpp"
@@ -65,8 +65,8 @@ TEST_CASE("translate a point test")
 
         /// compute the translation
         auto const xlate_mat     = rt_matrix_xforms_t::create_3d_translation_matrix(xlate_x,  /// translate-x
-                                                                                xlate_y,  /// translate-y
-                                                                                xlate_z); /// translate-z
+                                                                                    xlate_y,  /// translate-y
+                                                                                    xlate_z); /// translate-z
         auto const got_xlated_pt = xlate_mat * pt;
 
         CHECK(expected_xlated_pt == got_xlated_pt);
@@ -117,8 +117,8 @@ TEST_CASE("translate a vector test")
 
         /// compute the translation
         auto const xlate_mat      = rt_matrix_xforms_t::create_3d_translation_matrix(xlate_x,  /// translate-x
-                                                                                xlate_y,  /// translate-y
-                                                                                xlate_z); /// translate-z
+                                                                                     xlate_y,  /// translate-y
+                                                                                     xlate_z); /// translate-z
         auto const got_xlated_vec = xlate_mat * vec;
 
         CHECK(exp_xlated_vec == got_xlated_vec);
@@ -167,8 +167,8 @@ TEST_CASE("scale a point test")
 
         /// compute the scaling
         auto const scale_mat     = rt_matrix_xforms_t::create_3d_scaling_matrix(scale_x,  /// scale-x
-                                                                            scale_y,  /// scale-y
-                                                                            scale_z); /// scale-z
+                                                                                scale_y,  /// scale-y
+                                                                                scale_z); /// scale-z
         auto const got_scaled_pt = scale_mat * pt;
 
         CHECK(exp_scaled_pt == got_scaled_pt);
@@ -194,8 +194,8 @@ TEST_CASE("inverse-scale a point test")
 
         /// compute the inverse scaling
         auto const scale_mat     = rt_matrix_xforms_t::create_3d_scaling_matrix(scale_x,  /// scale-x
-                                                                            scale_y,  /// scale-y
-                                                                            scale_z); /// scale-z
+                                                                                scale_y,  /// scale-y
+                                                                                scale_z); /// scale-z
         auto const got_scaled_pt = inverse(scale_mat) * pt;
 
         CHECK(exp_scaled_pt == got_scaled_pt);
@@ -221,8 +221,8 @@ TEST_CASE("scale a vector")
 
         /// compute the scaling
         auto const scale_mat      = rt_matrix_xforms_t::create_3d_scaling_matrix(scale_x,  /// scale-x
-                                                                            scale_y,  /// scale-y
-                                                                            scale_z); /// scale-z
+                                                                                 scale_y,  /// scale-y
+                                                                                 scale_z); /// scale-z
         auto const got_scaled_vec = scale_mat * vec;
 
         CHECK(exp_scaled_vec == got_scaled_vec);
@@ -248,8 +248,8 @@ TEST_CASE("reflect a point test")
 
         /// compute the reflection
         auto const scale_mat        = rt_matrix_xforms_t::create_3d_scaling_matrix(scale_x,  /// scale-x
-                                                                            scale_y,  /// scale-y
-                                                                            scale_z); /// scale-z
+                                                                                   scale_y,  /// scale-y
+                                                                                   scale_z); /// scale-z
         auto const got_reflected_pt = scale_mat * pt;
 
         CHECK(exp_reflected_pt == got_reflected_pt);

@@ -15,11 +15,11 @@
 #include <vector>
 
 /// our includes
-#include "common/include/benchmark.hpp"
 #include "camera.hpp"
 #include "color.hpp"
-#include "constants.hpp"
+#include "common/include/benchmark.hpp"
 #include "common/include/logging.h"
+#include "constants.hpp"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "point_light.hpp"

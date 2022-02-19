@@ -10,9 +10,9 @@
 #include "doctest/doctest.h"
 
 /// our includes
+#include "common/include/logging.h"
 #include "constants.hpp"
 #include "intersection_record.hpp"
-#include "common/include/logging.h"
 #include "material.hpp"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"

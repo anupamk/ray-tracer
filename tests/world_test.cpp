@@ -14,8 +14,8 @@
 
 /// our includes
 #include "color.hpp"
-#include "constants.hpp"
 #include "common/include/logging.h"
+#include "constants.hpp"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "phong_illumination.hpp"

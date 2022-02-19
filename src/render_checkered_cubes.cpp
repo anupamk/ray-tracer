@@ -16,15 +16,15 @@
 
 /// our includes
 #include "align_check_pattern.hpp"
-#include "common/include/benchmark.hpp"
 #include "blended_pattern.hpp"
 #include "camera.hpp"
 #include "checkers_pattern.hpp"
 #include "color.hpp"
+#include "common/include/benchmark.hpp"
+#include "common/include/logging.h"
 #include "constants.hpp"
 #include "cube.hpp"
 #include "cube_map_texture.hpp"
-#include "common/include/logging.h"
 #include "matrix_transformations.hpp"
 #include "plane.hpp"
 #include "point_light.hpp"

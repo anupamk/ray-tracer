@@ -9,8 +9,8 @@
 #include "doctest/doctest.h"
 
 /// our own thing
-#include "constants.hpp"
 #include "common/include/logging.h"
+#include "constants.hpp"
 #include "matrix.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;

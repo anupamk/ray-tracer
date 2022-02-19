@@ -11,10 +11,10 @@
 
 /// our includes
 #include "align_check_pattern.hpp"
+#include "common/include/logging.h"
 #include "cone.hpp"
 #include "constants.hpp"
 #include "intersection_record.hpp"
-#include "common/include/logging.h"
 #include "material.hpp"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"

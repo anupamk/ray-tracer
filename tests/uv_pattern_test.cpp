@@ -17,8 +17,8 @@
 /// our own thing
 #include "align_check_pattern.hpp"
 #include "color.hpp"
-#include "constants.hpp"
 #include "common/include/logging.h"
+#include "constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

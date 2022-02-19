@@ -15,16 +15,16 @@
 #include <vector>
 
 /// our includes
-#include "common/include/benchmark.hpp"
 #include "blended_pattern.hpp"
 #include "camera.hpp"
 #include "checkers_pattern.hpp"
 #include "color.hpp"
+#include "common/include/benchmark.hpp"
+#include "common/include/logging.h"
 #include "constants.hpp"
 #include "gradient_pattern.hpp"
 #include "gradient_perlin_noise_pattern.hpp"
 #include "gradient_ring_pattern.hpp"
-#include "common/include/logging.h"
 #include "material.hpp"
 #include "matrix_transformations.hpp"
 #include "perlin_noise_pattern.hpp"
