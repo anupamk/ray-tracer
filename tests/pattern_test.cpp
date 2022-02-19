@@ -4,7 +4,7 @@
 #include <memory>
 
 /// 3rdparty testing library
-#include "doctest/include/doctest.h"
+#include "doctest/doctest.h"
 
 /// ----------------------------------------------------------------------------
 /// our includes, first what we are testing

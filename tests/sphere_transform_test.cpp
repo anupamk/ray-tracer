@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 /// 3rdparty testing library
-#include "doctest/include/doctest.h"
+#include "doctest/doctest.h"
 
 /// our own thing
 #include "sphere.hpp"

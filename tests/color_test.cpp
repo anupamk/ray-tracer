@@ -3,12 +3,12 @@
 #include <stdexcept>
 
 /// 3rdparty testing library
-#include "doctest/include/doctest.h"
+#include "doctest/doctest.h"
 
 /// our own thing
 #include "color.hpp"
-#include "constants.hpp"
 #include "common/include/logging.h"
+#include "constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

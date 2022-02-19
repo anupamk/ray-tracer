@@ -1,7 +1,7 @@
 #include "point_light.hpp"
 
 /// 3rdparty testing library
-#include "doctest/include/doctest.h"
+#include "doctest/doctest.h"
 
 /// our headers
 #include "common/include/logging.h"

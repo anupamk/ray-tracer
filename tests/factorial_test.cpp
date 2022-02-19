@@ -1,4 +1,4 @@
-#include "doctest/include/doctest.h"
+#include "doctest/doctest.h"
 
 ///
 /// trivial factorial(...) implementation
