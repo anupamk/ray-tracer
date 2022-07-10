@@ -1,5 +1,3 @@
-project (common)
-
 # ------------------------------------------------------------------------------
 # common utilities f.e. LOGGING, ASSERTIONS etc.
 add_library(common INTERFACE)

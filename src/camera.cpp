@@ -9,6 +9,7 @@
 /// our includes
 #include "camera.hpp"
 #include "canvas.hpp"
+#include "execution_profiler.hpp"
 #include "matrix.hpp"
 #include "ray.hpp"
 #include "tuple.hpp"
@@ -69,6 +70,8 @@ namespace raytracer
         /// single-threaded renderer
         canvas camera::render(world const& w) const
         {
+                PROFILE_SCOPE;
+
                 auto dst_canvas = canvas::create_binary(horiz_size_, vert_size_);
 
                 for (uint32_t y = 0; y < vert_size_; y++) {
@@ -110,6 +113,8 @@ namespace raytracer
         /// in the camera for futher computations.
         void camera::compute_misc_items(uint32_t h_size, uint32_t v_size, double fov)
         {
+                PROFILE_SCOPE;
+
                 auto const aspect_ratio = (1.0 * h_size) / (v_size);
                 auto const half_view    = tan(fov / 2.0);
 

@@ -56,21 +56,12 @@ int main(int argc, char** argv)
                  camera.hsize(), camera.vsize(), dst_fname);
 
         /// --------------------------------------------------------------------
-        /// benchmark the render with '10' renders performed, and throwing away
-        /// the results from '1' of them
-        Benchmark<> render_bm(10, 1);
-        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
+        /// ok render the scene
+        Benchmark<> render_bm("MT render");
 
-        /// --------------------------------------------------------------------
-        /// just use the first [0] result only please
         auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
         rendered_canvas.write(dst_fname);
-
-        /// --------------------------------------------------------------------
-        /// show what we got
-        LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
-                 render_bm.mean(),                /// mean-usec
-                 render_bm.standard_deviation()); /// stddev-usec
+        render_bm.show_stats();
 
         return 0;
 }
@@ -113,7 +104,7 @@ static RT::world create_world()
                              RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
 
         // clang-format off
-	sphere_01->set_material(RT::material()
+        sphere_01->set_material(RT::material()
                                 .set_pattern(sphere_01_pattern)
                                 .set_diffuse(0.8)
                                 .set_specular(0.3));
@@ -128,7 +119,7 @@ static RT::world create_world()
                              RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
         // clang-format off
-	sphere_02->set_material(RT::material()
+        sphere_02->set_material(RT::material()
                                 .set_pattern(sphere_02_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
@@ -143,7 +134,7 @@ static RT::world create_world()
                              RT_XFORM::create_3d_scaling_matrix(2.5, 2.5, 2.5));
 
         // clang-format off
-	sphere_03->set_material(RT::material()
+        sphere_03->set_material(RT::material()
                                 .set_pattern(sphere_03_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));
@@ -160,7 +151,7 @@ static RT::world create_world()
                              RT_XFORM::create_3d_scaling_matrix(1.5, 1.5, 1.5));
 
         // clang-format off
-	sphere_04->set_material(RT::material()
+        sphere_04->set_material(RT::material()
                                 .set_pattern(sphere_04_pattern)
                                 .set_diffuse(0.7)
                                 .set_specular(0.3));

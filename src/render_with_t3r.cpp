@@ -68,25 +68,12 @@ int main(int argc, char** argv)
                  camera.hsize(), camera.vsize(), dst_fname);
 
         /// --------------------------------------------------------------------
-        /// benchmark the render as follows:
-        ///   - record timings for 'num_iterations' renderings
-        ///   - from these records, discard 'num_discards' samples
-        /// and then compute mean and standard-deviation
-        auto const num_iterations = 1;
-        auto const num_discards   = 0;
-        Benchmark<> render_bm(num_iterations, num_discards);
-        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
+        /// ok render the scene
+        Benchmark<> render_bm("MT render");
 
-        /// --------------------------------------------------------------------
-        /// just use the first [0] result only please (they are all identical)
-        auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
         rendered_canvas.write(dst_fname);
-
-        /// --------------------------------------------------------------------
-        /// show what we got
-        LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
-                 render_bm.mean(),                /// mean-usec
-                 render_bm.standard_deviation()); /// stddev-usec
+        render_bm.show_stats();
 
         return 0;
 }
@@ -343,7 +330,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01     = RT::camera(1280 * 4, 1024 * 4, 1.152);
+        auto camera_01     = RT::camera(1280 / 2, 1024 / 2, 1.152);
         auto look_from     = RT::create_point(-2.6, 1.5, -3.9);
         auto look_to       = RT::create_point(-0.6, 1.0, -0.8);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

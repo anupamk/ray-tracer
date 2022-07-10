@@ -27,6 +27,7 @@
 #include "canvas.hpp"
 #include "color.hpp"
 #include "common/include/string_utils.hpp"
+#include "execution_profiler.hpp"
 #include "utils.hpp"
 
 namespace raytracer
@@ -167,6 +168,8 @@ namespace raytracer
         /// new canvas instance.
         std::optional<canvas> canvas::load_from_file(std::string file_name)
         {
+                PROFILE_SCOPE;
+
                 /// ------------------------------------------------------------
                 /// we are using mmap(...) and friends for reading data from the
                 /// file. why ? because we can.

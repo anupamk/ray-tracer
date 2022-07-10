@@ -3,6 +3,7 @@
  **/
 
 /// our includes
+#include "execution_profiler.hpp"
 #include "raytracer_renderer.hpp"
 
 namespace raytracer
@@ -15,6 +16,8 @@ namespace raytracer
         canvas single_threaded_renderer(raytracer::world W,  /// the world
                                         raytracer::camera C) /// the camera
         {
+                PROFILE_SCOPE;
+
                 return C.render(W);
         }
 

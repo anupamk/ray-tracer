@@ -30,14 +30,18 @@ class Benchmark
         typename TimeT::rep mean_;
         typename TimeT::rep std_dev_;
 
+        std::string const user_msg_;
+
     public:
-        Benchmark(int num_iterations = 100, int throw_away = 0)
+        Benchmark(std::string user_message, int num_iterations = 1, int throw_away = 0)
             : num_iter_(num_iterations)
             , throw_away_(throw_away)
             , num_times_{}
             , mean_{}
             , std_dev_{}
+            , user_msg_(std::move(user_message))
         {
+                LOG_INFO("%s, benchmark details: '%s'", user_msg_.c_str(), stringify().c_str());
         }
 
         /// --------------------------------------------------------------------
@@ -48,13 +52,24 @@ class Benchmark
 
                 // clang-format off
                 ss << "{"
-                   << "iterations: "  << this->num_iter_  << ", "
-                   << "throw-away: " << this->throw_away_ << ", "
-                   << "num_times: "   << this->num_times_.size()
+                   << "iterations: "  << num_iter_  << ", "
+                   << "throw-away: "  << throw_away_ << ", "
+                   << "num_times: "   << num_times_.size()
                    << "}";
                 // clang-format on
 
                 return ss.str();
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to dump statistics of render that was
+        /// performed.
+        void show_stats() const
+        {
+                LOG_INFO("%s, results: {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+                         user_msg_.c_str(),     /// user-string
+                         mean(),                /// mean-usec
+                         standard_deviation()); /// stddev-usec
         }
 
         /// --------------------------------------------------------------------

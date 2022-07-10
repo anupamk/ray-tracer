@@ -1,9 +1,11 @@
-# project name
-project(ray-tracer CXX)
-
+# ------------------------------------------------------------------------------
+# build everything with these options
 add_compile_options(
   -fdiagnostics-color=never
-  -ggdb
+  -ffast-math
+  -fno-omit-frame-pointer
+  -rdynamic
+  -g
   -O2
   -pipe
   -std=c++17
@@ -11,6 +13,8 @@ add_compile_options(
   -Werror
   -march=native
   -lm
+  -lpthread
+  -ldl
   )
 
 # ------------------------------------------------------------------------------
@@ -21,7 +25,7 @@ PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 # ------------------------------------------------------------------------------
 # rt-lib: implement core raytracer primitives f.e. canvas,
 # matrix manipulation, shapes etc. etc.
-set (RAYTRACER_LIB_SOURCES
+set(RAYTRACER_LIB_SOURCES
   # ----------------------------------------------------------------------------
   # rendering related utilties
   raytracer_renderer.hpp
@@ -30,6 +34,7 @@ set (RAYTRACER_LIB_SOURCES
 
   # ----------------------------------------------------------------------------
   # "everything" else
+  execution_profiler.hpp
   constants.hpp
   utils.hpp
   tuple.hpp
@@ -100,9 +105,16 @@ set (RAYTRACER_LIB_SOURCES
 
 add_library(rt-lib STATIC ${RAYTRACER_LIB_SOURCES})
 
+# ------------------------------------------------------------------------------
+# ... -DENABLE_EXECUTION_PROFILING ...
+target_compile_definitions(rt-lib
+  PUBLIC ENABLE_EXECUTION_PROFILING)
+
+# ----------------------------------------------------------------------------
+# execution profile disabled
 target_include_directories(rt-lib
-  PUBLIC common
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE common
   PRIVATE ${SDL2_INCLUDE_DIRS})
 
 target_link_libraries(rt-lib
@@ -110,6 +122,19 @@ target_link_libraries(rt-lib
   PRIVATE concurrent-queue
   PRIVATE pthread
   PRIVATE ${SDL2_LIBRARIES})
+
+if (ENABLE_EXECUTION_PROFILING)
+  target_include_directories(rt-lib
+    PRIVATE TracyClient)
+
+  target_link_libraries(rt-lib
+    PRIVATE TracyClient)
+
+  target_compile_definitions(rt-lib
+    PUBLIC TRACY_ENABLE
+    PUBLIC TRACY_CALLSTACK)
+
+endif()
 
 # ------------------------------------------------------------------------------
 # chapter-02: drawing on a canvas.
@@ -284,4 +309,16 @@ target_link_libraries(cylinder-texture-scene
 # render scene with conical shapes
 add_executable(cone-scene render_cone_scene.cpp)
 target_link_libraries(cone-scene
+  PRIVATE rt-lib)
+
+# ------------------------------------------------------------------------------
+# render scene with conical shapes
+add_executable(profile-fib tracy-fib.cpp)
+
+# target_compile_definitions(profile-fib
+#   PRIVATE ENABLE_EXECUTION_PROFILING
+#   PRIVATE TRACY_ENABLE
+#   PRIVATE TRACY_CALLSTACK)
+
+target_link_libraries(profile-fib
   PRIVATE rt-lib)

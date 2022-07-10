@@ -13,6 +13,7 @@
 
 /// our includes
 #include "color.hpp"
+#include "execution_profiler.hpp"
 #include "intersection_record.hpp"
 #include "matrix_transformations.hpp"
 #include "phong_illumination.hpp"
@@ -105,6 +106,8 @@ namespace raytracer
         /// that a ray makes when it hits objects / shapes in this world
         intersection_records world::intersect(ray_t const& R) const
         {
+                PROFILE_SCOPE;
+
                 intersection_records xs_result;
 
                 for (auto const& shape : shape_list_) {
@@ -132,20 +135,20 @@ namespace raytracer
         /// compute the color when a ray hits the world
         color world::shade_hit(intersection_info_t const& xs_info, uint8_t remaining) const
         {
+                PROFILE_SCOPE;
+
                 color shade_color = color_black();
 
-                // clang-format off
                 for (auto const& a_light : light_list_) {
                         auto point_in_shadow = is_shadowed(xs_info.over_position(), a_light);
-                        
+
                         shade_color += phong_illumination(xs_info.what_object(),   /// object-material
                                                           xs_info.over_position(), /// point of intersection
-                                                          a_light,		   /// the light
+                                                          a_light,                 /// the light
                                                           xs_info.eye_vector(),    /// eye
                                                           xs_info.normal_vector(), /// normal
-                                                          point_in_shadow);	   /// shadowed ?
+                                                          point_in_shadow);        /// shadowed ?
                 }
-                // clang-format on
 
                 auto const reflect_color = reflected_color(xs_info, remaining);
                 auto const refract_color = refracted_color(xs_info, remaining);
@@ -166,17 +169,19 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// compute the color due a ray intersecting a shape in the world
-        color world::color_at(ray_t const& r, uint8_t remaining) const
+        color world::color_at(ray_t const& R, uint8_t remaining) const
         {
+                PROFILE_SCOPE;
+
                 /// compute the visible intersection
-                auto xs_list       = intersect(r);
+                auto xs_list       = intersect(R);
                 auto vis_xs_record = visible_intersection(xs_list);
 
                 if (vis_xs_record) {
                         /// ok, so there seems to be a visible intersection. compute the
                         /// color
                         auto xs_record     = vis_xs_record.value();
-                        auto const xs_info = r.prepare_computations(xs_list, xs_record.index());
+                        auto const xs_info = R.prepare_computations(xs_list, xs_record.index());
                         return shade_hit(xs_info, remaining);
                 }
 

@@ -70,6 +70,8 @@ namespace raytracer
         std::optional<intersection_records>
         ray_t::intersect(std::shared_ptr<const shape_interface> const& S) const
         {
+                PROFILE_SCOPE;
+
                 const auto inv_ray = this->transform(S->inv_transform());
                 return S->intersect({}, inv_ray);
         }
@@ -80,6 +82,8 @@ namespace raytracer
         intersection_info_t ray_t::prepare_computations(intersection_records const& xs_data,
                                                         size_t index) const
         {
+                PROFILE_SCOPE;
+
                 intersection_info_t retval;
                 auto const& current_xs = xs_data[index];
 

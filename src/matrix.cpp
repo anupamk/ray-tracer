@@ -11,6 +11,7 @@
 #include <vector>
 
 /// our includes
+#include "execution_profiler.hpp"
 #include "matrix.hpp"
 #include "tuple.hpp"
 #include "utils.hpp"
@@ -172,6 +173,8 @@ namespace raytracer
         /// another.
         fsize_dense2d_matrix_t& fsize_dense2d_matrix_t::operator*=(fsize_dense2d_matrix_t const& rhs)
         {
+                PROFILE_SCOPE;
+
                 fsize_dense2d_matrix_t lhs(this->num_rows(), rhs.num_cols());
 
                 if (likely((lhs.num_cols() == 4) && (lhs.num_rows() == 4))) {
@@ -254,6 +257,8 @@ namespace raytracer
         /// this function is called to multiply a matrix by a tuple.
         tuple operator*(fsize_dense2d_matrix_t const& M, tuple const& N)
         {
+                PROFILE_SCOPE;
+
                 /// ------------------------------------------------------------
                 /// an 'unrolled' specialization can be used i.e. no
                 /// need to go through elaborate/generic matrix-tuple
@@ -345,7 +350,7 @@ namespace raytracer
                      } X;
                      X.col_ < M.num_cols();                 /// go over all columns
                      X.col_++, X.sign_ *= -1.0) {           /// sign alternates
-                        
+
                         /// ----------------------------------------------------
                         /// so for a matrix, M, like so:
                         ///

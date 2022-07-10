@@ -11,6 +11,7 @@
 
 /// our includes
 #include "common/include/assert_utils.h"
+#include "execution_profiler.hpp"
 #include "tuple.hpp"
 
 namespace raytracer
@@ -112,6 +113,8 @@ namespace raytracer
         /// around the normal vector 'N'
         tuple reflect(tuple in, tuple N)
         {
+                PROFILE_SCOPE;
+
                 ASSERT(in.is_vector() && N.is_vector());
                 return in - N * 2 * dot(in, N);
         }

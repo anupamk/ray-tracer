@@ -10,6 +10,7 @@
 
 /// our includes
 #include "constants.hpp"
+#include "execution_profiler.hpp"
 
 namespace raytracer
 {
@@ -106,6 +107,8 @@ namespace raytracer
         /// using either (1.sol) or (2.sol)
         inline const std::optional<real_roots_t> quadratic_real_roots(double A, double B, double C)
         {
+                PROFILE_SCOPE;
+
                 const auto discriminant = B * B - 4.0 * A * C;
 
                 /// only complex roots

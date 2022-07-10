@@ -70,23 +70,12 @@ int main(int argc, char** argv)
                  camera.hsize(), camera.vsize(), dst_fname);
 
         /// --------------------------------------------------------------------
-        /// benchmark the render with 'num_iterations' renders performed, and
-        /// throwing away the results from 'num_discards' of them
-        auto const num_iterations = 1;
-        auto const num_discards   = 0;
-        Benchmark<> render_bm(num_iterations, num_discards);
-        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
+        /// ok render the scene
+        Benchmark<> render_bm("MT render");
 
-        /// --------------------------------------------------------------------
-        /// just use the first [0] result only please
-        auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
         rendered_canvas.write(dst_fname);
-
-        /// --------------------------------------------------------------------
-        /// show what we got
-        LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
-                 render_bm.mean(),                /// mean-usec
-                 render_bm.standard_deviation()); /// stddev-usec
+        render_bm.show_stats();
 
         return 0;
 }

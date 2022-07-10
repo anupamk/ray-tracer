@@ -2,7 +2,12 @@
  * implement multi-threaded rendering of a scene.
  **/
 
+/// system includes
+#include <pthread.h>
+#include <sched.h> /// for cpu_set_t
+
 /// c++ includes
+#include <functional>
 #include <thread>
 #include <vector>
 
@@ -50,12 +55,14 @@ namespace raytracer
                                     canvas&);                                /// canvas-details
 
         /*
-         * this implements a single threaded rendering of scene in a world 'W'
+         * this implements a multi threaded rendering of scene in a world 'W'
          * that is looked at by a camera 'C' with the generated image stored in
          * a file 'dst_fname'
          **/
         canvas multi_threaded_renderer(world W, camera C)
         {
+                PROFILE_SCOPE;
+
                 canvas rendered_canvas = canvas::create_ascii(C.hsize(), C.vsize());
 
                 /// --------------------------------------------------------------------
@@ -99,6 +106,18 @@ namespace raytracer
                                                            std::ref(work_queue),       /// work-queue
                                                            W,                          /// the world
                                                            std::ref(rendered_canvas)); /// canvas
+
+                        /// ----------------------------------------------------
+                        /// force-pin threads to cores...
+                        cpu_set_t cpuset;
+                        CPU_ZERO(&cpuset);
+                        CPU_SET(i, &cpuset);
+
+                        auto retval = pthread_setaffinity_np(rendering_threads[i].native_handle(),
+                                                             sizeof(cpuset), &cpuset);
+                        if (retval != 0) {
+                                LOG_ERROR("failed to set affinity of thread:%d to core:%d", i, i);
+                        }
                 }
 
                 /// wait for all of them to terminate

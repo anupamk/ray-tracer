@@ -61,6 +61,8 @@ namespace raytracer
         /// intersection-record from the list of _sorted_ intersection records
         std::optional<intersection_record> visible_intersection(intersection_records const& ixns_list)
         {
+                PROFILE_SCOPE;
+
                 uint32_t idx = 0;
 
                 for (auto xs : ixns_list) {

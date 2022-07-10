@@ -27,8 +27,8 @@ namespace raytracer
                 tuple position_;
 
                 /// ------------------------------------------------------------
-                /// refractive index of material ray is passing from (n1) and
-                /// the refractive index of material ray is passing to (n2)
+                /// refractive index of material ray is passing
+                /// from -> to (n1 -> n2)
                 float ri_n1_;
                 float ri_n2_;
 

@@ -53,13 +53,15 @@ namespace raytracer
                                  tuple const& surface_normal,       /// normal at intersection
                                  bool is_shadowed)                  /// is the point shadowed ?
         {
+                PROFILE_SCOPE;
+
                 // clang-format off
 
                 /// ------------------------------------------------------------
                 /// get the color at a specific point on the shape. each point
                 /// on the shape can have a different color
-		auto const surface_material = shape->get_material();
-		auto const effective_color  = (surface_material.get_color(shape, surface_point) *
+                auto const surface_material = shape->get_material();
+                auto const effective_color  = (surface_material.get_color(shape, surface_point) *
                                                incident_light.get_color());
                 // clang-format on
 
