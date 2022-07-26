@@ -74,6 +74,18 @@ namespace raytracer
                         return (this->w_ == tuple_type_t::VECTOR);
                 }
 
+                /// forcefully make this tuple a vector !
+                constexpr void vectorify()
+                {
+                        this->w_ = tuple_type_t::VECTOR;
+                }
+
+                /// forcefully make this tuple a point !
+                constexpr void pointify()
+                {
+                        this->w_ = tuple_type_t::POINT;
+                }
+
                 /// stringified representation of a tuple
                 std::string stringify() const;
 

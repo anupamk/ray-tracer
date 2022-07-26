@@ -101,7 +101,10 @@ set(RAYTRACER_LIB_SOURCES
   stock_materials.hpp
   stock_materials.cpp
   cone.hpp
-  cone.cpp)
+  cone.cpp
+  group.hpp
+  group.cpp
+  )
 
 add_library(rt-lib STATIC ${RAYTRACER_LIB_SOURCES})
 
@@ -315,10 +318,11 @@ target_link_libraries(cone-scene
 # render scene with conical shapes
 add_executable(profile-fib tracy-fib.cpp)
 
-# target_compile_definitions(profile-fib
-#   PRIVATE ENABLE_EXECUTION_PROFILING
-#   PRIVATE TRACY_ENABLE
-#   PRIVATE TRACY_CALLSTACK)
-
 target_link_libraries(profile-fib
+  PRIVATE rt-lib)
+
+# ------------------------------------------------------------------------------
+# render hexagon scene with groups
+add_executable(hexagon-scene render_hexagon_scene.cpp)
+target_link_libraries(hexagon-scene
   PRIVATE rt-lib)

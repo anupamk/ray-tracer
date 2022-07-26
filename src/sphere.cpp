@@ -68,13 +68,11 @@ namespace raytracer
         {
                 std::stringstream ss("");
 
-                // clang-format off
-                ss << std::fixed    << std::left
-                   << "center: ("   << this->center()       << "), "
-                   << "radius: "    << this->radius()       << ", "
-                   << "material: (" << this->get_material() << ")"
-                   ;
-                // clang-format on
+                ss << "ray-tracer-sphere: {"
+                   << "center: " << this->center() << ", "
+                   << "radius: " << this->radius() << ", "
+                   << "material: " << this->get_material() << ", "
+                   << "grouped: " << this->is_grouped() << "}";
 
                 return ss.str();
         }

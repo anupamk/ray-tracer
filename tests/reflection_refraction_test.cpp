@@ -592,9 +592,6 @@ TEST_CASE("scenario: determine reflectance when n2 > n1")
         auto got_reflectance      = xs_info.schlick_approx();
         auto expected_reflectance = 0.48873;
 
-        std::cout << "got_reflectance: " << got_reflectance << ", "
-                  << "expected_reflectance: " << expected_reflectance << std::endl;
-
         CHECK(RT::epsilon_equal(got_reflectance, expected_reflectance));
 }
 

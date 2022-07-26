@@ -231,7 +231,7 @@ TEST_CASE("test shape.normal_at_world(...) returns correct results")
                 sphere->transform(RT_XFORM::create_3d_translation_matrix(0.0, 1.0, 0.0));
 
                 auto const world_pt         = RT::create_point(0.0, 1.70711, -0.70711);
-                auto const got_world_normal = sphere->normal_at_world(world_pt);
+                auto const got_world_normal = sphere->normal_at(world_pt);
                 auto const exp_world_normal = RT::create_vector(0.0, 0.70711, -0.70711);
 
                 CHECK(got_world_normal == exp_world_normal);
@@ -245,7 +245,7 @@ TEST_CASE("test shape.normal_at_world(...) returns correct results")
                 sphere->transform(xform_matrix);
 
                 auto const world_pt         = RT::create_point(0.0, RT::SQRT_2_BY_2F, -RT::SQRT_2_BY_2F);
-                auto const got_world_normal = sphere->normal_at_world(world_pt);
+                auto const got_world_normal = sphere->normal_at(world_pt);
                 auto const exp_world_normal = RT::create_vector(0.0, 0.97014, -0.24254);
 
                 CHECK(got_world_normal == exp_world_normal);

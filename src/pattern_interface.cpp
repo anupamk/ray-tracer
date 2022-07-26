@@ -1,5 +1,6 @@
 /// c++ includes
 #include <algorithm>
+#include <iostream>
 
 /// our includes
 #include "pattern_interface.hpp"
@@ -45,9 +46,8 @@ namespace raytracer
         color pattern_interface::color_at_shape(std::shared_ptr<shape_interface const> shape,
                                                 tuple const& where) const
         {
-                auto const object_pt  = shape->world_to_local(where);
-                auto const pattern_pt = inv_transform() * object_pt;
-
+                auto const object_pt = shape->world_to_local(where);
+                auto pattern_pt      = inv_transform() * object_pt;
                 return color_at_point(pattern_pt);
         }
 } // namespace raytracer

@@ -29,7 +29,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # ------------------------------------------------------------------------------
 # enable (ON) || disable (OFF) execution profiling
-set(ENABLE_EXECUTION_PROFILING ON)
+set(ENABLE_EXECUTION_PROFILING OFF)
 
 # ------------------------------------------------------------------------------
 # 3rd-party code (as submodules) making up this project. these are:

@@ -12,6 +12,7 @@ namespace raytracer
             , xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , inv_xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , material_()
+            , parent_(nullptr)
         {
         }
 
@@ -34,11 +35,26 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// this function is called to find the normal on a child object of a
+        /// group.
+        tuple shape_interface::normal_at(tuple const& world_pt) const
+        {
+                auto const local_pt     = world_to_local(world_pt);
+                auto const local_normal = normal_at_local(local_pt);
+                return normal_at_world(local_normal);
+        }
+
+        /// --------------------------------------------------------------------
         /// this function is called to return object-space coordinates of a
         /// specific point on the shape.
         tuple shape_interface::world_to_local(tuple const& world_pt) const
         {
-                return inv_transform() * world_pt;
+                auto local_pt = world_pt;
+                if (this->parent_ != nullptr) {
+                        local_pt = parent_->world_to_local(world_pt);
+                }
+
+                return inv_transform() * local_pt;
         }
 
         /// --------------------------------------------------------------------
@@ -48,14 +64,15 @@ namespace raytracer
         {
                 /// first convert the world-point to object space, and determine
                 /// the normal there
-                auto const obj_pt     = this->inv_transform() * world_pt;
-                auto const obj_normal = normal_at_local(obj_pt);
+                auto obj_space_normal = this->inv_transform().transpose() * world_pt;
+                obj_space_normal.vectorify();
+                obj_space_normal = normalize(obj_space_normal);
 
-                /// now go back to world space and return a normalized vector.
-                auto const tmp          = this->inv_transform().transpose() * obj_normal;
-                auto const world_normal = normalize(create_vector(tmp.x(), tmp.y(), tmp.z()));
+                if (this->parent_ != nullptr) {
+                        return this->parent_->normal_at_world(obj_space_normal);
+                }
 
-                return world_normal;
+                return obj_space_normal;
         }
 
         /// --------------------------------------------------------------------
@@ -72,6 +89,28 @@ namespace raytracer
         void shape_interface::set_material(material const& M)
         {
                 this->material_ = M;
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to get the parent of the current shape
+        std::shared_ptr<const shape_interface> shape_interface::get_parent() const
+        {
+                return parent_;
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to set the parent of the current shape
+        void shape_interface::set_parent(std::shared_ptr<const shape_interface> const& new_parent)
+        {
+                parent_ = new_parent;
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to check if this shape is part of a
+        /// group. returns 'true' if it is, 'false' otherwise.
+        bool shape_interface::is_grouped() const
+        {
+                return (parent_ != nullptr);
         }
 
 } // namespace raytracer

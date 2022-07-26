@@ -1,0 +1,138 @@
+/**
+ * this file implements the notion of combining multiple shapes into a single
+ * unit via the notion of object groups.
+ *
+ * this allows for operations f.e. scaling, rotation, translations etc. etc. on
+ * a group of shapes.
+ **/
+
+/// c++ includes
+#include <algorithm>
+#include <memory>
+#include <optional>
+#include <sstream>
+
+/// our includes
+#include "badge.hpp"
+#include "group.hpp"
+#include "intersection_record.hpp"
+#include "shape_interface.hpp"
+
+namespace raytracer
+{
+        group::group(bool cast_shadow)
+            : shape_interface(cast_shadow)
+            , child_shapes_({})
+        {
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to compute the intersection of the ray with
+        /// group
+        std::optional<intersection_records> group::intersect(the_badge<ray_t>, ray_t const& R) const
+        {
+                intersection_records xs_result;
+
+                for (auto const& cs : child_shapes_) {
+                        auto cs_xs_record = R.intersect(cs);
+
+                        if (!cs_xs_record) {
+                                continue;
+                        }
+
+                        auto cs_xs_list = cs_xs_record.value();
+                        for (auto& cs_xs : cs_xs_list) {
+                                xs_result.push_back(cs_xs);
+                        }
+                }
+
+                /// ------------------------------------------------------------
+                /// required otherwise, we return std::optional with an empty
+                /// value, which is not very useful...
+                if (xs_result.empty()) {
+                        return std::nullopt;
+                }
+
+                std::sort(xs_result.begin(), xs_result.end());
+
+                return xs_result;
+        }
+
+        /// --------------------------------------------------------------------
+        /// compute normal at a given point for the group
+        tuple group::normal_at_local(tuple const& P) const
+        {
+                ASSERT_FAIL("groups don't have normal !");
+        }
+
+        /// --------------------------------------------------------------------
+        /// stringified representation of this shape
+        std::string group::stringify() const
+        {
+                std::stringstream ss("");
+                ss << "ray-tracer-group: {";
+                ss << "total-shapes: '" << child_shapes_.size() << "'}";
+
+                return ss.str();
+        }
+
+        /// --------------------------------------------------------------------
+        /// just push the material properties to all children of a group.
+        ///
+        /// this might be a slow operation for deeply nested large groups,
+        /// because it happens during 'world creation' and not rendering, so we
+        /// should be ok with it...
+        void group::set_material(material const& M)
+        {
+                std::transform(this->child_shapes_.begin(), /// start
+                               this->child_shapes_.end(),   /// end
+                               this->child_shapes_.begin(), /// put results here
+                               [=](auto cs) {
+                                       auto modifiable_cs = const_cast<shape_interface*>(cs.get());
+                                       modifiable_cs->set_material(M);
+
+                                       return cs;
+                               });
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to compute the intersection of the ray with
+        /// group
+        bool group::has_intersection_before(the_badge<ray_t>, ray_t const& R, double distance) const
+        {
+                return R.has_intersection_before(child_shapes_, distance);
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to see if the group is empty or not. it
+        /// returns 'true' if the group is empty, 'false' otherwise.
+        bool group::is_empty() const
+        {
+                return child_shapes_.empty();
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to check if the specified shape is present
+        /// in the group.
+        bool group::includes(std::shared_ptr<const shape_interface> const& the_shape) const
+        {
+                return std::find(child_shapes_.begin(), child_shapes_.end(), the_shape) !=
+                       child_shapes_.end();
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to add a child shape to a group
+        void group::add_child(std::shared_ptr<shape_interface> new_shape)
+        {
+                child_shapes_.push_back(new_shape);
+                new_shape->set_parent(shared_from_this());
+        }
+
+        /// --------------------------------------------------------------------
+        /// return a const-reference to child shapes
+        decltype(group::child_shapes_) const& group::child_shapes_cref() const
+        {
+                return child_shapes_;
+        }
+
+} // namespace raytracer

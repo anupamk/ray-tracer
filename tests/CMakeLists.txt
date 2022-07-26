@@ -19,7 +19,9 @@ SET(RT_TEST_SRC_FILES
   cube_test.cpp
   uv_pattern_test.cpp
   cylinder_test.cpp
-  cone_test.cpp)
+  cone_test.cpp
+  group_test.cpp
+  )
 
 # ------------------------------------------------------------------------------
 # no user serviceable parts here ↓

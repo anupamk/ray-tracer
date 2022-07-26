@@ -330,7 +330,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01     = RT::camera(1280 / 2, 1024 / 2, 1.152);
+        auto camera_01     = RT::camera(1280, 1024, 1.152);
         auto look_from     = RT::create_point(-2.6, 1.5, -3.9);
         auto look_to       = RT::create_point(-0.6, 1.0, -0.8);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

@@ -42,6 +42,10 @@ namespace raytracer
                 /// the material which makes up the shape
                 material material_;
 
+                /// ------------------------------------------------------------
+                /// the parent of this shape.
+                std::shared_ptr<const shape_interface> parent_;
+
             protected:
                 /// ------------------------------------------------------------
                 /// don't allow deletion through a base
@@ -92,6 +96,10 @@ namespace raytracer
                 void transform(fsize_dense2d_matrix_t const& M);
 
                 /// ------------------------------------------------------------
+                /// normal at a an object of a group
+                tuple normal_at(tuple const&) const;
+
+                /// ------------------------------------------------------------
                 /// this function is called to return the normal at a point on
                 /// the shape in world-space coordinates
                 tuple normal_at_world(tuple const&) const;
@@ -103,7 +111,16 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// adjust material properties of a shape
                 material get_material() const;
-                void set_material(material const&);
+                virtual void set_material(material const&);
+
+                /// ------------------------------------------------------------
+                /// adjust parent of a shape
+                std::shared_ptr<const shape_interface> get_parent() const;
+                void set_parent(std::shared_ptr<const shape_interface> const&);
+
+                /// ------------------------------------------------------------
+                /// is this shape part of a group ?
+                bool is_grouped() const;
         };
 } // namespace raytracer
 

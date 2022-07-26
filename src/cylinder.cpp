@@ -5,7 +5,6 @@
 /// c++ includes
 #include <cmath>
 #include <ios>
-#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -89,7 +88,8 @@ namespace raytracer
                 ss << "cast_shadow: " << (cast_shadow ? "yes" : "no") << ", "
                    << "min_y: " << min_y << ", "
                    << "max_y: " << max_y << ", "
-                   << "capped: " << capped << "}";
+                   << "capped: " << capped << ", "
+                   << "grouped: " << this->is_grouped() << "}";
 
                 return ss.str();
         }
