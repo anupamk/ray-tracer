@@ -104,6 +104,14 @@ set(RAYTRACER_LIB_SOURCES
   cone.cpp
   group.hpp
   group.cpp
+  triangle.hpp
+  triangle.cpp
+  mmapped_file_reader.hpp
+  mmapped_file_reader.cpp
+  obj_file_loader.hpp
+  obj_file_loader.cpp
+  obj_parse_result.hpp
+  obj_parse_result.cpp
   )
 
 add_library(rt-lib STATIC ${RAYTRACER_LIB_SOURCES})
@@ -326,3 +334,10 @@ target_link_libraries(profile-fib
 add_executable(hexagon-scene render_hexagon_scene.cpp)
 target_link_libraries(hexagon-scene
   PRIVATE rt-lib)
+
+# ------------------------------------------------------------------------------
+# render teapot scene
+add_executable(obj-scene render_obj_scene.cpp)
+target_link_libraries(obj-scene
+  PRIVATE rt-lib)
+

@@ -7,25 +7,24 @@
 /* our includes */
 #include "common/include/logging.h"
 
-// clang-format off
-
 /* generate a stringified representation of a 'name' */
 #define STRINGIFY__(name) #name
 
-#define ASSERT_MESSAGE__(cond, msg, ...)                                \
-        if (!(cond)) {                                                  \
-                LOG_FATAL(msg, ##__VA_ARGS__);                          \
-                                                                        \
-                /* die die die */                                       \
-                assert(cond);                                           \
+// clang-format off
+#define ASSERT_MESSAGE__(cond, msg, ...)                \
+        if (!(cond)) {                                  \
+                LOG_FATAL(msg, ##__VA_ARGS__);          \
+                                                        \
+                /* die die die */                       \
+                assert(cond);                           \
         }
+// clang-format on
 
 /*
  * macros that we can call
-**/
-#define ASSERT(cond)     ASSERT_MESSAGE__(cond, STRINGIFY__(cond))
-#define ASSERT_FAIL(msg) ASSERT_MESSAGE__(0, msg)
-
-// clang-format on
+ **/
+#define ASSERT(cond) ASSERT_MESSAGE__(cond, STRINGIFY__(cond))
+#define ASSERT_FAIL_LOG(fmt, ...) ASSERT_MESSAGE__(0, fmt, ##__VA_ARGS__)
+#define ASSERT_FAIL(msg) ASSERT_FAIL_LOG("%s", msg)
 
 #endif

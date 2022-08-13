@@ -37,6 +37,7 @@ namespace raytracer
                 /// moving shapes around, deforming them etc. etc.
                 fsize_dense2d_matrix_t xform_;
                 fsize_dense2d_matrix_t inv_xform_;
+                fsize_dense2d_matrix_t inv_xform_transpose_;
 
                 /// ------------------------------------------------------------
                 /// the material which makes up the shape
@@ -65,7 +66,7 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// this function is called to return the normal at a point on
                 /// the shape in object-space coordinates
-                virtual tuple normal_at_local(tuple const&) const = 0;
+                virtual tuple normal_at_local(tuple const& world_pt, intersection_record const& xs) const = 0;
 
                 /// ------------------------------------------------------------
                 /// stringified representation of a shape
@@ -91,13 +92,19 @@ namespace raytracer
                 fsize_dense2d_matrix_t inv_transform() const;
 
                 /// ------------------------------------------------------------
+                /// this function is called to return the transpose of the the
+                /// inverse transform matrix associated with the shape
+                fsize_dense2d_matrix_t inv_transform_transpose() const;
+
+                /// ------------------------------------------------------------
                 /// this function is called to associate a new transformation
                 /// matrix with the shape
-                void transform(fsize_dense2d_matrix_t const& M);
+                virtual void transform(fsize_dense2d_matrix_t const& M);
 
                 /// ------------------------------------------------------------
                 /// normal at a an object of a group
-                tuple normal_at(tuple const&) const;
+                tuple normal_at(tuple const& world_pt,
+                                intersection_record const& xs = NULL_INTERSECTION_RECORD) const;
 
                 /// ------------------------------------------------------------
                 /// this function is called to return the normal at a point on

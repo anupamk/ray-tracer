@@ -34,7 +34,7 @@ namespace raytracer
                                                               ray_t const& R) const override;
 
                 /// compute normal at a give point for this shape
-                tuple normal_at_local(tuple const&) const override;
+                tuple normal_at_local(tuple const&, intersection_record const&) const override;
 
                 /// stringified representation of this shape
                 std::string stringify() const override;
@@ -56,13 +56,14 @@ namespace raytracer
                 /// const-ref for child_shapes
                 decltype(child_shapes_) const& child_shapes_cref() const;
 
-            public:
-                /// ------------------------------------------------------------
-                /// some new operations on this shape
-
                 /// ------------------------------------------------------------
                 /// add a child shape to a group
                 void add_child(std::shared_ptr<shape_interface> new_shape);
+
+            private:
+                /// ------------------------------------------------------------
+                /// actual workhorse for ray-group intersections
+                std::optional<intersection_records> compute_intersections_(ray_t const&) const;
         };
 } // namespace raytracer
 

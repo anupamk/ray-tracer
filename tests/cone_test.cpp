@@ -146,27 +146,21 @@ TEST_CASE("scenario: computing the normal vector on a cone")
 
                 /// [0]
                 {
-                        RT::create_point(0.0, 0.0, 0.0),
-                        RT::create_vector(0.0, 0.0, 0.0),
+                        RT::create_point(1.0, 1.0, 1.0),
+                        RT::normalize(RT::create_vector(1.0, -RT::SQRT_2, 1.0)),
                 },
 
                 /// [1]
                 {
-                        RT::create_point(1.0, 1.0, 1.0),
-                        RT::create_vector(1.0, -RT::SQRT_2, 1.0),
-                },
-
-                /// [2]
-                {
                         RT::create_point(-1.0, -1.0, 0.0),
-                        RT::create_vector(-1.0, 1.0, 0.0),
+                        RT::normalize(RT::create_vector(-1.0, 1.0, 0.0)),
                 },
         };
 
         auto const the_cone = std::make_shared<RT::cone>();
 
         for (auto const& tc : all_tc) {
-                auto const got_normal = the_cone->normal_at_local(tc.point);
+                auto const got_normal = the_cone->normal_at(tc.point);
                 CHECK(got_normal == tc.exp_normal_at_point);
         }
 }

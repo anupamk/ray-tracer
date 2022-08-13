@@ -49,7 +49,7 @@ namespace raytracer
 
                 /// normal vector at a given point on the sphere (in local
                 /// coordinates)
-                tuple normal_at_local(tuple const&) const override;
+                tuple normal_at_local(tuple const&, intersection_record const&) const override;
 
                 /// ------------------------------------------------------------
                 /// compute intersection of a ray with the sphere, and return

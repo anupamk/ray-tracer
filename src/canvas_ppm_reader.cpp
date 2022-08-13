@@ -28,6 +28,7 @@
 #include "color.hpp"
 #include "common/include/string_utils.hpp"
 #include "execution_profiler.hpp"
+#include "mmapped_file_reader.hpp"
 #include "utils.hpp"
 
 namespace raytracer
@@ -126,7 +127,7 @@ namespace raytracer
                 bool bad_token = false;
 
                 /// token-start and token-end index. index exists within the
-                /// stream of data that we read)
+                /// stream of data that we read
                 size_t ts_index = 0;
                 size_t te_index = 0;
 
@@ -137,29 +138,14 @@ namespace raytracer
                 {
                         return is_valid;
                 }
-        };
 
-        /// --------------------------------------------------------------------
-        /// mmap un-mapper : this allows cleanups on mmapped regions on exit
-        class mmap_unmapper
-        {
-            private:
-                int mmapped_fd          = -1;
-                void* mmapped_data      = nullptr;
-                long long mmapped_bytes = 0;
-
-            public:
-                mmap_unmapper(int file_fd, void* mmap_data, long long num_bytes)
-                    : mmapped_fd(file_fd)
-                    , mmapped_data(mmap_data)
-                    , mmapped_bytes(num_bytes)
+                void reset()
                 {
-                        close(mmapped_fd);
-                }
-
-                ~mmap_unmapper()
-                {
-                        munmap(mmapped_data, mmapped_bytes);
+                        is_valid    = false;
+                        bad_token   = false;
+                        ts_index    = 0;
+                        te_index    = 0;
+                        token_value = {};
                 }
         };
 
@@ -170,88 +156,24 @@ namespace raytracer
         {
                 PROFILE_SCOPE;
 
-                /// ------------------------------------------------------------
-                /// we are using mmap(...) and friends for reading data from the
-                /// file. why ? because we can.
-                errno = 0;
-
-                /// --------------------------------------------------------------------
-                /// open the file for reading
-                int ppm_fd = open(file_name.c_str(), O_RDONLY, S_IRUSR);
-                {
-                        if (ppm_fd == -1) {
-                                auto open_err_str = strerror(errno);
-
-                                close(ppm_fd);
-                                LOG_ERROR("%s(...) open(%s, ...) failed, reason:%s", __PRETTY_FUNCTION__,
-                                          file_name.c_str(), open_err_str);
-
-                                return std::nullopt;
-                        }
-                }
-
-                /// --------------------------------------------------------------------
-                /// get file size
-                struct stat ppm_file_info = {};
-                {
-                        errno = 0;
-                        if (fstat(ppm_fd, &ppm_file_info) == -1) {
-                                auto fstat_err_str = strerror(errno);
-
-                                close(ppm_fd);
-                                LOG_ERROR("%s(...) fstat(%d, ...) failed, reason:%s", __PRETTY_FUNCTION__,
-                                          ppm_fd, fstat_err_str);
-
-                                return std::nullopt;
-                        }
-                }
-
-                /// --------------------------------------------------------------------
-                /// mmap(...) the file
-                void* mmapped_addr = nullptr;
-                {
-                        errno = 0;
-
-                        int const MMAP_FLAGS = (MAP_POPULATE | /// populate page tables for mapping
-                                                MAP_PRIVATE);  /// private c.o.w mapping
-
-                        mmapped_addr = mmap(nullptr,               /// kernel-decides-map-addr
-                                            ppm_file_info.st_size, /// number-of-bytes-to-map
-                                            PROT_READ,             /// for reading
-                                            MMAP_FLAGS,            /// see above
-                                            ppm_fd,                /// fd-to-map
-                                            0);                    /// start-filemap-offset
-
-                        if (mmapped_addr == MAP_FAILED) {
-                                auto mmap_err_str = strerror(errno);
-
-                                close(ppm_fd);
-                                LOG_ERROR("%s(...) mmap(...) failed, reason:%s", __PRETTY_FUNCTION__,
-                                          mmap_err_str);
-
-                                return std::nullopt;
-                        }
-                }
-
-                /// let the mmap_unmapper do resource cleanups...
-                mmap_unmapper file_unmapper(ppm_fd, mmapped_addr, ppm_file_info.st_size);
+                file_utils::mmapped_file_reader ppm_file(file_name);
 
                 /// --------------------------------------------------------------------
                 /// lets go spelunking
-                char const* ppm_file_data = reinterpret_cast<char const*>(mmapped_addr);
-                size_t ci                 = 0;                     /// current-index (into raw-data)
-                size_t const ei           = ppm_file_info.st_size; /// end-index (of raw-data)
+                char const* ppm_file_data = reinterpret_cast<char const*>(ppm_file.data());
+                size_t ci                 = 0;               /// current-index (into raw-data)
+                size_t const ei           = ppm_file.size(); /// end-index (of raw-data)
                 token_context_t ppm_token = {};
 
                 /// --------------------------------------------------------------------
                 /// this is the 'tokenizer' creating ppm tokens (actually just pointers
-                /// to indexes (start, end)) from the data-stream. once a token is
+                /// to indexes (start, end) from the data-stream. once a token is
                 /// created, it is available for the next stage of processing in the
                 /// `ppm_token`
                 ///
-                /// ppm-tokens are simply character sequences sperated by whitespace.
+                /// ppm-tokens are simply character sequences separated by whitespace.
                 auto get_next_token = [&]() {
-                        ppm_token = token_context_t{};
+                        ppm_token.reset();
 
                         /// get token start
                         while (ci < ei) {

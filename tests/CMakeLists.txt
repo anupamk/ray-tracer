@@ -21,6 +21,8 @@ SET(RT_TEST_SRC_FILES
   cylinder_test.cpp
   cone_test.cpp
   group_test.cpp
+  triangle_test.cpp
+  obj_file_parser_test.cpp
   )
 
 # ------------------------------------------------------------------------------

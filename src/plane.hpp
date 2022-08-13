@@ -38,7 +38,7 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// normal vector at a give point on the plane (in local
                 /// coordinates)
-                tuple normal_at_local(tuple const&) const override;
+                tuple normal_at_local(tuple const&, intersection_record const&) const override;
 
                 /// ------------------------------------------------------------
                 /// compute intersection of a ray with the plane, and return

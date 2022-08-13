@@ -7,7 +7,9 @@
  **/
 
 /// c++ includes
+
 #include <algorithm>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <sstream>
@@ -31,36 +33,12 @@ namespace raytracer
         /// group
         std::optional<intersection_records> group::intersect(the_badge<ray_t>, ray_t const& R) const
         {
-                intersection_records xs_result;
-
-                for (auto const& cs : child_shapes_) {
-                        auto cs_xs_record = R.intersect(cs);
-
-                        if (!cs_xs_record) {
-                                continue;
-                        }
-
-                        auto cs_xs_list = cs_xs_record.value();
-                        for (auto& cs_xs : cs_xs_list) {
-                                xs_result.push_back(cs_xs);
-                        }
-                }
-
-                /// ------------------------------------------------------------
-                /// required otherwise, we return std::optional with an empty
-                /// value, which is not very useful...
-                if (xs_result.empty()) {
-                        return std::nullopt;
-                }
-
-                std::sort(xs_result.begin(), xs_result.end());
-
-                return xs_result;
+                return compute_intersections_(R);
         }
 
         /// --------------------------------------------------------------------
         /// compute normal at a given point for the group
-        tuple group::normal_at_local(tuple const& P) const
+        tuple group::normal_at_local(tuple const&, intersection_record const&) const
         {
                 ASSERT_FAIL("groups don't have normal !");
         }
@@ -100,7 +78,21 @@ namespace raytracer
         /// group
         bool group::has_intersection_before(the_badge<ray_t>, ray_t const& R, double distance) const
         {
-                return R.has_intersection_before(child_shapes_, distance);
+                auto maybe_xs_records = compute_intersections_(R);
+
+                if (!maybe_xs_records.has_value()) {
+                        return false;
+                }
+
+                auto const& xs_records = maybe_xs_records.value();
+                for (auto const& xs_i : xs_records) {
+                        auto const where = xs_i.where();
+                        if ((where >= EPSILON) && (where < distance)) {
+                                return true;
+                        }
+                }
+
+                return false;
         }
 
         /// --------------------------------------------------------------------
@@ -133,6 +125,38 @@ namespace raytracer
         decltype(group::child_shapes_) const& group::child_shapes_cref() const
         {
                 return child_shapes_;
+        }
+
+        /*
+         * only private functions from this point onwards
+         **/
+        std::optional<intersection_records> group::compute_intersections_(ray_t const& R) const
+        {
+                intersection_records xs_result;
+
+                for (auto const& cs : child_shapes_) {
+                        auto cs_xs_record = R.intersect(cs);
+
+                        if (!cs_xs_record) {
+                                continue;
+                        }
+
+                        auto cs_xs_list = cs_xs_record.value();
+                        for (auto& cs_xs : cs_xs_list) {
+                                xs_result.push_back(cs_xs);
+                        }
+                }
+
+                /// ------------------------------------------------------------
+                /// required otherwise, we return std::optional with an empty
+                /// value, which is not very useful...
+                if (xs_result.empty()) {
+                        return std::nullopt;
+                }
+
+                std::sort(xs_result.begin(), xs_result.end());
+
+                return xs_result;
         }
 
 } // namespace raytracer

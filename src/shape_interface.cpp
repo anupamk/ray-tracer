@@ -1,4 +1,5 @@
 /// c++ includes
+#include "intersection_record.hpp"
 #include <algorithm>
 
 /// our includes
@@ -11,6 +12,7 @@ namespace raytracer
             : cast_shadow(cast_shadow)
             , xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , inv_xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
+            , inv_xform_transpose_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , material_()
             , parent_(nullptr)
         {
@@ -26,10 +28,16 @@ namespace raytracer
                 return this->inv_xform_;
         }
 
+        fsize_dense2d_matrix_t shape_interface::inv_transform_transpose() const
+        {
+                return this->inv_xform_transpose_;
+        }
+
         void shape_interface::transform(fsize_dense2d_matrix_t const& M)
         {
-                this->xform_     = M;
-                this->inv_xform_ = inverse(M);
+                this->xform_               = M;
+                this->inv_xform_           = inverse(M);
+                this->inv_xform_transpose_ = this->inv_xform_.transpose();
 
                 return;
         }
@@ -37,10 +45,10 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// this function is called to find the normal on a child object of a
         /// group.
-        tuple shape_interface::normal_at(tuple const& world_pt) const
+        tuple shape_interface::normal_at(tuple const& world_pt, intersection_record const& xs) const
         {
                 auto const local_pt     = world_to_local(world_pt);
-                auto const local_normal = normal_at_local(local_pt);
+                auto const local_normal = normal_at_local(local_pt, xs);
                 return normal_at_world(local_normal);
         }
 
@@ -64,7 +72,7 @@ namespace raytracer
         {
                 /// first convert the world-point to object space, and determine
                 /// the normal there
-                auto obj_space_normal = this->inv_transform().transpose() * world_pt;
+                auto obj_space_normal = this->inv_transform_transpose() * world_pt;
                 obj_space_normal.vectorify();
                 obj_space_normal = normalize(obj_space_normal);
 

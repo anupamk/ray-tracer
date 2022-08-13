@@ -95,7 +95,7 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// compute normal at intersection
-                auto normal_at_xs = current_xs.what_object()->normal_at(retval.position());
+                auto normal_at_xs = current_xs.what_object()->normal_at(retval.position(), current_xs);
 
                 /// intersection is inside or outside ?
                 if (raytracer::dot(normal_at_xs, retval.eye_vector()) < 0) {

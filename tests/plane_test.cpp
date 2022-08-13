@@ -53,7 +53,7 @@ TEST_CASE("plane::plane(...) test")
         };
 
         for (auto tc : all_tc) {
-                auto got_xz_normal = the_xz_plane->normal_at_local(tc.xz_point);
+                auto got_xz_normal = the_xz_plane->normal_at(tc.xz_point);
                 CHECK(got_xz_normal == tc.exp_xz_normal);
         }
 }

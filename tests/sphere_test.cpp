@@ -213,7 +213,7 @@ TEST_CASE("test sphere.normal_at_local(...) returns correct results")
         auto const sphere = std::make_shared<RT::sphere>();
 
         for (auto tc : all_tc) {
-                auto const got_normal = sphere->normal_at_local(tc.point);
+                auto const got_normal = sphere->normal_at(tc.point);
                 CHECK(got_normal == tc.exp_normal);
 
                 /// normal is 'normalized' i.e. magnitude == 1.0

@@ -3,6 +3,7 @@
 
 /// c++ includes
 #include <algorithm>
+#include <cfloat>
 #include <memory>
 #include <optional>
 #include <ostream>
@@ -33,11 +34,22 @@ namespace raytracer
                 /// HACK: index of this record in the intersection-list
                 uint32_t index_;
 
+                /// ------------------------------------------------------------
+                /// distance from a vertex where an intersection happened. this
+                /// is only relevant for smooth-triangles
+                ///
+                /// these values are between [0.0 .. 1.0]
+                double u_ = DBL_MAX;
+                double v_ = DBL_MAX;
+
             public:
-                intersection_record(double t, std::shared_ptr<shape_interface const> a_shape)
+                intersection_record(double t, std::shared_ptr<shape_interface const> a_shape,
+                                    float u = FLT_MAX, float v = FLT_MAX)
                     : where_(t)
                     , what_(a_shape)
                     , index_(0)
+                    , u_(u)
+                    , v_(v)
                 {
                 }
 
@@ -50,6 +62,16 @@ namespace raytracer
                 std::shared_ptr<shape_interface const> what_object() const
                 {
                         return this->what_;
+                }
+
+                constexpr double u() const
+                {
+                        return this->u_;
+                }
+
+                constexpr double v() const
+                {
+                        return this->v_;
                 }
 
             public:
@@ -98,6 +120,13 @@ namespace raytracer
         /// this function is called to find the visible intersection (if it
         /// exists) from a set of intersection records.
         std::optional<intersection_record> visible_intersection(intersection_records const& ixns_list);
+
+        /// --------------------------------------------------------------------
+        /// a bogus intersection_record instance
+        const auto NULL_INTERSECTION_RECORD = intersection_record(-DBL_MAX, /// where
+                                                                  nullptr,  /// what-object
+                                                                  0.0,      /// u
+                                                                  0.0);     /// v
 
 } // namespace raytracer
 

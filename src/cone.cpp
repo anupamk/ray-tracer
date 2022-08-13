@@ -65,7 +65,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// compute normal vector at a given point on the cone surface
-        tuple cone::normal_at_local(tuple const& P) const
+        tuple cone::normal_at_local(tuple const& P, intersection_record const&) const
         {
                 auto const dist = P.x() * P.x() + P.z() * P.z();
 

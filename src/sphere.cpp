@@ -25,7 +25,7 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// just forward the computatio to the actual workhorse.
+        /// just forward the computation to the actual workhorse.
         std::optional<intersection_records> sphere::intersect(the_badge<ray_t>, ray_t const& R) const
         {
                 return compute_intersections_(R);
@@ -34,7 +34,7 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// this function is called to return the normal at a point 'P' on
         /// the surface of the sphere
-        tuple sphere::normal_at_local(tuple const& P) const
+        tuple sphere::normal_at_local(tuple const& P, intersection_record const&) const
         {
                 return create_vector(P.x(), P.y(), P.z());
         }

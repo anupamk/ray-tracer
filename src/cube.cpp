@@ -31,7 +31,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// normal vector at a given point on the cube (in local coordinates)
-        tuple cube::normal_at_local(tuple const& pt) const
+        tuple cube::normal_at_local(tuple const& pt, intersection_record const&) const
         {
                 auto const abs_x = std::abs(pt.x());
                 auto const abs_y = std::abs(pt.y());

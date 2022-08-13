@@ -124,7 +124,7 @@ TEST_CASE("scenario: normal vector on the cylinder")
         };
 
         for (auto const& tc : all_tc) {
-                auto const got_normal = the_cylinder->normal_at_local(tc.pt);
+                auto const got_normal = the_cylinder->normal_at(tc.pt);
                 CHECK(got_normal == tc.exp_normal);
         }
 }
@@ -298,7 +298,7 @@ TEST_CASE("scenario: normal vector cylinder's end caps")
                                                                  true);    /// capped ?
 
         for (auto const& tc : all_tc) {
-                auto const got_normal = the_cylinder->normal_at_local(tc.pt);
+                auto const got_normal = the_cylinder->normal_at(tc.pt);
                 CHECK(got_normal == tc.exp_normal);
         }
 }

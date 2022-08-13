@@ -34,7 +34,7 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// normal vector at any point on the xz-plane is a constant i.e. along
         /// the y-axis
-        tuple plane::normal_at_local(tuple const&) const
+        tuple plane::normal_at_local(tuple const&, intersection_record const&) const
         {
                 return create_vector(0.0, 1.0, 0.0);
         }
