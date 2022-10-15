@@ -23,7 +23,7 @@ namespace raytracer
                 std::vector<std::shared_ptr<const shape_interface>> child_shapes_;
 
             public:
-                group(bool cast_shadow = true);
+                group(bool cast_shadow = false);
 
             public:
                 /// ------------------------------------------------------------

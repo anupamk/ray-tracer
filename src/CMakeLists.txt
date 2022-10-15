@@ -341,3 +341,9 @@ add_executable(obj-scene render_obj_scene.cpp)
 target_link_libraries(obj-scene
   PRIVATE rt-lib)
 
+# ------------------------------------------------------------------------------
+# render a cessna
+add_executable(cessna-scene render_cessna.cpp)
+target_link_libraries(cessna-scene
+  PRIVATE rt-lib)
+
