@@ -25,13 +25,12 @@ namespace raytracer
          **/
         class shape_interface : public std::enable_shared_from_this<shape_interface>
         {
-            public:
+            private:
                 /// ------------------------------------------------------------
                 /// when set to 'false', the shape doesn't cast any shadow. by
                 /// default all shapes cast a shadow.
-                bool const cast_shadow;
+                bool cast_shadow_;
 
-            private:
                 /// ------------------------------------------------------------
                 /// transformation matrices associated with a shape. allows for
                 /// moving shapes around, deforming them etc. etc.
@@ -124,6 +123,11 @@ namespace raytracer
                 /// adjust parent of a shape
                 std::shared_ptr<const shape_interface> get_parent() const;
                 void set_parent(std::shared_ptr<const shape_interface> const&);
+
+                /// ------------------------------------------------------------
+                /// can this shape cast a shadow ?
+                bool get_cast_shadow() const;
+                void set_cast_shadow(bool);
 
                 /// ------------------------------------------------------------
                 /// is this shape part of a group ?

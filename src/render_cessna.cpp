@@ -108,14 +108,14 @@ static RT::world create_world()
                         RT::color::RGB(0xDC, 0xDC, 0xDC),         /// color-a
                         std::default_random_engine::default_seed, /// seed
                         16);
-                cloud_pattern->transform(RT_XFORM::create_3d_scaling_matrix(1.0, 1.0, 1.0));
 
-                s_01->set_material(RT::material()
-                                           .set_pattern(cloud_pattern)
-                                           .set_reflective(0.08)
-                                           .set_refractive_index(1.4));
+                auto sky_scale_factor = 1.2;
+                cloud_pattern->transform(
+                        RT_XFORM::create_3d_scaling_matrix(10.0, sky_scale_factor, sky_scale_factor));
 
-                s_01->transform(RT_XFORM::create_3d_scaling_matrix(25.0, 30.0, 50.0));
+                s_01->set_material(RT::material().set_pattern(cloud_pattern).set_refractive_index(1.4));
+
+                s_01->transform(RT_XFORM::create_3d_scaling_matrix(50.0, 50.0, 50.0));
         }
 
         /// ------------------------------------------------------------
@@ -131,10 +131,11 @@ static RT::world create_world()
                 world.add(floor);
                 auto floor_xform = RT_XFORM::create_3d_translation_matrix(0.0, -3.0, 0.0) *
                                    RT_XFORM::create_rotx_matrix(RT::PI / 13.0f);
-                cloud_pattern->transform(RT_XFORM::create_3d_scaling_matrix(-12.0, 0.6, -2.6));
+                cloud_pattern->transform(RT_XFORM::create_3d_scaling_matrix(1.34, 0.6, -2.6));
+
                 floor->set_material(RT::material()
                                             .set_pattern(cloud_pattern)
-                                            .set_reflective(1.0)
+                                            .set_reflective(0.8)
                                             .set_refractive_index(RT::material::RI_WATER));
                 floor->transform(floor_xform);
         }
@@ -155,14 +156,13 @@ static RT::world create_world()
                                    RT_XFORM::create_rotz_matrix(-RT::PI_BY_6F) *
                                    RT_XFORM::create_3d_scaling_matrix(0.4, 0.4, 0.4);
 
-                /// auto model_material = RT::create_material_matte(RT::color::RGB(0x8b, 0x8b, 0x83));
                 auto model_material = RT::create_material_matte(RT::color::RGB(0x8b, 0x00, 0x00));
-                model_material.set_reflective(0.2);
 
                 /// ------------------------------------------------------------
                 /// add default group and named groups into the world
-                auto grp = parse_result.default_group_cref();
+                auto grp = parse_result.default_group_ref();
                 if (grp != nullptr) {
+                        grp->set_cast_shadow(false);
                         world.add(grp);
                         grp->transform(model_xform);
                         grp->set_material(model_material);
@@ -170,6 +170,7 @@ static RT::world create_world()
 
                 auto grp_list = parse_result.group_list_cref();
                 for (auto const& g_i : grp_list) {
+                        g_i->set_cast_shadow(false);
                         world.add(g_i);
                         g_i->transform(model_xform);
                         g_i->set_material(model_material);

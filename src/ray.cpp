@@ -172,7 +172,7 @@ namespace raytracer
                 double distance) const
         {
                 for (auto const& obj : world_object_list) {
-                        if (!obj->cast_shadow) {
+                        if (!obj->get_cast_shadow()) {
                                 continue;
                         }
 

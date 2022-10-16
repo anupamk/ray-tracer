@@ -90,7 +90,7 @@ namespace raytracer
         {
                 std::stringstream ss("");
                 ss << "ray-tracer-cone: {";
-                ss << "cast_shadow: " << (cast_shadow ? "yes" : "no") << ", "
+                ss << "cast_shadow: " << (get_cast_shadow() ? "yes" : "no") << ", "
                    << "min_y: " << min_y << ", "
                    << "max_y: " << max_y << ", "
                    << "capped: " << capped << "}";

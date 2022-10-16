@@ -9,7 +9,7 @@
 namespace raytracer
 {
         shape_interface::shape_interface(bool cast_shadow)
-            : cast_shadow(cast_shadow)
+            : cast_shadow_(cast_shadow)
             , xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , inv_xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , inv_xform_transpose_(fsize_dense2d_matrix_t::create_identity_matrix(4))
@@ -111,6 +111,21 @@ namespace raytracer
         void shape_interface::set_parent(std::shared_ptr<const shape_interface> const& new_parent)
         {
                 parent_ = new_parent;
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to get shadow_cast'ing property for the
+        /// current shape
+        bool shape_interface::get_cast_shadow() const
+        {
+                return cast_shadow_;
+        }
+
+        /// --------------------------------------------------------------------
+        /// let a shape cast a shadow (true) or not (false)
+        void shape_interface::set_cast_shadow(bool val)
+        {
+                cast_shadow_ = val;
         }
 
         /// --------------------------------------------------------------------
