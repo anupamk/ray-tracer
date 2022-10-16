@@ -347,3 +347,9 @@ add_executable(cessna-scene render_cessna.cpp)
 target_link_libraries(cessna-scene
   PRIVATE rt-lib)
 
+# ------------------------------------------------------------------------------
+# render newtowns-cradle
+add_executable(newtons-cradle render_newtons_cradle.cpp)
+target_link_libraries(newtons-cradle
+  PRIVATE rt-lib)
+
