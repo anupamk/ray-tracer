@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_BADGE_HPP__
-#define RAYTRACER_BADGE_HPP__
+#pragma once
+
 
 namespace raytracer
 {
@@ -25,4 +25,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif /// RAYTRACER_BADGE_HPP__
+

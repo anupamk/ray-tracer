@@ -1,5 +1,4 @@
-#ifndef RAYTRACER_TRIANGLE_HPP_
-#define RAYTRACER_TRIANGLE_HPP_
+#pragma once
 
 /// c++ includes
 #include <optional>
@@ -86,5 +85,3 @@ namespace raytracer
         bool operator==(triangle const& lhs, triangle const& rhs);
 
 } // namespace raytracer
-
-#endif /// RAYTRACER_TRIANGLE_HPP_

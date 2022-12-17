@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_CHECKERS_PATTERN_HPP__
-#define RAYTRACER_CHECKERS_PATTERN_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <sstream>
@@ -49,4 +49,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_CHECKER_PATTERN_HPP__
+

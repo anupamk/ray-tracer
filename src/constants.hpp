@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_CONSTANTS_HPP__
-#define RAYTRACER_CONSTANTS_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <cmath>
@@ -37,4 +37,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif // RAYTRACER_CONSTANTS_HPP__
+

@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_GRADIENT_PERLIN_NOISE_PATTERN_HPP__
-#define RAYTRACER_GRADIENT_PERLIN_NOISE_PATTERN_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <algorithm>
@@ -71,4 +71,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_GRADIENT_PERLIN_NOISE_PATTERN_HPP__
+

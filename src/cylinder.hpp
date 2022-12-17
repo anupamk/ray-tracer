@@ -1,5 +1,4 @@
-#ifndef RAYTRACER_CYLINDER_HPP__
-#define RAYTRACER_CYLINDER_HPP__
+#pragma once
 
 /// c++ includes
 #include <optional>
@@ -89,5 +88,3 @@ namespace raytracer
         };
 
 } // namespace raytracer
-
-#endif /// RAYTRACER_CYLINDER_HPP__

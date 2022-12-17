@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_STRIPED_PATTERN_HPP__
-#define RAYTRACER_STRIPED_PATTERN_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <cmath>
@@ -47,4 +47,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_STRIPED_PATTERN_HPP__
+

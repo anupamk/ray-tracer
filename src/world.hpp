@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_WORLD_HPP__
-#define RAYTRACER_WORLD_HPP__
+#pragma once
+
 
 /// c++ includes
 #include "color.hpp"
@@ -76,4 +76,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif /// RAYTRACER_WORLD_HPP__
+

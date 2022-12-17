@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_SRC_OBJ_FILE_LOADER_HPP__
-#define RAYTRACER_SRC_OBJ_FILE_LOADER_HPP__
+#pragma once
+
 
 /*
  * this file implements rudimentary parsing of Wavefront's OBJ file format for
@@ -225,4 +225,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_SRC_OBJ_FILE__LOADER_HPP__
+

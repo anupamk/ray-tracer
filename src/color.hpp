@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_SRC_COLOR_HPP__
-#define RAYTRACER_SRC_COLOR_HPP__
+#pragma once
+
 
 /*
  * this file implements the representation of color with which various image
@@ -174,4 +174,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif // RAYTRACER_SRC_COLOR_HPP__
+

@@ -1,5 +1,4 @@
-#ifndef COMMON_INCLUDE_STRING_UTILS_HPP__
-#define COMMON_INCLUDE_STRING_UTILS_HPP__
+#pragma once
 
 #include <algorithm>
 #include <cctype>
@@ -44,5 +43,3 @@ static inline std::string trim_copy(std::string s)
         trim(s);
         return s;
 }
-
-#endif /// COMMON_INCLUDE_STRING_UTILS_HPP__

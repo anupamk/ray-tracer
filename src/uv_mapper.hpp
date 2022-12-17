@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_UV_MAPPER_HPP__
-#define RAYTRACER_UV_MAPPER_HPP__
+#pragma once
+
 
 /// our includes
 #include "tuple.hpp"
@@ -51,4 +51,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif
+

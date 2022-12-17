@@ -1,9 +1,7 @@
 /**
  * trivial benchmarking of function executions
  **/
-
-#ifndef BENCHMARK_HPP__
-#define BENCHMARK_HPP__
+#pragma once
 
 /// c++ includes
 #include <algorithm>
@@ -147,5 +145,3 @@ class Benchmark
                 std_dev_    = std::sqrt(sq_sum / num_iter_);
         }
 };
-
-#endif

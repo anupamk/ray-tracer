@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_TUPLE_HPP__
-#define RAYTRACER_TUPLE_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <cmath>
@@ -181,4 +181,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif // RAYTRACER_TUPLE_HPP__
+

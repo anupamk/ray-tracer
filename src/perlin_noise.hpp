@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_PERLIN_NOISE_HPP__
-#define RAYTRACER_PERLIN_NOISE_HPP__
+#pragma once
+
 
 #include <algorithm>
 #include <array>
@@ -300,4 +300,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_PERLIN_NOISE_HPP__
+

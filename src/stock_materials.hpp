@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_STOCK_MATERIALS_HPP__
-#define RAYTRACER_STOCK_MATERIALS_HPP__
+#pragma once
+
 
 /// our includes
 #include "canvas.hpp"
@@ -31,4 +31,4 @@ namespace raytracer
                                       color const& end_color);  /// end-color
 } // namespace raytracer
 
-#endif /// RAYTRACER_STOCK_MATERIALS_HPP__
+

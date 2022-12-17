@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_PHONG_ILLUMINATION_HPP__
-#define RAYTRACER_PHONG_ILLUMINATION_HPP__
+#pragma once
+
 
 /// our includes
 #include "color.hpp"
@@ -18,4 +18,4 @@ namespace raytracer
                                  bool is_shadowed = false);              /// is the point shadowed ?
 }
 
-#endif /// RAYTRACER_PHONG_ILLUMINATION_HPP__
+

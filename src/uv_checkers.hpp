@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_UV_CHECKERS_PATTERN_HPP__
-#define RAYTRACER_UV_CHECKERS_PATTERN_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <cstdint>
@@ -45,4 +45,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif /// RAYTRACER_UV_CHECKERS_PATTERN_HPP__
+

@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_POINT_LIGHT_HPP__
-#define RAYTRACER_POINT_LIGHT_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <ostream>
@@ -37,4 +37,4 @@ namespace raytracer
         bool operator==(point_light const& lhs, point_light const& rhs);
 } // namespace raytracer
 
-#endif /// RAYTRACER_POINT_LIGHT_HPP__
+

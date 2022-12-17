@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_SRC_MATRIX_TRANSFORMATIONS_HPP__
-#define RAYTRACER_SRC_MATRIX_TRANSFORMATIONS_HPP__
+#pragma once
+
 
 /// our includes
 #include "common/include/assert_utils.h"
@@ -44,4 +44,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif /// RAYTRACER_SRC_MATRIX_TRANSFORMATIONS_HPP__
+

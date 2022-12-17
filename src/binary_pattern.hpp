@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_BINARY_PATTERN_HPP__
-#define RAYTRACER_BINARY_PATTERN_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <memory>
@@ -57,4 +57,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif ///
+

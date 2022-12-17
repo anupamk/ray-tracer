@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_UV_POINT_HPP__
-#define RAYTRACER_UV_POINT_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <ostream>
@@ -50,4 +50,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif // RAYTRACER_UV_POINT_HPP__
+

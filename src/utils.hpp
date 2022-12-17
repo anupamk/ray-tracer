@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_UTILS_HPP__
-#define RAYTRACER_UTILS_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <algorithm>
@@ -178,4 +178,3 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif

@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_CAMERA_HPP__
-#define RAYTRACER_CAMERA_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <cstdint>
@@ -67,4 +67,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif /// RAYTRACER_CAMERA_HPP__
+

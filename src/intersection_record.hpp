@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_INTERSECTION_RECORD_HPP__
-#define RAYTRACER_INTERSECTION_RECORD_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <algorithm>
@@ -130,4 +130,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_INTERSECTION_RECORD_HPP__
+

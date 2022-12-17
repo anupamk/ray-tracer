@@ -1,5 +1,4 @@
-#ifndef COMMON_INCLUDE_LOGGING_H__
-#define COMMON_INCLUDE_LOGGING_H__
+#pragma once
 
 /* system includes */
 #include <math.h>
@@ -16,25 +15,25 @@
  **/
 static inline std::string log_ts_string()
 {
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
 
-	/* round off to nearest millisecond */
-	uint16_t msec = lrint(tv.tv_usec / 1000.0);
-	if (msec >= 1000) {
-		msec -= 1000;
-		tv.tv_sec += 1;
-	}
+        /* round off to nearest millisecond */
+        uint16_t msec = lrint(tv.tv_usec / 1000.0);
+        if (msec >= 1000) {
+                msec -= 1000;
+                tv.tv_sec += 1;
+        }
 
-	/* stringify */
-	constexpr uint8_t bufsize = 64;
-	char fmt_time_buf[bufsize];
+        /* stringify */
+        constexpr uint8_t bufsize = 64;
+        char fmt_time_buf[bufsize];
 
-	struct tm* tm_info  = localtime(&tv.tv_sec);
-	const size_t offset = strftime(fmt_time_buf, bufsize, "%Y-%m-%d %H:%M:%S", tm_info);
-	snprintf(fmt_time_buf + offset, (bufsize - offset), ".%03d", msec);
+        struct tm* tm_info  = localtime(&tv.tv_sec);
+        const size_t offset = strftime(fmt_time_buf, bufsize, "%Y-%m-%d %H:%M:%S", tm_info);
+        snprintf(fmt_time_buf + offset, (bufsize - offset), ".%03d", msec);
 
-	return std::string(fmt_time_buf);
+        return std::string(fmt_time_buf);
 }
 
 /*
@@ -90,12 +89,10 @@ extern log_level_t GLOBAL_LOG_LEVEL_NOW;
                         fflush(LOG_DEST);                               \
                 }                                                       \
         } while (0)
+// clang-format on
 
 /* convenience logging macros that we can call */
 #define LOG_DEBUG(fmt, ...) DO_LOG__(LOG_LEVEL_DEBUG, "DEBUG", fmt, ##__VA_ARGS__)
 #define LOG_INFO(fmt, ...)  DO_LOG__(LOG_LEVEL_INFO , "INFO" , fmt, ##__VA_ARGS__)
 #define LOG_ERROR(fmt, ...) DO_LOG__(LOG_LEVEL_ERROR, "ERROR", fmt, ##__VA_ARGS__)
 #define LOG_FATAL(fmt, ...) DO_LOG__(LOG_LEVEL_FATAL, "FATAL", fmt, ##__VA_ARGS__)
-// clang-format on
-
-#endif /* COMMONG_LOGGING_H__ */

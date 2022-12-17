@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_SRC_MMAPPED_FILE_READER_HPP__
-#define RAYTRACER_SRC_MMAPPED_FILE_READER_HPP__
+#pragma once
+
 
 #include <cstddef>
 #include <optional>
@@ -76,4 +76,4 @@ namespace file_utils
 
 } // namespace file_utils
 
-#endif /// RAYTRACER_SRC_MMAPPED_FILE_READER_HPP__
+

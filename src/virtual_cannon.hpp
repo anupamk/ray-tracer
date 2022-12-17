@@ -1,5 +1,5 @@
-#ifndef SRC_VIRTUAL_CANNON_HPP__
-#define SRC_VIRTUAL_CANNON_HPP__
+#pragma once
+
 
 #include "tuple.hpp"
 
@@ -53,4 +53,4 @@ struct projectile {
 
 projectile tick(env_params env, projectile proj);
 
-#endif // SRC_VIRTUAL_CANNON_HPP__
+

@@ -1,5 +1,4 @@
-#ifndef COMMON_INCLUDE_ASSERT_UTILS_H__
-#define COMMON_INCLUDE_ASSERT_UTILS_H__
+#pragma once
 
 /* system includes */
 #include <assert.h>
@@ -26,5 +25,3 @@
 #define ASSERT(cond) ASSERT_MESSAGE__(cond, STRINGIFY__(cond))
 #define ASSERT_FAIL_LOG(fmt, ...) ASSERT_MESSAGE__(0, fmt, ##__VA_ARGS__)
 #define ASSERT_FAIL(msg) ASSERT_FAIL_LOG("%s", msg)
-
-#endif

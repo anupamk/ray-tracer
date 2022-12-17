@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_UV_PATTERN_INTERFACE_HPP__
-#define RAYTRACER_UV_PATTERN_INTERFACE_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <memory>
@@ -31,4 +31,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_UV_PATTERN_INTERFACE_HPP__
+

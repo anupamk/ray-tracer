@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_CUBE_MAP_TEXTURE_HPP__
-#define RAYTRACER_CUBE_MAP_TEXTURE_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <functional>
@@ -157,4 +157,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_CUBE_MAP_TEXTTURE_HPP__
+

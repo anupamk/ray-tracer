@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_CONE_HPP__
-#define RAYTRACER_CONE_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <optional>
@@ -97,4 +97,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_CONE_HPP__
+

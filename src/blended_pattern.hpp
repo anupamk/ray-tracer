@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_BLENDED_PATTERN_HPP__
-#define RAYTRACER_BLENDED_PATTERN_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <cmath>
@@ -43,4 +43,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_BLENDED_PATTERN_HPP__
+

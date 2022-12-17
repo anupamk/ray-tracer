@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_RENDERER_HPP__
-#define RAYTRACER_RENDERER_HPP__
+#pragma once
+
 
 /*
  * this file contains declarations for routines commonly used for rendering a
@@ -31,4 +31,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_RENDERER_HPP__
+

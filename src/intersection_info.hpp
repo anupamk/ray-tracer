@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_INTERSECTION_INFO_HPP__
-#define RAYTRACER_INTERSECTION_INFO_HPP__
+#pragma once
+
 
 #include <memory>
 
@@ -134,4 +134,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif
+

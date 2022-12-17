@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_TEXTURE_2D_PATTERN_HPP__
-#define RAYTRACER_TEXTURE_2D_PATTERN_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <functional>
@@ -48,4 +48,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_TEXTURE_2D_PATTERN_HPP__
+

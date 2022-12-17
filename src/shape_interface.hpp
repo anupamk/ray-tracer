@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_SHAPE_INTERFACE_HPP__
-#define RAYTRACER_SHAPE_INTERFACE_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <algorithm>
@@ -135,4 +135,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif /// RAYTRACER_SHAPE_INTERFACE_HPP__
+

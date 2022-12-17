@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_PLANE_HPP__
-#define RAYTRACER_PLANE_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <optional>
@@ -57,4 +57,4 @@ namespace raytracer
         std::ostream& operator<<(std::ostream& os, plane const& P);
 } // namespace raytracer
 
-#endif /// RAYTRACER_PLANE_HPP__
+

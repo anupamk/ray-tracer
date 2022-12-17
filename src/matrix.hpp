@@ -1,4 +1,4 @@
-#ifndef RAYTRACER_SRC_MATRIX_HPP__
+#pragma once
 #define RAYTRACER_SRC_MATRIX_HPP__
 
 /// c++ includes
@@ -113,5 +113,3 @@ namespace raytracer
         fsize_dense2d_matrix_t inverse(fsize_dense2d_matrix_t const& M);
 
 } // namespace raytracer
-
-#endif

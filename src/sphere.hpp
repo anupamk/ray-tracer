@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_SPHERE_HPP__
-#define RAYTRACER_SPHERE_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <optional>
@@ -73,4 +73,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_SPHERE_HPP__
+

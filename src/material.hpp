@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_MATERIAL_HPP__
-#define RAYTRACER_MATERIAL_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <memory>
@@ -84,4 +84,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_MATERIAL_HPP__
+

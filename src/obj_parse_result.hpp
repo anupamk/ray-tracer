@@ -1,5 +1,4 @@
-#ifndef RAYTRACER_SRC_OBJ_FILE_PARSE_RESULT_HPP_
-#define RAYTRACER_SRC_OBJ_FILE_PARSE_RESULT_HPP_
+#pragma once
 
 /*
  * this file implements the result of parsing an OBJ file. it was better to
@@ -145,5 +144,3 @@ namespace raytracer
         };
 
 } // namespace raytracer
-
-#endif /// RAYTRACER_SRC_OBJ_FILE_PARSE_RESULT_HPP_

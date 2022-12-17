@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_GROUP_HPP__
-#define RAYTRACER_GROUP_HPP__
+#pragma once
+
 
 /// c++ includes
 #include <memory>
@@ -67,4 +67,4 @@ namespace raytracer
         };
 } // namespace raytracer
 
-#endif /// RAYTRACER_GROUP_HPP__
+

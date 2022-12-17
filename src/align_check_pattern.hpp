@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_ALIGN_CHECK_PATTERN_HPP__
-#define RAYTRACER_ALIGN_CHECK_PATTERN_HPP__
+#pragma once
+
 
 /// our includes
 #include "color.hpp"
@@ -83,4 +83,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif /// RAYTRACER_ALIGN_CHECK_PATTERN_HPP__
+

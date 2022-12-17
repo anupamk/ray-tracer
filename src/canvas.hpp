@@ -1,5 +1,5 @@
-#ifndef RAYTRACER_SRC_CANVAS_HPP__
-#define RAYTRACER_SRC_CANVAS_HPP__
+#pragma once
+
 
 /*
  * this file implements the canvas i.e. the virtual drawing board on which we
@@ -124,4 +124,4 @@ namespace raytracer
 
 } // namespace raytracer
 
-#endif // RAYTRACER_SRC_CANVAS_HPP__
+
