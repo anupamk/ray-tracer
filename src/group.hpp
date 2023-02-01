@@ -47,9 +47,6 @@ namespace raytracer
                 /// is the group empty ? i.e contains no child shapes
                 bool is_empty() const;
 
-                /// does the group include the specified shape ?
-                bool includes(std::shared_ptr<const shape_interface> const& the_shape) const;
-
                 void set_material(material const&) override;
 
                 /// ------------------------------------------------------------
@@ -60,11 +57,19 @@ namespace raytracer
                 /// add a child shape to a group
                 void add_child(std::shared_ptr<shape_interface> new_shape);
 
+                /// ------------------------------------------------------------
+                /// does this shape include the other shape ? for instances of
+                /// this class, we want this redefined method to be invoked.
+                ///
+                /// for a group shape, we check for the 'includes' relationship
+                /// for all the shapes in the group.
+                ///
+                /// return 'true' if it does, 'false' otherwise.
+                bool includes(std::shared_ptr<const shape_interface> const& other) const override;
+
             private:
                 /// ------------------------------------------------------------
                 /// actual workhorse for ray-group intersections
                 std::optional<intersection_records> compute_intersections_(ray_t const&) const;
         };
 } // namespace raytracer
-
-

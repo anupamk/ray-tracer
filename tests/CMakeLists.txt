@@ -23,6 +23,7 @@ SET(RT_TEST_SRC_FILES
   group_test.cpp
   triangle_test.cpp
   obj_file_parser_test.cpp
+  csg_test.cpp
   )
 
 # ------------------------------------------------------------------------------

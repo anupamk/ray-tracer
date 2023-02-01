@@ -122,6 +122,11 @@ namespace raytracer
         std::optional<intersection_record> visible_intersection(intersection_records const& ixns_list);
 
         /// --------------------------------------------------------------------
+        /// this function is called to merge two intersection records. the
+        /// merged intersection record is returned.
+        intersection_records merge_intersection_records(intersection_records L, intersection_records R);
+
+        /// --------------------------------------------------------------------
         /// a bogus intersection_record instance
         const auto NULL_INTERSECTION_RECORD = intersection_record(-DBL_MAX, /// where
                                                                   nullptr,  /// what-object

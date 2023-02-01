@@ -3,13 +3,16 @@
  **/
 
 /// c++ includes
+#include <cstdio>
 #include <ios>
+#include <iterator>
 #include <optional>
 #include <ostream>
 #include <sstream>
 #include <string>
 
 /// our includes
+#include "common/include/logging.h"
 #include "intersection_record.hpp"
 #include "utils.hpp"
 
@@ -76,6 +79,20 @@ namespace raytracer
 
                 /// no visible intersections
                 return std::nullopt;
+        }
+
+        /// --------------------------------------------------------------------
+        /// this function is called to merge two intersection record instances.
+        intersection_records merge_intersection_records(intersection_records L, intersection_records R)
+        {
+                intersection_records retval;
+                retval.reserve(L.size() + R.size());
+
+                std::sort(L.begin(), L.end());
+                std::sort(R.begin(), R.end());
+                std::merge(L.begin(), L.end(), R.begin(), R.end(), std::back_inserter(retval));
+
+                return retval;
         }
 
 } // namespace raytracer

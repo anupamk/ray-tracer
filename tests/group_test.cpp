@@ -1,5 +1,4 @@
 /// c++ includes
-#include "constants.hpp"
 #include <iostream>
 #include <memory>
 
@@ -7,6 +6,7 @@
 #include "doctest/doctest.h"
 
 /// our includes
+#include "constants.hpp"
 #include "group.hpp"
 #include "matrix.hpp"
 #include "matrix_transformations.hpp"

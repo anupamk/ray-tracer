@@ -136,4 +136,11 @@ namespace raytracer
                 return (parent_ != nullptr);
         }
 
+        /// --------------------------------------------------------------------
+        /// does this shape include the other ?
+        bool shape_interface::includes(std::shared_ptr<const shape_interface> const& other) const
+        {
+                return this == other.get();
+        }
+
 } // namespace raytracer

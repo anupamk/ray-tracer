@@ -79,6 +79,12 @@ namespace raytracer
                 virtual bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
                                                      double distance) const = 0;
 
+                /// ------------------------------------------------------------
+                /// does this shape include the other shape ?
+                ///
+                /// return 'true' if it does, 'false' otherwise.
+                virtual bool includes(std::shared_ptr<const shape_interface> const& other) const;
+
             public:
                 /// ------------------------------------------------------------
                 /// this function is called to return the current transform

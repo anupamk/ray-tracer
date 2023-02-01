@@ -108,8 +108,11 @@ namespace raytracer
         /// in the group.
         bool group::includes(std::shared_ptr<const shape_interface> const& the_shape) const
         {
-                return std::find(child_shapes_.begin(), child_shapes_.end(), the_shape) !=
-                       child_shapes_.end();
+                return std::find_if(child_shapes_.cbegin(), child_shapes_.cend(),
+                                    /// ----------------------------------------
+                                    /// a child shape must include 'the_shape'
+                                    [&](auto const& cs) { return cs->includes(the_shape); }) !=
+                       child_shapes_.cend();
         }
 
         /// --------------------------------------------------------------------

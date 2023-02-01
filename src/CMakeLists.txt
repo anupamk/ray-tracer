@@ -112,6 +112,9 @@ set(RAYTRACER_LIB_SOURCES
   obj_file_loader.cpp
   obj_parse_result.hpp
   obj_parse_result.cpp
+  csg.hpp
+  csg.cpp
+  color_pallette.hpp
   )
 
 add_library(rt-lib STATIC ${RAYTRACER_LIB_SOURCES})
@@ -353,3 +356,8 @@ add_executable(newtons-cradle render_newtons_cradle.cpp)
 target_link_libraries(newtons-cradle
   PRIVATE rt-lib)
 
+# ------------------------------------------------------------------------------
+# render dice with csg
+add_executable(csg-dice render_csg_dice.cpp)
+target_link_libraries(csg-dice
+  PRIVATE rt-lib)
