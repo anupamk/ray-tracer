@@ -15,10 +15,10 @@
 #include "doctest/doctest.h"
 
 /// our own thing
-#include "align_check_pattern.hpp"
-#include "color.hpp"
 #include "common/include/logging.h"
-#include "constants.hpp"
+#include "patterns/align_check_pattern.hpp"
+#include "primitives/color.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

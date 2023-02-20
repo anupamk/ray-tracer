@@ -6,8 +6,8 @@
 
 /// our own thing
 #include "common/include/logging.h"
-#include "constants.hpp"
-#include "tuple.hpp"
+#include "primitives/tuple.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

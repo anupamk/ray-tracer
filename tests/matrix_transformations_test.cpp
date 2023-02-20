@@ -10,10 +10,10 @@
 
 /// our own thing
 #include "common/include/logging.h"
-#include "constants.hpp"
-#include "matrix.hpp"
-#include "matrix_transformations.hpp"
-#include "tuple.hpp"
+#include "primitives/matrix.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/tuple.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
@@ -269,7 +269,7 @@ TEST_CASE("rotation about x-axis test")
         auto const cw_half_quarter_rot = rt_matrix_xforms_t::create_rotx_matrix(raytracer::PI / 4);
         auto const cw_full_quarter_rot = rt_matrix_xforms_t::create_rotx_matrix(raytracer::PI / 2);
 
-        constexpr double sqrt_2_div_2         = std::sqrt(2) / 2.0;
+        double sqrt_2_div_2                   = std::sqrt(2) / 2.0;
         auto const exp_cw_half_quarter_rot_pt = raytracer::create_point(0.0, sqrt_2_div_2, sqrt_2_div_2);
         auto const exp_cw_full_quarter_rot_pt = raytracer::create_point(0.0, 0.0, 1.0);
 
@@ -296,7 +296,7 @@ TEST_CASE("rotation about y-axis test")
         auto const cw_half_quarter_rot = rt_matrix_xforms_t::create_roty_matrix(raytracer::PI / 4);
         auto const cw_full_quarter_rot = rt_matrix_xforms_t::create_roty_matrix(raytracer::PI / 2);
 
-        constexpr double sqrt_2_div_2         = std::sqrt(2) / 2.0;
+        double sqrt_2_div_2                   = std::sqrt(2) / 2.0;
         auto const exp_cw_half_quarter_rot_pt = raytracer::create_point(sqrt_2_div_2, 0.0, sqrt_2_div_2);
         auto const exp_cw_full_quarter_rot_pt = raytracer::create_point(1.0, 0.0, 0.0);
 
@@ -323,7 +323,7 @@ TEST_CASE("rotation about z-axis test")
         auto const cw_half_quarter_rot = rt_matrix_xforms_t::create_rotz_matrix(raytracer::PI / 4);
         auto const cw_full_quarter_rot = rt_matrix_xforms_t::create_rotz_matrix(raytracer::PI / 2);
 
-        constexpr double sqrt_2_div_2         = std::sqrt(2) / 2.0;
+        double sqrt_2_div_2                   = std::sqrt(2) / 2.0;
         auto const exp_cw_half_quarter_rot_pt = raytracer::create_point(-sqrt_2_div_2, sqrt_2_div_2, 0.0);
         auto const exp_cw_full_quarter_rot_pt = raytracer::create_point(-1.0, 0.0, 0.0);
 

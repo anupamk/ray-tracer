@@ -10,8 +10,8 @@
 
 /// our own thing
 #include "common/include/logging.h"
-#include "constants.hpp"
-#include "matrix.hpp"
+#include "primitives/matrix.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

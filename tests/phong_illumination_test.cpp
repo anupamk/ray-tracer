@@ -6,17 +6,15 @@
 #include <memory>
 
 /// 3rdparty testing library
-#include "constants.hpp"
-#include "doctest/doctest.h"
-
-/// our includes
-#include "color.hpp"
 #include "common/include/logging.h"
-#include "material.hpp"
-#include "phong_illumination.hpp"
-#include "plane.hpp"
-#include "point_light.hpp"
-#include "tuple.hpp"
+#include "doctest/doctest.h"
+#include "io/phong_illumination.hpp"
+#include "patterns/material.hpp"
+#include "primitives/color.hpp"
+#include "primitives/point_light.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/plane.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

@@ -5,11 +5,11 @@
 #include "doctest/doctest.h"
 
 /// our own thing
-#include "intersection_record.hpp"
-#include "matrix_transformations.hpp"
-#include "ray.hpp"
-#include "sphere.hpp"
-#include "tuple.hpp"
+#include "primitives/intersection_record.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/ray.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/sphere.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

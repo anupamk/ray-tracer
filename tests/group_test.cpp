@@ -6,13 +6,13 @@
 #include "doctest/doctest.h"
 
 /// our includes
-#include "constants.hpp"
-#include "group.hpp"
-#include "matrix.hpp"
-#include "matrix_transformations.hpp"
-#include "ray.hpp"
-#include "sphere.hpp"
-#include "tuple.hpp"
+#include "primitives/matrix.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/ray.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/group.hpp"
+#include "shapes/sphere.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

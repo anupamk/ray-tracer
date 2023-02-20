@@ -11,14 +11,14 @@
 
 /// our includes
 #include "common/include/logging.h"
-#include "constants.hpp"
-#include "intersection_record.hpp"
-#include "material.hpp"
-#include "matrix.hpp"
-#include "matrix_transformations.hpp"
-#include "plane.hpp"
-#include "ray.hpp"
-#include "tuple.hpp"
+#include "patterns/material.hpp"
+#include "primitives/intersection_record.hpp"
+#include "primitives/matrix.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/ray.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/plane.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

@@ -30,7 +30,8 @@ SET(RT_TEST_SRC_FILES
 # no user serviceable parts here ↓
 
 # project name
-project(ray-tracer-tests CXX)
+project(ray-tracer-tests
+  LANGUAGES CXX)
 
 add_compile_options(
   -Wno-unused-variable
@@ -38,8 +39,12 @@ add_compile_options(
 )
 
 # ------------------------------------------------------------------------------
-# generate a single test-target based on the incoming file-name. test
-# executable is called 'rt_<test-file-name>'
+# generate a single test-target based on the incoming file-name.
+# test executable is called 'rt_<test-file-name>'
+#
+# so, for a file named 'foo_test.cpp' we get an executable called
+# 'rt_foo_test' which when run, will run through all the specified
+# tests.
 function (generate_one_test_target FNAME)
 
   get_filename_component(FNAME_SANS_EXT ${FNAME} NAME_WLE)
@@ -47,7 +52,7 @@ function (generate_one_test_target FNAME)
 
   add_executable(${TEST_NAME} ${FNAME} doctest_main.cpp)
   target_link_libraries(${TEST_NAME}
-    PRIVATE rt-lib
+    PRIVATE rt_io
     PRIVATE doctest)
 
   add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME} WORKING_DIRECTORY tests)

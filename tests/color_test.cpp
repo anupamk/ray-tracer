@@ -6,9 +6,9 @@
 #include "doctest/doctest.h"
 
 /// our own thing
-#include "color.hpp"
 #include "common/include/logging.h"
-#include "constants.hpp"
+#include "primitives/color.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

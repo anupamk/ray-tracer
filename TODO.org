@@ -106,10 +106,10 @@ and are generally not described in that order.
      Add support for axis-aligned-bounding-boxes for faster rendering
      of scenes.
 
-   + Use LLVM
+   + +Use LLVM+
 
-     Build the whole thing using clang, fixing issues as they come
-     up. Hopefully not too many :)
+     +Build the whole thing using clang, fixing issues as they come+
+     +up. Hopefully not too many :)+
 
    + Improvements To Perlin Noise
 

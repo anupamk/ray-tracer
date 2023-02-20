@@ -3,7 +3,6 @@
  **/
 
 /// c++ includes
-#include "sphere.hpp"
 #include <cstddef>
 #include <iostream>
 #include <ostream>
@@ -13,16 +12,17 @@
 #include "doctest/doctest.h"
 
 /// our includes
-#include "color.hpp"
 #include "common/include/logging.h"
-#include "constants.hpp"
-#include "material.hpp"
-#include "matrix_transformations.hpp"
-#include "phong_illumination.hpp"
-#include "point_light.hpp"
-#include "ray.hpp"
-#include "tuple.hpp"
-#include "world.hpp"
+#include "io/phong_illumination.hpp"
+#include "io/world.hpp"
+#include "patterns/material.hpp"
+#include "primitives/color.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/point_light.hpp"
+#include "primitives/ray.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/sphere.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

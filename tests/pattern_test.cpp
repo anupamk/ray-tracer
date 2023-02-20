@@ -1,6 +1,4 @@
 /// c++ includes
-#include "plane.hpp"
-#include "point_light.hpp"
 #include <memory>
 
 /// 3rdparty testing library
@@ -8,21 +6,21 @@
 
 /// ----------------------------------------------------------------------------
 /// our includes, first what we are testing
-#include "checkers_pattern.hpp"
-#include "gradient_pattern.hpp"
-#include "pattern_interface.hpp"
-#include "ring_pattern.hpp"
-#include "solid_pattern.hpp"
-#include "striped_pattern.hpp"
-
-/// ... and then everything else
-#include "color.hpp"
 #include "common/include/logging.h"
-#include "material.hpp"
-#include "matrix_transformations.hpp"
-#include "phong_illumination.hpp"
-#include "sphere.hpp"
-#include "tuple.hpp"
+#include "io/phong_illumination.hpp"
+#include "patterns/checkers_pattern.hpp"
+#include "patterns/gradient_pattern.hpp"
+#include "patterns/material.hpp"
+#include "patterns/pattern_interface.hpp"
+#include "patterns/ring_pattern.hpp"
+#include "patterns/solid_pattern.hpp"
+#include "patterns/striped_pattern.hpp"
+#include "primitives/color.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/point_light.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/plane.hpp"
+#include "shapes/sphere.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

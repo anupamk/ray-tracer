@@ -1,10 +1,9 @@
-#include "point_light.hpp"
-
 /// 3rdparty testing library
 #include "doctest/doctest.h"
 
 /// our headers
 #include "common/include/logging.h"
+#include "primitives/point_light.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

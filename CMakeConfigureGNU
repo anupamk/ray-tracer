@@ -1,0 +1,31 @@
+# -*- cmake -*-
+
+# ------------------------------------------------------------------------------
+# this file sets up various options required for building the whole
+# project with the GNU toolchain
+
+# ------------------------------------------------------------------------------
+# set gcc options
+SET (CMAKE_C_COMPILER                  "/usr/bin/gcc")
+SET (CMAKE_C_FLAGS_INIT                "-Wall -Werror -march=native -ffast-math -std=c11")
+SET (CMAKE_C_FLAGS_DEBUG_INIT          "-g")
+SET (CMAKE_C_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+
+# ------------------------------------------------------------------------------
+# set g++ options
+SET (CMAKE_CXX_COMPILER                  "/usr/bin/g++")
+SET (CMAKE_CXX_FLAGS_INIT                "-Wall -Werror -std=c++17 -pipe")
+SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g")
+SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG -march=native ")
+SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+
+# ------------------------------------------------------------------------------
+# set linker and other options
+SET (CMAKE_AR                   "/usr/bin/ar")
+SET (CMAKE_LINKER               "/usr/bin/ld")
+SET (CMAKE_NM                   "/usr/bin/nm")
+SET (CMAKE_OBJDUMP              "/usr/bin/objdump")
+SET (CMAKE_RANLIB               "/usr/bin/ranlib")

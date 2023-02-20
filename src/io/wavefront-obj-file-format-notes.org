@@ -1,0 +1,86 @@
+* These are notes regarding WaveFront OBJ file format.
+
+** Brief Overview
+
+The WaveFront =OBJ= file format is a useful standard for representing
+polygonal data. This format supports lines, polygons, free-form curves
+and surfaces.
+
+OBJ files are in ASCII / plain text format, which can be operated on
+by canonical tools f.e. emacs. Files using this have the =.obj=
+extension. A binary format, =MOD= also exists but it is proprietary.
+
+Current =OBJ= version is 3.0 which supersedes previous version 2.11.
+
+** File Organization
+
+*** Grammar
+
++ Salient points
+
+  - no header is required, but always a good idea to have one.
+  - =#= is the per-line /comment/ character.
+  - blank spaces and blank lines can be freely added.
+
++ Keywords
+
+  + Vertex Data
+    - =v= vertex data f.e. =v x y z=
+    - =vt= vertex texture f.e. =vt u v=
+    - =vn= vertex normal f.e. =vn dx dy dz=
+    - <this space is for rent>
+
+  + Elements
+
+    - =f= face f.e. =f v1 v2 v3 ... vn=
+
+  + Groups
+
+    - each generated object belongs to a default group, iff no
+      containing group is specified.
+
+    - =g= group name f.e. =g GroupOne= defines a named group called
+      =GroupOne=.
+
+*** Example
+
+**** Using absolute numbering
+
+#+begin_src OBJ
+# simple wavefront file
+
+[line-01] v 0.0 0.0 0.0
+[line-02] v 0.0 1.0 0.0
+[line-03] v 1.0 0.0 0.0
+[line-04] v 1.0 0.9 0.45
+[line-05] v 1.678 9.45 10.34
+[line-06] f 1 2 3 4 5
+#+end_src
+
+Couple of salient points about the above snippet of WaveFront data:
+
+  + The '[line-XX]' are /*NOT*/ part of the actual data. These are
+    there just for illustration / reference purposes.
+
+  + The above snippet describes a polygonal face with 5 vertices
+    (lines[line-01] .. [line-05]) Each point on the face is described
+    by a vertex i.e. the =v= keyword.
+
+  + The face itself is described by the =f= keyword (line-06)
+    enumerated as '1' based index into the vertex list.
+
+**** Using relative numbering
+
+#+begin_src OBJ
+# simple wavefront file
+
+v 0.0 0.0 0.0
+v 0.0 1.0 0.0
+v 1.0 0.0 0.0
+
+f -1 -2 -3
+#+end_src
+
+Reference points using negative indices, with '-1' being the current
+maximum. Thus, this makes it easy to intersperse vertex and face
+commands.

@@ -1,14 +1,14 @@
 /// c++ includes
-#include "matrix.hpp"
 #include <stdexcept>
 
 /// 3rdparty testing library
 #include "doctest/doctest.h"
 
 /// our own thing
-#include "matrix_transformations.hpp"
-#include "ray.hpp"
-#include "tuple.hpp"
+#include "primitives/matrix.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/ray.hpp"
+#include "primitives/tuple.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

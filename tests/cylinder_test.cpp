@@ -10,15 +10,15 @@
 #include "doctest/doctest.h"
 
 /// our includes
-#include "align_check_pattern.hpp"
-#include "constants.hpp"
-#include "cylinder.hpp"
-#include "intersection_record.hpp"
-#include "material.hpp"
-#include "matrix.hpp"
-#include "matrix_transformations.hpp"
-#include "ray.hpp"
-#include "tuple.hpp"
+#include "patterns/align_check_pattern.hpp"
+#include "patterns/material.hpp"
+#include "primitives/intersection_record.hpp"
+#include "primitives/matrix.hpp"
+#include "primitives/matrix_transformations.hpp"
+#include "primitives/ray.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/cylinder.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
@@ -260,11 +260,32 @@ TEST_CASE("scenario: intersecting caps of a closed cylinder")
                         RT::create_vector(0.0, 1.0, 1.0),
                         2,
                 },
+
+                /// ------------------------------------------------------------
+                /// next two tests [5], [6] are from:
+                ///    https://forum.raytracerchallenge.com/post/448/thread
+
+                /// [5]
+                ///
+                {
+                        RT::create_point(0.0, 0.5, 0.999),
+                        RT::create_vector(0.0, 1.0, 0.0),
+                        2,
+                },
+
+                /// [6]
+                {
+                        RT::create_point(0.0, 0.5, 1.001),
+                        RT::create_vector(0.0, 1, 0),
+                        0,
+                },
+
         };
 
-        auto const the_cylinder = std::make_shared<RT::cylinder>(false,    /// cast-shadow ?
-                                                                 1.0, 2.0, /// y min, max
-                                                                 true);    /// capped ?
+        auto const the_cylinder = std::make_shared<RT::cylinder>(false, /// no shadow
+                                                                 1.0,   /// y-min
+                                                                 2.0,   /// y-max
+                                                                 true); /// capped
 
         for (auto const& tc : all_tc) {
                 auto const r      = RT::ray_t(tc.ray_origin, normalize(tc.ray_direction));

@@ -17,10 +17,10 @@
 
 /// our own thing
 #include "common/include/logging.h"
-#include "mmapped_file_reader.hpp"
-#include "obj_file_loader.hpp"
-#include "triangle.hpp"
-#include "tuple.hpp"
+#include "io/obj_file_loader.hpp"
+#include "primitives/tuple.hpp"
+#include "shapes/triangle.hpp"
+#include "utils/mmapped_file_reader.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
