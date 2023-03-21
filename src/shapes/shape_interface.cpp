@@ -14,7 +14,7 @@ namespace raytracer
             , inv_xform_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , inv_xform_transpose_(fsize_dense2d_matrix_t::create_identity_matrix(4))
             , material_()
-            , parent_(nullptr)
+            , parent_({})
         {
         }
 
@@ -58,8 +58,10 @@ namespace raytracer
         tuple shape_interface::world_to_local(tuple const& world_pt) const
         {
                 auto local_pt = world_pt;
-                if (this->parent_ != nullptr) {
-                        local_pt = parent_->world_to_local(world_pt);
+
+                if (auto parent_sp = this->parent_.lock()) {
+                        local_pt = parent_sp->world_to_local(world_pt);
+                        return inv_transform() * local_pt;
                 }
 
                 return inv_transform() * local_pt;
@@ -76,8 +78,8 @@ namespace raytracer
                 obj_space_normal.vectorify();
                 obj_space_normal = normalize(obj_space_normal);
 
-                if (this->parent_ != nullptr) {
-                        return this->parent_->normal_at_world(obj_space_normal);
+                if (auto parent_sp = this->parent_.lock()) {
+                        return parent_sp->normal_at_world(obj_space_normal);
                 }
 
                 return obj_space_normal;
@@ -103,12 +105,12 @@ namespace raytracer
         /// this function is called to get the parent of the current shape
         std::shared_ptr<const shape_interface> shape_interface::get_parent() const
         {
-                return parent_;
+                return parent_.lock();
         }
 
         /// --------------------------------------------------------------------
         /// this function is called to set the parent of the current shape
-        void shape_interface::set_parent(std::shared_ptr<const shape_interface> const& new_parent)
+        void shape_interface::set_parent(std::shared_ptr<shape_interface> new_parent)
         {
                 parent_ = new_parent;
         }
@@ -133,7 +135,7 @@ namespace raytracer
         /// group. returns 'true' if it is, 'false' otherwise.
         bool shape_interface::is_grouped() const
         {
-                return (parent_ != nullptr);
+                return (parent_.lock() != nullptr);
         }
 
         /// --------------------------------------------------------------------

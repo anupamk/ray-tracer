@@ -33,16 +33,9 @@ include(CTest)
 enable_testing()
 
 # ------------------------------------------------------------------------------
-# disable colors : they don't help much
+# colorless verbose builds
 set(CMAKE_COLOR_MAKEFILE 0)
-
-# ------------------------------------------------------------------------------
-# we are going with c++17
-set(CMAKE_CXX_STANDARD 17)
-
-# ------------------------------------------------------------------------------
-# verbose builds
-set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # ------------------------------------------------------------------------------
 # create the compilation-database (compile_commands.json)

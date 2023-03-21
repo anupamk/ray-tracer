@@ -43,7 +43,7 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// the parent of this shape.
-                std::shared_ptr<const shape_interface> parent_;
+                std::weak_ptr<const shape_interface> parent_;
 
             protected:
                 /// ------------------------------------------------------------
@@ -127,7 +127,7 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// adjust parent of a shape
                 std::shared_ptr<const shape_interface> get_parent() const;
-                void set_parent(std::shared_ptr<const shape_interface> const&);
+                void set_parent(std::shared_ptr<shape_interface>);
 
                 /// ------------------------------------------------------------
                 /// can this shape cast a shadow ?

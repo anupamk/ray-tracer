@@ -7,8 +7,8 @@
 # ------------------------------------------------------------------------------
 # set clang options
 SET (CMAKE_C_COMPILER                  "/usr/bin/clang")
-SET (CMAKE_C_FLAGS_INIT                "-Wall -Werror -std=c11")
-SET (CMAKE_C_FLAGS_DEBUG_INIT          "-g")
+SET (CMAKE_C_FLAGS_INIT                "-Wall -Werror -std=c11 -fno-color-diagnostics")
+SET (CMAKE_C_FLAGS_DEBUG_INIT          "-g -fno-omit-frame-pointer -fsanitize=address")
 SET (CMAKE_C_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
 SET (CMAKE_C_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
 SET (CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
@@ -16,8 +16,8 @@ SET (CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 # ------------------------------------------------------------------------------
 # set clang++ options
 SET (CMAKE_CXX_COMPILER                  "/usr/bin/clang++")
-SET (CMAKE_CXX_FLAGS_INIT                "-Wall -Werror -std=c++17 -pipe")
-SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g")
+SET (CMAKE_CXX_FLAGS_INIT                "-Wall -Werror -std=c++17 -pipe -fno-color-diagnostics")
+SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g -fno-omit-frame-pointer -fsanitize=address")
 SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
 SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG -march=native")
 SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")

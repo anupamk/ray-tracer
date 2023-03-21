@@ -24,6 +24,8 @@ namespace raytracer
             public:
                 group(bool cast_shadow = true);
 
+                std::shared_ptr<shape_interface> get_ptr();
+
             public:
                 /// ------------------------------------------------------------
                 /// overridden methods here

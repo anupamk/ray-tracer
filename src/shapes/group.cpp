@@ -28,6 +28,11 @@ namespace raytracer
         {
         }
 
+        std::shared_ptr<shape_interface> group::get_ptr()
+        {
+                return shared_from_this();
+        }
+
         /// --------------------------------------------------------------------
         /// this function is called to compute the intersection of the ray with
         /// group
@@ -120,8 +125,8 @@ namespace raytracer
         /// this function is called to add a child shape to a group
         void group::add_child(std::shared_ptr<shape_interface> new_shape)
         {
+                new_shape->set_parent(get_ptr());
                 child_shapes_.push_back(new_shape);
-                new_shape->set_parent(shared_from_this());
         }
 
         /// --------------------------------------------------------------------
