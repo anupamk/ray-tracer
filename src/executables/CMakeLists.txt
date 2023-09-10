@@ -29,6 +29,7 @@ SET(RT_EXECUTABLES_SOURCES
   render_cessna.cpp
   render_newtons_cradle.cpp
   render_csg_dice.cpp
+  render_chess_pawn.cpp
 )
 
 # ------------------------------------------------------------------------------

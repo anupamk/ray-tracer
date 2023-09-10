@@ -42,7 +42,7 @@ namespace raytracer
                 static constexpr double RI_VACCUM  = 1.0;
                 static constexpr double RI_AIR     = 1.00029;
                 static constexpr double RI_WATER   = 1.333;
-                static constexpr double RI_GLASS   = 1.5;
+                static constexpr double RI_GLASS   = 1.52;
                 static constexpr double RI_DIAMOND = 2.417;
 
             public:
