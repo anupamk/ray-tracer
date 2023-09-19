@@ -44,6 +44,7 @@
 #include "shapes/shape_interface.hpp"
 #include "shapes/sphere.hpp"
 #include "utils/constants.hpp"
+#include "utils/utils.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed
@@ -71,9 +72,10 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok render the scene
-        Benchmark<> render_bm("MT render");
+        Benchmark<> render_bm("MT render", 10);
 
-        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+        auto const rendered_canvas =
+                render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
         LOG_INFO("rendering completed");
 
         rendered_canvas.write(dst_fname);
@@ -225,7 +227,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01 = RT::camera(1280, 1024, RT::PI_BY_3F);
+        auto camera_01 = RT::camera(512 / 8, 512 / 8, RT::PI_BY_3F);
         auto xform     = RT_XFORM::create_view_transform(RT::create_point(0.0, 4.0, -10.0), /// look-from
                                                          RT::create_point(0.0, 2.0, 0.0),   /// look-to
                                                          RT::create_vector(0.0, 1.0, 0.0)); /// up-vector

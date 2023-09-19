@@ -176,7 +176,7 @@ int main(int argc, char** argv)
 
                 /// ------------------------------------------------------------
                 /// just use the first [0] result only please
-                auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+                auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
                 rendered_canvas.write(dst_fname);
 
                 /// --------------------------------------------------------------------

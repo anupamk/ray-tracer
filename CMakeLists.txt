@@ -35,7 +35,7 @@ enable_testing()
 # ------------------------------------------------------------------------------
 # colorless verbose builds
 set(CMAKE_COLOR_MAKEFILE 0)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # ------------------------------------------------------------------------------
 # create the compilation-database (compile_commands.json)

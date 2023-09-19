@@ -73,7 +73,7 @@ int main(int argc, char** argv)
         /// ok render the scene
         Benchmark<> render_bm("MT render");
 
-        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, world, camera)[0];
+        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
         LOG_INFO("rendering completed");
 
         rendered_canvas.write(dst_fname);

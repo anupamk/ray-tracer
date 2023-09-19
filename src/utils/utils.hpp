@@ -1,10 +1,10 @@
 #pragma once
 
-
 /// c++ includes
 #include <algorithm>
 #include <cmath>
 #include <optional>
+#include <thread>
 #include <type_traits>
 #include <utility>
 
@@ -184,6 +184,13 @@ namespace raytracer
                 }
 
                 return val_mod;
+        }
+
+        /// --------------------------------------------------------------------
+        /// return the number of hw-threads on the system
+        inline uint32_t max_cores()
+        {
+                return std::thread::hardware_concurrency();
         }
 
 } // namespace raytracer

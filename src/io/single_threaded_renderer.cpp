@@ -16,9 +16,7 @@ namespace raytracer
         canvas single_threaded_renderer(raytracer::world W,  /// the world
                                         raytracer::camera C) /// the camera
         {
-                PROFILE_SCOPE;
-
-                return C.render(W);
+                return multi_threaded_renderer(1, W, C);
         }
 
 } // namespace raytracer

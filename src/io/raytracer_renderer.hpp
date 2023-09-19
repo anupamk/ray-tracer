@@ -26,7 +26,8 @@ namespace raytracer
          * multi threaded rendering of a scene. rendered canvas is returned
          * on completion.
          **/
-        canvas multi_threaded_renderer(raytracer::world,   /// the world
+        canvas multi_threaded_renderer(uint32_t,           /// num-hw-threads
+                                       raytracer::world,   /// the world
                                        raytracer::camera); /// the camera
 
 } // namespace raytracer

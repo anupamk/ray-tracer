@@ -8,6 +8,8 @@ add_library(rt_io SHARED
   canvas_ppm_reader.cpp
   canvas_ppm_writer.cpp
   multi_threaded_renderer.cpp
+  multi_threaded_work_generator.hpp
+  multi_threaded_work_generator.cpp
   obj_file_loader.cpp
   obj_file_loader.hpp
   obj_parse_result.cpp

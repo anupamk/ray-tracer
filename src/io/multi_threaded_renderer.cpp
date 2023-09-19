@@ -16,91 +16,38 @@
 
 /// our includes
 #include "common/include/logging.h"
+#include "io/multi_threaded_work_generator.hpp"
 #include "io/raytracer_renderer.hpp"
 #include "primitives/ray.hpp"
 
 namespace raytracer
 {
-        /// --------------------------------------------------------------------
-        /// a render-work item is a ray at a specific place on the canvas
-        class render_work_item
-        {
-            public:
-                uint32_t x;
-                uint32_t y;
-                ray_t r;
-        };
 
         /// --------------------------------------------------------------------
-        /// a bunch of render-work items is what is what gets handled by a
-        /// single rendering thread
-        class render_work_items
-        {
-            public:
-                std::vector<render_work_item> work_list;
-        };
-
-        /// --------------------------------------------------------------------
-        /// convenience mostly
-        namespace CQ = moodycamel;
-
-        /// --------------------------------------------------------------------
-        /// file specific declarations
-
         /// this is the function that gets invoked for rendering a bunch of work
         /// items.
         static void coloring_worker(int thread_id,
-                                    CQ::ConcurrentQueue<render_work_items>&, /// queue-of-work
-                                    world const&,                            /// scene-details
-                                    canvas&);                                /// canvas-details
+                                    moodycamel::ConcurrentQueue<render_work_items>&, /// queue-of-work
+                                    world const&,                                    /// scene-details
+                                    canvas&);                                        /// canvas-details
 
         /*
          * this implements a multi threaded rendering of scene in a world 'W'
          * that is looked at by a camera 'C' with the generated image stored in
          * a file 'dst_fname'
          **/
-        canvas multi_threaded_renderer(world W, camera C)
+        canvas multi_threaded_renderer(uint32_t num_hw_threads, world W, camera C)
         {
                 PROFILE_SCOPE;
 
                 canvas rendered_canvas = canvas::create_ascii(C.hsize(), C.vsize());
-
-                /// --------------------------------------------------------------------
-                /// concurrent queue contains multiple instances of render_work_items defined
-                /// above.
-                int const MAX_RENDERING_THREADS   = std::thread::hardware_concurrency();
-                int const TOTAL_PIXELS_PER_THREAD = C.hsize() / MAX_RENDERING_THREADS;
-
-                LOG_DEBUG("renderer information: total-threads:%d, pixels-per-thread:%d",
-                          MAX_RENDERING_THREADS, TOTAL_PIXELS_PER_THREAD);
-
-                CQ::ConcurrentQueue<render_work_items> work_queue(TOTAL_PIXELS_PER_THREAD * C.vsize());
-
-                /// ------------------------------------------------------------
-                /// generate work for the workers...
-                for (uint32_t y = 0; y < C.vsize(); y++) {
-                        for (uint32_t x = 0; x < C.hsize(); x += TOTAL_PIXELS_PER_THREAD) {
-                                render_work_items work_item;
-                                work_item.work_list.reserve(TOTAL_PIXELS_PER_THREAD);
-
-                                for (int i = 0; i < TOTAL_PIXELS_PER_THREAD; i++) {
-                                        render_work_item tmp{
-                                                x + i,                    /// x-pixel
-                                                y,                        /// y-pixel
-                                                C.ray_for_pixel(x + i, y) /// ray-at-(x,y)
-                                        };
-
-                                        work_item.work_list.push_back(tmp);
-                                }
-
-                                work_queue.enqueue(work_item);
-                        }
-                }
+                auto work_queue        = generate_scanline_work_queue(num_hw_threads, C);
 
                 /// ------------------------------------------------------------
                 /// start the coloring threads
-                std::vector<std::thread> rendering_threads(MAX_RENDERING_THREADS);
-                for (auto i = 0; i < MAX_RENDERING_THREADS; i++) {
+                std::vector<std::thread> rendering_threads(num_hw_threads);
+
+                for (auto i = 0; i < num_hw_threads; i++) {
                         rendering_threads[i] = std::thread(coloring_worker,            /// rendering-function
                                                            i,                          /// thread-id
                                                            std::ref(work_queue),       /// work-queue
@@ -135,10 +82,11 @@ namespace raytracer
          * this function is the workhorse for rendering a bunch of work-items
          * picked from a concurrent queue
          **/
-        static void coloring_worker(int thread_id,
-                                    CQ::ConcurrentQueue<render_work_items>& work_queue, /// queue-of-work
-                                    world const& W,                                     /// scene-details
-                                    canvas& dst_canvas)                                 /// canvas-details
+        static void
+        coloring_worker(int thread_id,
+                        moodycamel::ConcurrentQueue<render_work_items>& work_queue, /// queue-of-work
+                        world const& W,                                             /// scene-details
+                        canvas& dst_canvas)                                         /// canvas-details
         {
                 bool all_done          = false;
                 size_t pixels_rendered = 0;
