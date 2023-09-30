@@ -103,7 +103,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// this function is called to get the parent of the current shape
-        std::shared_ptr<const shape_interface> shape_interface::get_parent() const
+        std::shared_ptr<shape_interface const> shape_interface::get_parent() const
         {
                 return parent_.lock();
         }
@@ -140,7 +140,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// does this shape include the other ?
-        bool shape_interface::includes(std::shared_ptr<const shape_interface> const& other) const
+        bool shape_interface::includes(std::shared_ptr<shape_interface const> const& other) const
         {
                 return this == other.get();
         }

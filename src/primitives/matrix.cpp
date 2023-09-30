@@ -35,7 +35,7 @@ namespace raytracer
             , data_(rows_ * cols_)
         {
                 auto col_index = 0;
-                for (const auto ith_row : row_list) {
+                for (auto const& ith_row : row_list) {
                         std::copy(ith_row.begin(), ith_row.end(), &data_[col_index]);
                         col_index += cols_;
                 }
@@ -57,11 +57,11 @@ namespace raytracer
         /// this function is called to return a specific row
         std::vector<double> fsize_dense2d_matrix_t::get_row(size_t row_num) const
         {
-                const auto data_start = this->data_.begin();
-                const auto row_start  = data_start + row_num * this->num_cols();
-                const auto row_end    = row_start + this->num_cols();
+                auto const data_start = this->data_.begin();
+                auto const row_start  = data_start + row_num * this->num_cols();
+                auto const row_end    = row_start + this->num_cols();
 
-                const std::vector<double> ret(row_start, row_end);
+                std::vector<double> const ret(row_start, row_end);
                 return ret;
         }
 
@@ -224,8 +224,8 @@ namespace raytracer
                 /// element-by-element epsilon-comparison
                 for (size_t i = 0; i < M.num_rows(); i++) {
                         for (size_t j = 0; j < M.num_cols(); j++) {
-                                const auto m_ij = M(i, j);
-                                const auto n_ij = N(i, j);
+                                auto const m_ij = M(i, j);
+                                auto const n_ij = N(i, j);
 
                                 if (unlikely(!epsilon_equal(m_ij, n_ij))) {
                                         return false;

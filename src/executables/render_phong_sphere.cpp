@@ -51,8 +51,8 @@ static RT::camera create_camera();
 
 int main(int argc, char** argv)
 {
-        const auto camera = create_camera();
-        const auto world  = create_world();
+        auto const camera = create_camera();
+        auto const world  = create_world();
         auto dst_fname    = "phong-sphere.ppm";
 
         LOG_INFO("canvas details : {width (pixels): %d, height (pixels): %d, "

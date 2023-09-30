@@ -65,7 +65,7 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// compute the result of a ray intersecting a shape.
                 std::optional<intersection_records>
-                intersect(std::shared_ptr<const shape_interface> const&) const;
+                intersect(std::shared_ptr<shape_interface const> const&) const;
 
                 /// ------------------------------------------------------------
                 /// return meta-information about an intersection. intersections
@@ -81,7 +81,7 @@ namespace raytracer
                 /// returns 'true' if this ray intersects the list of
                 /// world-objects before 'distance'. returns 'false' otherwise.
                 bool has_intersection_before(
-                        std::vector<std::shared_ptr<const shape_interface>> const& world_objects,
+                        std::vector<std::shared_ptr<shape_interface const>> const& world_objects,
                         double distance) const;
         };
 

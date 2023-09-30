@@ -16,9 +16,6 @@
 
 namespace raytracer
 {
-        /// convenience mostly
-        using shared_shape_interface = std::shared_ptr<shape_interface const>;
-
         /*
          * this function implements the phong reflection model, a brief
          * description of which follows:
@@ -46,7 +43,7 @@ namespace raytracer
          *     and viewer (or eye) vector and is controlled by the 'shininess'
          *     of the surface.
          **/
-        color phong_illumination(shared_shape_interface shape,      /// shape
+        color phong_illumination(std::shared_ptr<shape_interface const> shape, /// shape
                                  tuple const& surface_point,        /// where ray intersects surface
                                  point_light const& incident_light, /// light illuminating the scene
                                  tuple const& eye_vector,           /// camera || viewer

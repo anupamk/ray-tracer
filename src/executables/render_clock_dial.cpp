@@ -59,9 +59,9 @@ int main(int argc, char** argv)
         constexpr auto y_midpt    = canvas_dim_y / 2;
 
         /// the transformation matrices
-        const auto dial_scale_mat  = RT_XFORM::create_3d_scaling_matrix(scaled_radius, scaled_radius, 0.0);
-        const auto dial_xlate_mat  = RT_XFORM::create_3d_translation_matrix(x_midpt, y_midpt, 0.0);
-        const auto final_xform_mat = dial_xlate_mat * dial_scale_mat;
+        auto const dial_scale_mat  = RT_XFORM::create_3d_scaling_matrix(scaled_radius, scaled_radius, 0.0);
+        auto const dial_xlate_mat  = RT_XFORM::create_3d_translation_matrix(x_midpt, y_midpt, 0.0);
+        auto const final_xform_mat = dial_xlate_mat * dial_scale_mat;
 
         /// compute final positions
         for (auto& pos : dial_hour_pos) {
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
         /// plot dial positions on canvas
         auto canvas = RT::canvas::create_binary(canvas_dim_x, canvas_dim_y);
-        for (const auto& pos : dial_hour_pos) {
+        for (auto const& pos : dial_hour_pos) {
                 size_t const dial_xpos = pos.x();
                 size_t const dial_ypos = pos.y();
 

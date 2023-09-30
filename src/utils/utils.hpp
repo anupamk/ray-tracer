@@ -42,7 +42,7 @@ namespace raytracer
         /// false otherwise.
         constexpr bool epsilon_equal(float a, float b)
         {
-                const auto abs_diff = std::abs(a - b);
+                auto const abs_diff = std::abs(a - b);
                 return (abs_diff < EPSILON);
         }
 
@@ -126,12 +126,12 @@ namespace raytracer
         ///
         /// No extra work is required in using the above, as opposed to blindly
         /// using either (1.sol) or (2.sol)
-        inline const std::optional<std::pair<double, double>> quadratic_real_roots(double A, double B,
+        inline std::optional<std::pair<double, double>> const quadratic_real_roots(double A, double B,
                                                                                    double C)
         {
                 PROFILE_SCOPE;
 
-                const auto discriminant = B * B - 4.0 * A * C;
+                auto const discriminant = B * B - 4.0 * A * C;
 
                 /// only complex roots
                 if (discriminant < 0) {
@@ -140,29 +140,29 @@ namespace raytracer
 
                 /// equal real roots
                 if (epsilon_equal(discriminant, 0.0)) {
-                        const double r_1 = -B / (2.0 * A);
-                        const double r_2 = r_1;
+                        double const r_1 = -B / (2.0 * A);
+                        double const r_2 = r_1;
 
                         return std::make_pair(r_1, r_2);
                 }
 
-                const auto sqrt_discriminant = std::sqrt(discriminant);
-                const auto two_A             = 2.0 * A;
-                const auto two_C             = 2.0 * C;
+                auto const sqrt_discriminant = std::sqrt(discriminant);
+                auto const two_A             = 2.0 * A;
+                auto const two_C             = 2.0 * C;
 
                 /// case-1 : B ≥ 0.0
                 if (B >= 0.0) {
-                        const double tmp = (-B - sqrt_discriminant);
-                        const double r_1 = tmp / two_A;
-                        const double r_2 = two_C / tmp;
+                        double const tmp = (-B - sqrt_discriminant);
+                        double const r_1 = tmp / two_A;
+                        double const r_2 = two_C / tmp;
 
                         return std::make_pair(r_1, r_2);
                 }
 
                 /// case-2 : B < 0.0
-                const double tmp = (-B + sqrt_discriminant);
-                const double r_1 = two_C / tmp;
-                const double r_2 = tmp / two_A;
+                double const tmp = (-B + sqrt_discriminant);
+                double const r_1 = two_C / tmp;
+                double const r_2 = tmp / two_A;
 
                 return std::make_pair(r_1, r_2);
         }

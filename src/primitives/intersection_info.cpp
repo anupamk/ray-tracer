@@ -104,11 +104,9 @@ namespace raytracer
                                 return 1.0;
                         }
 
-                        /// compute cos_t
-                        auto const cos_t = std::sqrt(1.0 - sin_sqr_t);
-
+                        /// ----------------------------------------------------
                         /// when n1 > n2, we use the cos_t instead of cos
-                        cos = cos_t;
+                        cos = std::sqrt(1.0 - sin_sqr_t);
                 }
 
                 float r0 = std::pow((n1_val - n2_val) / (n1_val + n2_val), 2.0);

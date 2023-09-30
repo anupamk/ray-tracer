@@ -175,7 +175,7 @@ namespace raytracer
                 /// in both the 'left' and 'right' shape in the csg.
                 ///
                 /// return 'true' if it does, 'false' otherwise.
-                bool includes(std::shared_ptr<const shape_interface> const& other) const override;
+                bool includes(std::shared_ptr<shape_interface const> const& other) const override;
 
                 /// ------------------------------------------------------------
                 /// given a list of intersections, produce a subset of only

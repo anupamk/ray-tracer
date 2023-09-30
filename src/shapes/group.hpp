@@ -19,7 +19,7 @@ namespace raytracer
         class group final : public shape_interface
         {
             private:
-                std::vector<std::shared_ptr<const shape_interface>> child_shapes_;
+                std::vector<std::shared_ptr<shape_interface const>> child_shapes_;
 
             public:
                 group(bool cast_shadow = true);
@@ -66,7 +66,7 @@ namespace raytracer
                 /// for all the shapes in the group.
                 ///
                 /// return 'true' if it does, 'false' otherwise.
-                bool includes(std::shared_ptr<const shape_interface> const& other) const override;
+                bool includes(std::shared_ptr<shape_interface const> const& other) const override;
 
             private:
                 /// ------------------------------------------------------------

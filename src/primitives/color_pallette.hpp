@@ -10,7 +10,7 @@
 
 namespace raytracer
 {
-        static const std::unordered_map<std::string, color> color_pallette = {
+        static std::unordered_map<std::string, color> const color_pallette = {
                 {"black", color::RGB(0x0, 0x0, 0x0)},
                 {"dim gray", color::RGB(0x69, 0x69, 0x69)},
                 {"dark gray", color::RGB(0xa9, 0xa9, 0xa9)},

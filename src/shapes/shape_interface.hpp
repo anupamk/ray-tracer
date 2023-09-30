@@ -43,7 +43,7 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// the parent of this shape.
-                std::weak_ptr<const shape_interface> parent_;
+                std::weak_ptr<shape_interface const> parent_;
 
             protected:
                 /// ------------------------------------------------------------
@@ -82,7 +82,7 @@ namespace raytracer
                 /// does this shape include the other shape ?
                 ///
                 /// return 'true' if it does, 'false' otherwise.
-                virtual bool includes(std::shared_ptr<const shape_interface> const& other) const;
+                virtual bool includes(std::shared_ptr<shape_interface const> const& other) const;
 
             public:
                 /// ------------------------------------------------------------
@@ -126,7 +126,7 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// adjust parent of a shape
-                std::shared_ptr<const shape_interface> get_parent() const;
+                std::shared_ptr<shape_interface const> get_parent() const;
                 void set_parent(std::shared_ptr<shape_interface>);
 
                 /// ------------------------------------------------------------

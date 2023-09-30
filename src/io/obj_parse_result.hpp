@@ -107,7 +107,7 @@ namespace raytracer
                 /// reference_wrapper.
                 ///
                 /// both checked and unchecked versions of these is provided.
-                const tuple& vertex(int32_t i) const;
+                tuple const& vertex(int32_t i) const;
                 std::optional<std::reference_wrapper<const tuple>> checked_vertex(int32_t i) const;
 
                 /// ------------------------------------------------------------
@@ -121,8 +121,8 @@ namespace raytracer
                 /// reference_wrapper.
                 ///
                 /// both checked and unchecked versions of these is provided.
-                const tuple& vertex_normal(int32_t i) const;
-                std::optional<std::reference_wrapper<const tuple>> checked_vertex_normal(int32_t i) const;
+                tuple const& vertex_normal(int32_t i) const;
+                std::optional<std::reference_wrapper<tuple const>> checked_vertex_normal(int32_t i) const;
 
                 /// ------------------------------------------------------------
                 /// is the vertex-index 'i' valid for vertex_list that we have

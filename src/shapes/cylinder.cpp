@@ -106,17 +106,17 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// intersect the cylinder "wall"
                 {
-                        const auto ray_dir_x    = R.direction().x();
-                        const auto ray_dir_z    = R.direction().z();
-                        const auto ray_origin_x = R.origin().x();
-                        const auto ray_origin_z = R.origin().z();
+                        auto const ray_dir_x    = R.direction().x();
+                        auto const ray_dir_z    = R.direction().z();
+                        auto const ray_origin_x = R.origin().x();
+                        auto const ray_origin_z = R.origin().z();
 
                         /// ------------------------------------------------------------
                         /// co-efficients of the quadratic equation for
                         /// ray-cylinder intersection
-                        const auto A = (ray_dir_x * ray_dir_x + ray_dir_z * ray_dir_z);
-                        const auto B = 2.0 * (ray_origin_x * ray_dir_x + ray_origin_z * ray_dir_z);
-                        const auto C = (ray_origin_x * ray_origin_x) + (ray_origin_z * ray_origin_z) - 1.0;
+                        auto const A = (ray_dir_x * ray_dir_x + ray_dir_z * ray_dir_z);
+                        auto const B = 2.0 * (ray_origin_x * ray_dir_x + ray_origin_z * ray_dir_z);
+                        auto const C = (ray_origin_x * ray_origin_x) + (ray_origin_z * ray_origin_z) - 1.0;
 
                         if (auto const roots = quadratic_real_roots(A, B, C)) {
                                 auto root_1 = roots->first;

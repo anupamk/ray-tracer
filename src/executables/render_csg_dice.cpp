@@ -65,8 +65,8 @@ using RT_XFORM = RT::matrix_transformations_t;
 /// file specific functions
 static RT::world create_world();
 static RT::camera create_camera();
-static std::shared_ptr<RT::shape_interface> create_a_dice(const RT::material& dice_material,
-                                                          const RT::material& pip_material);
+static std::shared_ptr<RT::shape_interface> create_a_dice(RT::material const& dice_material,
+                                                          RT::material const& pip_material);
 
 static std::vector<std::shared_ptr<RT::shape_interface>> create_dices(uint32_t num_dices);
 
@@ -84,7 +84,8 @@ int main(int argc, char** argv)
         /// ok render the scene
         Benchmark<> render_bm("MT render");
 
-        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
+        auto const rendered_canvas =
+                render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
         rendered_canvas.write(dst_fname);
         render_bm.show_stats();
 
@@ -96,7 +97,7 @@ int main(int argc, char** argv)
 /// larger sphere.
 ///
 /// make it so.
-static std::shared_ptr<RT::shape_interface> create_dice_body(const RT::material& mat)
+static std::shared_ptr<RT::shape_interface> create_dice_body(RT::material const& mat)
 {
         auto dice_cube = std::make_shared<RT::cube>(false);
         dice_cube->set_material(mat);
@@ -114,7 +115,7 @@ static std::shared_ptr<RT::shape_interface> create_dice_body(const RT::material&
 /// translated+scaled sphere.
 ///
 /// multiple 'pips' are a group of single pips
-static std::shared_ptr<RT::shape_interface> create_a_dice_pip(float i, float j, const RT::material& mat)
+static std::shared_ptr<RT::shape_interface> create_a_dice_pip(float i, float j, RT::material const& mat)
 {
         auto pip_sphere = std::make_shared<RT::sphere>(false);
         pip_sphere->set_material(mat);
@@ -127,12 +128,12 @@ static std::shared_ptr<RT::shape_interface> create_a_dice_pip(float i, float j, 
         return pip_sphere;
 }
 
-static std::shared_ptr<RT::shape_interface> create_dice_face_1(const RT::material& pip_mat)
+static std::shared_ptr<RT::shape_interface> create_dice_face_1(RT::material const& pip_mat)
 {
         return create_a_dice_pip(0.0, 0.0, pip_mat);
 }
 
-static std::shared_ptr<RT::shape_interface> create_dice_face_2(const RT::material& pip_mat)
+static std::shared_ptr<RT::shape_interface> create_dice_face_2(RT::material const& pip_mat)
 {
         auto pips = std::make_shared<RT::group>(false);
         pips->add_child(create_a_dice_pip(-0.8, -0.8, pip_mat));
@@ -141,7 +142,7 @@ static std::shared_ptr<RT::shape_interface> create_dice_face_2(const RT::materia
         return pips;
 }
 
-static std::shared_ptr<RT::shape_interface> create_dice_face_3(const RT::material& pip_mat)
+static std::shared_ptr<RT::shape_interface> create_dice_face_3(RT::material const& pip_mat)
 {
         auto pips = std::make_shared<RT::group>(false);
         pips->add_child(create_a_dice_pip(0.0, 0.0, pip_mat));
@@ -151,7 +152,7 @@ static std::shared_ptr<RT::shape_interface> create_dice_face_3(const RT::materia
         return pips;
 }
 
-static std::shared_ptr<RT::shape_interface> create_dice_face_4(const RT::material& pip_mat)
+static std::shared_ptr<RT::shape_interface> create_dice_face_4(RT::material const& pip_mat)
 {
         auto pips = std::make_shared<RT::group>(false);
         pips->add_child(create_a_dice_pip(-0.8, -0.8, pip_mat));
@@ -162,7 +163,7 @@ static std::shared_ptr<RT::shape_interface> create_dice_face_4(const RT::materia
         return pips;
 }
 
-static std::shared_ptr<RT::shape_interface> create_dice_face_5(const RT::material& pip_mat)
+static std::shared_ptr<RT::shape_interface> create_dice_face_5(RT::material const& pip_mat)
 {
         auto pips = std::make_shared<RT::group>(false);
 
@@ -175,7 +176,7 @@ static std::shared_ptr<RT::shape_interface> create_dice_face_5(const RT::materia
         return pips;
 }
 
-static std::shared_ptr<RT::shape_interface> create_dice_face_6(const RT::material& pip_mat)
+static std::shared_ptr<RT::shape_interface> create_dice_face_6(RT::material const& pip_mat)
 {
         auto pips = std::make_shared<RT::group>(false);
 
@@ -191,8 +192,8 @@ static std::shared_ptr<RT::shape_interface> create_dice_face_6(const RT::materia
 
 /// ----------------------------------------------------------------------------
 /// create a dice of a specific color
-static std::shared_ptr<RT::shape_interface> create_a_dice(const RT::material& dice_material,
-                                                          const RT::material& pip_material)
+static std::shared_ptr<RT::shape_interface> create_a_dice(RT::material const& dice_material,
+                                                          RT::material const& pip_material)
 {
         /// --------------------------------------------------------------------
         /// dice body + pips
@@ -316,7 +317,7 @@ static RT::world create_world()
         {
                 auto dices = create_dices(192);
                 std::for_each(dices.begin(), dices.end(),
-                              [&world](const std::shared_ptr<RT::shape_interface>& dice) {
+                              [&world](std::shared_ptr<RT::shape_interface> const& dice) {
                                       world.add(dice);
                               });
         }

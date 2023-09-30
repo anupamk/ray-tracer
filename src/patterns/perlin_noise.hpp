@@ -229,20 +229,20 @@ namespace raytracer
                 int32_t const y_lo = fast_floor(y);
                 int32_t const z_lo = fast_floor(z);
 
-                const std::int32_t X = static_cast<std::int32_t>(x_lo) & 255;
-                const std::int32_t Y = static_cast<std::int32_t>(y_lo) & 255;
-                const std::int32_t Z = static_cast<std::int32_t>(z_lo) & 255;
+                int32_t const X = static_cast<std::int32_t>(x_lo) & 255;
+                int32_t const Y = static_cast<std::int32_t>(y_lo) & 255;
+                int32_t const Z = static_cast<std::int32_t>(z_lo) & 255;
 
                 x -= x_lo;
                 y -= y_lo;
                 z -= z_lo;
 
-                const double u = fade(x);
-                const double v = fade(y);
-                const double w = fade(z);
+                double const u = fade(x);
+                double const v = fade(y);
+                double const w = fade(z);
 
-                const std::int32_t A = p_[X] + Y, AA = p_[A] + Z, AB = p_[A + 1] + Z;
-                const std::int32_t B = p_[X + 1] + Y, BA = p_[B] + Z, BB = p_[B + 1] + Z;
+                int32_t const A = p_[X] + Y, AA = p_[A] + Z, AB = p_[A + 1] + Z;
+                int32_t const B = p_[X + 1] + Y, BA = p_[B] + Z, BB = p_[B + 1] + Z;
 
                 return lerp(w,
                             lerp(v, lerp(u, grad(p_[AA], x, y, z), grad(p_[BA], x - 1, y, z)),

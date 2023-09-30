@@ -66,12 +66,12 @@ namespace raytracer
                         return *this;
                 }
 
-                bool operator==(const cube_face_enum_values v) const
+                bool operator==(cube_face_enum_values const v) const
                 {
                         return value_ == v;
                 }
 
-                bool operator!=(const cube_face_enum_values v) const
+                bool operator!=(cube_face_enum_values const v) const
                 {
                         return value_ != v;
                 }

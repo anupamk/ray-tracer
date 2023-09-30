@@ -161,7 +161,7 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// does this shape include the other ? returns 'true' if it does,
         /// 'false' otherwise.
-        bool csg_shape::includes(std::shared_ptr<const shape_interface> const& other) const
+        bool csg_shape::includes(std::shared_ptr<shape_interface const> const& other) const
         {
                 return l_shape->includes(other) || r_shape->includes(other);
         }
@@ -178,7 +178,7 @@ namespace raytracer
                 bool in_left  = false;
                 bool in_right = false;
 
-                for (const auto& xs_i : xs_list) {
+                for (auto const& xs_i : xs_list) {
                         auto xs_i_obj = xs_i.what_object();
                         bool left_hit = l_shape->includes(xs_i_obj);
 

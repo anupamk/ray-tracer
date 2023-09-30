@@ -433,7 +433,7 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// bad face data: invalid vertex || vertex-normal index
-                for (const auto& vi_vni : face_vertices) {
+                for (auto const& vi_vni : face_vertices) {
                         if (!result.vertex_index_is_valid(vi_vni.vi())) {
                                 return false;
                         }

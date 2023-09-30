@@ -96,13 +96,13 @@ namespace raytracer
         std::optional<intersection_records> sphere::compute_intersections_(ray_t const& R) const
         {
                 /// vector from sphere's center to the ray-origin
-                const auto sphere_to_ray = R.origin() - this->center();
-                const auto ray_dir       = R.direction();
+                auto const sphere_to_ray = R.origin() - this->center();
+                auto const ray_dir       = R.direction();
 
                 /// compute the coefficients of the quadratic equation
-                const auto A = dot(ray_dir, ray_dir);
-                const auto B = 2.0 * dot(ray_dir, sphere_to_ray);
-                const auto C = dot(sphere_to_ray, sphere_to_ray) - 1;
+                auto const A = dot(ray_dir, ray_dir);
+                auto const B = 2.0 * dot(ray_dir, sphere_to_ray);
+                auto const C = dot(sphere_to_ray, sphere_to_ray) - 1;
 
                 /// aaand get the roots
                 if (auto const roots = quadratic_real_roots(A, B, C)) {

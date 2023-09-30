@@ -68,12 +68,11 @@ namespace raytracer
         /// this function is called to return the result of a ray intersecting a
         /// shape
         std::optional<intersection_records>
-        ray_t::intersect(std::shared_ptr<const shape_interface> const& S) const
+        ray_t::intersect(std::shared_ptr<shape_interface const> const& S) const
         {
                 PROFILE_SCOPE;
 
-                const auto inv_ray = this->transform(S->inv_transform());
-                return S->intersect({}, inv_ray);
+                return S->intersect({}, this->transform(S->inv_transform()));
         }
 
         /// --------------------------------------------------------------------
@@ -168,7 +167,7 @@ namespace raytracer
         ///
         /// returns 'false' otherwise.
         bool ray_t::has_intersection_before(
-                std::vector<std::shared_ptr<const shape_interface>> const& world_object_list,
+                std::vector<std::shared_ptr<shape_interface const>> const& world_object_list,
                 double distance) const
         {
                 for (auto const& obj : world_object_list) {
@@ -176,7 +175,7 @@ namespace raytracer
                                 continue;
                         }
 
-                        const auto inv_ray = transform(obj->inv_transform());
+                        auto const inv_ray = transform(obj->inv_transform());
                         if (obj->has_intersection_before({}, inv_ray, distance)) {
                                 return true;
                         }

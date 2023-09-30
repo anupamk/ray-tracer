@@ -82,8 +82,8 @@ int main(int argc, char** argv)
                 RT::canvas ith_canvas = RT::canvas::create_binary(CANVAS_XSIZE_PIXELS, CANVAS_YSIZE_PIXELS);
 
                 constexpr double frequency = 1.0;
-                const double fx            = ith_canvas.width() / frequency;
-                const double fy            = ith_canvas.height() / frequency;
+                double const fx            = ith_canvas.width() / frequency;
+                double const fy            = ith_canvas.height() / frequency;
 
                 RT::perlin_noise_pattern n(gp,               /// gradient-pattern
                                            distrib(rnd_gen), /// a new-random-number

@@ -103,7 +103,7 @@ namespace raytracer
         ///
         /// indexing into the vertex list is '1' based i.e. 1st vertex is at
         /// index == 1, 2nd at index == 2 etc.
-        const tuple& obj_parse_result::vertex(int32_t i) const
+        tuple const& obj_parse_result::vertex(int32_t i) const
         {
                 i = get_1_based_index(i);
                 return vertex_list_[i];
@@ -115,7 +115,7 @@ namespace raytracer
         ///
         /// indexing into the vertex list is '1' based i.e. 1st vertex is at
         /// index == 1, 2nd at index == 2 etc.
-        std::optional<std::reference_wrapper<const tuple>> obj_parse_result::checked_vertex(int32_t i) const
+        std::optional<std::reference_wrapper<tuple const>> obj_parse_result::checked_vertex(int32_t i) const
         {
                 uint32_t k = get_1_based_index(i);
 
@@ -132,7 +132,7 @@ namespace raytracer
         ///
         /// indexing into the vertex list is '1' based i.e. 1st vertex is at
         /// index == 1, 2nd at index == 2 etc.
-        const tuple& obj_parse_result::vertex_normal(int32_t i) const
+        tuple const& obj_parse_result::vertex_normal(int32_t i) const
         {
                 i = get_1_based_index(i);
                 return vertex_normal_list_[i];
@@ -144,7 +144,7 @@ namespace raytracer
         ///
         /// indexing into the vertex list is '1' based i.e. 1st vertex is at
         /// index == 1, 2nd at index == 2 etc.
-        std::optional<std::reference_wrapper<const tuple>>
+        std::optional<std::reference_wrapper<tuple const>>
         obj_parse_result::checked_vertex_normal(int32_t i) const
         {
                 uint32_t k = get_1_based_index(i);

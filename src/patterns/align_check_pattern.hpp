@@ -35,11 +35,11 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// the colors that make up this pattern
-                const color main_color_;
-                const color ul_color_;
-                const color ur_color_;
-                const color bl_color_;
-                const color br_color_;
+                color const main_color_;
+                color const ul_color_;
+                color const ur_color_;
+                color const bl_color_;
+                color const br_color_;
 
             public:
                 align_check(color main_color,   /// main-color

@@ -61,8 +61,8 @@ namespace raytracer
 
                 canvas canvas_retval       = canvas::create_binary(canvas_xpixels, canvas_ypixels);
                 constexpr double frequency = 1.0;
-                const double fx            = canvas_retval.width() / frequency;
-                const double fy            = canvas_retval.height() / frequency;
+                double const fx            = canvas_retval.width() / frequency;
+                double const fy            = canvas_retval.height() / frequency;
 
                 for (size_t y = 0; y < canvas_retval.height(); y++) {
                         for (size_t x = 0; x < canvas_retval.width(); x++) {

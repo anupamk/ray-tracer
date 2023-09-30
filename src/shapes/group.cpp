@@ -112,7 +112,7 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// this function is called to check if the specified shape is present
         /// in the group.
-        bool group::includes(std::shared_ptr<const shape_interface> const& the_shape) const
+        bool group::includes(std::shared_ptr<shape_interface const> const& the_shape) const
         {
                 return std::find_if(child_shapes_.cbegin(), child_shapes_.cend(),
                                     /// ----------------------------------------

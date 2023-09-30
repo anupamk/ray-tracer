@@ -81,7 +81,7 @@ TEST_CASE("canvas::save(...)")
         c.write(canvas_fname);
 
         /// expected data format
-        const std::vector<std::string> have = {
+        std::vector<std::string> const have = {
                 "P3",
                 "10 2",
                 "255",

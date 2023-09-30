@@ -31,13 +31,13 @@ TEST_CASE("scenario : layout of align-check pattern")
 {
         /// --------------------------------------------------------------------
         /// align-check-pattern colors
-        const RT::color main_color = RT::color(1.0, 1.0, 1.0);
-        const RT::color ul_color   = RT::color(1.0, 0.0, 0.0);
-        const RT::color ur_color   = RT::color(1.0, 1.0, 0.0);
-        const RT::color bl_color   = RT::color(0.0, 1.0, 0.0);
-        const RT::color br_color   = RT::color(0.0, 1.0, 1.0);
+        RT::color const main_color = RT::color(1.0, 1.0, 1.0);
+        RT::color const ul_color   = RT::color(1.0, 0.0, 0.0);
+        RT::color const ur_color   = RT::color(1.0, 1.0, 0.0);
+        RT::color const bl_color   = RT::color(0.0, 1.0, 0.0);
+        RT::color const br_color   = RT::color(0.0, 1.0, 1.0);
 
-        auto const uv_pattern = RT::align_check(main_color, ul_color, ur_color, bl_color, br_color);
+        const auto uv_pattern = RT::align_check(main_color, ul_color, ur_color, bl_color, br_color);
 
         struct {
                 RT::uv_point uv_pt;

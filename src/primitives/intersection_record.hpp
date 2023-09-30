@@ -128,7 +128,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// a bogus intersection_record instance
-        const auto NULL_INTERSECTION_RECORD = intersection_record(-DBL_MAX, /// where
+        auto const NULL_INTERSECTION_RECORD = intersection_record(-DBL_MAX, /// where
                                                                   nullptr,  /// what-object
                                                                   0.0,      /// u
                                                                   0.0);     /// v

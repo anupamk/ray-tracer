@@ -30,7 +30,7 @@ static inline std::string log_ts_string()
         char fmt_time_buf[bufsize];
 
         struct tm* tm_info  = localtime(&tv.tv_sec);
-        const size_t offset = strftime(fmt_time_buf, bufsize, "%Y-%m-%d %H:%M:%S", tm_info);
+        size_t const offset = strftime(fmt_time_buf, bufsize, "%Y-%m-%d %H:%M:%S", tm_info);
         snprintf(fmt_time_buf + offset, (bufsize - offset), ".%03d", msec);
 
         return std::string(fmt_time_buf);

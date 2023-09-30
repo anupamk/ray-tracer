@@ -81,7 +81,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// this function is called to add a light to the world
-        void world::add(const std::shared_ptr<const shape_interface> s)
+        void world::add(std::shared_ptr<shape_interface const> const s)
         {
                 shape_list_.push_back(s);
                 return;
@@ -96,7 +96,7 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// shapes in the world
-        std::vector<std::shared_ptr<const shape_interface>> const& world::shapes() const
+        std::vector<std::shared_ptr<shape_interface const>> const& world::shapes() const
         {
                 return shape_list_;
         }

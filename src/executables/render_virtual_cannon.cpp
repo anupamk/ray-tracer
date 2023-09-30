@@ -69,20 +69,20 @@ int main(int argc, char** argv)
         namespace RT = raytracer;
 
         /// create projectile
-        const auto start_point = RT::create_point(0.0, 1.0, 0.0);
+        auto const start_point = RT::create_point(0.0, 1.0, 0.0);
         auto velocity          = RT::normalize(RT::create_vector(78.5, 102.0, 0.0)) * 12.25;
         projectile proj(start_point, velocity);
 
         /// create the environment
-        const auto gravity = RT::create_vector(0.0, -0.1, 0.0);
-        const auto wind    = raytracer::create_vector(-0.01, 0.0, 0.0);
+        auto const gravity = RT::create_vector(0.0, -0.1, 0.0);
+        auto const wind    = raytracer::create_vector(-0.01, 0.0, 0.0);
         env_params env(gravity, wind);
 
         /// and the canvas where everything will be shown
         auto canvas = RT::canvas::create_binary(1280, 1024);
 
         for (; proj.position().y() > 0;) {
-                const auto proj_pos    = proj.position();
+                auto const proj_pos    = proj.position();
                 const size_t proj_xpos = proj_pos.x();
                 const size_t proj_ypos = proj_pos.y();
 
@@ -115,8 +115,8 @@ int main(int argc, char** argv)
  **/
 static projectile tick(env_params env, projectile proj)
 {
-        const auto new_pos = proj.position() + proj.velocity();
-        const auto new_vel = proj.velocity() + env.gravity() + env.wind();
+        auto const new_pos = proj.position() + proj.velocity();
+        auto const new_vel = proj.velocity() + env.gravity() + env.wind();
 
         return projectile(new_pos, new_vel);
 }

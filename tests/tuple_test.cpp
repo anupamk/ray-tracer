@@ -66,7 +66,7 @@ TEST_CASE("test tuple::operator==(...) interface for points")
                 raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
                 raytracer::tuple pt_2 = raytracer::create_point(1.0, 2.0, 3.0);
 
-                const auto pts_eq = (pt_1 == pt_2) ? true : false;
+                auto const pts_eq = (pt_1 == pt_2) ? true : false;
                 CHECK(pts_eq == true);
         }
 
@@ -75,7 +75,7 @@ TEST_CASE("test tuple::operator==(...) interface for points")
                 raytracer::tuple pt_1 = raytracer::create_point(1.0 + raytracer::EPSILON * 0.1, 2.0, 3.0);
                 raytracer::tuple pt_2 = raytracer::create_point(1.0, 2.0, 3.0);
 
-                const auto pts_eq = (pt_1 == pt_2) ? true : false;
+                auto const pts_eq = (pt_1 == pt_2) ? true : false;
                 CHECK(pts_eq == true);
         }
 
@@ -84,7 +84,7 @@ TEST_CASE("test tuple::operator==(...) interface for points")
                 raytracer::tuple pt_1 = raytracer::create_point(1.0 + raytracer::EPSILON * 10, 2.0, 3.0);
                 raytracer::tuple pt_2 = raytracer::create_point(1.0, 2.0, 3.0);
 
-                const auto pts_eq = (pt_1 == pt_2) ? true : false;
+                auto const pts_eq = (pt_1 == pt_2) ? true : false;
                 CHECK(pts_eq == false);
         }
 }
@@ -96,7 +96,7 @@ TEST_CASE("test tuple::operator==(...) interface for vectors")
                 raytracer::tuple v_1 = raytracer::create_vector(1.0, 2.0, 3.0);
                 raytracer::tuple v_2 = raytracer::create_vector(1.0, 2.0, 3.0);
 
-                const auto vec_eq = (v_1 == v_2) ? true : false;
+                auto const vec_eq = (v_1 == v_2) ? true : false;
                 CHECK(vec_eq == true);
         }
 
@@ -105,7 +105,7 @@ TEST_CASE("test tuple::operator==(...) interface for vectors")
                 raytracer::tuple v_1 = raytracer::create_vector(1.0 + raytracer::EPSILON * 0.1, 2.0, 3.0);
                 raytracer::tuple v_2 = raytracer::create_vector(1.0, 2.0, 3.0);
 
-                const auto vec_eq = (v_1 == v_2) ? true : false;
+                auto const vec_eq = (v_1 == v_2) ? true : false;
                 CHECK(vec_eq == true);
         }
 
@@ -114,7 +114,7 @@ TEST_CASE("test tuple::operator==(...) interface for vectors")
                 raytracer::tuple v_1 = raytracer::create_vector(1.0 + raytracer::EPSILON * 10, 2.0, 3.0);
                 raytracer::tuple v_2 = raytracer::create_vector(1.0, 2.0, 3.0);
 
-                const auto vec_eq = (v_1 == v_2) ? true : false;
+                auto const vec_eq = (v_1 == v_2) ? true : false;
                 CHECK(vec_eq == false);
         }
 }
@@ -158,7 +158,7 @@ TEST_CASE("tuple::operator+(...) test")
         {
                 raytracer::tuple pt_1  = raytracer::create_point(1.0, 2.0, 3.0);
                 raytracer::tuple vec_1 = raytracer::create_vector(2.0, 3.0, 4.0);
-                const auto pt_new      = pt_1 + vec_1;
+                auto const pt_new      = pt_1 + vec_1;
 
                 CHECK(pt_new.x() == 3.0);
                 CHECK(pt_new.y() == 5.0);
@@ -171,7 +171,7 @@ TEST_CASE("tuple::operator+(...) test")
         {
                 raytracer::tuple vec_0 = raytracer::create_vector(1.0, 2.0, 3.0);
                 raytracer::tuple vec_1 = raytracer::create_vector(2.0, 3.0, 4.0);
-                const auto vec_new     = vec_0 + vec_1;
+                auto const vec_new     = vec_0 + vec_1;
 
                 CHECK(vec_new.x() == 3.0);
                 CHECK(vec_new.y() == 5.0);
@@ -235,7 +235,7 @@ TEST_CASE("tuple::operator-(...) test")
                 raytracer::tuple pt_1  = raytracer::create_point(1.0, 2.0, 3.0);
                 raytracer::tuple vec_1 = raytracer::create_vector(2.0, 3.0, 4.0);
 
-                const auto pt_0 = pt_1 - vec_1;
+                auto const pt_0 = pt_1 - vec_1;
 
                 CHECK(pt_0.x() == -1.0);
                 CHECK(pt_0.y() == -1.0);
@@ -248,7 +248,7 @@ TEST_CASE("tuple::operator-(...) test")
         {
                 raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
                 raytracer::tuple pt_2 = raytracer::create_point(2.0, 3.0, 4.0);
-                const auto pt_0       = pt_1 - pt_2;
+                auto const pt_0       = pt_1 - pt_2;
 
                 CHECK(pt_0.x() == -1.0);
                 CHECK(pt_0.y() == -1.0);
@@ -261,7 +261,7 @@ TEST_CASE("tuple::operator-(...) test")
         {
                 raytracer::tuple vec_0 = raytracer::create_vector(1.0, 2.0, 3.0);
                 raytracer::tuple vec_1 = raytracer::create_vector(2.0, 3.0, 4.0);
-                const auto vec_ret     = vec_0 - vec_1;
+                auto const vec_ret     = vec_0 - vec_1;
 
                 CHECK(vec_ret.x() == -1.0);
                 CHECK(vec_ret.y() == -1.0);
@@ -277,7 +277,7 @@ TEST_CASE("tuple::operator[*,/,-]() test")
         /// multiplication
         {
                 raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
-                const auto pt_2       = pt_1 * 2.0;
+                auto const pt_2       = pt_1 * 2.0;
 
                 CHECK(pt_2.x() == 2.0);
                 CHECK(pt_2.y() == 4.0);
@@ -286,7 +286,7 @@ TEST_CASE("tuple::operator[*,/,-]() test")
                 CHECK(pt_2.is_vector() == false);
 
                 raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
-                const auto vec_2       = vec_1 * 2.0;
+                auto const vec_2       = vec_1 * 2.0;
 
                 CHECK(vec_2.x() == 2.0);
                 CHECK(vec_2.y() == 4.0);
@@ -298,7 +298,7 @@ TEST_CASE("tuple::operator[*,/,-]() test")
         /// division
         {
                 raytracer::tuple pt_1 = raytracer::create_point(2.0, 4.0, 6.0);
-                const auto pt_2       = pt_1 / 2.0;
+                auto const pt_2       = pt_1 / 2.0;
 
                 CHECK(pt_2.x() == 1.0);
                 CHECK(pt_2.y() == 2.0);
@@ -307,7 +307,7 @@ TEST_CASE("tuple::operator[*,/,-]() test")
                 CHECK(pt_2.is_vector() == false);
 
                 raytracer::tuple vec_1 = raytracer::create_vector(2.0, 4.0, 6.0);
-                const auto vec_2       = vec_1 / 2.0;
+                auto const vec_2       = vec_1 / 2.0;
 
                 CHECK(vec_2.x() == 1.0);
                 CHECK(vec_2.y() == 2.0);
@@ -319,7 +319,7 @@ TEST_CASE("tuple::operator[*,/,-]() test")
         /// negation
         {
                 raytracer::tuple pt_1 = raytracer::create_point(1.0, 2.0, 3.0);
-                const auto pt_minus_1 = -pt_1;
+                auto const pt_minus_1 = -pt_1;
 
                 CHECK(pt_minus_1.x() == -1.0);
                 CHECK(pt_minus_1.y() == -2.0);
@@ -328,7 +328,7 @@ TEST_CASE("tuple::operator[*,/,-]() test")
                 CHECK(pt_minus_1.is_vector() == false);
 
                 raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
-                const auto vec_minus_1 = -vec_1;
+                auto const vec_minus_1 = -vec_1;
 
                 CHECK(vec_minus_1.x() == -1.0);
                 CHECK(vec_minus_1.y() == -2.0);
@@ -343,7 +343,7 @@ TEST_CASE("magnitude(tuple)")
 {
         /// magnitude of vector is well formed
         raytracer::tuple vec_1 = raytracer::create_vector(1.0, 0.0, 0.0);
-        const auto vec_mag     = magnitude(vec_1);
+        auto const vec_mag     = magnitude(vec_1);
         CHECK(vec_mag == 1.0);
 }
 
@@ -353,8 +353,8 @@ TEST_CASE("normalize(tuple)")
         /// common usage first
         {
                 raytracer::tuple vec_1     = raytracer::create_vector(1.0, 2.0, 3.0);
-                const auto mag_norm_vec_1  = magnitude(normalize(vec_1));
-                const auto mag_as_expected = raytracer::epsilon_equal(mag_norm_vec_1, 1.0);
+                auto const mag_norm_vec_1  = magnitude(normalize(vec_1));
+                auto const mag_as_expected = raytracer::epsilon_equal(mag_norm_vec_1, 1.0);
 
                 CHECK(mag_as_expected == true);
         }
@@ -364,7 +364,7 @@ TEST_CASE("normalize(tuple)")
                 raytracer::tuple vec_1 = raytracer::create_vector(0.0, 0.0, 0.0);
 
                 try {
-                        const auto norm_vec_1 = normalize(vec_1);
+                        auto const norm_vec_1 = normalize(vec_1);
                 }
                 catch (std::runtime_error& e) {
                 }
@@ -378,7 +378,7 @@ TEST_CASE("dot(tuple, tuple)")
         {
                 raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
                 raytracer::tuple vec_2 = raytracer::create_vector(2.0, 3.0, 4.0);
-                const auto dot_prod    = dot(vec_1, vec_2);
+                auto const dot_prod    = dot(vec_1, vec_2);
 
                 CHECK(dot_prod == 20.0);
         }
@@ -391,7 +391,7 @@ TEST_CASE("cross(tuple, tuple)")
         {
                 raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
                 raytracer::tuple vec_2 = raytracer::create_vector(2.0, 3.0, 4.0);
-                const auto cross_prod  = cross(vec_1, vec_2);
+                auto const cross_prod  = cross(vec_1, vec_2);
 
                 CHECK(cross_prod.x() == -1.0);
                 CHECK(cross_prod.y() == 2.0);
@@ -404,7 +404,7 @@ TEST_CASE("cross(tuple, tuple)")
         {
                 raytracer::tuple vec_1 = raytracer::create_vector(1.0, 2.0, 3.0);
                 raytracer::tuple vec_2 = raytracer::create_vector(2.0, 3.0, 4.0);
-                const auto cross_prod  = cross(vec_2, vec_1);
+                auto const cross_prod  = cross(vec_2, vec_1);
 
                 CHECK(cross_prod.x() == 1.0);
                 CHECK(cross_prod.y() == -2.0);
