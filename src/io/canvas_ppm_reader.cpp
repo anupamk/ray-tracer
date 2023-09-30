@@ -25,10 +25,10 @@
 
 /// our includes
 #include "common/include/string_utils.hpp"
+#include "file_utils/mmapped_file_reader.hpp"
 #include "io/canvas.hpp"
 #include "primitives/color.hpp"
 #include "utils/execution_profiler.hpp"
-#include "utils/mmapped_file_reader.hpp"
 #include "utils/utils.hpp"
 
 namespace raytracer

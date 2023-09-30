@@ -16,11 +16,11 @@
 
 /// our own thing
 #include "common/include/logging.h"
+#include "file_utils/mmapped_file_reader.hpp"
 #include "io/canvas.hpp"
 #include "patterns/uv_image_pattern.hpp"
 #include "primitives/color.hpp"
 #include "utils/constants.hpp"
-#include "utils/mmapped_file_reader.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

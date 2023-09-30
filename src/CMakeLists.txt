@@ -14,9 +14,11 @@ PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 # |-- primitives        : ray, color, matrix etc. etc.
 # |-- shapes            : supported shapes f.e. plane, sphere, cube etc.
 # |-- utils             : various utilities f.e. benchmark, constants etc.
+# |-- file-utils        : file specific common utilities f.e. mmap etc.
 # ------------------------------------------------------------------------------
 add_subdirectory(common)
 add_subdirectory(utils)
+add_subdirectory(file_utils)
 add_subdirectory(primitives)
 add_subdirectory(shapes)
 add_subdirectory(patterns)

@@ -11,8 +11,8 @@ namespace raytracer
         moodycamel::ConcurrentQueue<render_work_items> generate_scanline_work_queue(uint32_t num_hw_threads,
                                                                                     camera const& C)
         {
-                auto const total_pixels_per_thread = C.hsize() / num_hw_threads;
-                auto const total_work_items        = (C.hsize() / total_pixels_per_thread) * (C.vsize());
+                uint32_t const total_pixels_per_thread = C.hsize() / num_hw_threads;
+                uint32_t const total_work_items        = (C.hsize() / total_pixels_per_thread) * (C.vsize());
 
                 moodycamel::ConcurrentQueue<render_work_items> wq(total_work_items);
 
@@ -23,7 +23,7 @@ namespace raytracer
                                 render_work_items work_item;
                                 work_item.work_list.reserve(total_pixels_per_thread);
 
-                                for (int i = 0; i < total_pixels_per_thread; i++) {
+                                for (uint32_t i = 0; i < total_pixels_per_thread; i++) {
                                         render_work_item tmp{
                                                 x + i,                     /// x-pixel
                                                 y,                         /// y-pixel
@@ -61,7 +61,7 @@ namespace raytracer
                         }
                 };
 
-                auto d2xy = [&](int n, int d, uint32_t& x, uint32_t& y) -> void {
+                auto d2xy = [&](uint32_t n, uint32_t d, uint32_t& x, uint32_t& y) -> void {
                         uint32_t rx, ry, s, t = d;
                         x = y = 0;
 

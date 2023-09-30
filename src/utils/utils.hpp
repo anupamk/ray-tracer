@@ -1,12 +1,8 @@
 #pragma once
 
 /// c++ includes
-#include <algorithm>
-#include <cmath>
 #include <optional>
-#include <thread>
-#include <type_traits>
-#include <utility>
+#include <thread> /// for std::thread::hardware_concurrency(...)
 
 /// our includes
 #include "constants.hpp"
@@ -15,21 +11,35 @@
 namespace raytracer
 {
 
-/// ----------------------------------------------------------------------------
-/// gcc'izms
+        /// ----------------------------------------------------------------------------
+        /// gcc'izms
+#ifndef likely
+
 #define likely(x) __builtin_expect(!!(x), 1)
+
+#endif /// likely
+
+#ifndef unlikely
+
 #define unlikely(x) __builtin_expect(!!(x), 0)
 
+#endif /// unlikely
+
+        /// ----------------------------------------------------------------------------
+        /// are we building on gcc ?
 #if defined(__GNUC__) && !defined(__clang__)
-#define HAS_GCC_COMPILER 1
+
+#define HAS_GCC_COMPILER 1 /// yes
+
 #else
-#define HAS_GCC_COMPILER 0
+
+#define HAS_GCC_COMPILER 0 /// no
+
 #endif
 
-        ///
+        /// --------------------------------------------------------------------
         /// this function returns true if 'a' is approximately equal to 'b',
         /// false otherwise.
-        ///
         constexpr bool epsilon_equal(float a, float b)
         {
                 const auto abs_diff = std::abs(a - b);
@@ -46,6 +56,7 @@ namespace raytracer
         }
 
 #if HAS_GCC_COMPILER
+
         /// --------------------------------------------------------------------
         /// some gcc-inline-asm phun
         inline double asm_sqrt_1(double n)
@@ -61,9 +72,11 @@ namespace raytracer
 
                 return ret;
         }
-#endif
+
+#endif /// HAS_GCC_COMPILER
 
 #if HAS_GCC_COMPILER
+
         /// --------------------------------------------------------------------
         /// just use the floating-point instruction directly...
         inline double asm_sqrt_2(double n)
@@ -76,10 +89,8 @@ namespace raytracer
 
                 return result;
         }
-#endif
 
-        /// real roots of a quadratic equation
-        using real_roots_t = std::pair<double, double>;
+#endif /// HAS_GCC_COMPILER
 
         /// --------------------------------------------------------------------
         /// This function is called to return the real roots of the canonical
@@ -115,7 +126,8 @@ namespace raytracer
         ///
         /// No extra work is required in using the above, as opposed to blindly
         /// using either (1.sol) or (2.sol)
-        inline const std::optional<real_roots_t> quadratic_real_roots(double A, double B, double C)
+        inline const std::optional<std::pair<double, double>> quadratic_real_roots(double A, double B,
+                                                                                   double C)
         {
                 PROFILE_SCOPE;
 
@@ -128,32 +140,31 @@ namespace raytracer
 
                 /// equal real roots
                 if (epsilon_equal(discriminant, 0.0)) {
-                        const auto r_1 = -B / (2.0 * A);
-                        const auto r_2 = r_1;
+                        const double r_1 = -B / (2.0 * A);
+                        const double r_2 = r_1;
 
-                        return real_roots_t{r_1, r_2};
+                        return std::make_pair(r_1, r_2);
                 }
 
-                /// non-equal real roots
                 const auto sqrt_discriminant = std::sqrt(discriminant);
                 const auto two_A             = 2.0 * A;
                 const auto two_C             = 2.0 * C;
 
                 /// case-1 : B ≥ 0.0
                 if (B >= 0.0) {
-                        const auto tmp = (-B - sqrt_discriminant);
-                        const auto r_1 = tmp / two_A;
-                        const auto r_2 = two_C / tmp;
+                        const double tmp = (-B - sqrt_discriminant);
+                        const double r_1 = tmp / two_A;
+                        const double r_2 = two_C / tmp;
 
-                        return real_roots_t{r_1, r_2};
+                        return std::make_pair(r_1, r_2);
                 }
 
                 /// case-2 : B < 0.0
-                const auto tmp = (-B + sqrt_discriminant);
-                const auto r_1 = two_C / tmp;
-                const auto r_2 = tmp / two_A;
+                const double tmp = (-B + sqrt_discriminant);
+                const double r_1 = two_C / tmp;
+                const double r_2 = tmp / two_A;
 
-                return real_roots_t{r_1, r_2};
+                return std::make_pair(r_1, r_2);
         }
 
         /// --------------------------------------------------------------------

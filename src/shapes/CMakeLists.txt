@@ -21,6 +21,9 @@ add_library(rt_shapes SHARED
   triangle.hpp)
 
 target_link_libraries(rt_shapes
+
+  # ----------------------------------------------------------------------------
+  # our libraries
   PRIVATE common_utils
   PRIVATE rt_utils
   PRIVATE rt_primitives)

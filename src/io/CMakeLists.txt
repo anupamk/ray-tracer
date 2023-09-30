@@ -23,16 +23,21 @@ add_library(rt_io SHARED
   world.hpp)
 
 target_link_libraries(rt_io
-  PUBLIC common_utils
-  PUBLIC rt_utils
-  PUBLIC rt_primitives
-  PUBLIC rt_shapes
-  PUBLIC rt_patterns
-  PUBLIC concurrent-queue
-  PUBLIC pthread
-  PUBLIC ${SDL2_LIBRARIES})
+  # ----------------------------------------------------------------------------
+  # 3rd-party libraries
+  PRIVATE concurrent-queue
+  PRIVATE pthread
+  PRIVATE ${SDL2_LIBRARIES}
+
+  # ----------------------------------------------------------------------------
+  # our libraries
+  PRIVATE common_utils
+  PRIVATE rt_utils
+  PRIVATE rt_primitives
+  PRIVATE rt_shapes)
 
 augment_execution_profiling(rt_io)
 
-target_include_directories(rt_io PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(rt_io
+  PUBLIC ${CMAKE_SOURCE_DIR}/src)
 

@@ -31,6 +31,9 @@ add_library(rt_patterns SHARED
   uv_pattern_interface.hpp)
 
 target_link_libraries(rt_patterns
+
+  # ----------------------------------------------------------------------------
+  # our libraries
   PRIVATE common_utils
   PRIVATE rt_utils
   PRIVATE rt_primitives

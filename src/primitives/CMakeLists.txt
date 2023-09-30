@@ -22,6 +22,9 @@ add_library(rt_primitives SHARED
   uv_point.hpp)
 
 target_link_libraries(rt_primitives
+
+  # ----------------------------------------------------------------------------
+  # our libraries
   PRIVATE common_utils
   PRIVATE rt_utils)
 

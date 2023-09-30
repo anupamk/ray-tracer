@@ -13,12 +13,12 @@
 #include <vector>
 
 /// our includes
+#include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_parse_result.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/group.hpp"
 #include "shapes/shape_interface.hpp"
 #include "shapes/triangle.hpp"
-#include "utils/mmapped_file_reader.hpp"
 
 namespace raytracer
 {

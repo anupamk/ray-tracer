@@ -52,8 +52,20 @@ function (generate_one_test_target FNAME)
 
   add_executable(${TEST_NAME} ${FNAME} doctest_main.cpp)
   target_link_libraries(${TEST_NAME}
-    PRIVATE rt_io
-    PRIVATE doctest)
+    # --------------------------------------------------------------------------
+    # 3rd-party
+    PRIVATE doctest
+    PRIVATE concurrent-queue
+
+    # --------------------------------------------------------------------------
+    # our libraries
+    PRIVATE common_utils
+    PRIVATE rt_utils
+    PRIVATE rt_file_utils
+    PRIVATE rt_primitives
+    PRIVATE rt_shapes
+    PRIVATE rt_patterns
+    PRIVATE rt_io)
 
   add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME} WORKING_DIRECTORY tests)
 

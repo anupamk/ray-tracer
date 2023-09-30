@@ -16,11 +16,10 @@ namespace raytracer
                 {
                 }
 
-                // clang-format off
                 the_badge(const the_badge&)            = delete;
                 the_badge& operator=(const the_badge&) = delete;
-                the_badge(the_badge&&)		       = delete;
+                the_badge(the_badge&&)                 = delete;
                 the_badge& operator=(the_badge&&)      = delete;
-                // clang-format on
         };
+
 } // namespace raytracer

@@ -17,11 +17,11 @@
 
 /// our includes
 #include "common/include/logging.h"
+#include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_file_loader.hpp"
 #include "io/obj_parse_result.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/triangle.hpp"
-#include "utils/mmapped_file_reader.hpp"
 
 namespace raytracer
 {

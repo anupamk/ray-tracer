@@ -18,7 +18,21 @@ function (generate_one_release_executable_target FNAME)
 
   add_executable(${EXECUTABLE_NAME} ${FNAME})
   target_link_libraries(${EXECUTABLE_NAME}
-    PRIVATE rt_io)
+    # ----------------------------------------------------------------------------
+    # 3rd-party libraries
+    PRIVATE concurrent-queue
+    PRIVATE pthread
+    PRIVATE ${SDL2_LIBRARIES}
+
+    # ----------------------------------------------------------------------------
+    # our libraries
+    PRIVATE rt_io
+    PRIVATE common_utils
+    PRIVATE rt_utils
+    PRIVATE rt_file_utils
+    PRIVATE rt_primitives
+    PRIVATE rt_shapes
+    PRIVATE rt_patterns)
 
 endfunction()
 
@@ -47,8 +61,13 @@ function (generate_one_profiled_executable_target FNAME)
   set(TRACY_EXECUTABLE_NAME "tracy_${FNAME_SANS_EXT}")
 
   add_executable(${TRACY_EXECUTABLE_NAME} ${FNAME})
+
   target_link_libraries(${TRACY_EXECUTABLE_NAME}
-    PRIVATE rt_io)
+    # --------------------------------------------------------------------------
+    # our libraries
+    PRIVATE rt_utils
+  )
+
   augment_execution_profiling(${TRACY_EXECUTABLE_NAME})
 
 endfunction()

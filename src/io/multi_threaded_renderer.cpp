@@ -47,7 +47,7 @@ namespace raytracer
                 /// start the coloring threads
                 std::vector<std::thread> rendering_threads(num_hw_threads);
 
-                for (auto i = 0; i < num_hw_threads; i++) {
+                for (uint32_t i = 0; i < num_hw_threads; i++) {
                         rendering_threads[i] = std::thread(coloring_worker,            /// rendering-function
                                                            i,                          /// thread-id
                                                            std::ref(work_queue),       /// work-queue
