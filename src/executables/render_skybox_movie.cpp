@@ -20,7 +20,6 @@
 #include "common/include/benchmark.hpp"
 #include "common/include/logging.h"
 #include "io/camera.hpp"
-#include "io/raytracer_renderer.hpp"
 #include "patterns/align_check_pattern.hpp"
 #include "patterns/blended_pattern.hpp"
 #include "patterns/checkers_pattern.hpp"
@@ -174,9 +173,9 @@ int main(int argc, char** argv)
 
                 auto const dst_fname = ss.str();
 
-                /// ------------------------------------------------------------
-                /// just use the first [0] result only please
-                auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
+                /// --------------------------------------------------------------------
+                /// ok camera, render the scene
+                auto const rendered_canvas = camera.render(world);
                 rendered_canvas.write(dst_fname);
 
                 /// --------------------------------------------------------------------

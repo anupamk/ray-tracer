@@ -80,9 +80,8 @@ namespace raytracer
         color operator-(color a, color b);
         std::ostream& operator<<(std::ostream& os, color const& C);
 
-        ///
+        /// --------------------------------------------------------------------
         /// epsilon equality comparison of two tuples
-        ///
         constexpr bool operator==(color lhs, color rhs)
         {
                 // clang-format off
@@ -109,10 +108,9 @@ namespace raytracer
                 return color(a.R() + f, a.G() + f, a.B() + f);
         }
 
-        ///
+        /// --------------------------------------------------------------------
         /// hadamard/schur product of 'color * color', just multiply
         /// corresponding components from each color
-        ///
         constexpr color operator*(color a, color b)
         {
                 return color(a.R() * b.R(),  // red

@@ -66,27 +66,6 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// this function is called to render a world. this is the
-        /// single-threaded renderer
-        canvas camera::render(world const& w) const
-        {
-                PROFILE_SCOPE;
-
-                auto dst_canvas = canvas::create_binary(horiz_size_, vert_size_);
-
-                for (uint32_t y = 0; y < vert_size_; y++) {
-                        for (uint32_t x = 0; x < horiz_size_; x++) {
-                                auto const ray_at_xy   = ray_for_pixel(x, y);
-                                auto const color_at_xy = w.color_at(ray_at_xy);
-
-                                dst_canvas.write_pixel(x, y, color_at_xy);
-                        }
-                }
-
-                return dst_canvas;
-        }
-
-        /// --------------------------------------------------------------------
         /// this function is called to return a stringified representation of
         /// the properties of the camera
         std::string camera::stringify() const

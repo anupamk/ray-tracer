@@ -1,5 +1,4 @@
 #pragma once
-#define RAYTRACER_SRC_MATRIX_HPP__
 
 /// c++ includes
 #include <cstddef>

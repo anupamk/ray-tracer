@@ -17,7 +17,6 @@
 #include "common/include/benchmark.hpp"
 #include "common/include/logging.h"
 #include "io/camera.hpp"
-#include "io/raytracer_renderer.hpp"
 #include "io/world.hpp"
 #include "patterns/blended_pattern.hpp"
 #include "patterns/checkers_pattern.hpp"
@@ -71,23 +70,9 @@ int main(int argc, char** argv)
                  camera.hsize(), camera.vsize(), dst_fname);
 
         /// --------------------------------------------------------------------
-        /// benchmark the render with 'num_iterations' renders performed, and
-        /// throwing away the results from 'num_discards' of them
-        auto const num_iterations = 1;
-        auto const num_discards   = 0;
-        Benchmark<> render_bm("mt render", num_iterations, num_discards);
-        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
-
-        /// --------------------------------------------------------------------
-        /// just use the first [0] result only please
-        auto rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
+        /// ok camera, render the scene
+        auto const rendered_canvas = camera.render(world);
         rendered_canvas.write(dst_fname);
-
-        /// --------------------------------------------------------------------
-        /// show what we got
-        LOG_INFO("render benchmark results : {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
-                 render_bm.mean(),                /// mean-usec
-                 render_bm.standard_deviation()); /// stddev-usec
 
         return 0;
 }

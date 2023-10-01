@@ -1,25 +1,49 @@
 # -*- cmake -*-
 
 # ------------------------------------------------------------------------------
-# this file sets up various options required for building the whole
-# project with the llvm toolchain
+# the space at the begining of each line is significant !
+# ------------------------------------------------------------------------------
+
+# for 'CMAKE_C_FLAGS_INIT'
+string(CONCAT CMAKE_C_FLAGS_INIT_LIST
+  " -Wall"
+  " -Werror"
+  " -std=c11"                   # _C_FLAGS_
+  " -pipe"
+  " -fno-color-diagnostics"
+  " -Wstrict-prototypes"
+  " -Wold-style-definition"
+
+  # add more _CFLAGS_ there ↑
+)
+
+# for 'CMAKE_CXX_FLAGS_INIT'
+string(CONCAT CMAKE_CXX_FLAGS_INIT_LIST
+  " -Wall"
+  " -Werror"
+  " -std=c++17"                 # _CXX_FLAGS_
+  " -pipe"
+  " -fno-color-diagnostics"
+
+  # add more _CXXFLAGS_ there ↑
+)
 
 # ------------------------------------------------------------------------------
 # set clang options
 SET (CMAKE_C_COMPILER                  "/usr/bin/clang")
-SET (CMAKE_C_FLAGS_INIT                "-Wall -Werror -std=c11 -fno-color-diagnostics")
+SET (CMAKE_C_FLAGS_INIT                ${CMAKE_C_FLAGS_INIT_LIST})
 SET (CMAKE_C_FLAGS_DEBUG_INIT          "-g -fno-omit-frame-pointer -fsanitize=address")
 SET (CMAKE_C_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
-SET (CMAKE_C_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELEASE_INIT        "-march=native")
 SET (CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
 # ------------------------------------------------------------------------------
 # set clang++ options
 SET (CMAKE_CXX_COMPILER                  "/usr/bin/clang++")
-SET (CMAKE_CXX_FLAGS_INIT                "-Wall -Werror -std=c++17 -pipe -fno-color-diagnostics")
+SET (CMAKE_CXX_FLAGS_INIT                ${CMAKE_CXX_FLAGS_INIT_LIST})
 SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g -fno-omit-frame-pointer -fsanitize=address")
 SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
-SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG -march=native")
+SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-march=native")
 SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
 # ------------------------------------------------------------------------------

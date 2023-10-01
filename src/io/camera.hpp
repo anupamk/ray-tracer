@@ -6,12 +6,28 @@
 
 /// our includes
 #include "io/canvas.hpp"
+#include "io/render_params.hpp"
 #include "io/world.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/ray.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// a render-work item is a ray at a specific place on the canvas
+        struct render_work_item final {
+                uint32_t const x;
+                uint32_t const y;
+                ray_t const r;
+        };
+
+        /// --------------------------------------------------------------------
+        /// a bunch of render-work items is what is what gets handled by a
+        /// single rendering thread
+        struct render_work_items final {
+                std::vector<render_work_item> work_list;
+        };
+
         /// --------------------------------------------------------------------
         /// this describes a virtual camera which let's us take 'pictures' of a
         /// scene f.e. allowing us easily to zoom in/out, rotate camera etc.
@@ -48,7 +64,13 @@ namespace raytracer
                 camera(uint32_t, uint32_t, double);
                 ray_t ray_for_pixel(uint32_t, uint32_t) const;
                 void transform(fsize_dense2d_matrix_t const&);
-                canvas render(world const&) const;
+
+                /*
+                 * render the world
+                 **/
+                canvas render(world const&,
+                              config_render_params const& render_params = config_render_params()) const;
+
                 std::string stringify() const;
 
             public:
@@ -63,5 +85,52 @@ namespace raytracer
 
             private:
                 void compute_misc_items(uint32_t, uint32_t, double);
+
+                /*
+                 * @brief
+                 *    low-level rendering routine
+                 **/
+                canvas perform_rendering(world const&, config_render_params const&) const;
+
+                /*
+                 * @brief
+                 *    the workhorse of actually coloring a canvas instance
+                 *
+                 *    multiple threads are spawned each executing this
+                 *    function. the work-queue ensures that one pixel_painter
+                 *    instance is not stepping over another.
+                 *
+                 *    also note that this is a 'static' function, as there is no
+                 *    need to spawn instance specific painting routines
+                 **/
+                static void pixel_painter(int,                                             /// thread-id
+                                          moodycamel::ConcurrentQueue<render_work_items>&, /// queue-of-work
+                                          world const&,                                    /// scene-details
+                                          canvas&);                                        /// canvas-details
+
+                /*
+                 * @brief
+                 *    generate work in scanline order.
+                 *
+                 *    for scanline-order, the camera sweeps across the 'world'
+                 *    from
+                 *          - top-left -> top-right and
+                 *          - top -> bottom
+                 *    this is pretty much identical to how crt displays worked.
+                 **/
+                moodycamel::ConcurrentQueue<render_work_items> scanline_work_queue(uint32_t) const;
+
+                /*
+                 * @brief
+                 *    generate work in hilbert-curve order.
+                 *
+                 *    a hilbert space-filling curve, fills up a 2d space by
+                 *    traversing every point in the space in a specific order.
+                 *
+                 *    for more details, see:
+                 *           https://en.wikipedia.org/wiki/Hilbert_curve
+                 **/
+                moodycamel::ConcurrentQueue<render_work_items> hilbert_work_queue(uint32_t) const;
         };
+
 } // namespace raytracer

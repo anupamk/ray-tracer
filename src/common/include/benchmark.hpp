@@ -6,6 +6,7 @@
 /// c++ includes
 #include <algorithm>
 #include <chrono>
+#include <functional>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -37,7 +38,6 @@ class Benchmark
             , std_dev_{}
             , user_msg_(std::move(user_message))
         {
-                LOG_INFO("%s, benchmark details: '%s'", user_msg_.c_str(), stringify().c_str());
         }
 
         /// --------------------------------------------------------------------
@@ -71,29 +71,33 @@ class Benchmark
         /// --------------------------------------------------------------------
         /// execute the function to be benchmarked and collect the results
         template <typename Fun, typename... Args>
-        std::vector<typename std::result_of<Fun(Args...)>::type> benchmark(Fun&& fun, Args&&... args)
+        typename std::result_of<Fun(Args...)>::type benchmark(Fun&& fun, Args&&... args)
         {
                 using result_t = typename std::invoke_result<Fun, Args...>::type;
-
                 std::vector<result_t> results;
+
                 num_times_.clear();
                 auto n = num_iter_ + throw_away_;
 
                 for (auto i = 0; i < n; i++) {
-                        /// ----------------------------------------------------
-                        /// log something otherwise it gets lonely
                         LOG_INFO("running %04d / %04d", i + 1, n);
-                        auto pair = measure_execution(std::forward<Fun>(fun), std::forward<Args>(args)...);
-                        LOG_INFO("----------------------------------------------------------------");
 
-                        num_times_.push_back(pair.first);
-                        results.push_back(pair.second);
+                        /// measure execution
+                        auto start_time = std::chrono::steady_clock::now();
+                        auto result_i   = std::invoke(std::forward<Fun>(fun), std::forward<Args>(args)...);
+                        auto end_time   = std::chrono::steady_clock::now();
+                        auto time       = std::chrono::duration_cast<TimeT>(end_time - start_time).count();
+
+                        num_times_.push_back(time);
+                        results.push_back(result_i);
+
+                        LOG_INFO("----------------------------------------------------------------");
                 }
 
                 compute_mean();
                 compute_st_dev();
 
-                return results;
+                return results[0];
         }
 
         typename TimeT::rep mean() const
@@ -109,20 +113,6 @@ class Benchmark
     private:
         /// --------------------------------------------------------------------
         /// only private member functions from this point onwards
-
-        /// --------------------------------------------------------------------
-        /// measure the execution
-        template <typename Fun, typename... Args>
-        static std::pair<typename TimeT::rep, typename std::invoke_result<Fun, Args...>::type>
-        measure_execution(Fun&& fun, Args&&... args)
-        {
-                auto start_time = std::chrono::steady_clock::now();
-                auto result     = std::forward<Fun>(fun)(std::forward<Args>(args)...);
-                auto end_time   = std::chrono::steady_clock::now();
-
-                auto time = std::chrono::duration_cast<TimeT>(end_time - start_time).count();
-                return std::make_pair(time, result);
-        }
 
         /// --------------------------------------------------------------------
         /// compute execution mean

@@ -21,6 +21,7 @@
 /// our includes
 #include "common/include/logging.h"
 #include "primitives/color.hpp"
+#include "primitives/ray.hpp"
 
 namespace raytracer
 {
@@ -84,7 +85,7 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// MUTATORS
 
-                void write_pixel(size_t x, size_t y, color c)
+                void write_pixel(uint32_t x, uint32_t y, color c)
                 {
                         this->buf_[x + y * this->width_] = c;
                 }

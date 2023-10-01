@@ -4,6 +4,8 @@
  **/
 
 /// c++ includes
+#include "io/render_params.hpp"
+#include "utils/utils.hpp"
 #include <algorithm>
 #include <cstdint>
 #include <functional>
@@ -18,7 +20,6 @@
 #include "common/include/benchmark.hpp"
 #include "common/include/logging.h"
 #include "io/camera.hpp"
-#include "io/raytracer_renderer.hpp"
 #include "io/world.hpp"
 #include "patterns/blended_pattern.hpp"
 #include "patterns/checkers_pattern.hpp"
@@ -68,12 +69,16 @@ int main(int argc, char** argv)
                  camera.hsize(), camera.vsize(), dst_fname);
 
         /// --------------------------------------------------------------------
-        /// ok render the scene
-        Benchmark<> render_bm("MT render");
+        /// ok camera, render the scene
+        auto render_params = RT::config_render_params()
+                                     .render_style(RT::rendering_style::RENDERING_STYLE_HILBERT)
+                                     .benchmark(true)
+                                     .benchmark_rounds(5)
+                                     .benchmark_discard_initial(1)
+                                     .hw_threads(RT::max_cores());
 
-        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
+        auto rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);
-        render_bm.show_stats();
 
         return 0;
 }

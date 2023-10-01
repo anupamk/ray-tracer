@@ -1,6 +1,7 @@
 /*
- * implement the raytracer matrix
+ * implement the raytracer matrix routines
  **/
+
 /// c++ includes
 #include <algorithm>
 #include <cstddef>

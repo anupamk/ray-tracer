@@ -1,13 +1,41 @@
 # -*- cmake -*-
 
 # ------------------------------------------------------------------------------
-# this file sets up various options required for building the whole
-# project with the GNU toolchain
+# the space at the begining of each line is significant !
+# ------------------------------------------------------------------------------
+
+# for 'CMAKE_C_FLAGS_INIT'
+string(CONCAT CMAKE_C_FLAGS_INIT_LIST
+  " -Wall"
+  " -Werror"
+  " -march=native"
+  " -ffast-math"
+  " -std=c11"                   # _C_FLAGS_
+  " -pipe"
+  " -fno-diagnostics-color"
+  " -Wstrict-prototypes"
+  " -Wold-style-definition"
+
+  # add more _CFLAGS_ there ↑
+)
+
+# for 'CMAKE_CXX_FLAGS_INIT'
+string(CONCAT CMAKE_CXX_FLAGS_INIT_LIST
+  " -Wall"
+  " -Werror"
+  " -march=native"
+  " -ffast-math"
+  " -std=c++17"                 # _CXX_FLAGS_
+  " -pipe"
+  " -fno-diagnostics-color"
+
+  # add more _CXXFLAGS_ there ↑
+)
 
 # ------------------------------------------------------------------------------
 # set gcc options
 SET (CMAKE_C_COMPILER                  "/usr/bin/gcc")
-SET (CMAKE_C_FLAGS_INIT                "-Wall -Werror -march=native -ffast-math -std=c11 -fno-diagnostics-color")
+SET (CMAKE_C_FLAGS_INIT                ${CMAKE_C_FLAGS_INIT_LIST})
 SET (CMAKE_C_FLAGS_DEBUG_INIT          "-g")
 SET (CMAKE_C_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
 SET (CMAKE_C_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
@@ -16,7 +44,7 @@ SET (CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 # ------------------------------------------------------------------------------
 # set g++ options
 SET (CMAKE_CXX_COMPILER                  "/usr/bin/g++")
-SET (CMAKE_CXX_FLAGS_INIT                "-Wall -Werror -std=c++17 -pipe -fno-diagnostics-color")
+SET (CMAKE_CXX_FLAGS_INIT                ${CMAKE_CXX_FLAGS_INIT_LIST})
 SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g")
 SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
 SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG -march=native ")

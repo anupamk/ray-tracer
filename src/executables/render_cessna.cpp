@@ -20,7 +20,6 @@
 #include "io/camera.hpp"
 #include "io/obj_file_loader.hpp"
 #include "io/obj_parse_result.hpp"
-#include "io/raytracer_renderer.hpp"
 #include "io/world.hpp"
 #include "patterns/blended_pattern.hpp"
 #include "patterns/checkers_pattern.hpp"
@@ -70,16 +69,10 @@ int main(int argc, char** argv)
                  camera.hsize(), camera.vsize(), dst_fname);
 
         /// --------------------------------------------------------------------
-        /// ok render the scene
-        Benchmark<> render_bm("MT render");
-
-        auto const rendered_canvas = render_bm.benchmark(RT::multi_threaded_renderer, RT::max_cores(), world, camera)[0];
-        LOG_INFO("rendering completed");
-
+        /// ok camera, render the scene
+        auto const rendered_canvas = camera.render(world);
         rendered_canvas.write(dst_fname);
         LOG_INFO("image rendered to:'%s'", dst_fname);
-
-        render_bm.show_stats();
 
         return 0;
 }

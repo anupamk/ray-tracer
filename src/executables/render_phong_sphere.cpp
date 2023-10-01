@@ -22,7 +22,6 @@
 #include "io/camera.hpp"
 #include "io/canvas.hpp"
 #include "io/phong_illumination.hpp"
-#include "io/raytracer_renderer.hpp"
 #include "io/world.hpp"
 #include "patterns/material.hpp"
 #include "patterns/solid_pattern.hpp"
@@ -60,12 +59,9 @@ int main(int argc, char** argv)
                  camera.hsize(), camera.vsize(), dst_fname);
 
         /// --------------------------------------------------------------------
-        /// ok render the scene
-        Benchmark<> render_bm("ST render");
-
-        auto rendered_canvas = render_bm.benchmark(RT::single_threaded_renderer, world, camera)[0];
+        /// ok camera, render the scene
+        auto const rendered_canvas = camera.render(world);
         rendered_canvas.write(dst_fname);
-        render_bm.show_stats();
 
         return 0;
 }

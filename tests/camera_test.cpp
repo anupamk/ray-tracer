@@ -93,7 +93,7 @@ TEST_CASE("camera::ray_for_pixel(...) test")
         auto up_vector  = RT::create_vector(0.0, 1.0, 0.0);
 
         c_01.transform(RT::matrix_transformations_t::create_view_transform(from_point, to_point, up_vector));
-        auto rendered_img = c_01.render(w_01);
+        auto rendered_img = c_01.render(w_01, RT::config_render_params().hw_threads(1)); /// just-1-thread
 
         auto got_color_at_pixel = rendered_img.read_pixel(5, 5);
         auto exp_color_at_pixel = RT::color(0.38066, 0.47583, 0.2855);

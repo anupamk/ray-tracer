@@ -3,24 +3,22 @@
 add_library(rt_io SHARED
   camera.cpp
   camera.hpp
+  camera_render.cpp
   canvas.cpp
   canvas.hpp
   canvas_ppm_reader.cpp
   canvas_ppm_writer.cpp
-  multi_threaded_renderer.cpp
-  multi_threaded_work_generator.hpp
-  multi_threaded_work_generator.cpp
   obj_file_loader.cpp
   obj_file_loader.hpp
   obj_parse_result.cpp
   obj_parse_result.hpp
   phong_illumination.cpp
   phong_illumination.hpp
-  raytracer_renderer.hpp
-  single_threaded_renderer.cpp
   wavefront-obj-file-format-notes.org
   world.cpp
-  world.hpp)
+  world.hpp
+  render_params.hpp
+  render_params.cpp)
 
 target_link_libraries(rt_io
   # ----------------------------------------------------------------------------
