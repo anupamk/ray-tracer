@@ -17,11 +17,11 @@
 #include "common/include/logging.h"
 
 template <typename TimeT = std::chrono::milliseconds>
-class Benchmark
+class benchmark_t
 {
     private:
-        int num_iter_;
-        int throw_away_;
+        uint32_t num_iter_;
+        uint32_t throw_away_;
 
         std::vector<typename TimeT::rep> num_times_;
         typename TimeT::rep mean_;
@@ -30,7 +30,7 @@ class Benchmark
         std::string const user_msg_;
 
     public:
-        Benchmark(std::string user_message, int num_iterations = 1, int throw_away = 0)
+        benchmark_t(std::string user_message, uint32_t num_iterations = 1, uint32_t throw_away = 0)
             : num_iter_(num_iterations)
             , throw_away_(throw_away)
             , num_times_{}
@@ -77,9 +77,9 @@ class Benchmark
                 std::vector<result_t> results;
 
                 num_times_.clear();
-                auto n = num_iter_ + throw_away_;
+                uint32_t const n = num_iter_ + throw_away_;
 
-                for (auto i = 0; i < n; i++) {
+                for (uint32_t i = 0; i < n; i++) {
                         LOG_INFO("running %04d / %04d", i + 1, n);
 
                         /// measure execution

@@ -7,7 +7,7 @@
  * canvas generates images in the ppm (portable pixmap) format. specifically
  * both ppm3 (ascii) and ppm6 (binary) encoded images are supported.
  *
- * sdl2 based renderer can be brought to bear (beer ?) for 'online'
+ * x11 based renderer can be brought to bear (beer ?) for 'online'
  * visualization as well.
  **/
 
@@ -20,6 +20,7 @@
 
 /// our includes
 #include "common/include/logging.h"
+#include "io/xcb_display.hpp"
 #include "primitives/color.hpp"
 #include "primitives/ray.hpp"
 
@@ -67,28 +68,17 @@ namespace raytracer
                         return this->height_;
                 }
 
-                color read_pixel(size_t x, size_t y) const
-                {
-                        return this->buf_[x + y * this->width_];
-                }
+                /// ------------------------------------------------------------
+                /// read || write the color of a pixel at (x, y) location on the
+                /// canvas.
+                color read_pixel(size_t x, size_t y) const;
+                void write_pixel(uint32_t x, uint32_t y, color const& c);
 
                 /// meta information about the canvas
                 std::string stringify() const;
 
                 /// save canvas to a persistent store
                 void write(std::string const& fname) const;
-
-                /// display contents of canvas using sdl2
-                void show() const;
-
-            public:
-                /// ------------------------------------------------------------
-                /// MUTATORS
-
-                void write_pixel(uint32_t x, uint32_t y, color c)
-                {
-                        this->buf_[x + y * this->width_] = c;
-                }
 
             private:
                 /// ------------------------------------------------------------
@@ -101,6 +91,7 @@ namespace raytracer
                 }
 
             private:
+                /// ------------------------------------------------------------
                 /// ∵ named-constructor idiom
                 canvas(std::size_t width, std::size_t height, canvas_type type);
 

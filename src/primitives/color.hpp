@@ -67,6 +67,17 @@ namespace raytracer
                         return this->rgb_;
                 }
 
+                /// ------------------------------------------------------------
+                /// convert rgb-color to equivalent uint32_t
+                constexpr uint32_t rgb_u32() const
+                {
+                        uint8_t const r_u8 = roundf(clamp_in_range(R(), 0.0f, 1.0f) * 255.0);
+                        uint8_t const g_u8 = roundf(clamp_in_range(G(), 0.0f, 1.0f) * 255.0);
+                        uint8_t const b_u8 = roundf(clamp_in_range(B(), 0.0f, 1.0f) * 255.0);
+
+                        return ((r_u8 << 16) | (g_u8 << 8) | (b_u8));
+                }
+
             public:
                 /// some operators
                 color& operator+=(color);

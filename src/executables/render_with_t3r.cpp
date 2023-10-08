@@ -71,11 +71,8 @@ int main(int argc, char** argv)
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
         auto render_params = RT::config_render_params()
-                                     .render_style(RT::rendering_style::RENDERING_STYLE_HILBERT)
-                                     .benchmark(true)
-                                     .benchmark_rounds(5)
-                                     .benchmark_discard_initial(1)
-                                     .hw_threads(RT::max_cores());
+                                     .online(true) // show-as-we-go
+                                     .render_style(RT::rendering_style::RENDERING_STYLE_HILBERT);
 
         auto rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);

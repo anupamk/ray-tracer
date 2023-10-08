@@ -1,7 +1,10 @@
 # ------------------------------------------------------------------------------
 # find sdl2 package : required for sdl2_canvas implementation
 INCLUDE(FindPkgConfig)
-PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+
+# ------------------------------------------------------------------------------
+# find xcb package : required for online display of rendering progress
+PKG_SEARCH_MODULE(X11 REQUIRED x11)
 
 # ------------------------------------------------------------------------------
 # we have the following directory organization

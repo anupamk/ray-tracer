@@ -112,33 +112,32 @@ namespace raytracer
                 return std::move(*this);
         }
 
+        /// --------------------------------------------------------------------
+        /// stringified representation of rendering parameters
         std::string config_render_params::stringify() const
         {
                 std::stringstream ss("");
 
-                // clang-format off
-
                 ss << "{";
 
-                ss << "show-as-we-go: '" << this->online_ << "', "
+                ss << "show-as-we-go: '" << str_boolean(this->online_) << "', "
                    << "hw-threads: '" << this->hw_threads_ << "', "
                    << "rendering-style: '" << stringify_rendering_style(render_style_) << "'";
 
                 if (this->benchmark_) {
                         ss << ", "
-                           << "benchmark: '" << this->benchmark_ << "', "
+                           << "benchmark: '" << str_boolean(this->benchmark_) << "', "
                            << "benchmark-iterations: '" << this->benchmark_rounds_ << "'";
 
                         if (this->benchmark_discard_initial_) {
                                 ss << ", "
-                                   << "benchmark-discard-initial: '" << this->benchmark_discard_initial_ << "', "
+                                   << "benchmark-discard-initial: '"
+                                   << str_boolean(this->benchmark_discard_initial_) << "', "
                                    << "benchmark-discards: '" << this->benchmark_num_discards_ << "'";
                         }
                 }
 
-                ss  << "}";
-
-                // clang-format on
+                ss << "}";
 
                 return ss.str();
         }

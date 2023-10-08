@@ -14,9 +14,6 @@
 #include <typeindex>
 #include <utility>
 
-/// sdl2 includes
-#include <SDL2/SDL.h>
-
 /// our includes
 #include "common/include/string_utils.hpp"
 #include "io/canvas.hpp"
@@ -78,71 +75,17 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// display the contents of the canvas using sdl2
-        void canvas::show() const
+        /// color-value of a point (x, y) on the canvas
+        color canvas::read_pixel(size_t x, size_t y) const
         {
-                /// do it pixel-by-pixel there MUST be a faster way
-                auto sdl2_paint_canvas = [&](SDL_Renderer* renderer) {
-                        for (size_t y = 0; y < this->height_; y++) {
-                                for (size_t x = 0; x < this->width_; x++) {
-                                        unsigned char ir, ig, ib;
-                                        this->ppm_color_at(x, y, ir, ig, ib);
+                return this->buf_[x + y * this->width_];
+        }
 
-                                        SDL_SetRenderDrawColor(renderer, ir, ig, ib, 255);
-                                        SDL_RenderDrawPoint(renderer, x, y);
-                                }
-                        }
-                };
-
-                SDL_Renderer* renderer = nullptr; /// the renderer
-                SDL_Window* window     = nullptr; /// and the window
-
-                /// canonical sdl2 dance
-                SDL_Init(SDL_INIT_VIDEO);
-                SDL_CreateWindowAndRenderer(this->width_, this->height_, 0, &window, &renderer);
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-                SDL_RenderClear(renderer);
-                SDL_RenderPresent(renderer);
-
-                /// render and show
-                sdl2_paint_canvas(renderer);
-                SDL_RenderPresent(renderer);
-
-                /// handle any events if required
-                {
-                        SDL_Event event;
-                        bool quit = false;
-
-                        /// pressing escape quits...ooh, fancy !
-                        while (!quit) {
-                                while (SDL_PollEvent(&event)) {
-                                        switch (event.type) {
-                                        case SDL_KEYDOWN:
-                                                switch (event.key.keysym.sym) {
-                                                case SDLK_ESCAPE:
-                                                        quit = true;
-                                                        break;
-
-                                                default:
-                                                        break;
-                                                }
-
-                                        default:
-                                                SDL_RenderPresent(renderer);
-                                                break;
-                                        }
-                                }
-
-                                SDL_Delay(1);
-                        }
-                }
-
-                /// cleanup
-                SDL_DestroyRenderer(renderer);
-                SDL_DestroyWindow(window);
-                SDL_Quit();
-
-                return;
+        /// --------------------------------------------------------------------
+        /// write the pixel data, and display it as well.
+        void canvas::write_pixel(uint32_t x, uint32_t y, color const& c)
+        {
+                this->buf_[x + y * this->width_] = c;
         }
 
         /*
@@ -194,4 +137,5 @@ namespace raytracer
 
                 return ppm_colors;
         }
+
 } // namespace raytracer

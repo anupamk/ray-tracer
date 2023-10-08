@@ -37,8 +37,10 @@
 namespace raytracer
 {
         /// --------------------------------------------------------------------
-        /// this is the main rendering routing. it render a world, and returns
-        /// a canvas instance which is the result.
+        /// this is the top-level rendering routine.
+        ///
+        /// it returns a canvas instance, which is the result of rendering
+        /// 'the_world' with supplied 'rendering_params'.
         canvas camera::render(world const& the_world, config_render_params const& rendering_params) const
         {
                 ASSERT(rendering_params.render_style() != rendering_style::RENDERING_STYLE_INVALID);
@@ -48,26 +50,21 @@ namespace raytracer
                 /// performed.
                 LOG_INFO("rendering parameters: '%s'", rendering_params.stringify().c_str());
 
-                /// ------------------------------------------------------------
-                /// no benchmarking.
-                if (!rendering_params.benchmark()) {
-                        PROFILE_SCOPE;
+                auto bm_params = [&]() -> benchmark_t<> {
+                        if (!rendering_params.benchmark()) {
+                                return {""};
+                        }
 
-                        return perform_rendering(the_world, rendering_params);
-                }
+                        return {"benchmarking camera::render(...)",                /// user-defined-message
+                                rendering_params.benchmark_rounds(),               /// iterations
+                                rendering_params.benchmark_num_discard_initial()}; /// to-discount-cache-effects
+                }();
 
-                /// ------------------------------------------------------------
-                /// it does not make sense to 'PROFILE_SCOPE' when benchmarking
-                /// is enabled
-                Benchmark<> render_bm("benchmarking camera::render(...)",  /// title
-                                      rendering_params.benchmark_rounds(), /// iterations
-                                      rendering_params.benchmark_num_discard_initial());
-
-                auto rendered_canvas = render_bm.benchmark(&camera::perform_rendering, *this,
-                                                           the_world, /// scenery
+                auto rendered_canvas = bm_params.benchmark(&camera::perform_rendering, *this,
+                                                           the_world, /// the-scenery
                                                            rendering_params);
-                render_bm.show_stats();
 
+                bm_params.show_stats();
                 return rendered_canvas;
         }
 
@@ -75,12 +72,26 @@ namespace raytracer
          * only private functions from this point onwards
          **/
 
+        /// --------------------------------------------------------------------
+        /// this is the main rendering routine. rendering parameters are
+        /// unpacked, and applied to the rendering operation that this function
+        /// launches.
         canvas camera::perform_rendering(world const& the_world,
                                          config_render_params const& rendering_params) const
         {
                 /// ------------------------------------------------------------
-                /// get various rendering parameters f.e. num-hw-threads,
-                /// rendering-style, benchmark, ...
+                /// for 'show-as-we-go'
+                auto x11_display = [&]() -> std::unique_ptr<xcb_display> {
+                        if (rendering_params.online()) {
+                                return xcb_display::create_display(horiz_size_, vert_size_);
+                        }
+
+                        return nullptr;
+                }();
+
+                /// ------------------------------------------------------------
+                /// create work-queue of 'render_work_items' using various
+                /// rendering parameters that are passed.
                 auto const hw_threads = rendering_params.hw_threads();
                 auto work_q =
                         [&](rendering_style const& S) -> moodycamel::ConcurrentQueue<render_work_items> {
@@ -102,17 +113,20 @@ namespace raytracer
                         return moodycamel::ConcurrentQueue<render_work_items>{};
                 }(rendering_params.render_style());
 
+                /// ------------------------------------------------------------
+                /// destination canvas on which the world will be rendered.
                 auto dst_canvas = canvas::create_binary(horiz_size_, vert_size_);
 
                 /// ------------------------------------------------------------
-                /// start the threads ...
+                /// let the painters ... paint !
                 std::vector<std::thread> rendering_threads(hw_threads);
                 for (uint32_t i = 0; i < hw_threads; i++) {
-                        rendering_threads[i] = std::thread(pixel_painter,         /// rendering-function
-                                                           i,                     /// thread-id
-                                                           std::ref(work_q),      /// work-queue
-                                                           the_world,             /// the world
-                                                           std::ref(dst_canvas)); /// canvas
+                        rendering_threads[i] = std::thread(pixel_painter,          /// rendering-function
+                                                           i,                      /// thread-id
+                                                           std::ref(work_q),       /// work-queue
+                                                           the_world,              /// the world
+                                                           std::ref(dst_canvas),   /// canvas
+                                                           std::ref(x11_display)); /// x11-display
 
                         /// ----------------------------------------------------
                         /// force || pin threads to cores...
@@ -143,19 +157,28 @@ namespace raytracer
         camera::pixel_painter(int thread_id,                                              /// id-of-thread
                               moodycamel::ConcurrentQueue<render_work_items>& work_queue, /// queue-of-work
                               world const& W,                                             /// rendered-world
-                              canvas& dst_canvas)                                         /// on-canvas
+                              canvas& dst_canvas,                                         /// on-canvas
+                              std::unique_ptr<xcb_display>& x11_display)                  /// x11-display
         {
                 bool all_done          = false;
                 size_t pixels_rendered = 0;
                 size_t jobs_completed  = 0;
 
-                /// do some work
                 do {
                         render_work_items rw;
+
                         if (work_queue.try_dequeue(rw)) {
                                 for (auto work : rw.work_list) {
+                                        /// ------------------------------------
+                                        /// compute the color at (x, y) and
+                                        /// update the canvas with that
+                                        /// information
                                         auto r_color = W.color_at(work.r);
                                         dst_canvas.write_pixel(work.x, work.y, r_color);
+
+                                        if (x11_display != nullptr) {
+                                                x11_display->plot_pixel(work.x, work.y, r_color.rgb_u32());
+                                        }
 
                                         pixels_rendered += 1;
                                 }

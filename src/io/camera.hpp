@@ -8,6 +8,7 @@
 #include "io/canvas.hpp"
 #include "io/render_params.hpp"
 #include "io/world.hpp"
+#include "io/xcb_display.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/ray.hpp"
 
@@ -106,7 +107,8 @@ namespace raytracer
                 static void pixel_painter(int,                                             /// thread-id
                                           moodycamel::ConcurrentQueue<render_work_items>&, /// queue-of-work
                                           world const&,                                    /// scene-details
-                                          canvas&);                                        /// canvas-details
+                                          canvas&,                                         /// canvas-details
+                                          std::unique_ptr<xcb_display>&);                  /// x11-display
 
                 /*
                  * @brief
@@ -116,6 +118,7 @@ namespace raytracer
                  *    from
                  *          - top-left -> top-right and
                  *          - top -> bottom
+                 *
                  *    this is pretty much identical to how crt displays worked.
                  **/
                 moodycamel::ConcurrentQueue<render_work_items> scanline_work_queue(uint32_t) const;

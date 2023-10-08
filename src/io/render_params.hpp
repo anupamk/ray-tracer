@@ -34,6 +34,13 @@ namespace raytracer
             private:
                 /// ------------------------------------------------------------
                 /// should the rendering progress be show while rendering ?
+                ///
+                /// when enabled, this seems to be adding approximately 7..10
+                /// second delay. however, it ends up producing a cool looking
+                /// effect. so yeah, totally worth it.
+                ///
+                /// the 'cool looking effect' is especially more pronounced when
+                /// the 'rendering_style::RENDERING_STYLE_HILBERT' is used.
                 bool online_ = false;
 
                 /// ------------------------------------------------------------

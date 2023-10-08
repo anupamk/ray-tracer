@@ -126,8 +126,8 @@ namespace raytracer
         ///
         /// No extra work is required in using the above, as opposed to blindly
         /// using either (1.sol) or (2.sol)
-        inline std::optional<std::pair<double, double>> const quadratic_real_roots(double A, double B,
-                                                                                   double C)
+        inline std::optional<std::pair<double const, double const>> const
+        quadratic_real_roots(double A, double B, double C)
         {
                 PROFILE_SCOPE;
 
@@ -143,7 +143,7 @@ namespace raytracer
                         double const r_1 = -B / (2.0 * A);
                         double const r_2 = r_1;
 
-                        return std::make_pair(r_1, r_2);
+                        return std::pair(r_1, r_2);
                 }
 
                 auto const sqrt_discriminant = std::sqrt(discriminant);
@@ -156,7 +156,7 @@ namespace raytracer
                         double const r_1 = tmp / two_A;
                         double const r_2 = two_C / tmp;
 
-                        return std::make_pair(r_1, r_2);
+                        return std::pair(r_1, r_2);
                 }
 
                 /// case-2 : B < 0.0
@@ -164,7 +164,7 @@ namespace raytracer
                 double const r_1 = two_C / tmp;
                 double const r_2 = tmp / two_A;
 
-                return std::make_pair(r_1, r_2);
+                return std::pair(r_1, r_2);
         }
 
         /// --------------------------------------------------------------------
@@ -202,6 +202,14 @@ namespace raytracer
         inline uint32_t max_cores()
         {
                 return std::thread::hardware_concurrency();
+        }
+
+        /// --------------------------------------------------------------------
+        /// return a stringfied boolean value i.e. 'yes' / 'no' for easier to
+        /// parse output
+        inline const char* str_boolean(bool value)
+        {
+                return (value == true) ? "yes" : "no";
         }
 
 } // namespace raytracer

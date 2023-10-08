@@ -18,14 +18,16 @@ add_library(rt_io SHARED
   world.cpp
   world.hpp
   render_params.hpp
-  render_params.cpp)
+  render_params.cpp
+  xcb_display.hpp
+  xcb_display.cpp)
 
 target_link_libraries(rt_io
   # ----------------------------------------------------------------------------
   # 3rd-party libraries
   PRIVATE concurrent-queue
   PRIVATE pthread
-  PRIVATE ${SDL2_LIBRARIES}
+  PRIVATE ${X11_LIBRARIES}
 
   # ----------------------------------------------------------------------------
   # our libraries

@@ -161,7 +161,7 @@ int main(int argc, char** argv)
         /// --------------------------------------------------------------------
         /// benchmark the render with 'num_iterations' renders performed, and
         /// throwing away the results from 'num_discards' of them
-        Benchmark<> render_bm("MT render");
+        benchmark_t<> render_bm("MT render");
         LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
         constexpr uint32_t max_images = 100;
