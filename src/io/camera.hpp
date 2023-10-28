@@ -134,6 +134,13 @@ namespace raytracer
                  *           https://en.wikipedia.org/wiki/Hilbert_curve
                  **/
                 moodycamel::ConcurrentQueue<render_work_items> hilbert_work_queue(uint32_t) const;
+
+                /*
+                 * @brief
+                 *    generate rendering work as 'tiles' i.e. each work item
+                 *    is [M x N] pixels of work.
+                 **/
+                moodycamel::ConcurrentQueue<render_work_items> tile_work_queue(uint32_t) const;
         };
 
 } // namespace raytracer

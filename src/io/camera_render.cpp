@@ -102,6 +102,9 @@ namespace raytracer
                         case rendering_style::RENDERING_STYLE_HILBERT:
                                 return hilbert_work_queue(hw_threads);
 
+                        case rendering_style::RENDERING_STYLE_TILE:
+                                return tile_work_queue(hw_threads);
+
                         default:
                         case rendering_style::RENDERING_STYLE_INVALID:
                                 break;
@@ -177,6 +180,11 @@ namespace raytracer
                                         dst_canvas.write_pixel(work.x, work.y, r_color);
 
                                         if (x11_display != nullptr) {
+                                                /// ----------------------------
+                                                /// no locking is needed. this
+                                                /// is because each thread
+                                                /// handles different / distinct
+                                                /// pixels.
                                                 x11_display->plot_pixel(work.x, work.y, r_color.rgb_u32());
                                         }
 
@@ -343,6 +351,70 @@ namespace raytracer
                 LOG_INFO("hilbert-curve work-queue info: "
                          "total-threads: {%d}, pixels-per-thread: {%d}, work-queue-length: {%ld} (approx.)",
                          hw_threads, pixels_per_thread, wq.size_approx());
+
+                return wq;
+        }
+
+        /// --------------------------------------------------------------------
+        /// generate a work-queue comprising 'rendering work items' in tiling
+        /// order.
+        moodycamel::ConcurrentQueue<render_work_items> camera::tile_work_queue(uint32_t hw_threads) const
+        {
+                /*
+                 * tile dimensions
+                 **/
+                uint16_t const tile_dim_x = horiz_size_ / hw_threads;
+                uint16_t const tile_dim_y = vert_size_ / hw_threads;
+
+                /// ------------------------------------------------------------
+                /// tiles create a (X, Y) grid over the entire canvas. this
+                /// function is called to generate rendering work for a tile
+                /// located at a specific row (R) and a specific column (C)
+                auto const gen_tile_xy_work = [&](uint32_t R, uint32_t C) -> render_work_items {
+                        uint32_t const start_x = C * tile_dim_x;
+                        uint32_t const end_x   = start_x + tile_dim_x;
+
+                        uint32_t const start_y = R * tile_dim_y;
+                        uint32_t const end_y   = start_y + tile_dim_y;
+
+                        render_work_items work_item;
+                        work_item.work_list.reserve(tile_dim_x * tile_dim_y);
+
+                        for (uint32_t y = start_y; y < end_y; y++) {
+                                for (uint32_t x = start_x; x < end_x; x++) {
+                                        work_item.work_list.emplace_back(render_work_item{
+                                                x,                  /// x-pixel
+                                                y,                  /// y-pixel
+                                                ray_for_pixel(x, y) /// ray-at-(x, y)
+                                        });
+                                }
+                        }
+
+                        return work_item;
+                };
+
+                /// ------------------------------------------------------------
+                /// in the ensuing 'tile-matrix' how many rows + column are
+                /// there.
+                uint32_t const num_rows    = vert_size_ / tile_dim_y;
+                uint32_t const num_cols    = horiz_size_ / tile_dim_x;
+                uint32_t const total_tiles = num_cols * num_rows;
+
+                moodycamel::ConcurrentQueue<render_work_items> wq(total_tiles);
+
+                /// ------------------------------------------------------------
+                /// generate work for the workers
+                for (uint32_t r = 0; r < num_rows; ++r) {
+                        for (uint32_t c = 0; c < num_cols; ++c) {
+                                auto work_item = gen_tile_xy_work(r, c);
+                                wq.enqueue(work_item);
+                        }
+                }
+
+                LOG_INFO(
+                        "tile-work-queue info: "
+                        "total-threads: {%d}, tile-dimensions: {x:%d, y:%d} pixels, work-queue length: {%ld} (approx.)",
+                        hw_threads, tile_dim_x, tile_dim_y, wq.size_approx());
 
                 return wq;
         }

@@ -21,6 +21,7 @@ namespace raytracer
                 RENDERING_STYLE_INVALID  = 0,
                 RENDERING_STYLE_SCANLINE = 1,
                 RENDERING_STYLE_HILBERT  = 2,
+                RENDERING_STYLE_TILE     = 3,
         };
 
         /// --------------------------------------------------------------------

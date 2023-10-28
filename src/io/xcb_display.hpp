@@ -12,17 +12,6 @@
 
 namespace raytracer
 {
-        /*
-         * a pixel that can be plotted using interface exported from the
-         * 'xcb_display' instance.
-         **/
-        struct xcb_pixel_t final {
-                uint32_t const x     = {};
-                uint32_t const y     = {};
-                uint32_t const color = {};
-
-                xcb_pixel_t(uint32_t x, uint32_t y, uint32_t color);
-        };
 
         /*
          * use raw x11/xcb primitives for online rendering of images. this is
@@ -81,7 +70,6 @@ namespace raytracer
                  * plot a point || pixel
                  **/
                 void plot_pixel(uint32_t x, uint32_t y, uint32_t c);
-                void plot_pixel(xcb_pixel_t const& pixel);
 
             private:
                 /* @brief

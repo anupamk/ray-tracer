@@ -153,6 +153,9 @@ namespace raytracer
                 case rendering_style::RENDERING_STYLE_HILBERT:
                         return "RENDERING_STYLE_HILBERT";
 
+                case rendering_style::RENDERING_STYLE_TILE:
+                        return "RENDERING_STYLE_TILE";
+
                 case rendering_style::RENDERING_STYLE_INVALID:
                 default:
                         break;

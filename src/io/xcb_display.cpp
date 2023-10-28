@@ -16,15 +16,6 @@ namespace raytracer
 {
 
         /// --------------------------------------------------------------------
-        /// create a pixel of a specific color
-        xcb_pixel_t::xcb_pixel_t(uint32_t x, uint32_t y, uint32_t color)
-            : x(x)
-            , y(y)
-            , color(color)
-        {
-        }
-
-        /// --------------------------------------------------------------------
         /// create a display instance
         std::unique_ptr<xcb_display> xcb_display::create_display(uint32_t x_dim, uint32_t y_dim)
         {
@@ -61,13 +52,6 @@ namespace raytracer
                                &tmp_pt); /// point-itself
 
                 xcb_flush(connection_);
-        }
-
-        /// --------------------------------------------------------------------
-        /// plot a pixel
-        void xcb_display::plot_pixel(xcb_pixel_t const& pixel)
-        {
-                plot_pixel(pixel.x, pixel.y, pixel.color);
         }
 
         /// --------------------------------------------------------------------
