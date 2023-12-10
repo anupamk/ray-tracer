@@ -7,12 +7,12 @@
 #include <memory>
 
 /// our includes
-#include "common/include/logging.h"
 #include "patterns/material.hpp"
 #include "primitives/color.hpp"
 #include "primitives/point_light.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/shape_interface.hpp"
+#include "utils/execution_profiler.hpp"
 
 namespace raytracer
 {

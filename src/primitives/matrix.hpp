@@ -1,6 +1,7 @@
 #pragma once
 
 /// c++ includes
+#include <algorithm>
 #include <cstddef>
 #include <initializer_list>
 #include <ostream>

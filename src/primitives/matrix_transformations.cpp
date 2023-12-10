@@ -2,14 +2,14 @@
  * implement the raytracer matrix transformations
  **/
 
+#include "primitives/matrix_transformations.hpp"
+
 /// c++ includes
 #include <cmath>
 
 /// our includes
 #include "primitives/matrix.hpp"
-#include "primitives/matrix_transformations.hpp"
 #include "primitives/tuple.hpp"
-#include "utils/utils.hpp"
 
 namespace raytracer
 {

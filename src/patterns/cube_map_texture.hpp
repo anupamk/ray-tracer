@@ -1,16 +1,21 @@
 #pragma once
 
 /// c++ includes
-#include <functional>
 #include <memory>
+#include <string>
 
 /// our includes
 #include "patterns/pattern_interface.hpp"
-#include "patterns/uv_pattern_interface.hpp"
-#include "shapes/cube.hpp"
+#include "primitives/color.hpp"
+#include "primitives/uv_point.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class tuple;
+        class uv_pattern_interface;
+
         /*
          * define various faces of a cube in cross-format notation:
          *

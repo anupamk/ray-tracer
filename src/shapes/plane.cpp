@@ -1,20 +1,20 @@
 /*
  * implement the 'xz-plane'
  **/
+#include "shapes/plane.hpp"
 
 /// c++ includes
-#include <cmath>
-#include <iostream>
-#include <memory>
+#include <bits/std_abs.h>
 #include <optional>
-#include <ostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 /// our includes
 #include "primitives/intersection_record.hpp"
+#include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
-#include "shapes/plane.hpp"
+#include "utils/badge.hpp"
 #include "utils/constants.hpp"
 
 namespace raytracer

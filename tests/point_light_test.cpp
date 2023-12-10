@@ -1,9 +1,10 @@
 /// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// our headers
 #include "common/include/logging.h"
+#include "doctest/doctest.h"
+#include "primitives/color.hpp"
 #include "primitives/point_light.hpp"
+#include "primitives/tuple.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

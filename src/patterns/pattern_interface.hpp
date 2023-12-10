@@ -2,19 +2,18 @@
 
 
 /// c++ includes
-#include <algorithm>
 #include <memory>
-#include <string>
 
 /// our includes
 #include "primitives/color.hpp"
 #include "primitives/matrix.hpp"
-#include "primitives/tuple.hpp"
 
 namespace raytracer
 {
-        /// forward decl
+        /// --------------------------------------------------------------------
+        /// forward declarations
         class shape_interface;
+        class tuple;
 
         /*
          * this defines a common pattern interface, which is then implemented by

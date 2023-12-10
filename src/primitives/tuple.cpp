@@ -2,16 +2,14 @@
  * implement the raytracer tuple
  **/
 
+#include "primitives/tuple.hpp"
+
 /// c++ includes
-#include <ios>
-#include <ostream>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 
 /// our includes
 #include "common/include/assert_utils.h"
-#include "primitives/tuple.hpp"
 #include "utils/execution_profiler.hpp"
 
 namespace raytracer

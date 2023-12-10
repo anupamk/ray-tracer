@@ -3,17 +3,21 @@
  **/
 
 /// c++ includes
-#include <chrono>
-#include <cstddef>
+#include <stdint.h>
+#include <stdio.h>
+#include <time.h>
+#include <limits>
+#include <memory>
 #include <random>
 
 /// our includes
+#include "common/include/logging.h"
 #include "io/canvas.hpp"
 #include "patterns/checkers_pattern.hpp"
-#include "patterns/gradient_pattern.hpp"
 #include "patterns/perlin_noise.hpp"
 #include "patterns/perlin_noise_pattern.hpp"
 #include "primitives/color.hpp"
+#include "primitives/tuple.hpp"
 #include "utils/constants.hpp"
 
 /*

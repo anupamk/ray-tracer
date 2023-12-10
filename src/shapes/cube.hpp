@@ -2,20 +2,21 @@
 
 /// c++ includes
 #include <optional>
-#include <ostream>
 #include <string>
 #include <tuple>
 
 /// our includes
-#include "common/include/assert_utils.h"
 #include "primitives/intersection_record.hpp"
-#include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
-#include "primitives/uv_point.hpp"
 #include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class ray_t;
+        template <typename T> class the_badge;
+        
         /*
          * this defines a cube with each side of 2 units length. origin is
          * centered within the cube such that its extremeties are at

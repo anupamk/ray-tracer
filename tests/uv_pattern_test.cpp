@@ -1,23 +1,9 @@
 /// c includes
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-/// c++ includes
-#include <cstddef>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <string_view>
-#include <vector>
-
-/// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// our own thing
 #include "common/include/logging.h"
+#include "doctest/doctest.h"
 #include "patterns/align_check_pattern.hpp"
 #include "primitives/color.hpp"
+#include "primitives/uv_point.hpp"
 #include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;

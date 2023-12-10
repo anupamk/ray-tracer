@@ -4,7 +4,7 @@
 #include <memory>
 
 /// our includes
-#include "tuple.hpp"
+#include "primitives/tuple.hpp"
 
 namespace raytracer
 {

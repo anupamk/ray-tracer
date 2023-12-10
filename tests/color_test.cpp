@@ -1,14 +1,8 @@
 /// c++ includes
-#include <iostream>
-#include <stdexcept>
-
-/// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// our own thing
 #include "common/include/logging.h"
+#include "doctest/doctest.h"
 #include "primitives/color.hpp"
-#include "utils/constants.hpp"
+#include "utils/utils.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

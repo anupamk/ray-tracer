@@ -2,14 +2,15 @@
  * implement raytracer point-light
  **/
 
+#include "primitives/point_light.hpp"
+
 /// c++ includes
-#include <ostream>
 #include <sstream>
 #include <string>
 
 /// our includes
-#include "point_light.hpp"
-#include "tuple.hpp"
+#include "primitives/color.hpp"
+#include "primitives/tuple.hpp"
 
 namespace raytracer
 {

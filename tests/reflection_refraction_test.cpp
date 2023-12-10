@@ -1,26 +1,26 @@
 /// c++ includes
-#include <iostream>
+#include <stdio.h>
 #include <memory>
-#include <sstream>
-#include <stdexcept>
-#include <string>
 #include <vector>
 
-/// 3rdparty testing library
+#include "common/include/logging.h"
 #include "doctest/doctest.h"
-
-/// our includes
 #include "io/world.hpp"
 #include "patterns/material.hpp"
+#include "patterns/pattern_interface.hpp"
 #include "patterns/solid_pattern.hpp"
+#include "primitives/color.hpp"
+#include "primitives/intersection_info.hpp"
 #include "primitives/intersection_record.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/plane.hpp"
+#include "shapes/shape_interface.hpp"
 #include "shapes/sphere.hpp"
 #include "utils/constants.hpp"
+#include "utils/utils.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

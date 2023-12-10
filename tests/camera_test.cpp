@@ -2,12 +2,11 @@
  * this file tests the 'camera' class interfaces.
  **/
 
-/// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// our includes
 #include "common/include/logging.h"
+#include "doctest/doctest.h"
 #include "io/camera.hpp"
+#include "io/canvas.hpp"
+#include "io/render_params.hpp"
 #include "io/world.hpp"
 #include "primitives/color.hpp"
 #include "primitives/matrix.hpp"
@@ -16,6 +15,7 @@
 #include "primitives/tuple.hpp"
 #include "utils/constants.hpp"
 #include "utils/utils.hpp"
+
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

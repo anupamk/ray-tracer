@@ -2,18 +2,16 @@
  * implement raytracer intersection record
  **/
 
+#include "primitives/intersection_record.hpp"
+
 /// c++ includes
-#include <cstdio>
-#include <ios>
 #include <iterator>
 #include <optional>
-#include <ostream>
 #include <sstream>
 #include <string>
 
 /// our includes
-#include "common/include/logging.h"
-#include "primitives/intersection_record.hpp"
+#include "utils/execution_profiler.hpp"
 #include "utils/utils.hpp"
 
 namespace raytracer

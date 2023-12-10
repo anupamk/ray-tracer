@@ -1,12 +1,9 @@
 #pragma once
 
-
-#include <cstddef>
-#include <optional>
-#include <string>
-#include <sys/mman.h>
 #include <sys/stat.h>
-#include <sys/types.h>
+#include <cstddef>
+#include <string>
+#include <string_view>
 
 namespace file_utils
 {

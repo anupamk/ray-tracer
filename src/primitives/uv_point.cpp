@@ -2,15 +2,11 @@
  * implement the raytracer uv_point for procedural textures
  **/
 
-/// c++ includes
-#include <ios>
-#include <ostream>
-#include <sstream>
-#include <stdexcept>
-#include <string>
+#include "primitives/uv_point.hpp"
 
-/// our includes
-#include "uv_point.hpp"
+/// c++ includes
+#include <sstream>
+#include <string>
 
 namespace raytracer
 {

@@ -8,31 +8,29 @@
 
 /// system includes
 #include <pthread.h>
-#include <sched.h> /// for cpu_set_t
+#include <sched.h>
+#include <stddef.h>
 
 /// c++ includes
 #include <algorithm>
-#include <chrono>
-#include <cmath>
 #include <cstdint>
 #include <functional>
-#include <string>
+#include <memory>
 #include <thread>
+#include <utility>
 #include <vector>
-
-/// 3rd-party libraries
-#include "concurrentqueue/concurrentqueue.h"
 
 /// our includes
 #include "common/include/benchmark.hpp"
+#include "common/include/logging.h"
+#include "concurrentqueue/concurrentqueue.h"
 #include "io/camera.hpp"
 #include "io/canvas.hpp"
 #include "io/render_params.hpp"
 #include "io/world.hpp"
-#include "primitives/matrix.hpp"
-#include "primitives/ray.hpp"
-#include "primitives/tuple.hpp"
-#include "utils/execution_profiler.hpp"
+#include "io/xcb_display.hpp"
+#include "primitives/color.hpp"
+#include "common/include/assert_utils.h"
 
 namespace raytracer
 {

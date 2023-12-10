@@ -6,19 +6,23 @@
  * a group of shapes.
  **/
 
-/// c++ includes
+#include "shapes/group.hpp"
 
+/// c++ includes
 #include <algorithm>
-#include <iostream>
+#include <sstream>
 #include <memory>
 #include <optional>
-#include <sstream>
+#include <string>
 
 /// our includes
+#include "common/include/assert_utils.h"
+#include "patterns/material.hpp"
 #include "primitives/intersection_record.hpp"
-#include "shapes/group.hpp"
+#include "primitives/ray.hpp"
 #include "shapes/shape_interface.hpp"
 #include "utils/badge.hpp"
+#include "utils/constants.hpp"
 
 namespace raytracer
 {

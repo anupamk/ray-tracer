@@ -1,10 +1,7 @@
-/// c++ includes
-#include <algorithm>
+#include "shapes/shape_interface.hpp"
 
 /// our includes
-#include "primitives/intersection_record.hpp"
 #include "primitives/tuple.hpp"
-#include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {

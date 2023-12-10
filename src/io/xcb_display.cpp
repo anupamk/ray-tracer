@@ -4,13 +4,13 @@
 
 #include "io/xcb_display.hpp"
 
-/// system includes
+/// c++ includes
+#include <stddef.h>
+#include <xcb/xproto.h>
 #include <memory>
-#include <xcb/xproto.h> /// xcb_create_window
 
 /// our inclues
 #include "common/include/assert_utils.h"
-#include "common/include/logging.h"
 
 namespace raytracer
 {

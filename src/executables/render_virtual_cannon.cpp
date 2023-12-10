@@ -1,10 +1,13 @@
 /// c++ includes
 #include <cstddef>
+#include <memory>
 
 /// our includes
 #include "common/include/logging.h"
 #include "io/canvas.hpp"
+#include "primitives/color.hpp"
 #include "primitives/tuple.hpp"
+#include "utils/constants.hpp"
 
 /*
  * an environment contains both gravity and wind.

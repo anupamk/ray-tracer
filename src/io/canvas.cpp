@@ -2,21 +2,16 @@
  * implement the raytracer canvas
  **/
 
+#include "io/canvas.hpp"
+
 /// c++ includes
-#include <algorithm>
-#include <cerrno>
+#include <math.h>
 #include <cstddef>
-#include <cstdio>
-#include <cstring>
 #include <memory>
 #include <sstream>
 #include <string>
-#include <typeindex>
-#include <utility>
 
 /// our includes
-#include "common/include/string_utils.hpp"
-#include "io/canvas.hpp"
 #include "primitives/color.hpp"
 #include "utils/utils.hpp"
 

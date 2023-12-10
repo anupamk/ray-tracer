@@ -1,10 +1,13 @@
+#include "patterns/uv_mapper.hpp"
+
 /// c++ includes
 #include <cmath>
 
 /// our includes
-#include "patterns/uv_mapper.hpp"
 #include "primitives/tuple.hpp"
 #include "primitives/uv_point.hpp"
+#include "utils/constants.hpp"
+#include "utils/utils.hpp"
 
 namespace raytracer
 {

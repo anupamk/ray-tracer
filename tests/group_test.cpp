@@ -1,11 +1,12 @@
 /// c++ includes
-#include <iostream>
 #include <memory>
-
-/// 3rdparty testing library
-#include "doctest/doctest.h"
+#include <optional>
+#include <vector>
 
 /// our includes
+#include "common/include/logging.h"
+#include "doctest/doctest.h"
+#include "primitives/intersection_record.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/ray.hpp"

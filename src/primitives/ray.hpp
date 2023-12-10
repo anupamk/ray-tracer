@@ -1,19 +1,25 @@
 #pragma once
 
 /// c++ includes
-#include <algorithm>
+#include <stddef.h>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
+#include <vector>
 
-// our includes
+/// our includes
 #include "primitives/intersection_info.hpp"
+#include "primitives/intersection_record.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/tuple.hpp"
-#include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declaration
+        class shape_interface;
+
         /*
          * this class defines a ray and it's attributes. a ray is described
          * using parametric form of the equation of a straight line, which looks

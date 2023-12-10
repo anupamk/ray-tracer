@@ -12,6 +12,7 @@
  **/
 
 /// c++ includes
+#include <stdint.h>
 #include <cstddef>
 #include <memory>
 #include <optional>
@@ -19,10 +20,7 @@
 #include <vector>
 
 /// our includes
-#include "common/include/logging.h"
-#include "io/xcb_display.hpp"
 #include "primitives/color.hpp"
-#include "primitives/ray.hpp"
 
 namespace raytracer
 {

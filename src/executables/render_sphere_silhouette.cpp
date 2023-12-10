@@ -6,16 +6,20 @@
 /// c++ includes
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 
 /// our includes
 #include "common/include/logging.h"
 #include "io/canvas.hpp"
 #include "primitives/color.hpp"
+#include "primitives/intersection_record.hpp"
+#include "primitives/matrix.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/sphere.hpp"
+#include "utils/constants.hpp"
 
 /*
  * select default logging level depending on type of build. this can be changed

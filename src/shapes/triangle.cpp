@@ -2,19 +2,22 @@
  * implement the raytracer triangle
  **/
 
+#include "shapes/triangle.hpp"
+
 /// c++ includes
-#include <algorithm>
 #include <cmath>
-#include <ios>
-#include <memory>
 #include <optional>
-#include <ostream>
 #include <sstream>
 #include <string>
+#include <utility>
+#include <vector>
 
 /// our includes
+#include "patterns/material.hpp"
 #include "primitives/intersection_record.hpp"
-#include "shapes/triangle.hpp"
+#include "primitives/ray.hpp"
+#include "utils/badge.hpp"
+#include "utils/constants.hpp"
 
 namespace raytracer
 {

@@ -1,5 +1,9 @@
-#include "intersection_info.hpp"
-#include "tuple.hpp"
+#include "primitives/intersection_info.hpp"
+
+#include <cmath>
+
+/// our includes
+#include "primitives/tuple.hpp"
 
 namespace raytracer
 {

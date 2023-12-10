@@ -1,17 +1,11 @@
 /// c++ includes
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <string>
+#include <stddef.h>
 #include <vector>
 
-/// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// our own thing
 #include "common/include/logging.h"
+#include "doctest/doctest.h"
 #include "primitives/matrix.hpp"
-#include "utils/constants.hpp"
+#include "primitives/tuple.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

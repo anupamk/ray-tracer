@@ -2,18 +2,20 @@
 
 /// c++ includes
 #include <optional>
-#include <ostream>
 #include <string>
-#include <tuple>
 
 /// our includes
 #include "primitives/intersection_record.hpp"
-#include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class ray_t;
+        template <typename T> class the_badge;
+        
         /*
          * this defines an infinitely long or finite sized cone extending
          * along ±Y-axis having a unit radius.

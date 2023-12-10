@@ -2,19 +2,23 @@
  *  implement raytracer shape material
  **/
 
+#include "patterns/material.hpp"
+
 /// c++ includes
-#include <ios>
 #include <ostream>
-#include <sstream>
 #include <string>
 
 /// our includes
-#include "patterns/material.hpp"
+#include "patterns/pattern_interface.hpp"
 #include "patterns/solid_pattern.hpp"
 #include "primitives/tuple.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class shape_interface;
+        
         /// --------------------------------------------------------------------
         /// a default material has a solid pattern
         material::material()

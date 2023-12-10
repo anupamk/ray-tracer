@@ -1,10 +1,16 @@
+#include "patterns/cube_map_texture.hpp"
+
 /// c++ includes
-#include "primitives/color.hpp"
-#include <functional>
+#include <bits/std_abs.h>
+#include <algorithm>
 #include <memory>
 
 /// our includes
-#include "patterns/cube_map_texture.hpp"
+#include "common/include/assert_utils.h"
+#include "patterns/uv_pattern_interface.hpp"
+#include "primitives/color.hpp"
+#include "primitives/tuple.hpp"
+#include "utils/utils.hpp"
 
 namespace raytracer
 {

@@ -4,24 +4,19 @@
 
 /// c++ includes
 #include <cstddef>
-#include <iostream>
-#include <ostream>
+#include <memory>
 #include <vector>
-
-/// 3rdparty testing library
-#include "doctest/doctest.h"
 
 /// our includes
 #include "common/include/logging.h"
-#include "io/phong_illumination.hpp"
+#include "doctest/doctest.h"
 #include "io/world.hpp"
-#include "patterns/material.hpp"
 #include "primitives/color.hpp"
+#include "primitives/intersection_record.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/point_light.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
-#include "shapes/sphere.hpp"
 #include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;

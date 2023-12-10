@@ -2,17 +2,20 @@
  * implement raytracer shape cube
  **/
 
+#include "shapes/cube.hpp"
+
 /// c++ includes
-#include <cmath>
-#include <ios>
-#include <iostream>
+#include <bits/std_abs.h>
+#include <algorithm>
 #include <sstream>
 #include <string>
+#include <vector>
 
 /// our includes
 #include "primitives/intersection_record.hpp"
-#include "shapes/cube.hpp"
-#include "utils/utils.hpp"
+#include "primitives/ray.hpp"
+#include "utils/badge.hpp"
+#include "utils/constants.hpp"
 
 namespace raytracer
 {

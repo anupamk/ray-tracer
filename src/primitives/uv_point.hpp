@@ -3,11 +3,7 @@
 
 /// c++ includes
 #include <ostream>
-#include <stdexcept>
 #include <string>
-
-/// our includes
-#include "common/include/assert_utils.h"
 
 namespace raytracer
 {

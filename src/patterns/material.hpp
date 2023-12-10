@@ -6,11 +6,16 @@
 #include <string>
 
 /// our includes
-#include "patterns/pattern_interface.hpp"
 #include "primitives/color.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class pattern_interface;
+        class shape_interface;
+        class tuple;
+
         /*
          * this defines the material which makes up a shape. it contains
          * attributes from the phong reflection model as well the pattern that

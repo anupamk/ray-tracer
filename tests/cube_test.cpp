@@ -1,21 +1,14 @@
 /// c++ includes
-#include <iostream>
 #include <memory>
-#include <sstream>
-#include <stdexcept>
-#include <string>
+#include <optional>
 #include <vector>
 
-/// 3rdparty testing library
+#include "common/include/logging.h"
 #include "doctest/doctest.h"
-
-/// our includes
 #include "patterns/align_check_pattern.hpp"
 #include "patterns/cube_map_texture.hpp"
-#include "patterns/material.hpp"
+#include "primitives/color.hpp"
 #include "primitives/intersection_record.hpp"
-#include "primitives/matrix.hpp"
-#include "primitives/matrix_transformations.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/cube.hpp"

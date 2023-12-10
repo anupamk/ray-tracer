@@ -2,18 +2,24 @@
 
 /// c++ includes
 #include <cstdint>
+#include <memory>
 #include <string>
+#include <vector>
 
 /// our includes
+#include "concurrentqueue/concurrentqueue.h"
 #include "io/canvas.hpp"
-#include "io/render_params.hpp"
-#include "io/world.hpp"
-#include "io/xcb_display.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/ray.hpp"
+#include "io/render_params.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class world;
+        class xcb_display;
+        
         /// --------------------------------------------------------------------
         /// a render-work item is a ray at a specific place on the canvas
         struct render_work_item final {
@@ -70,7 +76,7 @@ namespace raytracer
                  * render the world
                  **/
                 canvas render(world const&,
-                              config_render_params const& render_params = config_render_params()) const;
+                              config_render_params const& render_params = {}) const;
 
                 std::string stringify() const;
 

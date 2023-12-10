@@ -6,19 +6,22 @@
  **/
 
 /// c++ includes
+#include <stdint.h>
+#include <functional>
 #include <memory>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <vector>
 
 /// our includes
 #include "primitives/tuple.hpp"
-#include "shapes/group.hpp"
-#include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class group;
+
         /// --------------------------------------------------------------------
         /// this describes the result of parsing an obj file
         class obj_parse_result final

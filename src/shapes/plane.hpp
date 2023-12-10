@@ -7,16 +7,17 @@
 #include <string>
 
 /// our includes
-#include "utils/badge.hpp"
-#include "common/include/assert_utils.h"
 #include "primitives/intersection_record.hpp"
-#include "primitives/ray.hpp"
-#include "shapes/shape_interface.hpp"
 #include "primitives/tuple.hpp"
-#include "primitives/uv_point.hpp"
+#include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class ray_t;
+        template <typename T> class the_badge;
+        
         /*
          * this defines a xz-plane
          **/

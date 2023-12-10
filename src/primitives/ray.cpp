@@ -2,15 +2,21 @@
  * implement the raytracer ray
  **/
 
+#include "primitives/ray.hpp"
+
 /// c++ includes
 #include <algorithm>
-#include <ostream>
 #include <sstream>
 #include <string>
+#include <utility>
 
 /// our includes
 #include "intersection_record.hpp"
-#include "ray.hpp"
+#include "patterns/material.hpp"
+#include "shapes/shape_interface.hpp"
+#include "utils/constants.hpp"
+#include "utils/execution_profiler.hpp"
+#include "utils/badge.hpp"
 
 namespace raytracer
 {

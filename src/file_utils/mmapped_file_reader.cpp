@@ -1,15 +1,16 @@
+#include "mmapped_file_reader.hpp"
+
+#include <fcntl.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+#include <unistd.h>
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
-#include <fcntl.h>
-#include <optional>
-#include <sstream>
-#include <unistd.h>
 
 /// our includes
 #include "common/include/assert_utils.h"
-#include "common/include/logging.h"
-#include "mmapped_file_reader.hpp"
+
 
 namespace file_utils
 {

@@ -2,20 +2,23 @@
  * implement the raytracer csg shape
  **/
 
+#include "shapes/csg.hpp"
+
 /// ----------------------------------------------------------------------------
 /// c++ includes
 #include <memory>
 #include <optional>
 #include <sstream>
-#include <utility>
+#include <vector>
 
 /// ----------------------------------------------------------------------------
 /// our includes
 #include "common/include/assert_utils.h"
 #include "primitives/intersection_record.hpp"
 #include "primitives/ray.hpp"
-#include "shapes/csg.hpp"
 #include "utils/badge.hpp"
+#include "utils/constants.hpp"
+#include "utils/utils.hpp"
 
 namespace raytracer
 {

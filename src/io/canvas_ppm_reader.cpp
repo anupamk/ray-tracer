@@ -2,29 +2,15 @@
  * implement the raytracer canvas ppm reader
  **/
 
-/// c includes
-#include <fcntl.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-
 /// c++ includes
-#include <algorithm>
-#include <cerrno>
+#include <stdint.h>
 #include <cstddef>
-#include <cstdio>
-#include <cstring>
-#include <memory>
+#include <optional>
 #include <sstream>
 #include <string>
-#include <typeindex>
-#include <utility>
+#include <string_view>
 
 /// our includes
-#include "common/include/string_utils.hpp"
 #include "file_utils/mmapped_file_reader.hpp"
 #include "io/canvas.hpp"
 #include "primitives/color.hpp"

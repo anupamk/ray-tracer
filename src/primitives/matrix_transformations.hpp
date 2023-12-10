@@ -2,12 +2,14 @@
 
 
 /// our includes
-#include "common/include/assert_utils.h"
 #include "primitives/matrix.hpp"
-#include "primitives/tuple.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declaration
+        class tuple;
+        
         /*
          * this implements various matrix transformations
          **/
@@ -42,4 +44,5 @@ namespace raytracer
                 static fsize_dense2d_matrix_t create_view_transform(tuple from_point, tuple to_point,
                                                                     tuple up_vector);
         };
+        
 } // namespace raytracer

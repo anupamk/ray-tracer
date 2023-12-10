@@ -2,6 +2,7 @@
 
 
 /// c++ includes
+#include <stdint.h>
 #include <algorithm>
 #include <cfloat>
 #include <memory>
@@ -12,6 +13,7 @@
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
         /// forward declaration
         class shape_interface;
 

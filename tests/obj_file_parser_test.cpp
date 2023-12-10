@@ -1,26 +1,21 @@
-/// c includes
-#include <memory>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 /// c++ includes
-#include <cstddef>
-#include <fstream>
-#include <iostream>
+#include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
 
-/// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// our own thing
+/// our includes
 #include "common/include/logging.h"
+#include "doctest/doctest.h"
 #include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_file_loader.hpp"
+#include "io/obj_parse_result.hpp"
 #include "primitives/tuple.hpp"
+#include "shapes/group.hpp"
+#include "shapes/shape_interface.hpp"
 #include "shapes/triangle.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 

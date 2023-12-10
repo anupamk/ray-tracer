@@ -3,23 +3,17 @@
  **/
 
 /// c++ includes
-#include <algorithm>
 #include <cerrno>
-#include <cstddef>
 #include <cstdio>
 #include <cstring>
 #include <memory>
 #include <string>
 #include <utility>
 
-/// sdl2 includes
-#include <SDL2/SDL.h>
-
 /// our includes
 #include "common/include/string_utils.hpp"
 #include "io/canvas.hpp"
-#include "primitives/color.hpp"
-#include "utils/utils.hpp"
+#include "utils/constants.hpp"
 
 namespace raytracer
 {

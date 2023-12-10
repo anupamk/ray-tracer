@@ -1,26 +1,26 @@
 /*
  * this file implements the OBJ file loader for the raytracer
  **/
+#include "io/obj_file_loader.hpp"
 
 /// c++ includes
+#include <ctype.h>
+#include <algorithm>
 #include <array>
 #include <charconv>
-#include <cstdint>
-#include <functional>
-#include <iostream>
+#include <sstream>
+#include <iterator>
 #include <memory>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <string_view>
-#include <utility>
 
 /// our includes
 #include "common/include/logging.h"
 #include "file_utils/mmapped_file_reader.hpp"
-#include "io/obj_file_loader.hpp"
 #include "io/obj_parse_result.hpp"
 #include "primitives/tuple.hpp"
+#include "shapes/group.hpp"
 #include "shapes/triangle.hpp"
 
 namespace raytracer

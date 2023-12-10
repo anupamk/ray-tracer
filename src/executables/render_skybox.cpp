@@ -4,33 +4,25 @@
  **/
 
 /// c++ includes
-#include <algorithm>
-#include <cstdint>
-#include <functional>
 #include <memory>
 #include <optional>
 #include <string>
-#include <thread>
-#include <utility>
-#include <vector>
 
 /// our includes
-#include "common/include/benchmark.hpp"
+#include "common/include/assert_utils.h"
 #include "common/include/logging.h"
 #include "io/camera.hpp"
-#include "patterns/align_check_pattern.hpp"
-#include "patterns/blended_pattern.hpp"
-#include "patterns/checkers_pattern.hpp"
+#include "io/canvas.hpp"
+#include "io/world.hpp"
 #include "patterns/cube_map_texture.hpp"
-#include "patterns/texture_2d_pattern.hpp"
+#include "patterns/material.hpp"
 #include "patterns/uv_image_pattern.hpp"
-#include "patterns/uv_mapper.hpp"
 #include "primitives/color.hpp"
+#include "primitives/matrix.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/point_light.hpp"
+#include "primitives/tuple.hpp"
 #include "shapes/cube.hpp"
-#include "shapes/plane.hpp"
-#include "shapes/sphere.hpp"
 #include "utils/constants.hpp"
 
 /*

@@ -4,39 +4,29 @@
  **/
 
 /// c++ includes
-#include <algorithm>
 #include <cstdint>
-#include <functional>
 #include <memory>
-#include <optional>
-#include <string>
-#include <thread>
-#include <utility>
-#include <vector>
 
-/// our includes
-#include "common/include/benchmark.hpp"
-#include "common/include/logging.h"
 #include "io/camera.hpp"
+#include "io/canvas.hpp"
 #include "io/world.hpp"
-#include "patterns/blended_pattern.hpp"
 #include "patterns/checkers_pattern.hpp"
 #include "patterns/gradient_perlin_noise_pattern.hpp"
 #include "patterns/material.hpp"
-#include "patterns/ring_pattern.hpp"
 #include "patterns/solid_pattern.hpp"
 #include "patterns/stock_materials.hpp"
 #include "patterns/striped_pattern.hpp"
 #include "primitives/color.hpp"
+#include "primitives/matrix.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/point_light.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/cylinder.hpp"
 #include "shapes/group.hpp"
 #include "shapes/plane.hpp"
-#include "shapes/shape_interface.hpp"
 #include "shapes/sphere.hpp"
 #include "utils/constants.hpp"
+#include "common/include/logging.h"
 
 /*
  * select default logging level depending on type of build. this can be changed

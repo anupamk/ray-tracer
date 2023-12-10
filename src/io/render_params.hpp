@@ -4,14 +4,8 @@
 #include <cstdint>
 #include <string>
 
-/// 3rd-party libraries
-#include "concurrentqueue/concurrentqueue.h"
-
 /// our includes
-#include "io/canvas.hpp"
-#include "io/world.hpp"
-#include "primitives/matrix.hpp"
-#include "primitives/ray.hpp"
+#include "utils/utils.hpp"
 
 namespace raytracer
 {

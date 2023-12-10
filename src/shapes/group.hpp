@@ -2,16 +2,23 @@
 
 /// c++ includes
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
 /// our includes
 #include "primitives/intersection_record.hpp"
-#include "primitives/ray.hpp"
+#include "primitives/tuple.hpp"
 #include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class material;
+        class ray_t;
+        template <typename T> class the_badge;
+        
         /**
          * a 'group' shape defines an abstract shape i.e. a shape without a
          * surface but taking form from the shapes that it contains.

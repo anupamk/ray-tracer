@@ -2,16 +2,20 @@
  * implement raytracer shape cylinder
  **/
 
+#include "shapes/cylinder.hpp"
+
 /// c++ includes
+#include <bits/std_abs.h>
 #include <algorithm>
-#include <cmath>
-#include <ios>
 #include <sstream>
 #include <string>
+#include <utility>
+#include <vector>
 
 /// our includes
 #include "primitives/intersection_record.hpp"
-#include "shapes/cylinder.hpp"
+#include "primitives/ray.hpp"
+#include "utils/badge.hpp"
 #include "utils/constants.hpp"
 #include "utils/utils.hpp"
 

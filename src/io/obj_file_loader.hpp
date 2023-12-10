@@ -6,6 +6,8 @@
  **/
 
 /// c++ includes
+#include <stddef.h>
+#include <stdint.h>
 #include <memory>
 #include <optional>
 #include <string>
@@ -15,13 +17,12 @@
 /// our includes
 #include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_parse_result.hpp"
-#include "primitives/tuple.hpp"
-#include "shapes/group.hpp"
-#include "shapes/shape_interface.hpp"
-#include "shapes/triangle.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class triangle;
 
         /// --------------------------------------------------------------------
         /// a token from an obj file. obj file tokens are simply character

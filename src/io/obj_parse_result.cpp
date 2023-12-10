@@ -2,21 +2,20 @@
  * this file implements the result of parsing a wavefront obj file.
  **/
 
+#include "io/obj_parse_result.hpp"
+
 /// c++ includes
-#include <array>
-#include <charconv>
-#include <cstdint>
+#include <bits/std_abs.h>
+#include <stdlib.h>
 #include <functional>
 #include <limits>
 #include <memory>
 #include <optional>
 #include <sstream>
 #include <string>
-#include <string_view>
 
 /// our includes
-#include "common/include/logging.h"
-#include "io/obj_parse_result.hpp"
+#include "shapes/group.hpp"
 
 namespace raytracer
 {

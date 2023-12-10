@@ -2,12 +2,21 @@
  * implement raytracer stock materials
  **/
 
-/// our includes
 #include "patterns/stock_materials.hpp"
-#include "io/canvas.hpp"
+
+/// c++ includes
+#include <time.h>
+#include <limits>
+#include <memory>
+#include <random>
+#include <utility>
+
+/// our includes
 #include "patterns/gradient_perlin_noise_pattern.hpp"
 #include "patterns/perlin_noise_pattern.hpp"
 #include "patterns/solid_pattern.hpp"
+#include "primitives/color.hpp"
+#include "primitives/tuple.hpp"
 
 namespace raytracer
 {

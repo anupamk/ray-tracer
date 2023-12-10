@@ -2,17 +2,21 @@
  * implement raytracer shape cone
  **/
 
+#include "shapes/cone.hpp"
+
 /// c++ includes
+#include <bits/std_abs.h>
 #include <cmath>
-#include <ios>
-#include <iostream>
 #include <sstream>
 #include <string>
+#include <utility>
+#include <vector>
 
 /// our includes
 #include "primitives/intersection_record.hpp"
+#include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
-#include "shapes/cone.hpp"
+#include "utils/badge.hpp"
 #include "utils/constants.hpp"
 #include "utils/utils.hpp"
 

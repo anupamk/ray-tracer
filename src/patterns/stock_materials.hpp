@@ -1,13 +1,19 @@
 #pragma once
 
 
+/// c++ includes
+#include <stddef.h>
+
 /// our includes
-#include "io/canvas.hpp"
-#include "primitives/color.hpp"
-#include "patterns/material.hpp"
+#include "io/canvas.hpp"          // for canvas
+#include "patterns/material.hpp"  // for material
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class color;
+        
         /*
          * this defines a 'catalogue', if you will, of materials that can be
          * used in various settings, rather than discovering these over and over

@@ -2,17 +2,16 @@
  * implement the raytracer matrix routines
  **/
 
+#include "primitives/matrix.hpp"
+
 /// c++ includes
 #include <algorithm>
 #include <cstddef>
-#include <ios>
-#include <ostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
 /// our includes
-#include "primitives/matrix.hpp"
 #include "primitives/tuple.hpp"
 #include "utils/execution_profiler.hpp"
 #include "utils/utils.hpp"

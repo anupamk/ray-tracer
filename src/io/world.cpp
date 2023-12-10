@@ -1,23 +1,25 @@
-#include "world.hpp"
+#include "io/world.hpp"
 
 /// c++ includes
 #include <algorithm>
 #include <cmath>
 #include <ios>
-#include <iostream>
 #include <memory>
+#include <optional>
 #include <ostream>
-#include <sstream>
 #include <string>
 #include <vector>
 
 /// our includes
 #include "io/phong_illumination.hpp"
+#include "patterns/material.hpp"
 #include "patterns/solid_pattern.hpp"
 #include "primitives/color.hpp"
+#include "primitives/intersection_info.hpp"
 #include "primitives/intersection_record.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/point_light.hpp"
+#include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/shape_interface.hpp"
 #include "shapes/sphere.hpp"

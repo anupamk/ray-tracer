@@ -1,15 +1,12 @@
+#include "io/camera.hpp"
+
 /// c++ includes
-#include <algorithm>
-#include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <sstream>
 #include <string>
 
 /// our includes
-#include "io/camera.hpp"
-#include "io/canvas.hpp"
-#include "io/world.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"

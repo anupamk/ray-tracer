@@ -1,15 +1,8 @@
 /// c++ includes
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <vector>
+#include <cmath>
 
-/// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// our own thing
 #include "common/include/logging.h"
+#include "doctest/doctest.h"
 #include "primitives/matrix.hpp"
 #include "primitives/matrix_transformations.hpp"
 #include "primitives/tuple.hpp"

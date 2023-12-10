@@ -1,19 +1,24 @@
 /*
  * implement the raytracer sphere
  **/
+#include "shapes/sphere.hpp"
 
 /// c++ includes
-#include <cmath>
-#include <ios>
 #include <memory>
 #include <optional>
-#include <ostream>
 #include <sstream>
 #include <string>
+#include <utility>
+#include <vector>
 
 /// our includes
+#include "common/include/assert_utils.h"
+#include "patterns/material.hpp"
 #include "primitives/intersection_record.hpp"
-#include "shapes/sphere.hpp"
+#include "primitives/ray.hpp"
+#include "utils/badge.hpp"
+#include "utils/constants.hpp"
+#include "utils/utils.hpp"
 
 namespace raytracer
 {

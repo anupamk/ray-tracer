@@ -1,13 +1,14 @@
-/// c++ includes
-#include <algorithm>
-#include <iostream>
+#include "patterns/pattern_interface.hpp"
 
 /// our includes
-#include "patterns/pattern_interface.hpp"
 #include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class tuple;
+
         /// --------------------------------------------------------------------
         /// by default both transform and inverse-transform matrices are
         /// identity.

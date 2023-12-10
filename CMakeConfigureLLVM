@@ -1,7 +1,7 @@
 # -*- cmake -*-
 
 # ------------------------------------------------------------------------------
-# the space at the begining of each line is significant !
+# the space at the beginning of each line is significant !
 # ------------------------------------------------------------------------------
 
 # for 'CMAKE_C_FLAGS_INIT'
@@ -27,6 +27,18 @@ string(CONCAT CMAKE_CXX_FLAGS_INIT_LIST
 
   # add more _CXXFLAGS_ there ↑
 )
+
+# ------------------------------------------------------------------------------
+# include-what-you-use: the right amount of includes in sources for
+# FEARLESS development !
+#
+# see: https://github.com/include-what-you-use/include-what-you-use
+# for some more information, and the reasons why this becomes useful.
+set(ENABLE_INCLUDE_WHAT_YOU_USE OFF)
+
+if (ENABLE_INCLUDE_WHAT_YOU_USE)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "include-what-you-use;-Xiwyu;--comment_style=none;")
+endif()
 
 # ------------------------------------------------------------------------------
 # set clang options

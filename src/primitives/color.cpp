@@ -2,14 +2,11 @@
  * implement the raytracer color
  **/
 
+#include "primitives/color.hpp"
+
 /// c++ includes
-#include <ios>
-#include <ostream>
 #include <sstream>
 #include <string>
-
-/// our includes
-#include "color.hpp"
 
 namespace raytracer
 {

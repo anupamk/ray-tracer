@@ -1,17 +1,25 @@
 #pragma once
 
 /// c++ includes
-#include <memory>
-#include <vector>
+#include <stdint.h>                            // for uint8_t
+#include <memory>                              // for shared_ptr
+#include <string>                              // for string
+#include <vector>                              // for vector
 
 /// our includes
 #include "primitives/color.hpp"
-#include "primitives/intersection_info.hpp"
+#include "primitives/intersection_record.hpp"
 #include "primitives/point_light.hpp"
-#include "shapes/shape_interface.hpp"
 
 namespace raytracer
 {
+        /// --------------------------------------------------------------------
+        /// forward declarations
+        class intersection_info_t;
+        class ray_t;
+        class shape_interface;
+        class tuple;
+        
         /// --------------------------------------------------------------------
         /// this implements a world object which acts as a container for a set
         /// of objects that make up a scene including various instantiation of

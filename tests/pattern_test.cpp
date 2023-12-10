@@ -1,13 +1,8 @@
 /// c++ includes
 #include <memory>
 
-/// 3rdparty testing library
-#include "doctest/doctest.h"
-
-/// ----------------------------------------------------------------------------
-/// our includes, first what we are testing
 #include "common/include/logging.h"
-#include "io/phong_illumination.hpp"
+#include "doctest/doctest.h"
 #include "patterns/checkers_pattern.hpp"
 #include "patterns/gradient_pattern.hpp"
 #include "patterns/material.hpp"
@@ -16,11 +11,11 @@
 #include "patterns/solid_pattern.hpp"
 #include "patterns/striped_pattern.hpp"
 #include "primitives/color.hpp"
+#include "primitives/matrix.hpp"
 #include "primitives/matrix_transformations.hpp"
-#include "primitives/point_light.hpp"
 #include "primitives/tuple.hpp"
-#include "shapes/plane.hpp"
 #include "shapes/sphere.hpp"
+#include "utils/constants.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 

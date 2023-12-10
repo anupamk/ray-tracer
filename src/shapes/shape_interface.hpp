@@ -1,7 +1,6 @@
 #pragma once
 
 /// c++ includes
-#include <algorithm>
 #include <memory>
 #include <optional>
 #include <string>
@@ -10,13 +9,14 @@
 #include "patterns/material.hpp"
 #include "primitives/intersection_record.hpp"
 #include "primitives/matrix.hpp"
-#include "primitives/uv_point.hpp"
-#include "utils/badge.hpp"
+#include "primitives/tuple.hpp"
 
 namespace raytracer
 {
-        /// forward decl
+        /// --------------------------------------------------------------------
+        /// forward declarations
         class ray_t;
+        template <typename T> class the_badge;
 
         /*
          * this defines the common shape_interface which is implemented by
