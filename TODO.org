@@ -124,3 +124,82 @@ and are generally not described in that order.
    + Performance Hacks
 
      Ideas from [[https://forum.raytracerchallenge.com/thread/203/performance-tips-clarifications-book-errata][here]].
+
+   + Test Layout Improvement
+
+     We do have unit-tests that cover almost all aspects of
+     primitives, routines etc. that have been developed. These are
+     organized into a separate directory at the top-level, like so:
+
+     #+begin_src shell
+
+     +--- src
+          +     CMakeLists.txt
+          |
+          + --- primitives
+          |        CMakeLists.txt
+          |        file_{1,2,...}.{cpp,hpp}
+          |
+          + --- shapes
+          |        CMakeLists.txt
+          |        file_{1,2,...}.{cpp,hpp}
+          |
+          + --- patterns
+          |        CMakeLists.txt
+          |        file_{1,2,...}.{cpp,hpp}
+          |
+          + --- io
+          |        CMakeLists.txt
+          |        file_{1,2,...}.{cpp,hpp}
+          |
+     +--- tests
+             CMakeLists.txt
+             file_{1,2,...}.{cpp,hpp}
+
+
+     #+end_src
+
+     However, it seems that it would be better to lay out the
+     unit-tests close to the code / library that they are
+     testing. This would imply a directory structure like so:
+
+     #+begin_src shell
+
+     +--- src
+          + --- primitives
+          |     .  CMakeLists.txt
+          |     .  file_{1,2,...}.{cpp,hpp}
+          |     |
+          |     + --- tests
+          |           CMakeLists.txt
+          |
+          + --- shapes
+          |     .  CMakeLists.txt
+          |     .  file_{1,2,...}.{cpp,hpp}
+          |     |
+          |     + --- tests
+          |           CMakeLists.txt
+          |
+          + --- patterns
+          |     .  CMakeLists.txt
+          |     .  file_{1,2,...}.{cpp,hpp}
+          |     |
+          |     + --- tests
+          |           CMakeLists.txt
+          |
+          + --- io
+          |     .  CMakeLists.txt
+          |     .  file_{1,2,...}.{cpp,hpp}
+          |     |
+          |     + --- tests
+          |           CMakeLists.txt
+          |
+     +--- integration-tests
+             . CMakeLists.txt
+             . file_{1,2,}.{cpp, hpp}
+
+     #+end_src
+
+     Moreover, we also want to automatically run these tests with
+     every build.
+

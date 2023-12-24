@@ -1,9 +1,9 @@
 [submodule "3rd-party/concurrentqueue"]
         path = 3rd-party/concurrentqueue
         url = https://github.com/cameron314/concurrentqueue
-[submodule "3rd-party/tracy"]
-        path = 3rd-party/tracy
-        url = https://github.com/wolfpld/tracy
 [submodule "3rd-party/doctest"]
         path = 3rd-party/doctest
         url = https://github.com/doctest/doctest
+[submodule "3rd-party/tracy"]
+	path = 3rd-party/tracy
+	url = https://github.com/wolfpld/tracy.git

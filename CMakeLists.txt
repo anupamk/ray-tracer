@@ -35,21 +35,21 @@ enable_testing()
 # ------------------------------------------------------------------------------
 # colorless verbose builds
 set(CMAKE_COLOR_MAKEFILE 0)
-set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # ------------------------------------------------------------------------------
 # create the compilation-database (compile_commands.json)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # ------------------------------------------------------------------------------
-# enable (ON) || disable (OFF) execution profiling
-set(ENABLE_EXECUTION_PROFILING OFF)
-
-# ------------------------------------------------------------------------------
 # 3rd-party code (as submodules) making up this project. these are:
 #   - doctest         : for tests
 #   - concurrentqueue : concurrent mpmc queue
 add_subdirectory(3rd-party)
+
+# ------------------------------------------------------------------------------
+# enable (ON) || disable (OFF) execution profiling
+set(ENABLE_EXECUTION_PROFILING ON)
 
 # ------------------------------------------------------------------------------
 # tracy : realtime high-resolution profiler

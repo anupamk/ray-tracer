@@ -1,15 +1,14 @@
 # -*- cmake -*-
 
 # ------------------------------------------------------------------------------
-# the space at the begining of each line is significant !
+# set gcc options
 # ------------------------------------------------------------------------------
 
-# for 'CMAKE_C_FLAGS_INIT'
-string(CONCAT CMAKE_C_FLAGS_INIT_LIST
+# ------------------------------------------------------------------------------
+# for 'RAYTRACER_C_COMMON_FLAGS'
+string (CONCAT RAYTRACER_C_COMMON_FLAGS
   " -Wall"
   " -Werror"
-  " -march=native"
-  " -ffast-math"
   " -std=c11"                   # _C_FLAGS_
   " -pipe"
   " -fno-diagnostics-color"
@@ -19,12 +18,36 @@ string(CONCAT CMAKE_C_FLAGS_INIT_LIST
   # add more _CFLAGS_ there ↑
 )
 
-# for 'CMAKE_CXX_FLAGS_INIT'
-string(CONCAT CMAKE_CXX_FLAGS_INIT_LIST
-  " -Wall"
-  " -Werror"
+string (CONCAT RAYTRACER_C_MIN_SIZE_REL_FLAGS
+  " -Os"
+
+  # add more _CFLAGS_ there ↑
+)
+
+string (CONCAT RAYTRACER_C_REL_FLAGS
+  " -O3"
   " -march=native"
   " -ffast-math"
+
+  # add more _CFLAGS_ there ↑
+)
+
+SET (CMAKE_C_COMPILER                  "/usr/bin/gcc")
+SET (CMAKE_C_FLAGS                     "${RAYTRACER_C_COMMON_FLAGS} ${CMAKE_C_FLAGS}")
+SET (CMAKE_C_FLAGS_DEBUG               "${CMAKE_C_FLAGS_DEBUG}")
+SET (CMAKE_C_FLAGS_MINSIZEREL          "${RAYTRACER_C_COMMON_FLAGS} ${RAYTRACER_C_MIN_SIZE_REL_FLAGS} ${CMAKE_C_FLAGS_MINSIZEREL}")
+SET (CMAKE_C_FLAGS_RELEASE             "${RAYTRACER_C_COMMON_FLAGS} ${RAYTRACER_C_REL_FLAGS} ${CMAKE_C_FLAGS_RELEASE}")
+SET (CMAKE_C_FLAGS_RELWITHDEBINFO      "${RAYTRACER_C_COMMON_FLAGS} ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+
+# ------------------------------------------------------------------------------
+# set g++ options
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# for 'CMAKE_CXX_FLAGS_INIT'
+string (CONCAT RAYTRACER_CXX_COMMON_FLAGS
+  " -Wall"
+  " -Werror"
   " -std=c++17"                 # _CXX_FLAGS_
   " -pipe"
   " -fno-diagnostics-color"
@@ -32,23 +55,26 @@ string(CONCAT CMAKE_CXX_FLAGS_INIT_LIST
   # add more _CXXFLAGS_ there ↑
 )
 
-# ------------------------------------------------------------------------------
-# set gcc options
-SET (CMAKE_C_COMPILER                  "/usr/bin/gcc")
-SET (CMAKE_C_FLAGS_INIT                ${CMAKE_C_FLAGS_INIT_LIST})
-SET (CMAKE_C_FLAGS_DEBUG_INIT          "-g")
-SET (CMAKE_C_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
-SET (CMAKE_C_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
-SET (CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+string (CONCAT RAYTRACER_CXX_MIN_SIZE_REL_FLAGS
+  " -Os"
 
-# ------------------------------------------------------------------------------
-# set g++ options
+  # add more _CFLAGS_ there ↑
+)
+
+string (CONCAT RAYTRACER_CXX_REL_FLAGS
+  " -O3"
+  " -march=native"
+  " -ffast-math"
+
+  # add more _CFLAGS_ there ↑
+)
+
 SET (CMAKE_CXX_COMPILER                  "/usr/bin/g++")
-SET (CMAKE_CXX_FLAGS_INIT                ${CMAKE_CXX_FLAGS_INIT_LIST})
-SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g")
-SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
-SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG -march=native ")
-SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+SET (CMAKE_CXX_FLAGS                     "${CMAKE_CXX_FLAGS}")
+SET (CMAKE_CXX_FLAGS_DEBUG               "${CMAKE_CXX_FLAGS_DEBUG}")
+SET (CMAKE_CXX_FLAGS_MINSIZEREL          "${RAYTRACER_CXX_COMMON_FLAGS} ${RAYTRACER_CXX_MIN_SIZE_REL_FLAGS} ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+SET (CMAKE_CXX_FLAGS_RELEASE             "${RAYTRACER_CXX_COMMON_FLAGS} ${RAYTRACER_CXX_REL_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
+SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO      "${RAYTRACER_CXX_COMMON_FLAGS} ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
 
 # ------------------------------------------------------------------------------
 # set linker and other options
