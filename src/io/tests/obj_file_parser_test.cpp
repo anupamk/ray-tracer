@@ -5,9 +5,12 @@
 #include <string_view>
 #include <vector>
 
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest/doctest.h"
+
 /// our includes
 #include "common/include/logging.h"
-#include "doctest/doctest.h"
 #include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_file_loader.hpp"
 #include "io/obj_parse_result.hpp"

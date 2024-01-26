@@ -4,9 +4,12 @@
 #include <optional>
 #include <vector>
 
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest/doctest.h"
+
 /// our includes
 #include "common/include/logging.h"
-#include "doctest/doctest.h"
 #include "primitives/intersection_record.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"

@@ -1,9 +1,8 @@
-/*
- * this file tests the 'camera' class interfaces.
- **/
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest/doctest.h"
 
 #include "common/include/logging.h"
-#include "doctest/doctest.h"
 #include "io/camera.hpp"
 #include "io/canvas.hpp"
 #include "io/render_params.hpp"

@@ -43,5 +43,6 @@ augment_execution_profiling(rt_patterns)
 
 target_include_directories(rt_patterns PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
-
-
+# ------------------------------------------------------------------------------
+# build tests
+add_subdirectory(tests)

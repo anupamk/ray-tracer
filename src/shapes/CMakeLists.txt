@@ -32,3 +32,6 @@ augment_execution_profiling(rt_shapes)
 
 target_include_directories(rt_shapes PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
+# ------------------------------------------------------------------------------
+# build tests
+add_subdirectory(tests)

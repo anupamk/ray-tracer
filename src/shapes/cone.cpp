@@ -164,7 +164,7 @@ namespace raytracer
                 intersection_records retval;
 
                 /// ------------------------------------------------------------
-                /// co-efficients of the quadratic equation for ray-cone
+                /// coefficients of the quadratic equation for ray-cone
                 /// intersection
                 auto const a = A(R);
                 auto const b = B(R);

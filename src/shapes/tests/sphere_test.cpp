@@ -3,8 +3,11 @@
 #include <optional>
 #include <vector>
 
-#include "common/include/logging.h"
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
+
+#include "common/include/logging.h"
 #include "patterns/material.hpp"
 #include "primitives/intersection_record.hpp"
 #include "primitives/matrix.hpp"

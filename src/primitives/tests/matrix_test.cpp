@@ -2,8 +2,11 @@
 #include <stddef.h>
 #include <vector>
 
-#include "common/include/logging.h"
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
+
+#include "common/include/logging.h"
 #include "primitives/matrix.hpp"
 #include "primitives/tuple.hpp"
 

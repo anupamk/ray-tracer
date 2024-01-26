@@ -92,6 +92,5 @@ add_custom_target(copy_assets ALL
 # ------------------------------------------------------------------------------
 # project top-level
 #    - 'src'    : all sources within this sub-directory
-#    - 'tests'  : all tests within this sub-directory
 add_subdirectory(src)
-add_subdirectory(tests)
+

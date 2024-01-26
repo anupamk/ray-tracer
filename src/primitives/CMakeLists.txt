@@ -31,3 +31,7 @@ target_link_libraries(rt_primitives
 augment_execution_profiling(rt_primitives)
 
 target_include_directories(rt_primitives PUBLIC ${CMAKE_SOURCE_DIR}/src)
+
+# ------------------------------------------------------------------------------
+# build tests
+add_subdirectory(tests)

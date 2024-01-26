@@ -1,8 +1,11 @@
 /// c++ includes
 #include <memory>
 
-#include "common/include/logging.h"
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
+
+#include "common/include/logging.h"
 #include "patterns/checkers_pattern.hpp"
 #include "patterns/gradient_pattern.hpp"
 #include "patterns/material.hpp"

@@ -1,13 +1,13 @@
-/*
- * this file tests the phong_illumination(...) api
- **/
-
 /// c++ includes
 #include <memory>
 
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest/doctest.h"
+
+
 /// 3rdparty testing library
 #include "common/include/logging.h"
-#include "doctest/doctest.h"
 #include "io/phong_illumination.hpp"
 #include "patterns/material.hpp"
 #include "primitives/color.hpp"

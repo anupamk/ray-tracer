@@ -1,8 +1,12 @@
 /// c++ includes
 #include <stdexcept>
 
-#include "common/include/logging.h"
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
+
+/// our includes
+#include "common/include/logging.h"
 #include "primitives/tuple.hpp"
 #include "utils/constants.hpp"
 #include "utils/utils.hpp"

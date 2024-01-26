@@ -1,15 +1,14 @@
-/*
- * this file tests the 'world' class interfaces.
- **/
-
 /// c++ includes
 #include <cstddef>
 #include <memory>
 #include <vector>
 
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest/doctest.h"
+
 /// our includes
 #include "common/include/logging.h"
-#include "doctest/doctest.h"
 #include "io/world.hpp"
 #include "primitives/color.hpp"
 #include "primitives/intersection_record.hpp"

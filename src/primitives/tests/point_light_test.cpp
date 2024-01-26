@@ -1,6 +1,8 @@
-/// 3rdparty testing library
-#include "common/include/logging.h"
+/// 3rd-party includes
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
+
+#include "common/include/logging.h"
 #include "primitives/color.hpp"
 #include "primitives/point_light.hpp"
 #include "primitives/tuple.hpp"
