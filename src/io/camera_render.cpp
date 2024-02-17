@@ -58,6 +58,8 @@ namespace raytracer
                                 rendering_params.benchmark_num_discard_initial()}; /// to-discount-cache-effects
                 }();
 
+                /// ------------------------------------------------------------
+                /// render the scene
                 auto rendered_canvas = bm_params.benchmark(&camera::perform_rendering, *this,
                                                            the_world, /// the-scenery
                                                            rendering_params);
@@ -179,10 +181,11 @@ namespace raytracer
 
                                         if (x11_display != nullptr) {
                                                 /// ----------------------------
-                                                /// no locking is needed. this
-                                                /// is because each thread
+                                                /// no locking is needed.
+                                                ///
+                                                /// this is because each thread
                                                 /// handles different / distinct
-                                                /// pixels.
+                                                /// set of pixels.
                                                 x11_display->plot_pixel(work.x, work.y, r_color.rgb_u32());
                                         }
 

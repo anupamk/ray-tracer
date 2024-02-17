@@ -56,13 +56,8 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
-        auto render_params = RT::config_render_params()
-                                     .online(true) // show-as-we-go
-                                     .render_style(RT::rendering_style::RENDERING_STYLE_HILBERT);
-
-        auto rendered_canvas = camera.render(world, render_params);
+        auto rendered_canvas = camera.render(world);
         rendered_canvas.write(dst_fname);
-        LOG_INFO("image rendered to:'%s'", dst_fname);
 
         return 0;
 }
@@ -208,7 +203,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01 = RT::camera(640, 480, RT::PI_BY_3F);
+        auto camera_01 = RT::camera(1280, 1024, RT::PI_BY_3F);
         camera_01.transform(RT_XFORM::create_view_transform(RT::create_point(0.0, 4.0, -10.0),  /// look-from
                                                             RT::create_point(0.0, 2.0, 0.0),    /// look-to
                                                             RT::create_vector(0.0, 1.0, 0.0))); /// up-vector

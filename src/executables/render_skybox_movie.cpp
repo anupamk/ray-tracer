@@ -11,6 +11,9 @@
 #include <optional>
 #include <string>
 
+/// system includes
+#include <string.h>
+
 #include "common/include/assert_utils.h"
 #include "common/include/benchmark.hpp"
 #include "common/include/logging.h"
@@ -108,7 +111,7 @@ int main(int argc, char** argv)
         /// setup the cube and its properties
         auto cube_surface_properties = RT::material().set_diffuse(0.0).set_specular(0.0).set_ambient(1.0);
         {
-                auto const file_texturer = [](std::string const& fname) -> std::shared_ptr<RT::uv_image> {
+                auto const textureize = [](std::string const& fname) -> std::shared_ptr<RT::uv_image> {
                         LOG_INFO("texturizing '%s'", fname.c_str());
 
                         auto canvas_maybe = RT::canvas::load_from_file(fname);
@@ -120,12 +123,12 @@ int main(int argc, char** argv)
                         return canvas_texture;
                 };
 
-                auto const left_face_texture  = file_texturer("../textures/skybox/negx.ppm");
-                auto const front_face_texture = file_texturer("../textures/skybox/posz.ppm");
-                auto const right_face_texture = file_texturer("../textures/skybox/posx.ppm");
-                auto const back_face_texture  = file_texturer("../textures/skybox/negz.ppm");
-                auto const up_face_texture    = file_texturer("../textures/skybox/posy.ppm");
-                auto const down_face_texture  = file_texturer("../textures/skybox/negy.ppm");
+                auto const left_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negx.ppm"));
+                auto const front_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posz.ppm"));
+                auto const right_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posx.ppm"));
+                auto const back_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negz.ppm"));
+                auto const up_face_texture    = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posy.ppm"));
+                auto const down_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negy.ppm"));
 
                 // clang-format off
                 auto const cube_pattern = std::make_shared<RT::cube_texture>(left_face_texture,
@@ -155,14 +158,16 @@ int main(int argc, char** argv)
         /// benchmark the render with 'num_iterations' renders performed, and
         /// throwing away the results from 'num_discards' of them
         benchmark_t<> render_bm("MT render");
-        LOG_INFO("render benchmark info: '%s'", render_bm.stringify().c_str());
 
-        constexpr uint32_t max_images = 100;
+        constexpr uint32_t max_images = 500;
         constexpr float rot_xy_step   = (2 * RT::PI) / (1.0f * max_images);
+        auto movie_image_fname = "/tmp/skybox-image-";
 
+        /// --------------------------------------------------------------------
+        /// step-1: render a bunch of images
         for (uint32_t i = 0; i < max_images; i++) {
                 std::stringstream ss("");
-                ss << "/tmp/skybox-image-" << std::setfill('0') << std::setw(5) << i << ".ppm";
+                ss << movie_image_fname << std::setfill('0') << std::setw(5) << i << ".ppm";
 
                 auto const dst_fname = ss.str();
 
@@ -173,7 +178,7 @@ int main(int argc, char** argv)
 
                 /// --------------------------------------------------------------------
                 /// show what we got
-                LOG_INFO("rendered:'%s' %05d/%05d", dst_fname.c_str(), i, max_images);
+                LOG_INFO("rendered:'%s' %05d / %05d", dst_fname.c_str(), i, max_images);
 
                 /// ------------------------------------------------------------
                 /// next round orientation
@@ -181,6 +186,40 @@ int main(int argc, char** argv)
                                        RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0) *
                                        RT_XFORM::create_rotx_matrix(0.0 + i * rot_xy_step) *
                                        RT_XFORM::create_roty_matrix(0.0 - i * rot_xy_step));
+        }
+
+        /// --------------------------------------------------------------------
+        /// step-2: create a movie from the set of images rendered in step-1
+        {
+                auto const movie_name = "skybox-movie.mp4";
+                auto const movie_framerate = 25;
+                
+
+                /// ------------------------------------------------------------
+                /// cmdline: ffmpeg -framerate 25 -i /tmp/skybox-image-%5d.ppm skybox-movie.mp4
+                std::stringstream create_movie_cmdline_ss;
+                create_movie_cmdline_ss << "ffmpeg"
+                                        << " -framerate " << movie_framerate
+                                        << " -i " << movie_image_fname << "%5d.ppm"
+                                        << " " << movie_name;
+
+                auto const create_movie_cmdline = create_movie_cmdline_ss.str();
+
+                LOG_INFO("creating the movie '%s' from source images '%s-*.ppm', cmdline: '%s'"
+                         ,
+                         movie_name,
+                         movie_image_fname,
+                         create_movie_cmdline.c_str());
+
+                errno = 0;
+                auto const retval = system(create_movie_cmdline.c_str());
+                if (retval != 0) {
+                        LOG_ERROR("failed to create movie, cmdline: '%s', errno/reason: '%d'/'%s'"
+                                  ,
+                                  create_movie_cmdline.c_str(),
+                                  errno,
+                                  strerror(errno));
+                }
         }
 
         return 0;

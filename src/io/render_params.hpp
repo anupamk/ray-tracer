@@ -84,6 +84,33 @@ namespace raytracer
                 config_render_params&& benchmark_rounds(uint32_t);
                 config_render_params&& benchmark_discard_initial(uint32_t);
                 config_render_params&& render_style(rendering_style const&);
+
+            private:
+                /// ------------------------------------------------------------
+                /// validate benchmarking parameters, and determine their
+                /// overall effect on benchmarking.
+                /// 
+                /// see below for more details. 
+                ///
+                /// for benchmarking a rendering process, the user can has
+                /// following two knobs:
+                /// 
+                ///    - 'benchmark_rounds_': how many iterations are
+                ///    performed, 
+                /// 
+                ///    - 'benchmark_num_discards_': number of initial benchmark
+                ///    rounds to discard
+                ///
+                /// the 'benchmark_num_discards_' drops initial 'n' benchmark
+                /// results, to discount for cache etc. effects.
+                ///
+                /// now, these parameters are independently controlled. however
+                /// they can have a cumulative effect, for example, if
+                /// 'benchmark_num_discards_' ≥ 'benchmark_rounds_' then
+                /// benchmark should be disabled.
+                ///
+                /// this function performs these checks and balances
+                void validate_benchmark_state_();
         };
 
 } // namespace raytracer

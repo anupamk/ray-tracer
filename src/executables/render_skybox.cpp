@@ -90,12 +90,12 @@ static RT::world create_world()
                 return canvas_texture;
         };
 
-        auto const left_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/negx.ppm"));
-        auto const front_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/posz.ppm"));
-        auto const right_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/posx.ppm"));
-        auto const back_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/negz.ppm"));
-        auto const up_face_texture    = textureize(RT::TEXTURE_ROOT + std::string("skybox/posy.ppm"));
-        auto const down_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/negy.ppm"));
+        auto const left_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negx.ppm"));
+        auto const front_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posz.ppm"));
+        auto const right_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posx.ppm"));
+        auto const back_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negz.ppm"));
+        auto const up_face_texture    = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posy.ppm"));
+        auto const down_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negy.ppm"));
 
         // clang-format off
         auto const cube_pattern = std::make_shared<RT::cube_texture>(left_face_texture,

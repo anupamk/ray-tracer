@@ -3,17 +3,29 @@
 cmake_minimum_required(VERSION 3.20)
 
 # ------------------------------------------------------------------------------
+# only support "Linux" platform (for now)
+if (NOT ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
+  message("unsupported platform: ${CMAKE_HOST_SYSTEM_NAME}")
+  message(FATAL_ERROR "die die die !!!")
+endif()
+
+# ------------------------------------------------------------------------------
 # possible options 'Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'
-SET (CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Release)
+
+# ------------------------------------------------------------------------------
+# put all cmake modules together instead of they being scattered all
+# over the place
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # ------------------------------------------------------------------------------
 # setup the toolchain, options 'LLVM', 'GNU'
 set (RT_TOOLCHAIN "LLVM")
 
 if ("${RT_TOOLCHAIN}" STREQUAL "LLVM")
-  include(CMakeConfigureLLVM)
+  set(CMAKE_TOOLCHAIN_FILE ConfigureLLVM)
 elseif ("${RT_TOOLCHAIN}" STREQUAL "GNU")
-  include(CMakeConfigureGNU)
+  set(CMAKE_TOOLCHAIN_FILE ConfigureGNU)
 else()
   message(SEND_ERROR "Aieee !!! Unknown toolchain '${RT_TOOLCHAIN}'")
   message(SEND_ERROR "Expected 'LLVM' or 'GNU'")
@@ -84,13 +96,10 @@ function (augment_execution_profiling EXEC_OR_LIB)
 endfunction()
 
 # ------------------------------------------------------------------------------
-# copy assets i.e. textures and obj files to the binary directory as well.
-add_custom_target(copy_assets ALL
-  COMMAND "${CMAKE_COMMAND}" -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/assets ${CMAKE_CURRENT_BINARY_DIR}/assets
-)
-
-# ------------------------------------------------------------------------------
 # project top-level
 #    - 'src'    : all sources within this sub-directory
 add_subdirectory(src)
 
+# ------------------------------------------------------------------------------
+# all assets (textures, OBJ's etc) within this sub-directory
+add_subdirectory(assets)

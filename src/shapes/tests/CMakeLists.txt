@@ -14,6 +14,6 @@ SET(RT_SHAPE_TEST_SOURCES
 
 # ------------------------------------------------------------------------------
 # generate + run the test targets
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../CMakeBuildTestFunctions)
+include(BuildTestFunctions)
 generate_all_test_targets("${RT_SHAPE_TEST_SOURCES}")
 run_all_tests("${RT_SHAPE_TEST_SOURCES}")

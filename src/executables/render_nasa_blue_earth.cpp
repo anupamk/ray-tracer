@@ -92,10 +92,14 @@ static RT::world create_world()
         /// earth-sphere
         auto earth_sphere = std::make_shared<RT::sphere>();
         {
-                auto maybe_earth_map_canvas =
-                        RT::canvas::load_from_file(RT::TEXTURE_ROOT + std::string("nasa-blue-marble.ppm"));
+                auto const texture_fname = RT::TEXTURE_ROOT + std::string("earth-8k-daymap.ppm");
+                LOG_INFO("begin texturizing '%s'", texture_fname.c_str());
+
+                auto maybe_earth_map_canvas = RT::canvas::load_from_file(texture_fname);
                 ASSERT(maybe_earth_map_canvas.has_value());
                 auto earth_map_canvas = maybe_earth_map_canvas.value();
+
+                LOG_INFO("end texturizing '%s'", texture_fname.c_str());
 
                 auto sp_01_earth_texture = std::make_shared<RT::uv_image>(earth_map_canvas);
                 auto sp_01_earth_pattern =
@@ -104,7 +108,8 @@ static RT::world create_world()
                 earth_sphere->transform(RT_XFORM::create_3d_scaling_matrix(3.75, 3.75, 3.75) *
                                         RT_XFORM::create_3d_translation_matrix(2.0, 1.3, 0.5) *
                                         RT_XFORM::create_rotz_matrix(RT::PI_BY_6F) *
-                                        RT_XFORM::create_rotx_matrix(-RT::PI / 8.0));
+                                        RT_XFORM::create_rotx_matrix(-RT::PI / 8.0) *
+                                        RT_XFORM::create_roty_matrix(-RT::PI_BY_5F));
 
                 earth_sphere->set_material(RT::material()
                                                    .set_pattern(sp_01_earth_pattern) /// pattern

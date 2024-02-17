@@ -90,8 +90,6 @@ class benchmark_t
 
                         num_times_.push_back(time);
                         results.push_back(result_i);
-
-                        LOG_INFO("----------------------------------------------------------------");
                 }
 
                 compute_mean();

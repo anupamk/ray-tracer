@@ -2,644 +2,743 @@
 #+Author: Anupam Kapoor
 #+EMAIL: anupam.kapoor@gmail.com
 #+OPTIONS: ^:nil _:nil
+#+LANGUAGE:  en
+#+OPTIONS:   H:4
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+HTML_HEAD: <style> #content{max-width:4000px;}</style>
 
 * Description
 
-  This is a rendition in C++, of a CPU based, [[https://en.wikipedia.org/wiki/Ray_tracing_(graphics)][raytracer]] without using
-  /*any*/ external graphics libraries f.e. OpenGL etc. [[Generated Images][Rendered images]]
-  are saved in [[http://netpbm.sourceforge.net/doc/ppm.html][PPM]] formatted files. These can be subsequently viewed
-  via plethora of image viewers.
+This is a rendition in C++, of a CPU based, [[https://en.wikipedia.org/wiki/Ray_tracing_(graphics)][raytracer]] without using
+/any/ external libraries f.e. OpenGL etc. [[Generated Images][Rendered images]]
+are saved in [[http://netpbm.sourceforge.net/doc/ppm.html][PPM]] formatted files, which can be subsequently viewed
+via plethora of image viewers.
 
 * Development Overview
 
-  This CPU based [[https://en.wikipedia.org/wiki/Ray_tracing_(graphics)][raytracer]] is /approximately/ based on the one
-  described in Jamis Buck's book [[https://www.goodreads.com/book/show/39933047-the-ray-tracer-challenge][The Ray Tracer Challenge]]. The book
-  itself is programming language agnostic, and follows a test driven
-  development or [[https://en.wikipedia.org/wiki/Test-driven_development][TDD]] style to motivate its (raytracer's)
-  construction.
+This CPU based [[https://en.wikipedia.org/wiki/Ray_tracing_(graphics)][raytracer]] is /approximately/ based on the one
+described in Jamis Buck's book [[https://www.goodreads.com/book/show/39933047-the-ray-tracer-challenge][The Ray Tracer Challenge]]. The book
+itself is programming language agnostic, and follows a test driven
+development or [[https://en.wikipedia.org/wiki/Test-driven_development][TDD]] style to motivate its (raytracer's)
+construction.
 
 ** What Is TDD ?
 
-   In TDD style of development, developers are expected to write unit
-   tests before they write code. Thus, for example, before writing an
-   implementation of a class, developers are expected to write unit
-   tests for /expected behavior/ of the class.
+In TDD style of development, developers are expected to write unit
+tests before they write code. Thus, for example, before writing an
+implementation of a class, developers are expected to write unit
+tests for /expected behavior/ of the class.
 
-   Ofcourse, initially, none of the tests would pass since there is
-   no code for the class. Developer then works through the tests one
-   at a time, writing enough code for each test to pass. When all
-   tests pass, the class is considered done.
+Ofcourse, initially, none of the tests would pass since there is
+no code for the class. Developer then works through the tests one
+at a time, writing enough code for each test to pass. When all
+tests pass, the class is considered done.
 
 ** Why I Don't Like It
 
-   Although I am a strong believer in writing /*unit tests*/, but
-   somehow the idea of TDD doesn't sit too well with me. It just seems
-   too /incremental/, and smacks of prioritizing getting specific
-   /features/ done, rather than finding the *best overall
-   design*. /IMHO/ with this /*tactical*/ style of development, it is
-   quite easy to end up with a mess.
+Although I am a strong believer in writing /unit tests/, but
+somehow the idea of TDD doesn't sit too well with me. It just seems
+too /incremental/, and smacks of prioritizing getting specific
+/features/ done, rather than finding the *best overall
+design*. /IMHO/ with this /tactical/ style of development, it is
+quite easy to end up with a mess.
 
 ** Moving Along...
 
-   Having said that, I have tried to follow the /spirit/ of the text in
-   this implementation. Ideas from the book are considered
-   /*informative*/ rather than /*normative*/. Deviations in
-   implementation, which are hopefully few and far between, are made
-   with an intent of:
+Having said that, I have tried to follow the /spirit/ of the text in
+this implementation. Ideas from the book are considered
+/informative/ rather than /normative/.
 
-      * either increasing rendering performance (on a /cpu/ ? hah !)
-        and
+Deviations in implementation are made with an intent of:
 
-      * increasing visual appeal of generated scenes.
+   + either increasing rendering performance (on a /cpu/ ? hah !) and
+   + increasing visual appeal of generated scenes
 
-   A few examples of the former include:
+A few examples of the former include:
 
-      * support for [[Notes On MultiThreading][multi-threaded]] rendering
+   + support for [[Notes On MultiThreading][multi-threaded]] rendering
+   + storing pre-computed inverse matrices for various supported
+     primitives, as opposed to re-computing them for each pixel during
+     rendering.
+   + avoiding memory-allocations during rendering operations
 
+Example of latter include:
 
-      * storing pre-computed inverse-transformation matrices for
-        various supported primitives, as opposed to re-computing them
-        for each pixel during rendering.
+   + applying both image based and /procedural/ textures (f.e. via
+     homegrown [[https://en.wikipedia.org/wiki/Perlin_noise][perlin noise]] implementation) on various geometric
+     primitives supported by the renderer.
 
-
-      * avoiding memory-allocations during rendering operations
-
-   Example of latter include:
-
-      * support for both applying image based as well as procedural
-        ([[https://en.wikipedia.org/wiki/Perlin_noise][perlin noise]]) textures on various primitives supported.
-
-   More tweaks and enhancements are planned. See the [[./TODO.org][included]] file for
-   details.
+More tweaks and enhancements are planned. See the [[./TODO.org][included]] file for
+details.
 
 * Building + Running
 
-** Machine Configuration
+** How Now Why Later...
+Before we get on to the /why's and the wherefores/ lets look at the
+how first.
 
-   Timings for operations, rendering benchmarks etc. that are
-   sprinkled fairly liberally throughout this document, are all from
-   experiments performed on my current desktop machine.
+*** Clone The Project
+Get the sources and the dependent submodules first:
 
-   This machine, has been my workhorse for more than a decade. It has
-   this [[https://www.gigabyte.com/Motherboard/GA-EX58-UD4P-rev-10#ov][motherboard]], with RAM maxed out at 24G. The [[https://ark.intel.com/content/www/us/en/ark/products/37147/intel-core-i7-920-processor-8m-cache-2-66-ghz-4-80-gt-s-intel-qpi.html][CPU]] is =Intel Core
-   i7 920= clocking at =2.67 Ghz= and the root filesystem is on a [[https://www.samsung.com/semiconductor/minisite/ssd/product/consumer/850evo/][1 TB
-   SSD]].
+#+begin_src
+$ .../> git clone https://github.com/anupamk/ray-tracer.git ray-tracer.git
+$ .../> cd ray-tracer.git
+$ .../ray-tracer.git> git submodule update --init --recursive
+#+end_src
 
-   Overall, from today's standards, the specs on the machine are
-   positively /*pleistocenic*/.
+*** Building The Project
+Project artifacts are built using [[https://cmake.org/][CMake]], like so:
 
-   If you are looking for the gory details here they are:
+#+begin_src
+$ .../ray-tracer.git/> mkdir builds && pushd builds
+$ .../ray-tracer.git/builds> cmake .. -G "Unix Makefiles"
+$ .../ray-tracer.git/builds> make -j <N>
+#+end_src
 
-*** CPU
-    #+begin_src
-      anupam@virat ~
-      % lscpu
+where =N= is the number of cpu-cores that you want to dedicate to this
+process.
 
-      Architecture:            x86_64
-        CPU op-mode(s):        32-bit, 64-bit
-        Address sizes:         36 bits physical, 48 bits virtual
-        Byte Order:            Little Endian
-      CPU(s):                  8
-        On-line CPU(s) list:   0-7
-      Vendor ID:               GenuineIntel
-        Model name:            Intel(R) Core(TM) i7 CPU         920  @ 2.67GHz
-          CPU family:          6
-          Model:               26
-          Thread(s) per core:  2
-          Core(s) per socket:  4
-          Socket(s):           1
-          Stepping:            4
-          Frequency boost:     enabled
-          CPU max MHz:         2793.0000
-          CPU min MHz:         1596.0000
-          BogoMIPS:            5331.62
-          Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts ac
-                               pi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts
-                                rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni dtes64 monitor ds_cpl vmx es
-                               t tm2 ssse3 cx16 xtpr pdcm sse4_1 sse4_2 popcnt lahf_lm pti tpr_shadow vnmi flexpriori
-                               ty ept vpid dtherm ida
-      Virtualization features:
-        Virtualization:        VT-x
-      Caches (sum of all):
-        L1d:                   128 KiB (4 instances)
-        L1i:                   128 KiB (4 instances)
-        L2:                    1 MiB (4 instances)
-        L3:                    8 MiB (1 instance)
-      NUMA:
-        NUMA node(s):          1
-        NUMA node0 CPU(s):     0-7
+At the successful conclusion of the above step, all executables are
+available here:
 
-        .....
-    #+end_src
+#+begin_src
+$ .../ray-tracer.git/builds> $PWD/src/executables
+#+end_src
 
-*** System Memory
-    #+begin_src
-      anupam@virat ~
-      % sudo lshw -short -C memory
-      H/W path           Device  Class       Description
-      ==================================================
-      /0/0                       memory      128KiB BIOS
-      /0/4/c                     memory      64KiB L1 cache
-      /0/4/d                     memory      8MiB L2 cache
-      /0/17                      memory      24GiB System Memory
-      /0/17/0                    memory      4GiB DIMM 400 MHz (2.5 ns)
-      /0/17/1                    memory      4GiB DIMM 400 MHz (2.5 ns)
-      /0/17/2                    memory      4GiB DIMM 400 MHz (2.5 ns)
-      /0/17/3                    memory      4GiB DIMM 400 MHz (2.5 ns)
-      /0/17/4                    memory      4GiB DIMM 400 MHz (2.5 ns)
-      /0/17/5                    memory      4GiB DIMM 400 MHz (2.5 ns)
-    #+end_src
+Before you attempt to run any of these, read on !
 
-*** SSD Specs
-    #+begin_src
-      % sudo hdparm -I /dev/sdc
+*** /Preparing/ Assets
+_Almost_ all the executables make use of included assets. Concretely,
+various programs use:
+   - [[https://en.wikipedia.org/wiki/Netpbm#PBM_example][P3]] formatted files for textures,
+   - [[https://en.wikipedia.org/wiki/Wavefront_.obj_file][OBJ]] files for description of scene geometries etc.
 
-      /dev/sdc:
+Before they can be gainfully employed, these assets need to be:
+   1. placed at the right location, and
+   2. made available in the right format
 
-      ATA device, with non-removable media
-              Model Number:       Samsung SSD 850 EVO 1TB
-              Serial Number:      S2PWNX0J202193D
-              Firmware Revision:  EMT02B6Q
-              Transport:          Serial, ATA8-AST, SATA 1.0a, SATA II Extensions, SATA Rev 2.5, SATA Rev 2.6, SATA Rev 3.0
-      ....
-    #+end_src
+Following targets automate the aforementioned steps:
++ =cp_assets_objs= copies OBJ assets to an appropriate location,
 
-** Building
++ =cp_assets_textures= copies textures to an appropriate location
+  after they have been converted into a [[https://en.wikipedia.org/wiki/Netpbm#PBM_example][format]] suitable for
+  consumption by various executables.
 
-   I am using [[https://cmake.org/][cmake]] for building the whole thing. Each scene is
-   rendered using its own executable. All scenes that can be rendered
-   are available [[Generated Images][here]].
+These are built like so:
+#+begin_src
+$ .../ray-tracer.git/builds> cmake --build . --target cp_assets_objs
+$ .../ray-tracer.git/builds> cmake --build . --target cp_assets_textures
+#+end_src
 
-   Unsurprisingly, in the table, the column named =Executable Name= is
-   the name of the executable that produces the displayed image.
+On a beefy hardware the =cp_assets_textures= target takes a couple of
+seconds to complete though.
 
-** Why You Do This ?
+*** Running The Executables
+Huzzah ! Now, we are all set to run the generated executables. The
+target =render_all_images= runs all built executables in one fell
+swoop, and can be invoked like so:
 
-   Instead of using 1 executable per scene, other approaches are also
-   possible. One possibility is to have the entire scene described
-   using a /scene configuration file/. The renderer can now have two
-   distinct parts as follows:
+#+begin_src
+$ .../ray-tracer.git/builds> cmake --build . --target render_all_images
+#+end_src
 
-       1. parse the scene, and create objects with properties
-          described therein and
+Depending on your machine, this can take a /really LONG/ time. For
+my machine this takes close to =5 .. 6= /hours/ ! Go watch a movie or
+two or three.
 
-       2. render the scene
+Ofcourse, =render_all_images= target is not the only way ! Individual
+executables can also be run. Thus, f.e. the following command:
 
-   [[https://en.wikipedia.org/wiki/YAML][YAML]] or maybe even [[https://en.wikipedia.org/wiki/Lua_(programming_language)][LUA]] can be used for this ? Going down that path
-   seems like an un-necessary distraction for /starters/. One would
-   presumably expend considerable time and energy activities which
-   are far removed from the /*actual*/ raytracer itself.
+#+begin_src
+$ .../ray-tracer.git/builds> pushd src/executables
+$ .../ray-tracer.git/builds/src/executables> ./render_with_t3r
+#+end_src
 
-   IMHO, having a /functionaly correct/ and /performant/ raytracer
-   /*first*/, is a superior approach. Once that is done, enhancements
-   to support scene specifications via a description language can be
-   easily added.
+Runs the executable =render_with_t3r= and hopefully produces something
+that is pleasing to your gentle sensibilities.
 
-** How Do I /Build/ It ... Please ?
+The above command produces this output on my machine:
 
-   Overall sequence of steps for building executables and tests are as
-   follows:
+#+begin_src
+INFO   | 2024-03-04 22:41:23.820 | /home/anupam/source-code/c++/ray-tracer.git/src/executables/render_with_t3r.cpp : 00050 | canvas details : {width (pixels): 1280, height (pixels): 1024, destination: 'render-with-t3r.ppm'}
+INFO   | 2024-03-04 22:41:23.820 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00049 | rendering parameters: '{show-as-we-go: 'no', hw-threads: '8', rendering-style: 'RENDERING_STYLE_SCANLINE', benchmark: 'yes', benchmark-iterations: '10', benchmark-discard-initial: 'yes', benchmark-discards: '3'}'
+INFO   | 2024-03-04 22:41:23.821 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0001 / 0013
+INFO   | 2024-03-04 22:41:24.002 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:41:45.015 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0002 / 0013
+INFO   | 2024-03-04 22:41:45.156 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:42:06.149 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0003 / 0013
+INFO   | 2024-03-04 22:42:06.295 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:42:27.253 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0004 / 0013
+INFO   | 2024-03-04 22:42:27.402 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:42:48.336 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0005 / 0013
+INFO   | 2024-03-04 22:42:48.480 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:43:09.420 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0006 / 0013
+INFO   | 2024-03-04 22:43:09.560 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:43:30.575 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0007 / 0013
+INFO   | 2024-03-04 22:43:30.717 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:43:51.678 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0008 / 0013
+INFO   | 2024-03-04 22:43:51.816 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:44:12.892 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0009 / 0013
+INFO   | 2024-03-04 22:44:13.057 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:44:34.053 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0010 / 0013
+INFO   | 2024-03-04 22:44:34.293 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:44:55.294 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0011 / 0013
+INFO   | 2024-03-04 22:44:55.443 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:45:16.408 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0012 / 0013
+INFO   | 2024-03-04 22:45:16.562 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:45:37.538 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00083 | running 0013 / 0013
+INFO   | 2024-03-04 22:45:37.695 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00249 | scanline-work-queue info: total-threads: {8}, pixels-per-thread: {160}, work-queue length: {8192} (approx.)
+INFO   | 2024-03-04 22:45:58.836 | /home/anupam/source-code/c++/ray-tracer.git/src/common/include/benchmark.hpp : 00068 | benchmarking camera::render(...), results: {mean (ms): '21113', standard-deviation (ms): '00045'}
+#+end_src
 
-    1. Create a directory where all generated files will be
-       placed. For illustration purposes, this is called =build=. Go
-       there and generate the makefiles:
+This is quite a chatty output indeed, mostly because benchmarking was
+enabled as is evident from:
+
+#+begin_src
+INFO   | 2024-03-04 22:41:23.820 | /home/anupam/source-code/c++/ray-tracer.git/src/io/camera_render.cpp : 00049 | rendering parameters: '{show-as-we-go: 'no', hw-threads: '8', rendering-style: 'RENDERING_STYLE_SCANLINE', benchmark: 'yes', benchmark-iterations: '10', benchmark-discard-initial: 'yes', benchmark-discards: '3'}'
+#+end_src
+
+Thus, a total of =13 (10 + 3)= rounds of rendering are performed. Out
+of these =10= samples are chosen (for statistics computation), and
+first =3= of these are discarded.
+
+
+*** Running Tests
+As is probably the _norm_ for projects using CMake, this project too
+makes use of a combination of [[https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html][CTest]] and [[https://github.com/doctest/doctest][doctest]] for testing various
+components that make up the entire project.
+
+These tests are run *during* the build process itself thereby ensuring
+a modicum of sanity in the code.
+
+/All/ tests can be manually run like so:
+
+#+begin_src
+$ .../ray-tracer.git/builds> ctest
+Test project /home/anupam/source-code/c++/ray-tracer.git/builds
+      Start  1: rt_tuple_test
+ 1/23 Test  #1: rt_tuple_test ....................   Passed    0.01 sec
+      Start  2: rt_color_test
+ 2/23 Test  #2: rt_color_test ....................   Passed    0.00 sec
+      Start  3: rt_matrix_test
+ 3/23 Test  #3: rt_matrix_test ...................   Passed    0.00 sec
+      Start  4: rt_matrix_transformations_test
+ 4/23 Test  #4: rt_matrix_transformations_test ...   Passed    0.00 sec
+      Start  5: rt_ray_test
+ 5/23 Test  #5: rt_ray_test ......................   Passed    0.00 sec
+      Start  6: rt_ray_transform_test
+ 6/23 Test  #6: rt_ray_transform_test ............   Passed    0.00 sec
+      Start  7: rt_point_light_test
+ 7/23 Test  #7: rt_point_light_test ..............   Passed    0.00 sec
+      Start  8: rt_sphere_test
+ 8/23 Test  #8: rt_sphere_test ...................   Passed    0.00 sec
+      Start  9: rt_plane_test
+ 9/23 Test  #9: rt_plane_test ....................   Passed    0.00 sec
+      Start 10: rt_cube_test
+10/23 Test #10: rt_cube_test .....................   Passed    0.00 sec
+      Start 11: rt_cylinder_test
+11/23 Test #11: rt_cylinder_test .................   Passed    0.00 sec
+      Start 12: rt_cone_test
+12/23 Test #12: rt_cone_test .....................   Passed    0.00 sec
+      Start 13: rt_group_test
+13/23 Test #13: rt_group_test ....................   Passed    0.00 sec
+      Start 14: rt_triangle_test
+14/23 Test #14: rt_triangle_test .................   Passed    0.00 sec
+      Start 15: rt_csg_test
+15/23 Test #15: rt_csg_test ......................   Passed    0.00 sec
+      Start 16: rt_pattern_test
+16/23 Test #16: rt_pattern_test ..................   Passed    0.00 sec
+      Start 17: rt_reflection_refraction_test
+17/23 Test #17: rt_reflection_refraction_test ....   Passed    0.00 sec
+      Start 18: rt_uv_pattern_test
+18/23 Test #18: rt_uv_pattern_test ...............   Passed    0.00 sec
+      Start 19: rt_canvas_test
+19/23 Test #19: rt_canvas_test ...................   Passed    0.00 sec
+      Start 20: rt_phong_illumination_test
+20/23 Test #20: rt_phong_illumination_test .......   Passed    0.00 sec
+      Start 21: rt_world_test
+21/23 Test #21: rt_world_test ....................   Passed    0.00 sec
+      Start 22: rt_camera_test
+22/23 Test #22: rt_camera_test ...................   Passed    0.00 sec
+      Start 23: rt_obj_file_parser_test
+23/23 Test #23: rt_obj_file_parser_test ..........   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 23
+
+Total Test time (real) =   0.07 sec
+
+#+end_src
+
+Or, they can be run individually or in subsets (via the
+=--tests-regex=) as well, like so:
+
+#+begin_src
+$ .../ray-tracer.git/builds> ctest --tests-regex rt_obj_file_parser_test
+Test project /home/anupam/source-code/c++/ray-tracer.git/builds
+    Start 23: rt_obj_file_parser_test
+1/1 Test #23: rt_obj_file_parser_test ..........   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec
+#+end_src
+
+Here is the list of all available tests:
+
+#+begin_src
+$ .../ray-tracer.git/builds> ctest --show-only
+Test project /home/anupam/source-code/c++/ray-tracer.git/builds
+  Test  #1: rt_tuple_test
+  Test  #2: rt_color_test
+  Test  #3: rt_matrix_test
+  Test  #4: rt_matrix_transformations_test
+  Test  #5: rt_ray_test
+  Test  #6: rt_ray_transform_test
+  Test  #7: rt_point_light_test
+  Test  #8: rt_sphere_test
+  Test  #9: rt_plane_test
+  Test #10: rt_cube_test
+  Test #11: rt_cylinder_test
+  Test #12: rt_cone_test
+  Test #13: rt_group_test
+  Test #14: rt_triangle_test
+  Test #15: rt_csg_test
+  Test #16: rt_pattern_test
+  Test #17: rt_reflection_refraction_test
+  Test #18: rt_uv_pattern_test
+  Test #19: rt_canvas_test
+  Test #20: rt_phong_illumination_test
+  Test #21: rt_world_test
+  Test #22: rt_camera_test
+  Test #23: rt_obj_file_parser_test
+
+Total Tests: 23
+#+end_src
+
+
+*** ASAN / TSAN
+For now running various [[https://github.com/google/sanitizers][sanitizers]] f.e. address, thread, memory
+etc. needs to done manually.
+
+It is definitely a better idea to create a SANITIZER build profile for
+CMake via the =CMAKE_CONFIGURATION_TYPES= and then use that.
+
+*** Profiling
+The job of profiling the code to remove architectural, implementation
+etc. inefficiencies has been relegated to [[https://github.com/wolfpld/tracy][Tracy]]. It is a real time,
+nanosecond resolution, hybrid frame and sampling profiler.
+
+It can be automatically enabled in the codebase via the
+=ENABLE_EXECUTION_PROFILING= flag.
+
+** Philosophical Musings
+
+*** Overall Organization
+Instead of using 1 executable per scene, other approaches are also
+possible. These alternatives, and their advantages and shortcomings
+are discussed next.
+
+One possibility is to have the entire scene described using a /scene
+configuration file/. The renderer can now be split into two distinct
+parts as follows:
+
+   1. a scene-configuration parser which parses the scene description,
+      and creates the world populated with various objects etc. etc.
+
+   2. a renderer engine, which renders the world described in (1)
+
+Scene description can be done using f.e. [[https://en.wikipedia.org/wiki/YAML][YAML]] or maybe even [[https://en.wikipedia.org/wiki/Lua_(programming_language)][LUA]] ?
+Going down that path seems like an unnecessary distraction for
+/starters/. One would presumably expend considerable time and energy
+on activities that are far removed from the /actual/ raytracer itself,
+aka [[https://en.wiktionary.org/wiki/yak_shaving][yak-shaving !]]
+
+IMHO, having a /functionally correct/ and /performant/ raytracer
+/first/, is a /superior/ approach. Once that is done, enhancements to
+support scene specifications via a description language can be
+easily added.
+
+*** Asset Loading
+Textures in SMRT can either be procedurally generated or (as alluded
+to earlier) loaded from PPM (or more pedantically [[https://en.wikipedia.org/wiki/Netpbm#PPM_example][P3]]) formatted files.
+
+Let's look at each of these:
+
+**** Loading Textures
+P3 formatted files though easy to work with are quite profligate with
+their space usage. We still use it though !
+
+But /WHY/ ? Why not just use on the available libraries for
+interfacing with =png= / =jpeg= etc. formatted files ? And the answer
+is two fold as follows:
+
+   1. i don't want to rely on /ANY/ external libraries at all for
+      this project, and
+
+   2. /efficient/ parsing of text (and binary) file formats is quite
+      fun for me at least !
+
+Parsing speed is not too shabby though, see for yourself:
 
        #+begin_src
-         $ .../> mkdir build && cd build
-         $ .../build> cmake .. -G "Unix Makefiles"
+$ .../ray-tracer.git/builds/src/executables> ./render_nasa_blue_earth
+
+INFO   | 2024-03-05 22:14:58.203 | /home/anupam/source-code/c++/ray-tracer.git/src/executables/render_nasa_blue_earth.cpp : 00096 | begin texturizing '../../assets/textures/earth-8k-daymap.ppm'
+INFO   | 2024-03-05 22:15:00.781 | /home/anupam/source-code/c++/ray-tracer.git/src/executables/render_nasa_blue_earth.cpp : 00102 | end texturizing '../../assets/textures/earth-8k-daymap.ppm'
+...
+$ .../ray-tracer.git/builds/src/executables> ls -l --human ../../assets/textures/earth-8k-daymap.ppm
+-rw-r--r-- 1 anupam anupam 337M Feb 27 19:57 ../../assets/textures/earth-8k-daymap.ppm
        #+end_src
 
-    2. Now we can run either:
+Thus, on this machine, it takes approximately =2.5sec= to parse a
+=337M= PPM encoded texture !
 
-       #+begin_src
-         $ .../build> make
-       #+end_src
+**** Load Scene Geometries
+Wavefront OBJ file format is a simple data-format for storing and
+sharing *only* scene geometries. This includes, but is not limited to,
+things like position of each vertex, UV position of texture
+coordinates, vertex normals etc. etc.
 
-       for single threaded build. Faster parallelized builds are also
-       possible, thus f.e., you can do:
+The parser for this too is homegrown, and not too bad though in terms
+of loading large scene geometries:
 
-       #+begin_src
-         $ .../build> make -j <N>
-         N == number of cpu-cores you want to use
-       #+end_src
+#+begin_src
+% .../ray-tracer.git/builds/src/executables> ./render_chess_pawn
+INFO   | 2024-03-07 22:04:25.117 | /home/anupam/source-code/c++/ray-tracer.git/src/executables/render_chess_pawn.cpp : 00160 | begin parsing:'../../assets/OBJ/chess-pawn.obj'
+INFO   | 2024-03-07 22:04:25.217 | /home/anupam/source-code/c++/ray-tracer.git/src/executables/render_chess_pawn.cpp : 00164 | chess-pawn parsed, summary:'{unknown-tokens:'6', bad-faces:'0', vertex-list size:'15913', default-group size:'31776', named-group size:'0', vertex-normal-list size:'15761'}'
+...
 
-       Either of the steps, when completed successfully, will generate
-       executables as well as the tests. These are respectively
-       available in:
+% .../ray-tracer.git/builds/src/executables> ls -l --human ../../assets/OBJ/chess-pawn.obj
+-rw-r--r-- 1 anupam anupam 2.4M Feb 27 19:55 ../../assets/OBJ/chess-pawn.obj
 
-      #+begin_src
-        $ .../build> ./src
-        $ .../build> ./tests
-      #+end_src
-
-      Can we run the executables now ? Nope, read on brave soldier !
-
-    3. <<convert-textures>> Convert textures from JPEG to P3 format
-
-       SMRT's texture support is quite spartan with respect to
-       supported image formats. Currently, it just supports PPM based
-       (or to be pedantic [[https://en.wikipedia.org/wiki/Netpbm#PPM_example][P3]] formatted) textures.
-
-       PPM formatted files, though easy to work with, are quite
-       profligate with their space usage. This repository therefore
-       packages textures as JPEG formatted files.
-
-       Of course, before these can be used, they must be converted to
-       P3 format. This can be accomplished quite easily though. For
-       example, using the venerable [[https://imagemagick.org/index.php][Image Magick]] we can do this:
-
-       #+begin_src
-         $ .../build> convert ../textures/nasa-blue-marble.jpg -compress none ../textures/nasa-blue-marble.ppm
-         $ .../build> ls -l --human ../textures/nasa-blue-marble.jpg ../textures/nasa-blue-marble.ppm
-
-         -rw-r--r-- 1 anupam anupam 1.7M Mar 20 16:49 ../textures/nasa-blue-marble.jpg
-         -rw-r--r-- 1 anupam anupam  76M Jul  6 14:51 ../textures/nasa-blue-marble.ppm
-       #+end_src
-
-       The, =-compress none= stanza above, specifies that we want to
-       generate ascii formatted PPM files. As you can see the
-       difference in file sizes between the two is quite significant
-       indeed.
-
-       Texture loading speed is not /too shabby/ though. For the above
-       case, on [[Machine Configuration][my machine]] I get:
-
-       #+begin_src
-         INFO   | 2021-07-06 15:26:16.235 | /home/anupam/source-code/c++/ray-tracer/src/render_nasa_blue_earth.cpp : 00125 | begin loading texture:../textures/nasa-blue-marble.ppm
-         INFO   | 2021-07-06 15:26:16.721 | /home/anupam/source-code/c++/ray-tracer/src/render_nasa_blue_earth.cpp : 00130 | end loading texture:../textures/nasa-blue-marble.ppm
-       #+end_src
-
-       Which is =486ms= for loading a =76 MB= P3 formatted file into a
-       texture that is then further processed.
-
-       /Now/ we are /*all set*/ for running the generated executables
-       and tests.
-
-** Running
-
-    Once the build process is complete, and the textures have all been
-    [[convert-textures][converted]] you can run any executable to render the [[Generated   Images][scenes]].
-
-*** Rendering The Scenes
-
-    Thus for example, to render the scene shown [[render-with-t3r][here]], you can do this:
-
-    #+begin_src
-      $ .../build> src/render-with-t3
-
-      INFO   | 2021-07-10 21:33:53.267 | /home/anupam/source-code/c++/ray-tracer/src/render_with_t3r.cpp : 00066 | canvas details : {width (pixels): 1280, height (pixels): 1024, destination: 'render-with-t3r.ppm'}
-      INFO   | 2021-07-10 21:33:53.267 | /home/anupam/source-code/c++/ray-tracer/src/render_with_t3r.cpp : 00078 | benchmark details: '{iterations: 10, throw-away: 3, num_times: 0}'
-      INFO   | 2021-07-10 21:33:53.267 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0001 / 0013
-      INFO   | 2021-07-10 21:34:04.441 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0002 / 0013
-      INFO   | 2021-07-10 21:34:16.013 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0003 / 0013
-      INFO   | 2021-07-10 21:34:27.522 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0004 / 0013
-      INFO   | 2021-07-10 21:34:39.192 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0005 / 0013
-      INFO   | 2021-07-10 21:34:50.478 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0006 / 0013
-      INFO   | 2021-07-10 21:35:01.974 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0007 / 0013
-      INFO   | 2021-07-10 21:35:13.250 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0008 / 0013
-      INFO   | 2021-07-10 21:35:24.565 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0009 / 0013
-      INFO   | 2021-07-10 21:35:35.777 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0010 / 0013
-      INFO   | 2021-07-10 21:35:47.038 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0011 / 0013
-      INFO   | 2021-07-10 21:35:58.269 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0012 / 0013
-      INFO   | 2021-07-10 21:36:09.739 | /home/anupam/source-code/c++/ray-tracer/common/include/benchmark.hpp : 00074 | running 0013 / 0013
-      INFO   | 2021-07-10 21:36:21.445 | /home/anupam/source-code/c++/ray-tracer/src/render_with_t3r.cpp : 00087 | benchmark details : {mean (ms): '11312', standard-deviation (ms): '00141'}
-
-
-      $ .../build> ls -l render-with-t3r.ppm
-      -rw-r--r-- 1 anupam anupam 12786381 Jul 10 21:36 render-with-t3r.ppm
-    #+end_src
-
-    Since benchmarking is enabled (not a runtime option !) we see
-    quite a chatty output from the renderer.
-
-    Benchmarking is done with following parameters:
-
-    #+begin_src
-      INFO   | 2021-07-10 21:33:53.267 | /home/anupam/source-code/c++/ray-tracer/src/render_with_t3r.cpp : 00078 | benchmark details: '{iterations: 10, throw-away: 3, num_times: 0}'
-    #+end_src
-
-    Thus a total of =13= rounds of rendering are done, out which =10=
-    samples are chosen (for statistics computation), and (first) =3=
-    of those are discarded.
-
-    Benchmark routines allow to repeat the entire computation multiple
-    times as well (to discount cache effects etc.). This is the
-    =num_times= field in the above log. However, we are not doing that
-    here.
-
-    In any case, the code for benchmarking looks something like this:
-
-    #+begin_src c++
-              /// --------------------------------------------------------------------
-              /// benchmark the render as follows:
-              ///   - record timings for 'num_iterations' renderings
-              ///   - from these records, discard 'num_discards' samples
-              /// and then compute mean and standard-deviation
-              auto const num_iterations = 10;
-              auto const num_discards   = 3;
-              Benchmark<> render_bm(num_iterations, num_discards);
-              LOG_INFO("benchmark details: '%s'", render_bm.stringify().c_str());
-    #+end_src
-
-    The result are:
-
-    #+begin_src
-      INFO   | 2021-07-10 21:36:21.445 | /home/anupam/source-code/c++/ray-tracer/src/render_with_t3r.cpp : 00087 | benchmark details : {mean (ms): '11312', standard-deviation (ms): '00141'}
-    #+end_src
-
-    This shows, that the renderer (multi-threaded in this case) took a
-    [[https://en.wikipedia.org/wiki/Mean][mean]] of =11312 ms= to render the scene, and this has a
-    [[https://en.wikipedia.org/wiki/Standard_deviation][standard-deviation]] of =141 ms=.
-
-    For the single-threaded renderer, on the other hand, we get this:
-
-    #+begin_src
-      INFO   | 2021-07-10 21:28:41.378 | /home/anupam/source-code/c++/ray-tracer/src/render_with_t3r.cpp : 00088 | benchmark details : {mean (ms): '32249', standard-deviation (ms): '00277'}
-    #+end_src
-
-    which has corresponding numbers at =32249 ms= and =00277 ms=
-    respectively.
-
-    For this specific case, therefore, the multi threaded renderer is
-    better than the single threaded one by a factor of about =2.85=.
-
-    Larger scenes would ofcourse have larger /absolute/ numbers, but
-    the ratio between the two (renderers) should be /about/ the
-    same.
-
-    For example, a =5120x4096= pixel render for the same scene (larger
-    by a factor of =16=), takes:
-
-    * ={mean (ms):'190032', standard-deviation (ms): '05703'}= for the
-      multi threaded case, and
-
-    * ={mean (ms): '533484', standard-deviation (ms): '09607'}= for
-      the single threaded case
-
-    The ratio of single-threaded to multi-threaded rendering is =2.8=,
-    which seems to be in line with the expectations above.
-
-*** Running tests
-
-    SMRT has a /decent/ suite of tests covering most of the crucial
-    areas of the program. Tests can be run either individually:
-
-       #+begin_src
-         $ .../build> ./tests/<name-of-a-test>
-       #+end_src
-
-    or all at once:
-
-       #+begin_src
-         $ .../build> make test
-       #+end_src
-
-    Tests are included for things like: tuples, colors, canvas
-    operations i.e. reading & writing, matrix operations (including
-    transformations), camera & ray primitives, shapes and their
-    intersection with rays, phong illumination model tests,
-    reflection, refraction and transparency tests etc. etc.
-
-    Usually, after making a change f.e. adding support for a new shape
-    primitive etc. I do the latter than the former. When the latter
-    fails, then I go and dig deeper...
+#+end_src
+Thus it takes approximately =100ms= to parse a =2.4M= OBJ file with
+=15913= vertices, =31776= groups and =15761= vertex normals.
 
 * Notes On MultiThreading
 
-  Pixels comprising an image generated as part of a scene, are placed
-  on a canvas. Canvas parameters are either manually specified or are
-  computed from pinhole camera (configuration) through which the
-  entire scene is observed. These include things like horizontal image
-  size, vertical image size, field of view, pixel size etc.
+Conceptually, rendering a scene, falls under one of those
+/embarrasingly parallel/ class of problems. On purpose built GPU, this
+is achieved via thousands of SIMT (to stretch Flynn's Taxonomy a bit)
+cores executing instructions, in parallel.
 
-  Rendering on the canvas can be done either by a single thread of
-  execution or can proceed with multiple threads. Multi threaded
-  rendering utilizes all available hardware cores on the
-  system.
+On a general purpose CPU, more elbow grease is needed.
 
+Carefully choosing work, and rendering primitives, and hooking them up
+correctly leads to full utilization of all available execution units
+on the CPU. It is also quite possible to perform this activity
+/efficiently/ without using any locks or inter-thread coordination
+mechanisms.
 
-** SMRT's Approach To Multi Threaded Rendering
+This scheme is described next.
 
-   SMRT's approach for multi threaded rendering is now described:
+For multi-threaded rendering SMRT uses a multi producer multi-consumer
+/lockless/ (MPMC) /work/ queue. This is used for dispatching /work
+items/ to individual =renderers / painters=. Work queue is filled with
+/work items/ each comprising =N= pixels worth of task.
 
-   For multi-threaded rendering SMRT uses a multi producer multi
-   consumer lockless (MPMC) 'work' queue. This is used for dispatching
-   'work items' to individual renderers.
+Ofcourse, number of pixels worked upon depends on number of cpu cores
+that are actually brought to bear on the rendering task. Thus, for
+example, if =8= physical cores are used to render an image that is
+=1280x1024= pixels, then each work item comprises =128= pixels.
 
-   A 'work item' comprises 'N' pixels worth of rendering in a specific
-   row of pixels in the image, and is computed based on number of
-   available hardware cores on the machine.
+Notice that we don't exactly specify _how_ pixels in a work item are
+actually chosen. There can be multiple [[Available Rendering Styles][styles]] in which the entire
+image is rendered.
 
-   Thus, for example, if a machine has 8 physical cores, and the image
-   is 1280x1024 pixels, 'N' would be '1024 / 8 == 128' pixels. A single
-   row is rendered by hopefully in parallel by each h/w thread.
+As long /all/ pixels across /all/ work items are chosen only *once*
+there is *NO* chance of indvidual threads stomping over each
+other. With this description, the rendering process can be broken down
+as follows:
 
-   The overall scheme is pretty straightforward and proceeds as
-   follows:
+   1. Compute total number of pixels per work item based on image
+      dimensions, and number of cores used for rendering.
 
-     1. Based on horizontal pixel size of the image, and available
-        cores, first compute total pixels per thread.
+   2. Fill up the lockless queue with work items, and start as many
+      painter threads as requested.
 
-     2. Fill up the lockless queue with render work items, each of
-        which contains an instance of a render work, and these look
-        like this:
+   3. Each painter-thread works on a single work item at time. And
+      once done, picks the next available one from the queue.
 
+      This goes on till all work items are completed, at which point
+      the image is rendered.
+
+Here is how the pieces themseleves look, starting with the work item
+itself:
         #+begin_src c++
-         /// --------------------------------------------------------------------
-         /// a render-work item is a ray at a specific place on the canvas
-         class render_work_item
-         {
-             public:
-                 uint32_t x;
-                 uint32_t y;
-                 ray_t r;
-         };
+/// --------------------------------------------------------------------
+/// a render-work item is a ray at a specific place on the canvas
+struct render_work_item final {
+        uint32_t const x;
+        uint32_t const y;
+        ray_t const r;
+};
 
-         /// --------------------------------------------------------------------
-         /// a bunch of render-work items is what is what gets handled by a
-         /// single rendering thread
-         class render_work_items
-         {
-             public:
-                 std::vector<render_work_item> work_list;
-         };
+/// --------------------------------------------------------------------
+/// a bunch of render-work items is what is what gets handled by a
+/// single rendering thread
+struct render_work_items final {
+        std::vector<render_work_item> work_list;
+};
         #+end_src
 
-     3. For a camera 'C', the main thread now fills up the work queue
-        with rendering work like so:
-
+Now the work-queue is filled up, and threads are started:
         #+begin_src c++
-         int const TOTAL_PIXELS_PER_THREAD = C.hsize() / MAX_RENDERING_THREADS;
-         int const TOTAL_PIXELS_PER_THREAD = C.hsize() / MAX_RENDERING_THREADS;
-         CQ::ConcurrentQueue<render_work_items> work_queue(TOTAL_PIXELS_PER_THREAD * C.vsize());
+/// ------------------------------------------------------------
+/// let the painters ... paint !
+std::vector<std::thread> rendering_threads(hw_threads);
+for (uint32_t i = 0; i < hw_threads; i++) {
+        rendering_threads[i] = std::thread(pixel_painter,          /// rendering-function
+                                           i,                      /// thread-id
+                                           std::ref(work_q),       /// work-queue
+                                           the_world,              /// the world
+                                           std::ref(dst_canvas),   /// canvas
+                                           std::ref(x11_display)); /// x11-display
 
-         /// ------------------------------------------------------------
-         /// generate work for the workers...
-         for (uint32_t y = 0; y < C.vsize(); y++) {
-                 for (uint32_t x = 0; x < C.hsize(); x += TOTAL_PIXELS_PER_THREAD) {
-                         for (int i = 0; i < TOTAL_PIXELS_PER_THREAD; i++) {
-                           ...
-                         }
-                 }
-         }
+        /// ----------------------------------------------------
+        /// force || pin threads to cores...
+        cpu_set_t cpuset;
+        CPU_ZERO(&cpuset);
+        CPU_SET(i, &cpuset);
+
+        auto retval = pthread_setaffinity_np(rendering_threads[i].native_handle(),
+                                             sizeof(cpuset), &cpuset);
+        if (retval != 0) {
+                LOG_ERROR("failed to set affinity of thread:%d to core:%d", i, i);
+        }
+}
+
+/// ------------------------------------------------------------
+/// ... and wait for all of them to terminate
+std::for_each(rendering_threads.begin(), rendering_threads.end(),
+              std::mem_fn(&std::thread::join));
         #+end_src
 
-        It then starts all the rendering threads, and waits for them to
-        join.
+Notice that each thread is pinned to a core. Typically the os
+scheduler uses different policies to decide cpu-core to thread
+assignment.
 
-        #+begin_src c++
-         /// ------------------------------------------------------------
-         /// start the coloring threads
-         std::vector<std::thread> rendering_threads(MAX_RENDERING_THREADS);
-         for (auto i = 0; i < MAX_RENDERING_THREADS; i++) {
-                 rendering_threads[i] = std::thread(coloring_worker,            /// rendering-function
-                                                    i,                          /// thread-id
-                                                    std::ref(work_queue),       /// work-queue
-                                                    W,                          /// the world
-                                                    std::ref(rendered_canvas)); /// canvas
-         }
+On linux for example, looking at the =CLS= row of =ps -eLfc= command
+output will give us the /scheduling class/:
 
-         /// wait for all of them to terminate
-         std::for_each(rendering_threads.begin(), rendering_threads.end(),
-                       std::mem_fn(&std::thread::join));
-        #+end_src
+#+begin_src
+$ .../ray-tracer.git/builds/src/executables> ./render_with_t3r
+UID          PID    PPID     LWP NLWP CLS PRI STIME TTY          TIME CMD
+anupam      1463       1    2754  406 B     0 Mar14 ?        00:00:00 /usr/lib/firefox/firefox
+...
+root          84       2      84    1 FF   90 Mar14 ?        00:00:00 [watchdogd]
+...
+anupam      1310     986    5927    5 RR   45 Mar14 pts/2    00:00:00 pulseaudio -v
+...
+anupam    957866  957461  957866    9 TS   19 12:16 pts/16   00:00:00 ./render_with_t3r
+anupam    957866  957461  958009    9 TS   19 12:17 pts/16   00:00:07 ./render_with_t3r
+anupam    957866  957461  958010    9 TS   19 12:17 pts/16   00:00:07 ./render_with_t3r
+anupam    957866  957461  958011    9 TS   19 12:17 pts/16   00:00:07 ./render_with_t3r
+anupam    957866  957461  958012    9 TS   19 12:17 pts/16   00:00:06 ./render_with_t3r
+anupam    957866  957461  958013    9 TS   19 12:17 pts/16   00:00:07 ./render_with_t3r
+anupam    957866  957461  958014    9 TS   19 12:17 pts/16   00:00:07 ./render_with_t3r
+anupam    957866  957461  958015    9 TS   19 12:17 pts/16   00:00:07 ./render_with_t3r
+anupam    957866  957461  958016    9 TS   19 12:17 pts/16   00:00:06 ./render_with_t3r
+...
+#+end_src
+In the /carefully/ chosen sample above, we see couple of different
+scheduling policies in action: =B= is the /SCHED_BATCH/
+i.e. batch-scheduling, =FF= is the /SCHED_FIFO/, =RR= is the
+/SCHED_RR/ while =TS= /SCHED_OTHER/. There are couple of other
+scheduling classes as well, but those listed above are common ones.
 
-     4. Each of the 'coloring_worker' picks a work item from the queue,
-        and renders all the pixels specified in the work item.
-
-        Since all work items (that make up the entire canvas) contain
-        disjoint set of pixels, no locking is required.
-
-     5. When a renderer is done with the current work item, it picks up
-        the next one from the queue. This goes on, till all the work
-        items in the queue are done.
-
-        When that happens across all renderers, complete image is
-        rendered.
+The most common one is =TS= or time-share scheduling. It is intended
+for threads that don't need special real-time mechanisms. Under this
+class of scheduling execution of a thread can be paused for some time,
+while it is moved to a different core. This operation ofcourse takes
+quite a few CPU cycles and leads to completely trashing the L1 and L2
+caches. And ofcourse, we don't want that.
 
 ** Why this particular approach ?
+Scenes normally have varying amount of detail with some portions of a
+canvas being empty, others filled with objects.
 
-     Scenes normally have varying amount of detail, therefore, some
-     threads will finish early as compared to their brethren. But then
-     they get to pick the next available work item, which may tip the
-     balance. On the whole though, number of work items handled per
-     thread (through the entire course of rendering the scene) should
-     /*approximately*/ be the same.
+With the approach described above, all threads have a good chance of
+doing /full/ work ! For example, if a thread picks up a work item
+comprising almost all black pixels, it will be done early. But then it
+gets to pick the next available work item, which may tip the balance.
 
-     This scheme _seems_ to be a better than slicing up the entire
-     scene into multiple stripes, and then letting each of the threads
-     handle a specific stripe. Depending on the scene, some threads
-     might get a 'free-ride' by just rendering stripes that contain
-     few non-black pixels.
+On the whole though, the number of work items handled per thread would
+will be approximately equal, with little deviation, and low
+variance. Yes, /*I*/ have experimented with various scenes, and have
+observed this behavior.
+
+This scheme _seems_ to be a better than, for example, slicing up the
+entire scene into multiple stripes, and then letting each of the
+threads handle a specific stripe. Depending on the scene, some threads
+might get a 'free-ride' by just rendering stripes that contain few
+non-black pixels.
+
+* Odds and Ends
+Some notes on more interesting aspects of all that is being done here
+are now discussed.
+
+** Available Rendering Styles
+There are multiple /rendering styles/ that are supported. These are as follows:
+
+- /RENDERING_STYLE_SCANLINE/ as the name suggests renders the entire
+  canvas as rows of pixels i.e. a scanline that moves across the
+  image. This is not unlike how CRT (remember those) monitors worked,
+  with the electron beam sweeping across the surface from left ->
+  right, top -> bottom.
+
+
+- /RENDERING_STYLE_HILBERT/ as the name suggests divides the entire
+  canvas into /space filling/ (or shall i say, canvas filling ?)
+  [[https://en.wikipedia.org/wiki/Hilbert_curve][Hilbert Curve]]. Rendering work items are generated in hilbert-curve
+  order, and the painters render the image accordingly.
+
+  It actually is quite enticing to look at with =show_as_we_go=
+  rendering option. When this option is enabled, the renderer uses [[https://en.wikipedia.org/wiki/XCB][XCB]]
+  for displaying the canvas as rendering progresses.
+
+  Incidentally =show_as_we_go= rendering option is supported for all
+  rendering styles described here.
+
+- /RENDERING_STYLE_TILE/ as the name suggests the canvas is divided into
+  tiles of appropriate dimensions, and the painter threads then render
+  the desired image.
+
+
+It would be remiss of me to not mention that in terms of efficiency,
+=RENDERING_STYLE_SCANLINE= is the best, while
+=RENDERING_STYLE_HILBERT= /looks/ the fanciest !
+
+One reason to explore multiple rendering styles was to experiment and
+see if cpu-cache effects make one approach better than the other.
+
+Also, as you would have noticed, because the painter threads are not
+involved in divvying up work, this approach is quite conducive to
+experimentation. For example, it would be fairly easy to have a spiral
+style tiled rendering as well. This would render the image starting at
+the center of the canvas, and then spiralling out.
+
+** Rendering Paramaters
+Various rendering parameters can be configured by creating an instance
+of =raytracer::config_render_params=. It controls things like
+benchmarking, rendering styles (as discussed above), number of
+hardware threads to use etc. etc.
 
 * Generated Images
 
-  Click on the low resolution images here to see the same image in
-  higher resolution. All scenes that are rendered, generate a
-  /*1280x1024*/ pixel image.
-
-  Moreover the =Time To Render= column (when available) shows the time
-  in milli-seconds it took to render the scene on [[Machine Configuration][this]] machine. First
-  number is with multi-threaded (MT) renderer, and the second one is
-  with single-threaded (ST) renderer.
+Click on the low resolution images here to see the same image in
+higher resolution. All scenes that are rendered, generate a
+/1280x1024/ pixel image.
 
 ** 'Getting Your Feet Wet' Images
 
-   These are quite trivial constructions, but they are very useful to
-   test out various rudimentary aspects of the ray tracer. This
-   includes (but is not limited to),
+These are quite trivial constructions, but they are very useful to
+test out various rudimentary aspects of the ray tracer. This includes
+(but is not limited to):
 
-   * basic ray, tuple, vector and matrix implementatations
+   * basic ray, tuple, vector and matrix implementations
    * ppm file generation routines
    * different transformations applied to generated scenes
 
-   |------------+-----------------------------------------------------------------------------+-------------------+------------------------------------------------------|
-   | Serial No. | Description                                                                 | Executable Name   | Image                                                |
-   |------------+-----------------------------------------------------------------------------+-------------------+------------------------------------------------------|
-   |          1 | Display trajectory of a virtual projectile shot through a cannon.           | virtual-cannon    | [[file:./generated-images/virtual-cannon.png][file:./generated-images/virtual-cannon-lowres.png]]    |
-   |------------+-----------------------------------------------------------------------------+-------------------+------------------------------------------------------|
-   |          2 | Display clock dials on a clock face through trivial matrix transformations. | clock-dial        | [[file:./generated-images/clock-face.png][file:./generated-images/clock-face-lowres.png]]        |
-   |------------+-----------------------------------------------------------------------------+-------------------+------------------------------------------------------|
-   |          3 | Silhouette of a sphere.                                                     | sphere-silhouette | [[file:./generated-images/sphere-silhouette.png][file:./generated-images/sphere-silhouette-lowres.png]] |
-   |------------+-----------------------------------------------------------------------------+-------------------+------------------------------------------------------|
+|------------+-----------------------------------------------------------------------------+--------------------------+------------------------------------------------------|
+| Serial No. | Description                                                                 | Executable Name          | Image                                                |
+|------------+-----------------------------------------------------------------------------+--------------------------+------------------------------------------------------|
+|          1 | Display trajectory of a virtual projectile shot through a cannon.           | render_virtual_cannon    | [[file:./generated-images/virtual-cannon.png][file:./generated-images/virtual-cannon-lowres.png]]    |
+|------------+-----------------------------------------------------------------------------+--------------------------+------------------------------------------------------|
+|          2 | Display clock dials on a clock face through trivial matrix transformations. | render_clock_dial        | [[file:./generated-images/clock-face.png][file:./generated-images/clock-face-lowres.png]]        |
+|------------+-----------------------------------------------------------------------------+--------------------------+------------------------------------------------------|
+|          3 | Silhouette of a sphere.                                                     | render_sphere_silhouette | [[file:./generated-images/sphere-silhouette.png][file:./generated-images/sphere-silhouette-lowres.png]] |
+|------------+-----------------------------------------------------------------------------+--------------------------+------------------------------------------------------|
 
 
 ** Simple Shapes
 
-   This is where things are getting slightly more involved. Here we
-   have examples of different shapes using [[https://en.wikipedia.org/wiki/Phong_reflection_model][Phong Reflection Model]] to
-   generate /slightly/ more realistic looking images.
+This is where things are getting slightly more involved. Here we have
+examples of different shapes using [[https://en.wikipedia.org/wiki/Phong_reflection_model][Phong Reflection Model]] to generate
+/slightly/ more realistic looking images.
 
-   Rendering is now taking more time, and there is support for both
-   single and multi-threaded rendering. Generally, a single source
-   file can switch between single-threaded and multi-threaded
-   rendering (with trivial code changes).
+Rendering is now taking more time, and there is support for both
+single and multi-threaded rendering. Generally, a single source file
+can switch between single-threaded and multi-threaded rendering (with
+trivial code changes).
 
-   See for yourself !
+See for yourself !
 
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   | Serial No. | Description                                                                                                                    | Time To Render (MT/ST) Milliseconds | Executable Name        | Image                                                   |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   |          1 | Phong shading of a scaled sphere.                                                                                              | 649/603                             | phong-sphere           | [[file:./generated-images/phong-sphere.png][file:./generated-images/phong-sphere-lowres.png]]         |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   |          2 | Make a simple scene with a bunch of spheres, their shadows, and walls. Walls are /*huge*/ spheres actually.                    | 1828/3991                           | making-a-scene         | [[file:./generated-images/render-world-simple.png][file:./generated-images/render-world-simple-lowres.png]]  |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   |          3 | Still a simple scene afaics. Wall are planes this time around, and thus rendering is fasta !                                   | 1476/3156                           | render-with-plane      | [[file:./generated-images/render-with-plane.png][file:./generated-images/render-with-plane-lowres.png]]    |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   |          4 | This is just showing off !!! Render a simple scene with multiple objects, light sources, shadows and different patterns.       | 1035/2196                           | render-with-patterns   | [[file:./generated-images/render-with-patterns.png][file:./generated-images/render-with-patterns-lowres.png]] |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   |          5 | How do perline noise textures look like ?                                                                                      | -                                   | render-textures        | [[file:./generated-images/simple-noise.png][file:./generated-images/simple-noise-lowres.png]]         |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   |          6 | Render a scene with perlin noise. Kinda weird looking for sure.                                                                | 1423/3633                           | render-with-textures   | [[file:./generated-images/render-with-textures.png][file:./generated-images/render-with-textures-lowres.png]] |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
-   |          7 | Probably the first scene everyone renders after adding support for texture mapping. Notice that not everything casts a shadow. | 1133/2940                           | render-nasa-blue-earth | [[file:./generated-images/render-blue-earth.png][file:./generated-images/render-blue-earth-lowres.png]]    |
-   |------------+--------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+------------------------+---------------------------------------------------------|
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+| Serial No. | Description                                                                                                                    | Executable Name        | Image                                                   |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+|          1 | Phong shading of a scaled sphere.                                                                                              | phong_sphere           | [[file:./generated-images/phong-sphere.png][file:./generated-images/phong-sphere-lowres.png]]         |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+|          2 | Make a simple scene with a bunch of spheres, their shadows, and walls. Walls are /huge/ spheres actually.                      | making_a_scene         | [[file:./generated-images/render-world-simple.png][file:./generated-images/render-world-simple-lowres.png]]  |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+|          3 | Still a simple scene afaics. Wall are planes this time around, and thus rendering is fasta !                                   | render_with_plane      | [[file:./generated-images/render-with-plane.png][file:./generated-images/render-with-plane-lowres.png]]    |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+|          4 | This is just showing off !!! Render a simple scene with multiple objects, light sources, shadows and different patterns.       | render_with_patterns   | [[file:./generated-images/render-with-patterns.png][file:./generated-images/render-with-patterns-lowres.png]] |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+|          5 | How do perline noise textures look like ?                                                                                      | render_textures        | [[file:./generated-images/simple-noise.png][file:./generated-images/simple-noise-lowres.png]]         |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+|          6 | Render a scene with perlin noise. Kinda weird looking for sure.                                                                | render_with_textures   | [[file:./generated-images/render-with-textures.png][file:./generated-images/render-with-textures-lowres.png]] |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
+|          7 | Probably the first scene everyone renders after adding support for texture mapping. Notice that not everything casts a shadow. | render_nasa_blue_earth | [[file:./generated-images/render-blue-earth.png][file:./generated-images/render-blue-earth-lowres.png]]    |
+|------------+--------------------------------------------------------------------------------------------------------------------------------+------------------------+---------------------------------------------------------|
 
 
 ** Things are Getting Interesting Now ?
 
-   Things are now getting interesting. Support is now available for
-   refractions, reflections and transparency effects.
+Things are now getting interesting. Support is now available for
+refractions, reflections and transparency effects.
 
-   |------------+----------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------------------+---------------------------------------------------------|
-   | Serial No. | Description                                                                                              | Time To Render (MT/ST) Milliseconds | Executable Name                     | Image                                                   |
-   |------------+----------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------------------+---------------------------------------------------------|
-   |          1 | A reddish looking /planet/ with reflections in /water/.                                                  | 1331/3226                           | render-with-reflections             | [[file:./generated-images/render-red-planet.png][file:./generated-images/render-red-planet-lowres.png]]    |
-   |------------+----------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------------------+---------------------------------------------------------|
-   |          2 | A slightly sophisticated scene with transparency, reflections and refractions. Looks kinda cool overall. | 11016/33027                         | <<render-with-t3r>> render-with-t3r | [[file:./generated-images/render-with-t3r.png][file:./generated-images/render-with-t3r-lowres.png]]      |
-   |------------+----------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------------------+---------------------------------------------------------|
-   |          3 | A glass sphere, containing a hollow sphere within itself.                                                | 17491/28923                         | nested-glass-spheres                | [[file:./generated-images/nested-glass-spheres.png][file:./generated-images/nested-glass-spheres-lowres.png]] |
-   |------------+----------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------------------+---------------------------------------------------------|
+|------------+----------------------------------------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+| Serial No. | Description                                                                                              | Executable Name         | Image                                                   |
+|------------+----------------------------------------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          1 | A reddish looking /planet/ with reflections in /water/.                                                  | render_with_reflections | [[file:./generated-images/render-red-planet.png][file:./generated-images/render-red-planet-lowres.png]]    |
+|------------+----------------------------------------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          2 | A slightly sophisticated scene with transparency, reflections and refractions. Looks kinda cool overall. | render_with_t3r         | [[file:./generated-images/render-with-t3r.png][file:./generated-images/render-with-t3r-lowres.png]]      |
+|------------+----------------------------------------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          3 | A glass sphere, containing a hollow sphere within itself.                                                | nested_glass_spheres    | [[file:./generated-images/nested-glass-spheres.png][file:./generated-images/nested-glass-spheres-lowres.png]] |
+|------------+----------------------------------------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
 
 
 ** Add Cube Support
 
-   Cube support is now available in the renderer. This includes
-   mapping cross-format or skybox images onto a cube as well.
+Cube support is now available in the renderer. This includes mapping
+cross-format or skybox images onto a cube as well.
 
-   Lets see how that looks like
+Lets see how that looks like
 
-   |------------+---------------------------------------------------------------+-------------------------------------+------------------+------------------------------------------------------|
-   | Serial No. | Description                                                   | Time To Render (MT/ST) Milliseconds | Executable Name  | Image                                                |
-   |------------+---------------------------------------------------------------+-------------------------------------+------------------+------------------------------------------------------|
-   |          1 | A cubic pattern on a plane.                                   | -                                   | cube-align-check | [[file:./generated-images/align-check-plane.png][file:./generated-images/align-check-plane-lowres.png]] |
-   |------------+---------------------------------------------------------------+-------------------------------------+------------------+------------------------------------------------------|
-   |          2 | Texture mapping at cube corners.                              | -                                   | cube-checkered   | [[file:./generated-images/checker-cubes.png][file:./generated-images/checker-cubes-lowres.png]]     |
-   |------------+---------------------------------------------------------------+-------------------------------------+------------------+------------------------------------------------------|
-   |          3 | A cross-format texture mapped on a slightly transformed cube. | 752/833                             | cube-skybox      | [[file:./generated-images/skybox.png][file:./generated-images/skybox-lowres.png]]            |
-   |------------+---------------------------------------------------------------+-------------------------------------+------------------+------------------------------------------------------|
+|------------+---------------------------------------------------------------+-------------------------+------------------------------------------------------|
+| Serial No. | Description                                                   | Executable Name         | Image                                                |
+|------------+---------------------------------------------------------------+-------------------------+------------------------------------------------------|
+|          1 | A cubic pattern on a plane.                                   | render_cube_align_check | [[file:./generated-images/align-check-plane.png][file:./generated-images/align-check-plane-lowres.png]] |
+|------------+---------------------------------------------------------------+-------------------------+------------------------------------------------------|
+|          2 | Texture mapping at cube corners.                              | render_cube_checkered   | [[file:./generated-images/checker-cubes.png][file:./generated-images/checker-cubes-lowres.png]]     |
+|------------+---------------------------------------------------------------+-------------------------+------------------------------------------------------|
+|          3 | A cross-format texture mapped on a slightly transformed cube. | render_cube_skybox      | [[file:./generated-images/skybox.png][file:./generated-images/skybox-lowres.png]]            |
+|------------+---------------------------------------------------------------+-------------------------+------------------------------------------------------|
 
 
 ** /Miscellaneous/ Scenery
 
-   Ok, so if you are getting bored on a slow weekend, what do you do ?
-   Raytracing is the right and only answer I suppose...
+Ok, so if you are getting bored on a slow weekend, what do you do ?
+Raytracing is the right and only answer I suppose...
 
-   |------------+--------------------------------------------------------------------------+-------------------------------------+------------------+-----------------------------------------------------|
-   | Serial No. | Description                                                              | Time To Render (MT/ST) Milliseconds | Executable Name  | Image                                               |
-   |------------+--------------------------------------------------------------------------+-------------------------------------+------------------+-----------------------------------------------------|
-   |          1 | Earth in a transparent cube, for some cool looking effects.              | 8634/21723                          | cube-scene       | [[file:./generated-images/cube-scene.png][file:./generated-images/cube-scene-lowres.png]]       |
-   |------------+--------------------------------------------------------------------------+-------------------------------------+------------------+-----------------------------------------------------|
-   |          2 | A bunch of cubes in a texture mapped /starfield/ for something bizzare ? | 26995/86411                         | cube-light-scene | [[file:./generated-images/cube-light-scene.png][file:./generated-images/cube-light-scene-lowres.png]] |
-   |------------+--------------------------------------------------------------------------+-------------------------------------+------------------+-----------------------------------------------------|
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+| Serial No. | Description                                                              | Executable Name         | Image                                                   |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          1 | Earth in a transparent cube, for some cool looking effects.              | render_cube_scene       | [[file:./generated-images/cube-scene.png][file:./generated-images/cube-scene-lowres.png]]           |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          2 | A bunch of cubes in a texture mapped /starfield/ for something bizzare ? | render_cube_light_scene | [[file:./generated-images/cube-light-scene.png][file:./generated-images/cube-light-scene-lowres.png]]     |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          3 | A cessna on a misty lake. 'Mist' from (perlin) noise !                   | render_render_cessna    | [[file:./generated-images/cessna.png][file:./generated-images/cessna-lowres.png]]               |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          4 | A hexgon lying in a room, in the corner, with a sphere hanging over it!  | render_hexagon_scene    | [[file:./generated-images/render-hexagon.png][file:./generated-images/render-hexagon-lowres.png]]       |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          5 | A modernish take on a classic!                                           | render_teapot           | [[file:./generated-images/render-teapot.png][file:./generated-images/render-teapot-lowres.png]]        |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          6 | A poor rendition of Newton's Cradle.                                     | render_newtons_cradle   | [[file:./generated-images/newtons-cradle-scene.png][file:./generated-images/newtons-cradle-scene-lowres.png]] |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          7 | A bunch dice(s?) ! What are the odds?                                    | render_csg_dice         | [[file:./generated-images/render-csg-dice.png][file:./generated-images/render-csg-dice-lowres.png]]      |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+|          8 | A transparent pawn on a chessboard!                                      | render_chess_pawn       | [[file:./generated-images/chess-pawn-checkered.png][file:./generated-images/chess-pawn-checkered-lowres.png]] |
+|------------+--------------------------------------------------------------------------+-------------------------+---------------------------------------------------------|
+

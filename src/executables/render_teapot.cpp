@@ -82,46 +82,6 @@ static RT::world create_world()
         }
 
         /// --------------------------------------------------------------------
-        /// axes + origin to get the bearings
-        if (0) {
-                auto axes_xform = RT_XFORM::create_3d_scaling_matrix(0.1, 0.1, 0.1);
-
-                /// ------------------------------------------------------------
-                /// x-axis
-                auto x_axis = std::make_shared<RT::cylinder>(false, -RT::INF, RT::INF, false);
-                world.add(x_axis);
-
-                x_axis->transform(axes_xform * RT_XFORM::create_rotz_matrix(RT::PI_BY_2F));
-                x_axis->set_material(RT::create_material_matte(RT::color::RGB(0, 0, 200)));
-
-                /// ------------------------------------------------------------
-                /// y-axis
-                auto y_axis = std::make_shared<RT::cylinder>(false, -RT::INF, RT::INF, false);
-                world.add(y_axis);
-
-                y_axis->transform(axes_xform);
-                y_axis->set_material(RT::create_material_matte(RT::color::RGB(0, 200, 0)));
-
-                /// ------------------------------------------------------------
-                /// z-axis
-                auto z_axes = std::make_shared<RT::cylinder>(false, -RT::INF, RT::INF, false);
-                world.add(z_axes);
-
-                z_axes->transform(axes_xform * RT_XFORM::create_rotx_matrix(RT::PI_BY_2F));
-                z_axes->set_material(RT::create_material_matte(RT::color::RGB(200, 0, 0)));
-
-                /// ------------------------------------------------------------
-                /// 'tiny' sphere marking origin
-                auto origin_sphere = std::make_shared<RT::sphere>(false);
-                world.add(origin_sphere);
-
-                auto origin_sphere_scaler = RT_XFORM::create_3d_scaling_matrix(0.6, 0.6, 0.6);
-                origin_sphere->transform(origin_sphere_scaler);
-
-                origin_sphere->set_material(RT::create_material_matte(RT::color::RGB(0xAA, 0xAA, 0xAA)));
-        }
-
-        /// --------------------------------------------------------------------
         /// a checkered floor
         {
                 auto floor = std::make_shared<RT::plane>();
@@ -139,40 +99,16 @@ static RT::world create_world()
                 floor->transform(floor_xform);
         }
 
-        /// /// --------------------------------------------------------------------
-        /// /// floor
-        /// {
-        ///         auto floor = std::make_shared<RT::plane>();
-        ///         world.add(floor);
-
-        ///         auto fuzzy_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
-        ///                 RT::color(1.0, 1.0, 1.0),                 /// u
-        ///                 RT::color(0.0, 0.0, 1.0),                 /// v
-        ///                 std::default_random_engine::default_seed, /// seed
-        ///                 16);                                      /// octaves
-
-        ///         auto floor_mat = RT::material()
-        ///                                  .set_ambient(0.0)
-        ///                                  .set_diffuse(0.4)
-        ///                                  .set_specular(0.0)
-        ///                                  .set_reflective(0.0)
-        ///                                  .set_pattern(fuzzy_pattern);
-
-        ///         floor->set_material(floor_mat);
-
-        ///         floor->transform(RT_XFORM::create_3d_translation_matrix(0.0, -18.0, 0.0));
-        /// }
-
         /// --------------------------------------------------------------------
         /// glass ball with a hollow sphere
         {
                 auto s_01 = std::make_shared<RT::sphere>(false);
                 world.add(s_01);
-                s_01->transform(RT_XFORM::create_3d_scaling_matrix(20.0, 20.0, 20.0));
+                s_01->transform(RT_XFORM::create_3d_scaling_matrix(40.0, 40.0, 40.0));
 
                 s_01->set_material(
                         RT::material()
-                                .set_pattern(std::make_shared<RT::solid_pattern>(RT::color(0.0, 0.1, 0.1)))
+                        .set_pattern(std::make_shared<RT::solid_pattern>(RT::color::RGB(200, 0, 0)))
                                 .set_ambient(0.0)
                                 .set_diffuse(0.0)
                                 .set_specular(0.9)
@@ -185,14 +121,15 @@ static RT::world create_world()
         /// ------------------------------------------------------------
         /// teapot
         {
-                RT::obj_file_parser teapot_parser(RT::OBJ_ROOT + std::string("teapot.obj"));
+                RT::obj_file_parser teapot_parser(RT::OBJ_ROOT + std::string("teapot-fine.obj"));
                 auto parse_result = teapot_parser.parse();
 
                 LOG_INFO("model-01 parsed, summary:'%s'", parse_result.summarize().c_str());
 
-                auto model_xform = RT_XFORM::create_rotx_matrix(-RT::PI / 1.3f) *
-                                   RT_XFORM::create_3d_scaling_matrix(0.5, 0.5, 0.5);
-                auto model_material = RT::create_material_matte(RT::color::RGB(128, 0, 0));
+                auto model_xform = RT_XFORM::create_3d_scaling_matrix(7.0, 7.0, 7.0) *
+                        RT_XFORM::create_rotx_matrix(-0.2f * RT::PI);
+                
+                auto model_material = RT::create_material_matte(RT::color::RGB(200, 0, 0));
 
                 /// ------------------------------------------------------------
                 /// add default group and named groups into the world
@@ -213,27 +150,6 @@ static RT::world create_world()
                 LOG_INFO("model-01 loaded");
         }
 
-        /// --------------------------------------------------------------------
-        /// starry texture for the night sky
-        {
-                auto maybe_star_map_canvas =
-                        RT::canvas::load_from_file(RT::TEXTURE_ROOT + std::string("stars-8k.ppm"));
-                ASSERT(maybe_star_map_canvas.has_value());
-
-                auto star_map_canvas  = maybe_star_map_canvas.value();
-                auto star_map_texture = std::make_shared<RT::uv_image>(star_map_canvas);
-
-                auto star_map_pattern =
-                        std::make_shared<RT::texture_2d_pattern>(star_map_texture, RT::planar_map);
-
-                auto wall = std::make_shared<RT::plane>();
-                world.add(wall);
-
-                wall->transform(RT_XFORM::create_3d_translation_matrix(0.0, 0.0, 400.0) *
-                                RT_XFORM::create_rotx_matrix(RT::PI_BY_2F));
-                wall->set_material(RT::material().set_pattern(star_map_pattern));
-        }
-
         return world;
 }
 
@@ -242,7 +158,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01     = RT::camera(640, 480, 2.0);
+        auto camera_01     = RT::camera(1280, 1024, 2.0);
         auto look_from     = RT::create_point(-8.5, 5.0, -40.0);
         auto look_to       = RT::create_point(1.5, 1.5, 1.5);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

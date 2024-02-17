@@ -82,6 +82,8 @@ namespace raytracer
         config_render_params&& config_render_params::benchmark_rounds(uint32_t val)
         {
                 benchmark_rounds_ = val;
+                validate_benchmark_state_();
+
                 return std::move(*this);
         }
 
@@ -89,8 +91,8 @@ namespace raytracer
         /// how many samples to discard ?
         config_render_params&& config_render_params::benchmark_discard_initial(uint32_t val)
         {
-                benchmark_discard_initial_ = (val > 0) ? true : false;
-                benchmark_num_discards_    = val;
+                benchmark_num_discards_ = val;
+                validate_benchmark_state_();
 
                 return std::move(*this);
         }
@@ -131,6 +133,30 @@ namespace raytracer
                 ss << "}";
 
                 return ss.str();
+        }
+
+        /// --------------------------------------------------------------------
+        /// validate benchmark state
+        void config_render_params::validate_benchmark_state_()
+        {
+                if (benchmark_rounds() > 0) {
+                        benchmark(true);
+                }
+
+                if (benchmark_num_discard_initial() > 0) {
+                        this->benchmark_discard_initial_ = true;
+                }
+
+                /// ------------------------------------------------------------
+                /// bogus benchmark configuration. no benchmark for you !
+                if (benchmark_num_discard_initial() >= benchmark_rounds()) {
+                        /// ----------------------------------------------------
+                        /// reset benchmark configuration
+                        benchmark_                 = false;
+                        benchmark_discard_initial_ = false;
+                        benchmark_rounds_          = 0;
+                        benchmark_num_discards_    = 0;
+                }
         }
 
         /// --------------------------------------------------------------------

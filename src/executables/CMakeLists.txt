@@ -39,11 +39,19 @@ SET(RT_TRACY_PROFILER_EXECUTABLE_SOURCES
 )
 
 # ------------------------------------------------------------------------------
+# render all images
+add_custom_target(render_all_images
+  COMMAND ${CMAKE_COMMAND} -E echo "* generating all images *"
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/render_all_images.sh ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/render_all_images.sh -g
+)
+
+# ------------------------------------------------------------------------------
 # no user serviceable parts from here on ↓
 
 # ------------------------------------------------------------------------------
 # generate all the release and tracy-profiler executable targets
-include(CMakeBuildExecutablesFunctions)
+include(BuildExecutablesFunctions)
 
 generate_all_release_executable_targets("${RT_EXECUTABLES_SOURCES}")
 generate_all_profiled_executable_targets("${RT_TRACY_PROFILER_EXECUTABLE_SOURCES}")
