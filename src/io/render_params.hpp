@@ -54,8 +54,28 @@ namespace raytracer
                 uint32_t benchmark_num_discards_ = 0;
 
                 /// ------------------------------------------------------------
+                /// when true, enable antialiased rendering of a scene.
+                ///
+                /// when 'antialias_enabled == true', adaptively compute
+                /// a pixel's color.
+                ///
+                /// the 'AA_COLOR_DIFF_THRESHOLD' constant is related.
+                bool antialias_enabled_ = false;
+
+                /// ------------------------------------------------------------
                 /// rendering order
                 rendering_style render_style_ = rendering_style::RENDERING_STYLE_SCANLINE;
+
+            public:
+                /// ------------------------------------------------------------
+                /// see camera::adaptively_color_a_pixel_at(...) to get some
+                /// more idea about what + how this is used.
+                ///
+                /// briefly though it defines threshold by which color
+                /// differ between corner & center of a pixel triggering
+                /// a recursive sub-division of the pixel to compute color
+                /// sample there.
+                static constexpr double AA_COLOR_DIFF_THRESHOLD = 0.05;
 
             public:
                 /// ------------------------------------------------------------
@@ -75,6 +95,7 @@ namespace raytracer
                 bool benchmark_discard_initial() const;
                 uint32_t benchmark_num_discard_initial() const;
                 rendering_style render_style() const;
+                bool antialias() const;
 
                 /// ------------------------------------------------------------
                 /// configure various properties
@@ -84,20 +105,21 @@ namespace raytracer
                 config_render_params&& benchmark_rounds(uint32_t);
                 config_render_params&& benchmark_discard_initial(uint32_t);
                 config_render_params&& render_style(rendering_style const&);
+                config_render_params&& antialias(bool);
 
             private:
                 /// ------------------------------------------------------------
                 /// validate benchmarking parameters, and determine their
                 /// overall effect on benchmarking.
-                /// 
-                /// see below for more details. 
+                ///
+                /// see below for more details.
                 ///
                 /// for benchmarking a rendering process, the user can has
                 /// following two knobs:
-                /// 
+                ///
                 ///    - 'benchmark_rounds_': how many iterations are
-                ///    performed, 
-                /// 
+                ///    performed,
+                ///
                 ///    - 'benchmark_num_discards_': number of initial benchmark
                 ///    rounds to discard
                 ///

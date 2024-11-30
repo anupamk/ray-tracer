@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <memory>
 
+#include "common/include/logging.h"
 #include "io/camera.hpp"
 #include "io/canvas.hpp"
 #include "io/world.hpp"
@@ -26,7 +27,6 @@
 #include "shapes/plane.hpp"
 #include "shapes/sphere.hpp"
 #include "utils/constants.hpp"
-#include "common/include/logging.h"
 
 /*
  * select default logging level depending on type of build. this can be changed
@@ -60,7 +60,8 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
-        auto const rendered_canvas = camera.render(world);
+        auto render_params         = RT::config_render_params().antialias(true);
+        auto const rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);
 
         return 0;

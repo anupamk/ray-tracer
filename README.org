@@ -91,7 +91,7 @@ Project artifacts are built using [[https://cmake.org/][CMake]], like so:
 
 #+begin_src
 $ .../ray-tracer.git/> mkdir builds && pushd builds
-$ .../ray-tracer.git/builds> cmake .. -G "Unix Makefiles"
+$ .../ray-tracer.git/builds> cmake .. [-G "Unix Makefiles"]
 $ .../ray-tracer.git/builds> make -j <N>
 #+end_src
 

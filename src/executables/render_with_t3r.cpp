@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
-        auto render_params = RT::config_render_params().benchmark_rounds(10).benchmark_discard_initial(3);
+        auto render_params   = RT::config_render_params().antialias(true);
         auto rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);
 

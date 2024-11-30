@@ -3,10 +3,10 @@
  **/
 
 /// c++ includes
-#include <time.h>
 #include <limits>
 #include <memory>
 #include <random>
+#include <time.h>
 
 #include "common/include/logging.h"
 #include "io/camera.hpp"
@@ -66,7 +66,8 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
-        auto const rendered_canvas = camera.render(world);
+        auto render_params         = RT::config_render_params().antialias(true);
+        auto const rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);
 
         return 0;

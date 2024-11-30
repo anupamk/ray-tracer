@@ -81,7 +81,7 @@ function (____run_one_test_target file_name)
      TARGET ${TEST_NAME}
      COMMENT "running test '${TEST_NAME}'"
      POST_BUILD
-     COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R '^${TEST_NAME}' --output-on-failures
+     COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R '^${TEST_NAME}' --output-on-failure
    )
 
 endfunction()

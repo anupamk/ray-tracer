@@ -47,6 +47,14 @@ add_custom_target(render_all_images
 )
 
 # ------------------------------------------------------------------------------
+# update generated-images
+add_custom_target(update_generated_images
+  COMMAND ${CMAKE_COMMAND} -E echo "* updating generated images *"
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/update_generated_images.sh ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/update_generated_images.sh
+)
+
+# ------------------------------------------------------------------------------
 # no user serviceable parts from here on ↓
 
 # ------------------------------------------------------------------------------

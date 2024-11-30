@@ -2,6 +2,7 @@
 
 /// c++ includes
 #include <optional>
+#include <random>
 #include <thread> /// for std::thread::hardware_concurrency(...)
 
 /// our includes
@@ -210,6 +211,16 @@ namespace raytracer
         inline const char* str_boolean(bool value)
         {
                 return (value == true) ? "yes" : "no";
+        }
+
+        /// --------------------------------------------------------------------
+        /// return a random number in [0.0 .. 1.0]
+        inline double random_in_range_01()
+        {
+                static auto rng{std::mt19937(std::random_device()())};
+                static std::uniform_real_distribution<double> dist_range(0.0, 1.0);
+
+                return dist_range(rng);
         }
 
 } // namespace raytracer

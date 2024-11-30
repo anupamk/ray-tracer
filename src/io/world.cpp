@@ -170,23 +170,27 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// compute the color due a ray intersecting a shape in the world
+        /// compute color due to ray(s) intersecting shape(s) in the world
         color world::color_at(ray_t const& R, uint8_t remaining) const
         {
                 PROFILE_SCOPE;
 
+                /// ----------------------------------------------------
                 /// compute the visible intersection
                 auto xs_list       = intersect(R);
                 auto vis_xs_record = visible_intersection(xs_list);
 
                 if (vis_xs_record) {
-                        /// ok, so there seems to be a visible intersection. compute the
-                        /// color
-                        auto xs_record     = vis_xs_record.value();
-                        auto const xs_info = R.prepare_computations(xs_list, xs_record.index());
+                        /// ----------------------------------------------------
+                        /// OK, so there seems to be a visible
+                        /// intersection. compute the color.
+                        auto xs_record = vis_xs_record.value();
+                        auto xs_info   = R.prepare_computations(xs_list, xs_record.index());
+
                         return shade_hit(xs_info, remaining);
                 }
 
+                /// ------------------------------------------------------------
                 /// no visible intersection
                 return color_black();
         }
@@ -245,7 +249,7 @@ namespace raytracer
                         return color_black();
                 }
 
-                ray_t const reflected_ray(xs_info.over_position(), xs_info.reflection_vector());
+                ray_t reflected_ray(xs_info.over_position(), xs_info.reflection_vector());
                 return color_at(reflected_ray, remaining - 1) * mat_reflective;
         }
 
@@ -275,14 +279,14 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// figure out the refracted-ray (rr) and compute its
                 /// color.
-                double const cos_t      = std::sqrt(1.0 - sin_sqr_t);
-                auto const rr_direction = xs_info.normal_vector() * (ri_ratio * cos_i - cos_t) -
-                                          (xs_info.eye_vector() * ri_ratio);
+                auto cos_t        = std::sqrt(1.0 - sin_sqr_t);
+                auto rr_direction = xs_info.normal_vector() * (ri_ratio * cos_i - cos_t) -
+                                    (xs_info.eye_vector() * ri_ratio);
 
+                /// ------------------------------------------------------------
                 /// refracted-ray originates at a point just-under the point of
                 /// intersection...
-                auto const refracted_ray = ray_t(xs_info.under_position(), rr_direction);
-
+                auto refracted_ray = ray_t(xs_info.under_position(), rr_direction);
                 return color_at(refracted_ray, remaining - 1) * mat_transparency;
         }
 
