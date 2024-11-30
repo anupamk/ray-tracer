@@ -123,12 +123,18 @@ int main(int argc, char** argv)
                         return canvas_texture;
                 };
 
-                auto const left_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negx.ppm"));
-                auto const front_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posz.ppm"));
-                auto const right_face_texture = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posx.ppm"));
-                auto const back_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negz.ppm"));
-                auto const up_face_texture    = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posy.ppm"));
-                auto const down_face_texture  = textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negy.ppm"));
+                auto const left_face_texture =
+                        textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negx.ppm"));
+                auto const front_face_texture =
+                        textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posz.ppm"));
+                auto const right_face_texture =
+                        textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posx.ppm"));
+                auto const back_face_texture =
+                        textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negz.ppm"));
+                auto const up_face_texture =
+                        textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/posy.ppm"));
+                auto const down_face_texture =
+                        textureize(RT::TEXTURE_ROOT + std::string("skybox/chapel/negy.ppm"));
 
                 // clang-format off
                 auto const cube_pattern = std::make_shared<RT::cube_texture>(left_face_texture,
@@ -161,7 +167,7 @@ int main(int argc, char** argv)
 
         constexpr uint32_t max_images = 500;
         constexpr float rot_xy_step   = (2 * RT::PI) / (1.0f * max_images);
-        auto movie_image_fname = "/tmp/skybox-image-";
+        auto movie_image_fname        = "/tmp/skybox-image-";
 
         /// --------------------------------------------------------------------
         /// step-1: render a bunch of images
@@ -173,7 +179,8 @@ int main(int argc, char** argv)
 
                 /// --------------------------------------------------------------------
                 /// ok camera, render the scene
-                auto const rendered_canvas = camera.render(world);
+                auto render_params         = RT::config_render_params().antialias(true);
+                auto const rendered_canvas = camera.render(world, render_params);
                 rendered_canvas.write(dst_fname);
 
                 /// --------------------------------------------------------------------
@@ -191,34 +198,29 @@ int main(int argc, char** argv)
         /// --------------------------------------------------------------------
         /// step-2: create a movie from the set of images rendered in step-1
         {
-                auto const movie_name = "skybox-movie.mp4";
+                auto const movie_name      = "skybox-movie.mp4";
                 auto const movie_framerate = 25;
-                
 
                 /// ------------------------------------------------------------
-                /// cmdline: ffmpeg -framerate 25 -i /tmp/skybox-image-%5d.ppm skybox-movie.mp4
+                /// command-line:
+                ///    "ffmpeg -y -framerate 25 -i /tmp/skybox-image-%5d.ppm skybox-movie.mp4
                 std::stringstream create_movie_cmdline_ss;
                 create_movie_cmdline_ss << "ffmpeg"
-                                        << " -framerate " << movie_framerate
-                                        << " -i " << movie_image_fname << "%5d.ppm"
+                                        << " -y " /// overwrite without asking
+                                        << " -framerate " << movie_framerate << " -i " << movie_image_fname
+                                        << "%5d.ppm"
                                         << " " << movie_name;
 
                 auto const create_movie_cmdline = create_movie_cmdline_ss.str();
 
-                LOG_INFO("creating the movie '%s' from source images '%s-*.ppm', cmdline: '%s'"
-                         ,
-                         movie_name,
-                         movie_image_fname,
-                         create_movie_cmdline.c_str());
+                LOG_INFO("creating the movie '%s' from source images '%s-*.ppm', cmdline: '%s'", movie_name,
+                         movie_image_fname, create_movie_cmdline.c_str());
 
-                errno = 0;
+                errno             = 0;
                 auto const retval = system(create_movie_cmdline.c_str());
                 if (retval != 0) {
-                        LOG_ERROR("failed to create movie, cmdline: '%s', errno/reason: '%d'/'%s'"
-                                  ,
-                                  create_movie_cmdline.c_str(),
-                                  errno,
-                                  strerror(errno));
+                        LOG_ERROR("failed to create movie, cmdline: '%s', errno/reason: '%d'/'%s'",
+                                  create_movie_cmdline.c_str(), errno, strerror(errno));
                 }
         }
 
@@ -234,7 +236,7 @@ int main(int argc, char** argv)
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01 = RT::camera(1280, 1024, 1.2);
+        auto camera_01 = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 1.2);
         auto look_from = RT::create_point(-1.0, 2.0, -20.0);
         /// auto look_to       = RT::create_point(0.0, 0.0, 0.0);
         /// auto look_from = RT::create_point(-10.0, 2.0, -25.0);

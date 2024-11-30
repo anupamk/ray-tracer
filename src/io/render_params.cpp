@@ -53,6 +53,11 @@ namespace raytracer
                 return render_style_;
         }
 
+        bool config_render_params::antialias() const
+        {
+                return antialias_enabled_;
+        }
+
         /// --------------------------------------------------------------------
         /// show progress of rendering as pixels are colored ?
         config_render_params&& config_render_params::online(bool val)
@@ -106,6 +111,14 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// antialiasing settings
+        config_render_params&& config_render_params::antialias(bool val)
+        {
+                antialias_enabled_ = val;
+                return std::move(*this);
+        }
+
+        /// --------------------------------------------------------------------
         /// stringified representation of rendering parameters
         std::string config_render_params::stringify() const
         {
@@ -115,7 +128,13 @@ namespace raytracer
 
                 ss << "show-as-we-go: '" << str_boolean(this->online_) << "', "
                    << "hw-threads: '" << this->hw_threads_ << "', "
-                   << "rendering-style: '" << stringify_rendering_style(render_style_) << "'";
+                   << "rendering-style: '" << stringify_rendering_style(render_style_) << "', "
+                   << "antialiasing (aa): '" << str_boolean(antialias_enabled_) << "'";
+
+                if (this->antialias_enabled_) {
+                        ss << ", "
+                           << "aa-color-threshold: '" << AA_COLOR_DIFF_THRESHOLD << "'";
+                }
 
                 if (this->benchmark_) {
                         ss << ", "

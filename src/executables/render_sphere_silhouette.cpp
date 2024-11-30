@@ -35,24 +35,21 @@ int main(int argc, char** argv)
 {
         ///
         /// define some scene specific constants first
-        ///
-        uint32_t const canvas_dim_x = 1280;
-        uint32_t const canvas_dim_y = 1024;
-        auto const CAMERA_POSITION  = RT::create_point(0.0, 0.0, -3.0);
-        float const WALL_ZPOS       = 6.0;
-        float const WALL_XSIZE      = 12.0;
-        float const WALL_YSIZE      = 9.0;
+        auto const CAMERA_POSITION = RT::create_point(0.0, 0.0, -3.0);
+        float const WALL_ZPOS      = 6.0;
+        float const WALL_XSIZE     = 12.0;
+        float const WALL_YSIZE     = 9.0;
 
         /// compute the rest based on these values
         float const WALL_HALF_XSIZE  = WALL_XSIZE * 0.5;
         float const WALL_HALF_YSIZE  = WALL_YSIZE * 0.5;
-        float const WALL_XPIXEL_SIZE = WALL_XSIZE / canvas_dim_x;
-        float const WALL_YPIXEL_SIZE = WALL_YSIZE / canvas_dim_y;
+        float const WALL_XPIXEL_SIZE = WALL_XSIZE / RT::canvas::X_PIXELS;
+        float const WALL_YPIXEL_SIZE = WALL_YSIZE / RT::canvas::Y_PIXELS;
 
         // clang-format off
         auto const scene_constants = std::string(std::string("{") + /// first
-                                                  "CANVAS_XPIXELS: "   + std::to_string(canvas_dim_x)     + ", "  +
-                                                  "CANVAS_YPIXELS: "   + std::to_string(canvas_dim_y)     + ", "  +
+                                                  "CANVAS_XPIXELS: "   + std::to_string(RT::canvas::X_PIXELS)     + ", "  +
+                                                  "CANVAS_YPIXELS: "   + std::to_string(RT::canvas::Y_PIXELS)     + ", "  +
                                                   "WALL_ZPOS: "        + std::to_string(WALL_ZPOS)        + ", "  +
                                                   "WALL_XSIZE: "       + std::to_string(WALL_XSIZE)       + ", "  +
                                                   "WALL_YSIZE: "       + std::to_string(WALL_YSIZE)       + ", "  +
@@ -65,7 +62,7 @@ int main(int argc, char** argv)
 
         auto const RED_COLOR = RT::color_red();
         auto sphere          = std::make_shared<RT::sphere>();
-        auto canvas          = RT::canvas::create_binary(canvas_dim_x, canvas_dim_y);
+        auto canvas          = RT::canvas::create_binary(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS);
 
         ///
         /// some transformations on the sphere
@@ -88,10 +85,10 @@ int main(int argc, char** argv)
                           * RT_XFORM::create_3d_scaling_matrix(0.5, 1.0, 1.0));
 
         /// for each pixel do
-        for (uint32_t y = 0; y < canvas_dim_y; y++) {
+        for (uint32_t y = 0; y < RT::canvas::Y_PIXELS; y++) {
                 auto const wall_y = WALL_HALF_YSIZE - WALL_YPIXEL_SIZE * y;
 
-                for (uint32_t x = 0; x < canvas_dim_x; x++) {
+                for (uint32_t x = 0; x < RT::canvas::X_PIXELS; x++) {
                         auto const wall_x      = -WALL_HALF_XSIZE + WALL_XPIXEL_SIZE * x;
                         auto const wall_xyz    = RT::create_point(wall_x, wall_y, WALL_ZPOS);
                         auto const ray_to_wall = RT::ray_t(CAMERA_POSITION, (wall_xyz - CAMERA_POSITION));

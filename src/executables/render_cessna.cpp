@@ -55,9 +55,9 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
-        auto const rendered_canvas = camera.render(world);
+        auto render_params         = RT::config_render_params().antialias(true);
+        auto const rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);
-        LOG_INFO("image rendered to:'%s'", dst_fname);
 
         return 0;
 }
@@ -163,7 +163,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01     = RT::camera(1280, 1024, 2.0);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 2.0);
         auto look_from     = RT::create_point(0.0, 0.2, -4.5);
         auto look_to       = RT::create_point(0.0, -0.5, 100.8);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

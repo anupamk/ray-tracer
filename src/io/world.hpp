@@ -1,10 +1,11 @@
 #pragma once
 
 /// c++ includes
-#include <stdint.h>                            // for uint8_t
-#include <memory>                              // for shared_ptr
-#include <string>                              // for string
-#include <vector>                              // for vector
+#include <initializer_list>
+#include <memory>
+#include <stdint.h>
+#include <string>
+#include <vector>
 
 /// our includes
 #include "primitives/color.hpp"
@@ -19,7 +20,7 @@ namespace raytracer
         class ray_t;
         class shape_interface;
         class tuple;
-        
+
         /// --------------------------------------------------------------------
         /// this implements a world object which acts as a container for a set
         /// of objects that make up a scene including various instantiation of
@@ -60,7 +61,15 @@ namespace raytracer
                 /// compute the color when a ray hits the world
                 color shade_hit(intersection_info_t const&, uint8_t remaining = MAX_RECURSION_DEPTH) const;
 
-                /// compute the color due to a ray.
+                /// ------------------------------------------------------------
+                /// compute the color due to one or more rays, at a specific
+                /// pixel.
+                ///
+                /// this is quite useful f.e. when we want to perform
+                /// antialiased rendering of images with multiple samples per
+                /// pixel.
+                ///
+                /// 'aa_color_scale' is a value in range (0.0 .. 1.0]
                 color color_at(ray_t const&, uint8_t remaining = MAX_RECURSION_DEPTH) const;
 
                 /// stringified representation of the world

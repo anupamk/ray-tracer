@@ -3,12 +3,12 @@
  **/
 
 /// c++ includes
-#include <stdint.h>
-#include <stdio.h>
-#include <time.h>
 #include <limits>
 #include <memory>
 #include <random>
+#include <stdint.h>
+#include <stdio.h>
+#include <time.h>
 
 /// our includes
 #include "common/include/logging.h"
@@ -73,17 +73,15 @@ int main(int argc, char** argv)
                                                         std::numeric_limits<unsigned>::max());
 
         /// --------------------------------------------------------------------
-        /// generate MAX_NUMBER_OF_CANVASES each with CANVAS_XSIZE_PIXELS X
-        /// CANVAS_YSIZE_PIXELS. stitch them together for a movie !
-        constexpr size_t CANVAS_XSIZE_PIXELS    = 1280;
-        constexpr size_t CANVAS_YSIZE_PIXELS    = 1024;
+        /// generate MAX_NUMBER_OF_CANVASES each with RT::canvas::X_PIXELS X
+        /// RT::canvas::Y_PIXELS. stitch them together for a movie !
         constexpr size_t MAX_NUMBER_OF_CANVASES = 1;
 
         auto gp = std::make_shared<RT::checkers_pattern>(RT::color::RGB(0x00, 0x00, 0xff),  /// start-color
                                                          RT::color::RGB(0xff, 0xff, 0x00)); /// end-color
 
         for (size_t c = 0; c < MAX_NUMBER_OF_CANVASES; c++) {
-                RT::canvas ith_canvas = RT::canvas::create_binary(CANVAS_XSIZE_PIXELS, CANVAS_YSIZE_PIXELS);
+                RT::canvas ith_canvas = RT::canvas::create_binary(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS);
 
                 constexpr double frequency = 1.0;
                 double const fx            = ith_canvas.width() / frequency;

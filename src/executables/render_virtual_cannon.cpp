@@ -82,7 +82,7 @@ int main(int argc, char** argv)
         env_params env(gravity, wind);
 
         /// and the canvas where everything will be shown
-        auto canvas = RT::canvas::create_binary(1280, 1024);
+        auto canvas = RT::canvas::create_binary(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS);
 
         for (; proj.position().y() > 0;) {
                 auto const proj_pos    = proj.position();

@@ -66,7 +66,8 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
-        auto const rendered_canvas = camera.render(world);
+        auto render_params         = RT::config_render_params().antialias(true);
+        auto const rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);
 
         return 0;
@@ -208,7 +209,7 @@ RT::world create_table_world()
 /// observed.
 RT::camera create_table_world_camera()
 {
-        auto camera_01     = RT::camera(1280, 1024, RT::PI_BY_3F);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, RT::PI_BY_3F);
         auto look_from     = RT::create_point(29.0, 10.0, -29.0);
         auto look_to       = RT::create_point(-5.0, 9.0, 0.0);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
@@ -376,7 +377,7 @@ RT::world create_earth_world()
 /// observed.
 RT::camera create_earth_world_camera()
 {
-        auto camera_01     = RT::camera(320, 256, 0.8);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 0.8);
         auto look_from     = RT::create_point(-2.6, 4.5, -20.0);
         auto look_to       = RT::create_point(-0.6, 2.5, -0.8);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
@@ -544,9 +545,9 @@ RT::world create_simple_world()
 /// observed.
 RT::camera create_simple_world_camera()
 {
-        auto camera_01     = RT::camera(320 * 4, 256 * 4, 0.8);
-        auto look_from     = RT::create_point(-2.6, 4.5, -30.0);
-        auto look_to       = RT::create_point(-0.6, 0.6, -0.8);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 0.8);
+        auto look_from     = RT::create_point(-20.6, 4.5, -30.0);
+        auto look_to       = RT::create_point(0.0, 0.0, 0.0);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
         auto xform         = RT_XFORM::create_view_transform(look_from, look_to, up_dir_vector);
 

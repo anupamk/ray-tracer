@@ -9,6 +9,8 @@
 string (CONCAT RAYTRACER_C_COMMON_FLAGS
   " -Wall"
   " -Werror"
+  " -Wextra"
+  " -fsanitize=undefined,address"
   " -std=c11"                   # _C_FLAGS_
   " -pipe"
   " -fno-diagnostics-color"

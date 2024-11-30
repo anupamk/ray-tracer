@@ -35,16 +35,12 @@ int main(int argc, char** argv)
 {
         auto dial_hour_pos = compute_dial_positions(100);
 
-        /// ----------------------------------------------------------------
-        constexpr auto canvas_dim_x = 1280;
-        constexpr auto canvas_dim_y = 1024;
-
         /// maximum size of dial cannot exceed 90% of the half of minimum of the
         /// canvas, so that we can see something
-        constexpr auto max_dial_radius = 0.9 * (std::min(canvas_dim_x, canvas_dim_y) / 2);
+        constexpr auto max_dial_radius = 0.9 * (std::min(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS) / 2);
 
         /// compute the maximum ratio of canvas-area to clock-dial area
-        constexpr auto canvas_area = canvas_dim_x * canvas_dim_y;
+        constexpr auto canvas_area = RT::canvas::X_PIXELS * RT::canvas::Y_PIXELS;
         constexpr auto dial_area   = RT::PI * max_dial_radius * max_dial_radius;
         constexpr auto alpha_max   = dial_area / canvas_area;
 
@@ -59,8 +55,8 @@ int main(int argc, char** argv)
          **/
         constexpr auto area_alpha = std::min(0.2, alpha_max);
         auto scaled_radius        = std::sqrt((canvas_area * area_alpha) / RT::PI);
-        constexpr auto x_midpt    = canvas_dim_x / 2;
-        constexpr auto y_midpt    = canvas_dim_y / 2;
+        constexpr auto x_midpt    = RT::canvas::X_PIXELS / 2;
+        constexpr auto y_midpt    = RT::canvas::Y_PIXELS / 2;
 
         /// the transformation matrices
         auto const dial_scale_mat  = RT_XFORM::create_3d_scaling_matrix(scaled_radius, scaled_radius, 0.0);
@@ -73,7 +69,7 @@ int main(int argc, char** argv)
         }
 
         /// plot dial positions on canvas
-        auto canvas = RT::canvas::create_binary(canvas_dim_x, canvas_dim_y);
+        auto canvas = RT::canvas::create_binary(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS);
         for (auto const& pos : dial_hour_pos) {
                 size_t const dial_xpos = pos.x();
                 size_t const dial_ypos = pos.y();

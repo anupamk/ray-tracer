@@ -1,6 +1,6 @@
 /// c++ includes
-#include <stdio.h>
 #include <memory>
+#include <stdio.h>
 #include <vector>
 
 /// 3rd-party includes
@@ -197,8 +197,11 @@ TEST_CASE("scenario: ensure no infinite recursion between parallel reflected sur
         auto const ray_direction = RT::create_vector(0.0, 1.0, 0.0);
         auto const the_ray       = RT::ray_t(ray_origin, ray_direction);
 
+        /// --------------------------------------------------------------------
         /// compute color due to ray
-        auto const got_rc      = W.color_at(the_ray);
+        auto const got_rc = W.color_at({the_ray},
+                                       1.0); /// 1-sample-only => color-scale == 1.0
+
         auto const expected_rc = RT::color_black();
 
         CHECK(got_rc == expected_rc);

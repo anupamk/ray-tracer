@@ -3,6 +3,7 @@
 /// c++ includes
 #include <cmath>
 #include <cstdint>
+#include <random>
 #include <sstream>
 #include <string>
 
@@ -32,8 +33,10 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// this function returns a ray starting at the camera and passing
         /// through a specific point (x, y) on the canvas
-        ray_t camera::ray_for_pixel(uint32_t x, uint32_t y) const
+        ray_t camera::ray_for_pixel(float x, float y) const
         {
+                static constexpr tuple ORIGIN_POINT = create_point(0.0, 0.0, 0.0);
+
                 /// offset from edge of the canvas to the pixel's center
                 auto const x_offset = (x + 0.5) * pixel_size_;
                 auto const y_offset = (y + 0.5) * pixel_size_;
@@ -45,7 +48,7 @@ namespace raytracer
                 /// camera is at unit distance from the canvas. compute the ray
                 /// direction
                 auto const pixel       = inv_transform_ * create_point(world_x, world_y, -1.0);
-                auto const r_origin    = inv_transform_ * create_point(0.0, 0.0, 0.0);
+                auto const r_origin    = inv_transform_ * ORIGIN_POINT;
                 auto const r_direction = normalize(pixel - r_origin);
 
                 return ray_t(r_origin, r_direction);
@@ -89,8 +92,6 @@ namespace raytracer
         /// in the camera for futher computations.
         void camera::compute_misc_items(uint32_t h_size, uint32_t v_size, double fov)
         {
-                PROFILE_SCOPE;
-
                 auto const aspect_ratio = (1.0 * h_size) / (v_size);
                 auto const half_view    = tan(fov / 2.0);
 

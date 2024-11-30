@@ -21,6 +21,7 @@
 #include <vector>
 
 /// our includes
+#include "common/include/assert_utils.h"
 #include "common/include/benchmark.hpp"
 #include "common/include/logging.h"
 #include "concurrentqueue/concurrentqueue.h"
@@ -30,7 +31,6 @@
 #include "io/world.hpp"
 #include "io/xcb_display.hpp"
 #include "primitives/color.hpp"
-#include "common/include/assert_utils.h"
 
 namespace raytracer
 {
@@ -42,11 +42,12 @@ namespace raytracer
         canvas camera::render(world const& the_world, config_render_params const& rendering_params) const
         {
                 ASSERT(rendering_params.render_style() != rendering_style::RENDERING_STYLE_INVALID);
+                render_params_ = rendering_params;
 
                 /// ------------------------------------------------------------
                 /// dump some information about how the rendering will be
                 /// performed.
-                LOG_INFO("rendering parameters: '%s'", rendering_params.stringify().c_str());
+                LOG_INFO("rendering parameters: '%s'", render_params_.stringify().c_str());
 
                 auto bm_params = [&]() -> benchmark_t<> {
                         if (!rendering_params.benchmark()) {
@@ -61,8 +62,7 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// render the scene
                 auto rendered_canvas = bm_params.benchmark(&camera::perform_rendering, *this,
-                                                           the_world, /// the-scenery
-                                                           rendering_params);
+                                                           the_world); /// the-scenery
 
                 bm_params.show_stats();
                 return rendered_canvas;
@@ -76,13 +76,12 @@ namespace raytracer
         /// this is the main rendering routine. rendering parameters are
         /// unpacked, and applied to the rendering operation that this function
         /// launches.
-        canvas camera::perform_rendering(world const& the_world,
-                                         config_render_params const& rendering_params) const
+        canvas camera::perform_rendering(world const& the_world) const
         {
                 /// ------------------------------------------------------------
                 /// for 'show-as-we-go'
                 auto x11_display = [&]() -> std::unique_ptr<xcb_display> {
-                        if (rendering_params.online()) {
+                        if (render_params_.online()) {
                                 return xcb_display::create_display(horiz_size_, vert_size_);
                         }
 
@@ -92,18 +91,17 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// create work-queue of 'render_work_items' using various
                 /// rendering parameters that are passed.
-                auto const hw_threads = rendering_params.hw_threads();
                 auto work_q =
                         [&](rendering_style const& S) -> moodycamel::ConcurrentQueue<render_work_items> {
                         switch (S) {
                         case rendering_style::RENDERING_STYLE_SCANLINE:
-                                return scanline_work_queue(hw_threads);
+                                return scanline_work_queue();
 
                         case rendering_style::RENDERING_STYLE_HILBERT:
-                                return hilbert_work_queue(hw_threads);
+                                return hilbert_work_queue();
 
                         case rendering_style::RENDERING_STYLE_TILE:
-                                return tile_work_queue(hw_threads);
+                                return tile_work_queue();
 
                         default:
                         case rendering_style::RENDERING_STYLE_INVALID:
@@ -114,7 +112,7 @@ namespace raytracer
 
                         /// not-reached
                         return moodycamel::ConcurrentQueue<render_work_items>{};
-                }(rendering_params.render_style());
+                }(render_params_.render_style());
 
                 /// ------------------------------------------------------------
                 /// destination canvas on which the world will be rendered.
@@ -122,9 +120,12 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// let the painters ... paint !
+                auto const hw_threads = render_params_.hw_threads();
                 std::vector<std::thread> rendering_threads(hw_threads);
+
                 for (uint32_t i = 0; i < hw_threads; i++) {
-                        rendering_threads[i] = std::thread(pixel_painter,          /// rendering-function
+                        rendering_threads[i] = std::thread(&camera::pixel_painter, /// rendering-function
+                                                           *this,                  /// instance
                                                            i,                      /// thread-id
                                                            std::ref(work_q),       /// work-queue
                                                            the_world,              /// the world
@@ -156,27 +157,29 @@ namespace raytracer
          * this function is the workhorse for rendering a bunch of work-items
          * picked from a concurrent queue
          **/
-        void
-        camera::pixel_painter(int thread_id,                                              /// id-of-thread
-                              moodycamel::ConcurrentQueue<render_work_items>& work_queue, /// queue-of-work
-                              world const& W,                                             /// rendered-world
-                              canvas& dst_canvas,                                         /// on-canvas
-                              std::unique_ptr<xcb_display>& x11_display)                  /// x11-display
+        void camera::pixel_painter(int thread_id, moodycamel::ConcurrentQueue<render_work_items>& work_queue,
+                                   world const& W, canvas& dst_canvas,
+                                   std::unique_ptr<xcb_display>& x11_display)
         {
-                bool all_done          = false;
-                size_t pixels_rendered = 0;
-                size_t jobs_completed  = 0;
+                bool all_done                   = false;
+                size_t pixels_rendered          = 0;
+                size_t jobs_completed           = 0;
+                static double const pixel_delta = render_params_.antialias() ? 0.5 : 0.0;
 
                 do {
                         render_work_items rw;
 
                         if (work_queue.try_dequeue(rw)) {
-                                for (auto work : rw.work_list) {
+                                for (auto const& work : rw.work_list) {
                                         /// ------------------------------------
                                         /// compute the color at (x, y) and
                                         /// update the canvas with that
                                         /// information
-                                        auto r_color = W.color_at(work.r);
+                                        auto r_color = adaptively_color_a_pixel_at(W,            /// world
+                                                                                   work.x,       /// x
+                                                                                   work.y,       /// y
+                                                                                   pixel_delta); /// delta
+
                                         dst_canvas.write_pixel(work.x, work.y, r_color);
 
                                         if (x11_display != nullptr) {
@@ -214,11 +217,86 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// adaptively compute pixel color at a specific point (x, y).
+        color camera::adaptively_color_a_pixel_at(world const& W, double x, double y, double delta) const
+        {
+                /// ------------------------------------------------------------
+                /// break out of recursion. we have reached the desired
+                /// color-difference.
+                if (delta < config_render_params::AA_COLOR_DIFF_THRESHOLD) {
+                        return pixel_color_at(W, x, y);
+                }
+
+                /*
+                 * 4-corners + 1-center, for a total of 5 points per pixel
+                 * (marked by 'x' in the ascii-art below) whose colors we are
+                 * going to compute, and merge into the final color.
+                 *
+                 *            |
+                 *    (-1,1)  |    (1,1)
+                 *       x----+----x
+                 *       |    |    |
+                 *  -----+----x----+----- (xy-center-color)
+                 *       |    |    |
+                 *       x----+----x
+                 *    (-1,-1) |    (1, -1)
+                 *            |
+                 *
+                 * so, the ordering of the dx[...], and dy[...] arrays (below)
+                 * is *significant*, with dx[i] and dy[i] *together* defining
+                 * a single point of a pixel as described above.
+                 **/
+                static constexpr uint8_t points_per_pixel = 5;
+                static constexpr double dx[]              = {1.0, 1.0, -1.0, -1.0};
+                static constexpr double dy[]              = {1.0, -1.0, -1.0, 1.0};
+
+                auto const xy_center_color = pixel_color_at(W, x, y);
+                auto pixel_color           = xy_center_color * (1.0 / points_per_pixel);
+
+                for (int i = 0; i < 4; i++) {
+                        auto const c_x = x + dx[i] * delta;
+                        auto const c_y = y + dy[i] * delta;
+
+                        /// ----------------------------------------------------
+                        /// this is the adaptive color sampling part.
+                        ///
+                        /// just compute the difference between corner, and
+                        /// center colors. when that difference is more than the
+                        /// threshold, recursively sub-divide that quarter of
+                        /// the pixel, and recompute.
+                        ///
+                        /// this approach is superior to the brute-force (simple
+                        /// to implement, and wasteful from computation
+                        /// perspective) approach of *always* projecting a fixed
+                        /// number of random rays per pixel, and sampling the
+                        /// colors.
+                        auto corner_color    = pixel_color_at(W, c_x, c_y);
+                        auto color_diff      = xy_center_color - corner_color;
+                        float component_diff = std::fabs(color_diff.R() + color_diff.G() + color_diff.B());
+
+                        if (component_diff > config_render_params::AA_COLOR_DIFF_THRESHOLD) {
+                                corner_color = adaptively_color_a_pixel_at(W, c_x, c_y, delta / 2.0);
+                        }
+
+                        pixel_color += corner_color * (1.0 / points_per_pixel);
+                }
+
+                return pixel_color;
+        }
+
+        /// --------------------------------------------------------------------
+        /// simple computation of pixel color at a specific point (x,y)
+        color camera::pixel_color_at(world const& W, double x, double y) const
+        {
+                return W.color_at(ray_for_pixel(x, y));
+        }
+
+        /// --------------------------------------------------------------------
         /// generate a work-queue comprising 'rendering work items' in scanline
         /// order.
-        moodycamel::ConcurrentQueue<render_work_items> camera::scanline_work_queue(uint32_t hw_threads) const
+        moodycamel::ConcurrentQueue<render_work_items> camera::scanline_work_queue() const
         {
-                uint32_t const total_pixels_per_thread = horiz_size_ / hw_threads;
+                uint32_t const total_pixels_per_thread = horiz_size_ / render_params_.hw_threads();
                 uint32_t const total_work_items = (horiz_size_ / total_pixels_per_thread) * (vert_size_);
 
                 moodycamel::ConcurrentQueue<render_work_items> wq(total_work_items);
@@ -232,9 +310,8 @@ namespace raytracer
 
                                 for (uint32_t i = 0; i < total_pixels_per_thread; i++) {
                                         render_work_item tmp{
-                                                x + i,                   /// x-pixel
-                                                y,                       /// y-pixel
-                                                ray_for_pixel(x + i, y), /// ray-at-(x,y)
+                                                double(x + i), /// x-pixel
+                                                double(y)      /// y-pixel
                                         };
 
                                         work_item.work_list.emplace_back(tmp);
@@ -246,7 +323,7 @@ namespace raytracer
 
                 LOG_INFO("scanline-work-queue info: "
                          "total-threads: {%d}, pixels-per-thread: {%d}, work-queue length: {%ld} (approx.)",
-                         hw_threads, total_pixels_per_thread, wq.size_approx());
+                         render_params_.hw_threads(), total_pixels_per_thread, wq.size_approx());
 
                 return wq;
         }
@@ -254,7 +331,7 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// generate a work-queue comprising 'rendering work items' in
         /// hilbert-curve order.
-        moodycamel::ConcurrentQueue<render_work_items> camera::hilbert_work_queue(uint32_t hw_threads) const
+        moodycamel::ConcurrentQueue<render_work_items> camera::hilbert_work_queue() const
         {
                 auto rot = [](uint32_t n, uint32_t& x, uint32_t& y, uint32_t rx, uint32_t ry) -> void {
                         if (ry == 0) {
@@ -338,12 +415,11 @@ namespace raytracer
                                 }
 
                                 render_work_item tmp{
-                                        hilbert_x,                           /// x-pixel
-                                        hilbert_y,                           /// y-pixel
-                                        ray_for_pixel(hilbert_x, hilbert_y), /// ray
+                                        double(hilbert_x + i), /// x-pixel
+                                        double(hilbert_y)      /// y-pixel
                                 };
 
-                                work_item.work_list.push_back(tmp);
+                                work_item.work_list.emplace_back(tmp);
                         }
 
                         wq.enqueue(work_item);
@@ -351,7 +427,7 @@ namespace raytracer
 
                 LOG_INFO("hilbert-curve work-queue info: "
                          "total-threads: {%d}, pixels-per-thread: {%d}, work-queue-length: {%ld} (approx.)",
-                         hw_threads, pixels_per_thread, wq.size_approx());
+                         render_params_.hw_threads(), pixels_per_thread, wq.size_approx());
 
                 return wq;
         }
@@ -359,11 +435,12 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// generate a work-queue comprising 'rendering work items' in tiling
         /// order.
-        moodycamel::ConcurrentQueue<render_work_items> camera::tile_work_queue(uint32_t hw_threads) const
+        moodycamel::ConcurrentQueue<render_work_items> camera::tile_work_queue() const
         {
                 /*
                  * tile dimensions
                  **/
+                auto const hw_threads     = render_params_.hw_threads();
                 uint16_t const tile_dim_x = horiz_size_ / hw_threads;
                 uint16_t const tile_dim_y = vert_size_ / hw_threads;
 
@@ -383,11 +460,12 @@ namespace raytracer
 
                         for (uint32_t y = start_y; y < end_y; y++) {
                                 for (uint32_t x = start_x; x < end_x; x++) {
-                                        work_item.work_list.emplace_back(render_work_item{
-                                                x,                  /// x-pixel
-                                                y,                  /// y-pixel
-                                                ray_for_pixel(x, y) /// ray-at-(x, y)
-                                        });
+                                        render_work_item tmp{
+                                                double(x), /// x-pixel
+                                                double(y), /// y-pixel
+                                        };
+
+                                        work_item.work_list.emplace_back(tmp);
                                 }
                         }
 

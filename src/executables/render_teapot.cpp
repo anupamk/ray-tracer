@@ -60,7 +60,8 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// ok camera, render the scene
-        auto const rendered_canvas = camera.render(world);
+        auto render_params         = RT::config_render_params().antialias(true);
+        auto const rendered_canvas = camera.render(world, render_params);
         rendered_canvas.write(dst_fname);
 
         return 0;
@@ -108,7 +109,7 @@ static RT::world create_world()
 
                 s_01->set_material(
                         RT::material()
-                        .set_pattern(std::make_shared<RT::solid_pattern>(RT::color::RGB(200, 0, 0)))
+                                .set_pattern(std::make_shared<RT::solid_pattern>(RT::color::RGB(200, 0, 0)))
                                 .set_ambient(0.0)
                                 .set_diffuse(0.0)
                                 .set_specular(0.9)
@@ -127,8 +128,8 @@ static RT::world create_world()
                 LOG_INFO("model-01 parsed, summary:'%s'", parse_result.summarize().c_str());
 
                 auto model_xform = RT_XFORM::create_3d_scaling_matrix(7.0, 7.0, 7.0) *
-                        RT_XFORM::create_rotx_matrix(-0.2f * RT::PI);
-                
+                                   RT_XFORM::create_rotx_matrix(-0.2f * RT::PI);
+
                 auto model_material = RT::create_material_matte(RT::color::RGB(200, 0, 0));
 
                 /// ------------------------------------------------------------
@@ -158,7 +159,7 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01     = RT::camera(1280, 1024, 2.0);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 2.0);
         auto look_from     = RT::create_point(-8.5, 5.0, -40.0);
         auto look_to       = RT::create_point(1.5, 1.5, 1.5);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

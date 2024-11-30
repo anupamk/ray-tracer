@@ -118,7 +118,7 @@ function main() {
 
     # --------------------------------------------------------------------------
     # is imagemagick installed ?
-    local convert_exe_fname=$(which convert)
+    local convert_exe_fname=$(which magick)
     if ! [ -x ${convert_exe_fname} ]
     then
         echo "runtime error : 'ImageMagick' is not installed !"

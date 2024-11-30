@@ -12,10 +12,10 @@
  **/
 
 /// c++ includes
-#include <stdint.h>
 #include <cstddef>
 #include <memory>
 #include <optional>
+#include <stdint.h>
 #include <string>
 #include <vector>
 
@@ -41,6 +41,19 @@ namespace raytracer
                 std::size_t const height_{0};
                 canvas_type const type_{PPM_CANVAS_INVALID};
                 std::vector<color> buf_;
+
+            public:
+                /*
+                 * @brief
+                 *    common canvas size for all renders. ofcourse, these sizes
+                 *    are not cast in stone, and other ones can be chosen as
+                 *    well.
+                 *
+                 *    for now, by default, we render all images at 2k
+                 *    resolution.
+                 **/
+                static constexpr uint32_t X_PIXELS = 2560;
+                static constexpr uint32_t Y_PIXELS = 1440;
 
             public:
                 /// ------------------------------------------------------------
