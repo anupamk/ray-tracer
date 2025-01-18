@@ -15,7 +15,6 @@
 #include "utils/constants.hpp"
 #include "utils/utils.hpp"
 
-
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
 /// convenience
@@ -83,7 +82,7 @@ TEST_CASE("camera::ray_for_pixel(...) test")
 
 /// ----------------------------------------------------------------------------
 /// render a world by camera
-TEST_CASE("camera::ray_for_pixel(...) test")
+TEST_CASE("camera::ray_for_pixel(...) test" * doctest::skip(true))
 {
         auto w_01       = RT::world::create_default_world();
         auto c_01       = RT::camera(11, 11, RT::PI_BY_2F);

@@ -296,6 +296,76 @@ namespace raytracer
         /// order.
         moodycamel::ConcurrentQueue<render_work_items> camera::scanline_work_queue() const
         {
+                /*
+                 * an instance of 'render_work_items' has 'PIXELS_PER_WORK_ITEM'
+                 * worth of pixels that will be rendered at a time.
+                 *
+                 * each thread picks a new 'work_item' from the work-queue once
+                 * it is done with the current one.
+                 **/
+                static constexpr uint32_t PIXELS_PER_WORK_ITEM = 30;
+
+                const long total_pixel_count        = horiz_size_ * vert_size_;
+                const auto work_items_and_remainder = std::div(total_pixel_count, PIXELS_PER_WORK_ITEM);
+
+                const auto total_work_items =
+                        (work_items_and_remainder.quot + work_items_and_remainder.rem ? 1 : 0);
+
+                uint32_t x_pixel = 0;
+                uint32_t y_pixel = 0;
+
+                /// ------------------------------------------------------------
+                /// generate work for the workers
+                moodycamel::ConcurrentQueue<render_work_items> wq(total_work_items);
+
+                /// ------------------------------------------------------------
+                /// integer division worth items first
+                render_work_items work_item;
+                const long int_div_pixels = work_items_and_remainder.quot * PIXELS_PER_WORK_ITEM;
+                for (uint32_t pixel_count = 0; pixel_count < int_div_pixels; pixel_count++) {
+                        /// ----------------------------------------------------
+                        /// we now have pixels for a single work-item, add it to
+                        /// the work-queue.
+                        if ((pixel_count % PIXELS_PER_WORK_ITEM) == 0) {
+                                wq.enqueue(work_item);
+                                work_item.work_list.clear();
+                        }
+
+                        render_work_item tmp{double(x_pixel), double(y_pixel)};
+                        work_item.work_list.emplace_back(tmp);
+
+                        /// ----------------------------------------------------
+                        /// scanline processing of pixels making up this image
+                        x_pixel += 1;
+                        if (x_pixel >= horiz_size_) {
+                                x_pixel = 0;
+                                y_pixel += 1;
+                        }
+                }
+
+                /// ------------------------------------------------------------
+                /// and then the lone straggler
+                render_work_items straggler_work_item;
+                for (uint32_t pixel_count = int_div_pixels; pixel_count < total_pixel_count; pixel_count++) {
+                        render_work_item tmp{double(x_pixel), double(y_pixel)};
+                        straggler_work_item.work_list.emplace_back(tmp);
+
+                        x_pixel += 1;
+                }
+                wq.enqueue(straggler_work_item);
+
+                LOG_INFO("scanline-work-queue info: "
+                         "total-threads: {%d}, pixels-per-thread: {%d}, work-queue length: {%ld} (approx.)",
+                         render_params_.hw_threads(), PIXELS_PER_WORK_ITEM, wq.size_approx());
+
+                return wq;
+        }
+
+        /// --------------------------------------------------------------------
+        /// generate a work-queue comprising 'rendering work items' in scanline
+        /// order.
+        moodycamel::ConcurrentQueue<render_work_items> camera::scanline_work_queue_1() const
+        {
                 uint32_t const total_pixels_per_thread = horiz_size_ / render_params_.hw_threads();
                 uint32_t const total_work_items = (horiz_size_ / total_pixels_per_thread) * (vert_size_);
 

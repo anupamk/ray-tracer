@@ -61,7 +61,7 @@ add_subdirectory(3rd-party)
 
 # ------------------------------------------------------------------------------
 # enable (ON) || disable (OFF) execution profiling
-set(ENABLE_EXECUTION_PROFILING ON)
+set(ENABLE_EXECUTION_PROFILING OFF)
 
 # ------------------------------------------------------------------------------
 # tracy : realtime high-resolution profiler

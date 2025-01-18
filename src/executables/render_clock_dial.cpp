@@ -53,7 +53,7 @@ int main(int argc, char** argv)
          *
          * moreover, the clock is drawn in the middle of the canvas.
          **/
-        constexpr auto area_alpha = std::min(0.2, alpha_max);
+        constexpr auto area_alpha = std::min(0.4, alpha_max);
         auto scaled_radius        = std::sqrt((canvas_area * area_alpha) / RT::PI);
         constexpr auto x_midpt    = RT::canvas::X_PIXELS / 2;
         constexpr auto y_midpt    = RT::canvas::Y_PIXELS / 2;

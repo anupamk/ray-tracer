@@ -70,7 +70,8 @@ static RT::world create_world()
                 auto sphere_01         = std::make_shared<RT::sphere>();
                 auto sphere_01_pattern = std::make_shared<RT::solid_pattern>(RT::color(1.0, 0.2, 1.0));
                 sphere_01->set_material(RT::material().set_pattern(sphere_01_pattern).set_specular(0.2));
-                sphere_01->transform(RT_XFORM::create_3d_scaling_matrix(2.0, 2.0, 2.0));
+                sphere_01->transform(RT_XFORM::create_3d_translation_matrix(0.0, -0.40, 0.0) *
+                                     RT_XFORM::create_3d_scaling_matrix(2.1, 2.1, 2.1));
 
                 world.add(sphere_01);
         }

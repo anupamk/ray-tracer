@@ -107,7 +107,7 @@ static RT::world create_world()
                         std::make_shared<RT::texture_2d_pattern>(sp_01_earth_texture, RT::spherical_map);
 
                 earth_sphere->transform(RT_XFORM::create_3d_scaling_matrix(3.75, 3.75, 3.75) *
-                                        RT_XFORM::create_3d_translation_matrix(2.0, 1.3, 0.5) *
+                                        RT_XFORM::create_3d_translation_matrix(2.0, 1.15, 0.5) *
                                         RT_XFORM::create_rotz_matrix(RT::PI_BY_6F) *
                                         RT_XFORM::create_rotx_matrix(-RT::PI / 8.0) *
                                         RT_XFORM::create_roty_matrix(-RT::PI_BY_5F));

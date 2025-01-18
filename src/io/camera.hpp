@@ -169,6 +169,7 @@ namespace raytracer
                  *
                  *    this is pretty much identical to how CRT displays worked.
                  **/
+                moodycamel::ConcurrentQueue<render_work_items> scanline_work_queue_1() const;
                 moodycamel::ConcurrentQueue<render_work_items> scanline_work_queue() const;
 
                 /*

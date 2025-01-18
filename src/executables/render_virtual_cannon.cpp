@@ -73,12 +73,12 @@ int main(int argc, char** argv)
 
         /// create projectile
         auto const start_point = RT::create_point(0.0, 1.0, 0.0);
-        auto velocity          = RT::normalize(RT::create_vector(78.5, 102.0, 0.0)) * 12.25;
+        auto const velocity    = RT::normalize(RT::create_vector(0.005, 0.005, 0.0)) * 152.0;
         projectile proj(start_point, velocity);
 
         /// create the environment
-        auto const gravity = RT::create_vector(0.0, -0.1, 0.0);
-        auto const wind    = raytracer::create_vector(-0.01, 0.0, 0.0);
+        auto const gravity = RT::create_vector(0.0, -9.8, 0.0);
+        auto const wind    = raytracer::create_vector(-0.02, 0.0, 0.0);
         env_params env(gravity, wind);
 
         /// and the canvas where everything will be shown
@@ -93,9 +93,9 @@ int main(int argc, char** argv)
                 /// the (0, 0) of the canvas is at the top-left. however the
                 /// viewing coordinates have (0, 0) at the bottom-left.
                 ///
-                /// so, we subtract y-position of the projectil from
+                /// so, we subtract y-position of the projectile from
                 /// canvas.height()
-                canvas.write_pixel(proj_xpos, canvas.height() - proj_ypos, RT::color_white());
+                canvas.write_pixel(proj_xpos, canvas.height() - proj_ypos, RT::color_yellow());
 
                 /// next round
                 proj = tick(env, proj);
