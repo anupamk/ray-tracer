@@ -8,7 +8,6 @@ SET(RT_EXECUTABLES_SOURCES
   render_world_main.cpp
   render_with_plane.cpp
   render_with_patterns.cpp
-  render_textures.cpp
   render_with_textures.cpp
   render_nasa_blue_earth.cpp
   render_with_reflections.cpp
@@ -51,7 +50,7 @@ add_custom_target(render_all_images
 add_custom_target(update_generated_images
   COMMAND ${CMAKE_COMMAND} -E echo "* updating generated images *"
   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/update_generated_images.sh ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/update_generated_images.sh
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/update_generated_images.sh -g -d ${CMAKE_SOURCE_DIR}/generated-images
 )
 
 # ------------------------------------------------------------------------------
