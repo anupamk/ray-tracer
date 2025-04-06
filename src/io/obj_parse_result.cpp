@@ -5,13 +5,12 @@
 #include "io/obj_parse_result.hpp"
 
 /// c++ includes
-#include <bits/std_abs.h>
-#include <stdlib.h>
 #include <functional>
 #include <limits>
 #include <memory>
 #include <optional>
 #include <sstream>
+#include <stdlib.h>
 #include <string>
 
 /// our includes

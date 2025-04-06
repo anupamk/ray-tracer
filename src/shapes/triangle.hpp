@@ -1,21 +1,22 @@
 #pragma once
 
 /// c++ includes
-#include <optional>                            // for optional
-#include <string>                              // for string
+#include <optional> // for optional
+#include <string>   // for string
 
 /// our includes
-#include "primitives/intersection_record.hpp"  // for intersection_records
-#include "primitives/tuple.hpp"                // for tuple
-#include "shapes/shape_interface.hpp"          // for shape_interface
+#include "primitives/intersection_record.hpp" // for intersection_records
+#include "primitives/tuple.hpp"               // for tuple
+#include "shapes/shape_interface.hpp"         // for shape_interface
 
 namespace raytracer
 {
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
-        template <typename T> class the_badge;
-        
+        template <typename T>
+        class the_badge;
+
         /*
          * this defines a triangle identified by 3 points (p1, p2 and p3)
          **/

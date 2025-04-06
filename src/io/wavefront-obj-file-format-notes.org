@@ -1,13 +1,11 @@
-* These are notes regarding WaveFront OBJ file format.
-
-** Brief Overview
+* Notes On WaveFront OBJ File Format
 
 The WaveFront =OBJ= file format is a useful standard for representing
 polygonal data. This format supports lines, polygons, free-form curves
 and surfaces.
 
 OBJ files are in ASCII / plain text format, which can be operated on
-by canonical tools f.e. emacs. Files using this have the =.obj=
+by canonical tools f.e. Emacs. Files using this have the =.obj=
 extension. A binary format, =MOD= also exists but it is proprietary.
 
 Current =OBJ= version is 3.0 which supersedes previous version 2.11.

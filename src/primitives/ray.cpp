@@ -14,9 +14,9 @@
 #include "intersection_record.hpp"
 #include "patterns/material.hpp"
 #include "shapes/shape_interface.hpp"
+#include "utils/badge.hpp"
 #include "utils/constants.hpp"
 #include "utils/execution_profiler.hpp"
-#include "utils/badge.hpp"
 
 namespace raytracer
 {

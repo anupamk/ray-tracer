@@ -41,10 +41,10 @@ static inline std::string log_ts_string()
  * 8 levels. that just seems too inordinate.
  */
 typedef enum {
-	LOG_LEVEL_FATAL = 1,
-	LOG_LEVEL_ERROR = 2,
-	LOG_LEVEL_INFO  = 3,
-	LOG_LEVEL_DEBUG = 4,
+        LOG_LEVEL_FATAL = 1,
+        LOG_LEVEL_ERROR = 2,
+        LOG_LEVEL_INFO  = 3,
+        LOG_LEVEL_DEBUG = 4,
 } log_level_t;
 
 /* where do we log ? */
@@ -93,6 +93,6 @@ extern log_level_t GLOBAL_LOG_LEVEL_NOW;
 
 /* convenience logging macros that we can call */
 #define LOG_DEBUG(fmt, ...) DO_LOG__(LOG_LEVEL_DEBUG, "DEBUG", fmt, ##__VA_ARGS__)
-#define LOG_INFO(fmt, ...)  DO_LOG__(LOG_LEVEL_INFO , "INFO" , fmt, ##__VA_ARGS__)
+#define LOG_INFO(fmt, ...) DO_LOG__(LOG_LEVEL_INFO, "INFO", fmt, ##__VA_ARGS__)
 #define LOG_ERROR(fmt, ...) DO_LOG__(LOG_LEVEL_ERROR, "ERROR", fmt, ##__VA_ARGS__)
 #define LOG_FATAL(fmt, ...) DO_LOG__(LOG_LEVEL_FATAL, "FATAL", fmt, ##__VA_ARGS__)

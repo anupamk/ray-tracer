@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <memory>
 
 /// our includes
@@ -133,5 +132,3 @@ namespace raytracer
                 }
         };
 } // namespace raytracer
-
-

@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// our includes
 #include "primitives/uv_point.hpp"
 
@@ -8,8 +7,8 @@ namespace raytracer
 {
         /// --------------------------------------------------------------------
         /// forward declarations
-        class tuple; 
-        
+        class tuple;
+
         /*
          * this file describes uv-mapper routines for various shapes. uv-mapper
          * is a function (in true sense of that word) mapping a 3d-point (on a

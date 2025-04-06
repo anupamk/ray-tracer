@@ -1,18 +1,20 @@
 #include "mmapped_file_reader.hpp"
 
+#include <cerrno>
+#include <cstdio>
+#include <cstring>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include <cerrno>
-#include <cstdio>
-#include <cstring>
 
 /// our includes
 #include "common/include/assert_utils.h"
 
-
-namespace file_utils
+/*
+ * this is the implementation of file_utils on the linux platform.
+ **/
+namespace platform_utils
 {
         /// --------------------------------------------------------------------
         /// it is a fatal runtime error to pass a non-existent or unreadable
@@ -156,4 +158,4 @@ namespace file_utils
                 return std::string{ret_fname};
         }
 
-} // namespace file_utils
+} // namespace platform_utils

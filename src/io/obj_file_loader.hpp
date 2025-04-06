@@ -6,17 +6,17 @@
  **/
 
 /// c++ includes
-#include <stddef.h>
-#include <stdint.h>
 #include <memory>
 #include <optional>
+#include <stddef.h>
+#include <stdint.h>
 #include <string>
 #include <string_view>
 #include <vector>
 
 /// our includes
-#include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_parse_result.hpp"
+#include "platform_utils/mmapped_file_reader.hpp"
 
 namespace raytracer
 {
@@ -103,7 +103,7 @@ namespace raytracer
         class obj_file_parser final
         {
             private:
-                file_utils::mmapped_file_reader obj_file;
+                platform_utils::mmapped_file_reader obj_file;
 
                 /// ------------------------------------------------------------
                 /// imagine, that the whole input file is looong string, with

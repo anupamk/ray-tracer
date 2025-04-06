@@ -62,7 +62,7 @@ class benchmark_t
         /// performed.
         void show_stats() const
         {
-                LOG_INFO("%s, results: {mean (ms): '%05zu', standard-deviation (ms): '%05zu'}",
+                LOG_INFO("%s, results: {mean (ms): '%05lld', standard-deviation (ms): '%05lld'}",
                          user_msg_.c_str(),     /// user-string
                          mean(),                /// mean-usec
                          standard_deviation()); /// stddev-usec
@@ -71,7 +71,7 @@ class benchmark_t
         /// --------------------------------------------------------------------
         /// execute the function to be benchmarked and collect the results
         template <typename Fun, typename... Args>
-        typename std::result_of<Fun(Args...)>::type benchmark(Fun&& fun, Args&&... args)
+        typename std::invoke_result<Fun, Args...>::type benchmark(Fun&& fun, Args&&... args)
         {
                 using result_t = typename std::invoke_result<Fun, Args...>::type;
                 std::vector<result_t> results;

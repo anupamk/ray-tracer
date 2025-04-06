@@ -7,8 +7,8 @@
 
 /// c++ includes
 #include <math.h>
-#include <stdint.h>
 #include <ostream>
+#include <stdint.h>
 #include <string>
 
 // our includes

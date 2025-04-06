@@ -1,10 +1,10 @@
 #pragma once
 
 /// c++ includes
-#include <stddef.h>
 #include <memory>
 #include <optional>
 #include <ostream>
+#include <stddef.h>
 #include <string>
 #include <vector>
 

@@ -14,8 +14,9 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
-        template <typename T> class the_badge;
-        
+        template <typename T>
+        class the_badge;
+
         /*
          * this defines an infinitely long or finite sized cylinder extending
          * along ±Y-axis having a unit radius.

@@ -1,10 +1,6 @@
 # ------------------------------------------------------------------------------
-# find sdl2 package : required for sdl2_canvas implementation
-INCLUDE(FindPkgConfig)
-
-# ------------------------------------------------------------------------------
 # find xcb package : required for online display of rendering progress
-PKG_SEARCH_MODULE(X11 REQUIRED x11)
+find_package(X11 REQUIRED)
 
 # ------------------------------------------------------------------------------
 # we have the following directory organization
@@ -17,11 +13,11 @@ PKG_SEARCH_MODULE(X11 REQUIRED x11)
 # |-- primitives        : ray, color, matrix etc. etc.
 # |-- shapes            : supported shapes f.e. plane, sphere, cube etc.
 # |-- utils             : various utilities f.e. benchmark, constants etc.
-# |-- file-utils        : file specific common utilities f.e. mmap etc.
+# |-- platform-utils    : platform specific common utilities f.e. mmap etc.
 # ------------------------------------------------------------------------------
 add_subdirectory(common)
 add_subdirectory(utils)
-add_subdirectory(file_utils)
+add_subdirectory(platform_utils)
 add_subdirectory(primitives)
 add_subdirectory(shapes)
 add_subdirectory(patterns)

@@ -1,7 +1,6 @@
 #include "patterns/cube_map_texture.hpp"
 
 /// c++ includes
-#include <bits/std_abs.h>
 #include <algorithm>
 #include <memory>
 

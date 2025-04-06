@@ -10,9 +10,9 @@
 
 /// c++ includes
 #include <algorithm>
-#include <sstream>
 #include <memory>
 #include <optional>
+#include <sstream>
 #include <string>
 
 /// our includes

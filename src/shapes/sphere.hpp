@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// c++ includes
 #include <memory>
 #include <optional>
@@ -17,8 +16,9 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
-        template <typename T> class the_badge;
-        
+        template <typename T>
+        class the_badge;
+
         /*
          * this defines an origin centered sphere.
          **/

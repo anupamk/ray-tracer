@@ -3,16 +3,16 @@
  **/
 
 /// c++ includes
-#include <stdint.h>
 #include <cstddef>
 #include <optional>
 #include <sstream>
+#include <stdint.h>
 #include <string>
 #include <string_view>
 
 /// our includes
-#include "file_utils/mmapped_file_reader.hpp"
 #include "io/canvas.hpp"
+#include "platform_utils/mmapped_file_reader.hpp"
 #include "primitives/color.hpp"
 #include "utils/execution_profiler.hpp"
 #include "utils/utils.hpp"
@@ -142,7 +142,7 @@ namespace raytracer
         {
                 PROFILE_SCOPE;
 
-                file_utils::mmapped_file_reader ppm_file(file_name);
+                platform_utils::mmapped_file_reader ppm_file(file_name);
 
                 /// --------------------------------------------------------------------
                 /// lets go spelunking

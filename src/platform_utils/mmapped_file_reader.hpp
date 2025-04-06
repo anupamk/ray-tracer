@@ -1,11 +1,11 @@
 #pragma once
 
-#include <sys/stat.h>
 #include <cstddef>
 #include <string>
 #include <string_view>
+#include <sys/stat.h>
 
-namespace file_utils
+namespace platform_utils
 {
         /*
          * this class implements 'infrastructure' for facilitating parsing input
@@ -71,6 +71,4 @@ namespace file_utils
         /// file where the input data is stored.
         std::string fill_file_with_data(std::string_view);
 
-} // namespace file_utils
-
-
+} // namespace platform_utils

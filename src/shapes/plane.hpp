@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// c++ includes
 #include <optional>
 #include <ostream>
@@ -16,8 +15,9 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
-        template <typename T> class the_badge;
-        
+        template <typename T>
+        class the_badge;
+
         /*
          * this defines a xz-plane
          **/

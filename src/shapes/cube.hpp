@@ -15,8 +15,9 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
-        template <typename T> class the_badge;
-        
+        template <typename T>
+        class the_badge;
+
         /*
          * this defines a cube with each side of 2 units length. origin is
          * centered within the cube such that its extremeties are at

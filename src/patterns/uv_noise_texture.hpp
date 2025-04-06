@@ -1,14 +1,13 @@
 #pragma once
 
-
 /// c++ includes
 #include <cstdint>
 
 /// our includes
-#include "primitives/color.hpp"
 #include "patterns/gradient_perlin_noise_pattern.hpp"
-#include "utils/utils.hpp"
 #include "patterns/uv_pattern_interface.hpp"
+#include "primitives/color.hpp"
+#include "utils/utils.hpp"
 
 namespace raytracer
 {

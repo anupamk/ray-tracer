@@ -30,6 +30,7 @@ function (generate_one_release_executable_target FNAME)
     PRIVATE common_utils
     PRIVATE rt_utils
     PRIVATE rt_file_utils
+    PRIVATE rt_thread_utils
     PRIVATE rt_primitives
     PRIVATE rt_shapes
     PRIVATE rt_patterns)

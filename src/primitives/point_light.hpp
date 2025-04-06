@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// c++ includes
 #include <ostream>
 #include <string>
@@ -37,5 +36,3 @@ namespace raytracer
         bool operator==(point_light const& lhs, point_light const& rhs);
 
 } // namespace raytracer
-
-

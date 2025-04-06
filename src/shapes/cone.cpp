@@ -5,7 +5,6 @@
 #include "shapes/cone.hpp"
 
 /// c++ includes
-#include <bits/std_abs.h>
 #include <cmath>
 #include <sstream>
 #include <string>

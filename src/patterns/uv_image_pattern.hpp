@@ -1,13 +1,12 @@
 #pragma once
 
-
 /// c++ includes
 #include <cstdint>
 
 /// our includes
 #include "io/canvas.hpp"
-#include "utils/utils.hpp"
 #include "patterns/uv_pattern_interface.hpp"
+#include "utils/utils.hpp"
 
 namespace raytracer
 {

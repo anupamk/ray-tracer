@@ -4,21 +4,22 @@
 #include "io/obj_file_loader.hpp"
 
 /// c++ includes
-#include <ctype.h>
 #include <algorithm>
 #include <array>
 #include <charconv>
-#include <sstream>
+#include <cstdlib>
+#include <ctype.h>
 #include <iterator>
 #include <memory>
 #include <optional>
+#include <sstream>
 #include <string>
 #include <string_view>
 
 /// our includes
 #include "common/include/logging.h"
-#include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_parse_result.hpp"
+#include "platform_utils/mmapped_file_reader.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/group.hpp"
 #include "shapes/triangle.hpp"
@@ -197,8 +198,7 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// this function is called to handle a non-whitespace character in the
-        /// input stream.
+        /// handle a non-whitespace character
         bool obj_file_parser::tokenizer_handle_non_ws_char(char const* data, ascii_token_t& tok) const
         {
                 tok.ts = ri;
@@ -224,8 +224,12 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// this function is called to handle a non-whitespace character in the
-        /// input stream.
+        /// handle a whitespace token i.e. *ONE* of these:
+        ///
+        ///    [' ', '\f', '\r', '\t', '\v']
+        ///
+        /// square-brackets just denote an array, and are not part of whitespace
+        /// token set.
         bool obj_file_parser::tokenizer_handle_ws_char(char const* data, ascii_token_t& tok) const
         {
                 tok = ascii_token_t{};
@@ -243,8 +247,7 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// this function is called to handle a comment character in the input
-        /// stream. just eat everything till we reach e.o.l
+        /// handle comment i.e. '#' token, eat everything till end-of-line
         bool obj_file_parser::tokenizer_handle_comment_char(char const* data, ascii_token_t& tok) const
         {
                 do {
@@ -256,7 +259,7 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// this function is called to handle a e.o.l i.e. a newline token
+        /// handle line continuation i.e. '\\' token
         bool obj_file_parser::tokenizer_handle_line_contd_char(char const* data, ascii_token_t& tok) const
         {
                 tok       = ascii_token_t{};
@@ -271,7 +274,7 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
-        /// this function is called to handle a e.o.l i.e. a newline token
+        /// handle new-line i.e. '\n' token
         bool obj_file_parser::tokenizer_handle_eol_char(char const* data, ascii_token_t& tok) const
         {
                 tok = ascii_token_t{};
@@ -590,12 +593,38 @@ namespace raytracer
                 /// when 'p' points to the 'val_end' it implies that all
                 /// characters in the token [val_begin...val_end] were used
                 /// to parse this value.
-                T ret        = {};
-                auto [p, ec] = std::from_chars(val_begin, val_end, ret);
-                if (p != val_end) {
-                        LOG_ERROR("bad token value:'%s'", std::string(tok_val).c_str());
+                T ret = {};
 
-                        return std::nullopt;
+                /*
+                 * note
+                 * ====
+                 * on MacOS llvm / clang++ does not yet (as of Apr 16, 2025)
+                 * support 'std::from_chars(...)' for 'double'.
+                 *
+                 * once that happens this can go away.
+                 *
+                 * although, this *looks* ugly, but it is ensconsed in a
+                 * 'constexpr' so, runtime penalty is not really there.
+                 **/
+                if constexpr (std::is_same_v<int32_t, T>) {
+                        auto [p, ec] = std::from_chars(val_begin, val_end, ret);
+
+                        if (p != val_end) {
+                                LOG_ERROR("bad token value:'%s'", std::string(tok_val).c_str());
+                                return std::nullopt;
+                        }
+                } else if constexpr (std::is_same_v<double, T>) {
+                        const char* tok_begin = val_begin;
+                        char* tok_end         = const_cast<char*>(tok_begin);
+
+                        ret = strtod(tok_begin, &tok_end);
+
+                        if (tok_end != val_end) {
+                                LOG_ERROR("bad token value:'%s'", std::string(tok_val).c_str());
+                                return std::nullopt;
+                        }
+                } else {
+                        static_assert(std::is_arithmetic_v<T> == false, "bad usage. type is not arithmetic");
                 }
 
                 return ret;

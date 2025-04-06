@@ -1,13 +1,12 @@
 #pragma once
 
-
 /// c++ includes
-#include <stdint.h>
 #include <algorithm>
 #include <cfloat>
 #include <memory>
 #include <optional>
 #include <ostream>
+#include <stdint.h>
 #include <string>
 #include <vector>
 
@@ -136,5 +135,3 @@ namespace raytracer
                                                                   0.0);     /// v
 
 } // namespace raytracer
-
-

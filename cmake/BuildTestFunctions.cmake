@@ -53,6 +53,7 @@ function (____generate_one_test_target file_name)
     PRIVATE common_utils
     PRIVATE rt_utils
     PRIVATE rt_file_utils
+    PRIVATE rt_thread_utils
     PRIVATE rt_primitives
     PRIVATE rt_shapes
     PRIVATE rt_patterns

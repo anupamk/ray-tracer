@@ -30,6 +30,7 @@
 #include "io/render_params.hpp"
 #include "io/world.hpp"
 #include "io/xcb_display.hpp"
+#include "platform_utils/thread_utils.hpp"
 #include "primitives/color.hpp"
 
 namespace raytracer
@@ -133,14 +134,13 @@ namespace raytracer
                                                            std::ref(x11_display)); /// x11-display
 
                         /// ----------------------------------------------------
-                        /// force || pin threads to cores...
-                        cpu_set_t cpuset;
-                        CPU_ZERO(&cpuset);
-                        CPU_SET(i, &cpuset);
+                        /// try to force || pin threads to cores...
+                        auto retval = platform_utils::thread_utils::set_thread_affinity(
+                                rendering_threads[i].native_handle(), i);
 
-                        auto retval = pthread_setaffinity_np(rendering_threads[i].native_handle(),
-                                                             sizeof(cpuset), &cpuset);
                         if (retval != 0) {
+                                /// --------------------------------------------
+                                /// an error for sure. not a fatal one though.
                                 LOG_ERROR("failed to set affinity of thread:%d to core:%d", i, i);
                         }
                 }

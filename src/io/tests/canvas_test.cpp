@@ -1,10 +1,10 @@
 /// c++ includes
-#include <stdint.h>
-#include <unistd.h>
 #include <fstream>
 #include <optional>
+#include <stdint.h>
 #include <string>
 #include <string_view>
+#include <unistd.h>
 #include <vector>
 
 /// 3rd-party includes
@@ -13,9 +13,9 @@
 
 /// our includes
 #include "common/include/logging.h"
-#include "file_utils/mmapped_file_reader.hpp"
 #include "io/canvas.hpp"
 #include "patterns/uv_image_pattern.hpp"
+#include "platform_utils/mmapped_file_reader.hpp"
 #include "primitives/color.hpp"
 #include "primitives/uv_point.hpp"
 #include "utils/constants.hpp"
@@ -116,7 +116,7 @@ TEST_CASE("canvas::load_from_file(...) with invalid magic")
 0 0 0
 )""";
 
-        std::string ppm_fname = file_utils::fill_file_with_data(ppm_data);
+        std::string ppm_fname = platform_utils::fill_file_with_data(ppm_data);
         CHECK(ppm_fname.size() != 0);
 
         auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);
@@ -139,7 +139,7 @@ TEST_CASE("canvas::load_from_file(...) check canvas width and height")
 0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
 )""";
 
-        std::string ppm_fname = file_utils::fill_file_with_data(ppm_data);
+        std::string ppm_fname = platform_utils::fill_file_with_data(ppm_data);
         CHECK(ppm_fname.size() != 0);
 
         auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);
@@ -165,7 +165,7 @@ TEST_CASE("canvas::load_from_file(...) validate pixel data")
 255 255 0  0 255 255  255 0 255  127 127 127
 )""";
 
-        std::string ppm_fname = file_utils::fill_file_with_data(ppm_data);
+        std::string ppm_fname = platform_utils::fill_file_with_data(ppm_data);
         CHECK(ppm_fname.size() != 0);
 
         auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);
@@ -225,7 +225,7 @@ TEST_CASE("canvas::load_from_file(...) ignore comment lines")
 255 0 255
 )""";
 
-        std::string ppm_fname = file_utils::fill_file_with_data(ppm_data);
+        std::string ppm_fname = platform_utils::fill_file_with_data(ppm_data);
         CHECK(ppm_fname.size() != 0);
 
         auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);
@@ -269,7 +269,7 @@ TEST_CASE("canvas::load_from_file(...) allows an RGB triple to span lines")
 204
 )""";
 
-        std::string ppm_fname = file_utils::fill_file_with_data(ppm_data);
+        std::string ppm_fname = platform_utils::fill_file_with_data(ppm_data);
         CHECK(ppm_fname.size() != 0);
 
         auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);
@@ -310,7 +310,7 @@ TEST_CASE("canvas::load_from_file(...) parsing respects the scale setting")
 75 50 25  0 0 0
 )""";
 
-        std::string ppm_fname = file_utils::fill_file_with_data(ppm_data);
+        std::string ppm_fname = platform_utils::fill_file_with_data(ppm_data);
         CHECK(ppm_fname.size() != 0);
 
         auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);
@@ -364,7 +364,7 @@ TEST_CASE("uv_image checkers patterned canvas")
 9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8
 )""";
 
-        std::string ppm_fname = file_utils::fill_file_with_data(ppm_data);
+        std::string ppm_fname = platform_utils::fill_file_with_data(ppm_data);
         CHECK(ppm_fname.size() != 0);
 
         auto maybe_ppm_canvas = RT::canvas::load_from_file(ppm_fname);

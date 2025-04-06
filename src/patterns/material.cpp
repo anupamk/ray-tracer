@@ -18,7 +18,7 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// forward declarations
         class shape_interface;
-        
+
         /// --------------------------------------------------------------------
         /// a default material has a solid pattern
         material::material()

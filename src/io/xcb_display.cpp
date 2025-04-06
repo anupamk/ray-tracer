@@ -5,9 +5,9 @@
 #include "io/xcb_display.hpp"
 
 /// c++ includes
+#include <memory>
 #include <stddef.h>
 #include <xcb/xproto.h>
-#include <memory>
 
 /// our inclues
 #include "common/include/assert_utils.h"

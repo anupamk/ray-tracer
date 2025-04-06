@@ -14,8 +14,8 @@
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/triangle.hpp"
-#include "utils/utils.hpp"
 #include "utils/constants.hpp"
+#include "utils/utils.hpp"
 
 log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_FATAL;
 
