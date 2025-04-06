@@ -5,10 +5,10 @@
 #include "patterns/stock_materials.hpp"
 
 /// c++ includes
-#include <time.h>
 #include <limits>
 #include <memory>
 #include <random>
+#include <time.h>
 #include <utility>
 
 /// our includes

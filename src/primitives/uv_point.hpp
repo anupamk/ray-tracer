@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// c++ includes
 #include <ostream>
 #include <string>
@@ -45,5 +44,3 @@ namespace raytracer
         std::ostream& operator<<(std::ostream& os, uv_point const& a);
 
 } // namespace raytracer
-
-

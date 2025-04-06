@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// c++ includes
 #include <cmath>
 #include <memory>
@@ -9,8 +8,8 @@
 
 /// our includes
 #include "patterns/binary_pattern.hpp"
-#include "primitives/color.hpp"
 #include "patterns/pattern_interface.hpp"
+#include "primitives/color.hpp"
 
 namespace raytracer
 {

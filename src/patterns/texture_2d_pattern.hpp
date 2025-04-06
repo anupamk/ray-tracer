@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// c++ includes
 #include <functional>
 #include <memory>

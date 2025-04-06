@@ -4,7 +4,6 @@
 #include "shapes/plane.hpp"
 
 /// c++ includes
-#include <bits/std_abs.h>
 #include <optional>
 #include <sstream>
 #include <string>

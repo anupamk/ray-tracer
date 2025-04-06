@@ -5,7 +5,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 
-
 /// 3rdparty testing library
 #include "common/include/logging.h"
 #include "io/phong_illumination.hpp"

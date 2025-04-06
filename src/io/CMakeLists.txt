@@ -1,4 +1,29 @@
+# ==============================================================================
+# ray tracer xcb interface
+
 # ------------------------------------------------------------------------------
+# find xcb package : required for online display of rendering progress
+find_package(X11 REQUIRED)
+
+add_library(rt_io_xcb_display SHARED
+  xcb_display.hpp
+  xcb_display.cpp)
+
+target_include_directories(rt_io_xcb_display
+  PUBLIC
+  ${X11_X11_INCLUDE_PATH})
+
+target_link_libraries(rt_io_xcb_display
+  # ----------------------------------------------------------------------------
+  # 3rd-party libraries
+  PRIVATE ${X11_X11_LIB}
+  PRIVATE ${X11_X11_xcb_LIB}
+
+  # ----------------------------------------------------------------------------
+  # our libraries
+  PRIVATE common_utils)
+
+# ==============================================================================
 # ray tracer io specific routines
 add_library(rt_io SHARED
   camera.cpp
@@ -18,23 +43,21 @@ add_library(rt_io SHARED
   world.cpp
   world.hpp
   render_params.hpp
-  render_params.cpp
-  xcb_display.hpp
-  xcb_display.cpp)
+  render_params.cpp)
 
 target_link_libraries(rt_io
   # ----------------------------------------------------------------------------
   # 3rd-party libraries
   PRIVATE concurrent-queue
   PRIVATE pthread
-  PRIVATE ${X11_LIBRARIES}
 
   # ----------------------------------------------------------------------------
   # our libraries
   PRIVATE common_utils
   PRIVATE rt_utils
   PRIVATE rt_primitives
-  PRIVATE rt_shapes)
+  PRIVATE rt_shapes
+  PRIVATE rt_io_xcb_display)
 
 augment_execution_profiling(rt_io)
 

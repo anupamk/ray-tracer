@@ -6,10 +6,10 @@
  **/
 
 /// c++ includes
-#include <stdint.h>
 #include <functional>
 #include <memory>
 #include <optional>
+#include <stdint.h>
 #include <string>
 #include <vector>
 

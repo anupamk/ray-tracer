@@ -7,22 +7,23 @@
 #pragma once
 
 /// c++ includes
-#include <memory>                              // for shared_ptr
-#include <optional>                            // for optional
-#include <string>                              // for string
+#include <memory>   // for shared_ptr
+#include <optional> // for optional
+#include <string>   // for string
 
 /// our includes
-#include "primitives/intersection_record.hpp"  // for intersection_records
-#include "primitives/tuple.hpp"                // for tuple
-#include "shapes/shape_interface.hpp"          // for shape_interface
+#include "primitives/intersection_record.hpp" // for intersection_records
+#include "primitives/tuple.hpp"               // for tuple
+#include "shapes/shape_interface.hpp"         // for shape_interface
 
 namespace raytracer
 {
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
-        template <typename T> class the_badge;
-        
+        template <typename T>
+        class the_badge;
+
         /*
          * @brief
          *    an operation that can be performed on a csg_shape that yields a

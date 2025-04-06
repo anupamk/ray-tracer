@@ -1,38 +1,85 @@
 # ------------------------------------------------------------------------------
 # minimum cmake version required
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.20...4.0)
 
 # ------------------------------------------------------------------------------
-# only support "Linux" platform (for now)
-if (NOT ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
+# only 'Linux' or 'Darwin' systems are supported
+if (NOT
+    ((${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux") OR
+      (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+    ))
   message("unsupported platform: ${CMAKE_HOST_SYSTEM_NAME}")
   message(FATAL_ERROR "die die die !!!")
 endif()
 
 # ------------------------------------------------------------------------------
-# possible options 'Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'
+# what release type we want ? supported ones are:
+#    - 'Debug'
+#    - 'Release'
+#    - 'RelWithDebInfo'
+#    - 'MinSizeRel'
+# pick one.
 set(CMAKE_BUILD_TYPE Release)
 
 # ------------------------------------------------------------------------------
-# put all cmake modules together instead of they being scattered all
-# over the place
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+# what compiler toolchain we want to use ? supported ones are:
+#    - "LLVM", or
+#    - "GNU"
+# pick one
+set(USE_TOOLCHAIN "LLVM")
+
+# ==============================================================================
+# with the basics done, everything else should be pretty much
+# automated.
+#
+# lets just get on with it.
+# ==============================================================================
 
 # ------------------------------------------------------------------------------
-# setup the toolchain, options 'LLVM', 'GNU'
-set (RT_TOOLCHAIN "LLVM")
+# put all cmake modules together instead of they being scattered all
+# over the place.
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-if ("${RT_TOOLCHAIN}" STREQUAL "LLVM")
-  set(CMAKE_TOOLCHAIN_FILE ConfigureLLVM)
-elseif ("${RT_TOOLCHAIN}" STREQUAL "GNU")
-  set(CMAKE_TOOLCHAIN_FILE ConfigureGNU)
+if (("${USE_TOOLCHAIN}" STREQUAL "LLVM") AND
+    ("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin"))
+
+  # ----------------------------------------------------------------------------
+  # llvm+darwin
+  set(CMAKE_TOOLCHAIN_FILE ConfigureLLVMForDarwin)
+
+elseif (("${USE_TOOLCHAIN}" STREQUAL "GNU") AND
+    ("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin"))
+
+  # ----------------------------------------------------------------------------
+  # gnu+darwin
+  set(CMAKE_TOOLCHAIN_FILE ConfigureGNUForDarwin)
+
+elseif (("${USE_TOOLCHAIN}" STREQUAL "LLVM") AND
+    ("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Linux"))
+
+  # ----------------------------------------------------------------------------
+  # llvm+linux
+  set(CMAKE_TOOLCHAIN_FILE ConfigureLLVMForLinux)
+
+elseif (("${USE_TOOLCHAIN}" STREQUAL "GNU") AND
+    ("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Linux"))
+
+  # ----------------------------------------------------------------------------
+  # gnu+linux
+  set(CMAKE_TOOLCHAIN_FILE ConfigureGNUForLinux)
+
 else()
-  message(SEND_ERROR "Aieee !!! Unknown toolchain '${RT_TOOLCHAIN}'")
-  message(SEND_ERROR "Expected 'LLVM' or 'GNU'")
-  message(FATAL_ERROR "die die die")
+
+  # ----------------------------------------------------------------------------
+  # fatal-error: unsupported combination
+  message("Error: Unsupported Configuration")
+  message("Toolchain: ${USE_TOOLCHAIN}, system-name: ${CMAKE_HOST_SYSTEM_NAME}")
+  message(FATAL_ERROR "die die die !!!")
+
 endif()
 
-message("Using '${RT_TOOLCHAIN}' toolchain in '${CMAKE_BUILD_TYPE}' mode")
+message("tool-chain-file:'${CMAKE_TOOLCHAIN_FILE}', system-name: '${CMAKE_HOST_SYSTEM_NAME}'")
+message("using '${USE_TOOLCHAIN}' toolchain in '${CMAKE_BUILD_TYPE}' mode")
 
 # ------------------------------------------------------------------------------
 # project name
@@ -45,9 +92,9 @@ include(CTest)
 enable_testing()
 
 # ------------------------------------------------------------------------------
-# colorless verbose builds
-set(CMAKE_COLOR_MAKEFILE 0)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+# colorless + verbose builds
+set(CMAKE_COLOR_MAKEFILE OFF)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # ------------------------------------------------------------------------------
 # create the compilation-database (compile_commands.json)
@@ -61,7 +108,7 @@ add_subdirectory(3rd-party)
 
 # ------------------------------------------------------------------------------
 # enable (ON) || disable (OFF) execution profiling
-set(ENABLE_EXECUTION_PROFILING OFF)
+set(ENABLE_EXECUTION_PROFILING ON)
 
 # ------------------------------------------------------------------------------
 # tracy : realtime high-resolution profiler
@@ -71,23 +118,25 @@ if (ENABLE_EXECUTION_PROFILING)
   set(TRACY_ENABLE ON CACHE BOOL "enable profiling")
   set(TRACY_CALLSTACK ON CACHE BOOL "collect call stacks")
 
+  # ----------------------------------------------------------------------------
+  # for TracyClient or alias Tracy::TracyClient
   add_subdirectory(3rd-party/tracy)
 endif()
 
 # ------------------------------------------------------------------------------
-# augment a library or executable target with tracy-execution-profiler
+# augment an executable or library target with tracy-execution-profiler
 # artifacts
-function (augment_execution_profiling EXEC_OR_LIB)
+function (augment_execution_profiling EXECUTABLE_OR_LIB)
 
   if (ENABLE_EXECUTION_PROFILING)
 
-    target_include_directories(${EXEC_OR_LIB}
+    target_include_directories(${EXECUTABLE_OR_LIB}
       PRIVATE TracyClient)
 
-    target_link_libraries(${EXEC_OR_LIB}
+    target_link_libraries(${EXECUTABLE_OR_LIB}
       PRIVATE TracyClient)
 
-    target_compile_definitions(${EXEC_OR_LIB}
+    target_compile_definitions(${EXECUTABLE_OR_LIB}
       PRIVATE TRACY_ENABLE
       PRIVATE TRACY_CALLSTACK)
 

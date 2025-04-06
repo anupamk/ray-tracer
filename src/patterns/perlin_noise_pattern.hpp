@@ -1,6 +1,5 @@
 #pragma once
 
-
 /// c++ includes
 #include <algorithm>
 #include <array>
@@ -10,11 +9,11 @@
 #include <vector>
 
 /// our includes
-#include "utils/constants.hpp"
 #include "patterns/pattern_interface.hpp"
 #include "patterns/perlin_noise.hpp"
 #include "patterns/solid_pattern.hpp"
 #include "primitives/tuple.hpp"
+#include "utils/constants.hpp"
 
 namespace raytracer
 {

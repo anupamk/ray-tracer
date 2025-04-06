@@ -5,8 +5,8 @@
 #include "io/canvas.hpp"
 
 /// c++ includes
-#include <math.h>
 #include <cstddef>
+#include <math.h>
 #include <memory>
 #include <sstream>
 #include <string>

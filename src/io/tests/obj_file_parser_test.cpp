@@ -11,9 +11,9 @@
 
 /// our includes
 #include "common/include/logging.h"
-#include "file_utils/mmapped_file_reader.hpp"
 #include "io/obj_file_loader.hpp"
 #include "io/obj_parse_result.hpp"
+#include "platform_utils/mmapped_file_reader.hpp"
 #include "primitives/tuple.hpp"
 #include "shapes/group.hpp"
 #include "shapes/shape_interface.hpp"
@@ -33,7 +33,7 @@ TEST_CASE("obj_file_loader::parse(...) trivial")
 lamb with fleece as white as snow
 and # some comment to spice things up
       wherever
-   mary 	went
+   mary		went
 the lamb \
 	was sure to
 
@@ -43,7 +43,7 @@ the lamb \
 
 )""";
 
-        std::string fname = file_utils::fill_file_with_data(obj_data);
+        std::string fname = platform_utils::fill_file_with_data(obj_data);
 
         RT::obj_file_parser p1(fname);
         auto parse_result = p1.parse();
@@ -74,7 +74,7 @@ v 1 0 0
 v 1 1 0
 )""";
 
-        std::string fname = file_utils::fill_file_with_data(obj_data);
+        std::string fname = platform_utils::fill_file_with_data(obj_data);
 
         RT::obj_file_parser p1(fname);
         auto parse_result = p1.parse();
@@ -121,7 +121,7 @@ f 1 2 3
 f 1 3 4
 )""";
 
-        std::string fname = file_utils::fill_file_with_data(obj_data);
+        std::string fname = platform_utils::fill_file_with_data(obj_data);
 
         RT::obj_file_parser p1(fname);
         auto parse_result = p1.parse();
@@ -186,7 +186,7 @@ v 0 2 0
 f 1 2 3 4 5
 )""";
 
-        std::string fname = file_utils::fill_file_with_data(obj_data);
+        std::string fname = platform_utils::fill_file_with_data(obj_data);
 
         RT::obj_file_parser p1(fname);
         auto parse_result = p1.parse();
@@ -256,7 +256,7 @@ g SecondGroup
 f 1 3 4
 )""";
 
-        std::string fname = file_utils::fill_file_with_data(obj_data);
+        std::string fname = platform_utils::fill_file_with_data(obj_data);
 
         RT::obj_file_parser p1(fname);
         auto parse_result = p1.parse();
@@ -325,7 +325,7 @@ vn 1 2 3
 vn 1 1 0
 )""";
 
-        std::string fname = file_utils::fill_file_with_data(obj_data);
+        std::string fname = platform_utils::fill_file_with_data(obj_data);
 
         RT::obj_file_parser p1(fname);
         auto parse_result = p1.parse();
@@ -381,7 +381,7 @@ f 1//3 2//1 3//2
 f 1/0/3 2/102/1 3/14/2
 )""";
 
-        std::string fname = file_utils::fill_file_with_data(obj_data);
+        std::string fname = platform_utils::fill_file_with_data(obj_data);
 
         RT::obj_file_parser p1(fname);
         auto parse_result = p1.parse();

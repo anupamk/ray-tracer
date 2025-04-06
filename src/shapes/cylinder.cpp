@@ -5,7 +5,6 @@
 #include "shapes/cylinder.hpp"
 
 /// c++ includes
-#include <bits/std_abs.h>
 #include <algorithm>
 #include <sstream>
 #include <string>

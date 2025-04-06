@@ -1,13 +1,12 @@
 #pragma once
 
-
 /// c++ includes
 #include <sstream>
 #include <string>
 
 /// our includes
-#include "primitives/color.hpp"
 #include "patterns/pattern_interface.hpp"
+#include "primitives/color.hpp"
 
 namespace raytracer
 {
