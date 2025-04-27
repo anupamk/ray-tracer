@@ -6,6 +6,7 @@
 /// c++ includes
 #include <algorithm>
 #include <chrono>
+#include <cinttypes>
 #include <functional>
 #include <numeric>
 #include <sstream>
@@ -62,7 +63,8 @@ class benchmark_t
         /// performed.
         void show_stats() const
         {
-                LOG_INFO("%s, results: {mean (ms): '%05lld', standard-deviation (ms): '%05lld'}",
+                LOG_INFO("%s, results: {mean (ms): '%05" PRIu64 "', "
+                         "standard-deviation (ms): '%05" PRIu64 "'}",
                          user_msg_.c_str(),     /// user-string
                          mean(),                /// mean-usec
                          standard_deviation()); /// stddev-usec
@@ -80,7 +82,7 @@ class benchmark_t
                 uint32_t const n = num_iter_ + throw_away_;
 
                 for (uint32_t i = 0; i < n; i++) {
-                        LOG_INFO("running %04d / %04d", i + 1, n);
+                        LOG_INFO("running %04" PRIu32 " / %04" PRIu32 "", i + 1, n);
 
                         /// measure execution
                         auto start_time = std::chrono::steady_clock::now();

@@ -2,7 +2,14 @@
 #include <cstdio>
 
 /// our includes
+#include "common/include/logging.h"
 #include "utils/execution_profiler.hpp"
+
+/*
+ * select default logging level depending on type of build. this can be changed
+ * later to more appropriate values.
+ **/
+log_level_t GLOBAL_LOG_LEVEL_NOW = LOG_LEVEL_INFO;
 
 /**
  * @brief

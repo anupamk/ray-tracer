@@ -1,12 +1,35 @@
 # -*- cmake -*-
 
-# ------------------------------------------------------------------------------
-# set gcc options
-# ------------------------------------------------------------------------------
+# ==============================================================================
+# setup the gnu-tool-chain binaries
+# ==============================================================================
+SET (CMAKE_C_COMPILER               "/usr/bin/gcc-14")
+SET (CMAKE_CXX_COMPILER             "/usr/bin/g++-14")
+SET (CMAKE_LINKER                   "/usr/bin/ld")
+SET (CMAKE_AR                       "/usr/bin/gcc-ar-14")
+SET (CMAKE_NM                       "/usr/bin/gcc-nm-14")
+SET (CMAKE_OBJDUMP                  "/usr/bin/objdump")
+SET (CMAKE_RANLIB                   "/usr/bin/ranlib")
+
+# hopefully not much of a change below this line is needed
+# ==============================================================================
 
 # ------------------------------------------------------------------------------
-# for 'RAYTRACER_C_COMMON_FLAGS'
-string (CONCAT RAYTRACER_C_COMMON_FLAGS
+# include-what-you-use: the right amount of includes in sources for
+# FEARLESS development !
+#
+# see: https://github.com/include-what-you-use/include-what-you-use
+# for some more information, and the reasons why this becomes useful.
+SET (ENABLE_INCLUDE_WHAT_YOU_USE OFF)
+
+if (ENABLE_INCLUDE_WHAT_YOU_USE)
+  SET (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "include-what-you-use;-Xiwyu;--comment_style=none;")
+endif()
+
+# ==============================================================================
+# set gcc options
+# ==============================================================================
+string (CONCAT RT_C_COMMON_FLAGS
   " -Wall"
   " -Werror"
   " -std=c11"                   # _C_FLAGS_
@@ -18,13 +41,13 @@ string (CONCAT RAYTRACER_C_COMMON_FLAGS
   # add more _CFLAGS_ there ↑
 )
 
-string (CONCAT RAYTRACER_C_MIN_SIZE_REL_FLAGS
+string (CONCAT RT_C_MIN_SIZE_REL_FLAGS
   " -Os"
 
   # add more _CFLAGS_ there ↑
 )
 
-string (CONCAT RAYTRACER_C_REL_FLAGS
+string (CONCAT RT_C_REL_FLAGS
   " -O3"
   " -march=native"
   " -ffast-math"
@@ -32,20 +55,10 @@ string (CONCAT RAYTRACER_C_REL_FLAGS
   # add more _CFLAGS_ there ↑
 )
 
-SET (CMAKE_C_COMPILER                  "/usr/bin/gcc")
-SET (CMAKE_C_FLAGS                     "${RAYTRACER_C_COMMON_FLAGS} ${CMAKE_C_FLAGS}")
-SET (CMAKE_C_FLAGS_DEBUG               "${CMAKE_C_FLAGS_DEBUG}")
-SET (CMAKE_C_FLAGS_MINSIZEREL          "${RAYTRACER_C_COMMON_FLAGS} ${RAYTRACER_C_MIN_SIZE_REL_FLAGS} ${CMAKE_C_FLAGS_MINSIZEREL}")
-SET (CMAKE_C_FLAGS_RELEASE             "${RAYTRACER_C_COMMON_FLAGS} ${RAYTRACER_C_REL_FLAGS} ${CMAKE_C_FLAGS_RELEASE}")
-SET (CMAKE_C_FLAGS_RELWITHDEBINFO      "${RAYTRACER_C_COMMON_FLAGS} ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
-
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # set g++ options
-# ------------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------------
-# for 'CMAKE_CXX_FLAGS_INIT'
-string (CONCAT RAYTRACER_CXX_COMMON_FLAGS
+# ==============================================================================
+string (CONCAT RT_CXX_COMMON_FLAGS
   " -Wall"
   " -Werror"
   " -std=c++17"                 # _CXX_FLAGS_
@@ -55,13 +68,13 @@ string (CONCAT RAYTRACER_CXX_COMMON_FLAGS
   # add more _CXXFLAGS_ there ↑
 )
 
-string (CONCAT RAYTRACER_CXX_MIN_SIZE_REL_FLAGS
+string (CONCAT RT_CXX_MIN_SIZE_REL_FLAGS
   " -Os"
 
   # add more _CFLAGS_ there ↑
 )
 
-string (CONCAT RAYTRACER_CXX_REL_FLAGS
+string (CONCAT RT_CXX_REL_FLAGS
   " -O3"
   " -march=native"
   " -ffast-math"
@@ -69,17 +82,8 @@ string (CONCAT RAYTRACER_CXX_REL_FLAGS
   # add more _CFLAGS_ there ↑
 )
 
-SET (CMAKE_CXX_COMPILER                  "/usr/bin/g++")
-SET (CMAKE_CXX_FLAGS                     "${CMAKE_CXX_FLAGS}")
-SET (CMAKE_CXX_FLAGS_DEBUG               "${CMAKE_CXX_FLAGS_DEBUG}")
-SET (CMAKE_CXX_FLAGS_MINSIZEREL          "${RAYTRACER_CXX_COMMON_FLAGS} ${RAYTRACER_CXX_MIN_SIZE_REL_FLAGS} ${CMAKE_CXX_FLAGS_MINSIZEREL}")
-SET (CMAKE_CXX_FLAGS_RELEASE             "${RAYTRACER_CXX_COMMON_FLAGS} ${RAYTRACER_CXX_REL_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
-SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO      "${RAYTRACER_CXX_COMMON_FLAGS} ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-
-# ------------------------------------------------------------------------------
-# set linker and other options
-SET (CMAKE_AR                   "/usr/bin/ar")
-SET (CMAKE_LINKER               "/usr/bin/ld")
-SET (CMAKE_NM                   "/usr/bin/nm")
-SET (CMAKE_OBJDUMP              "/usr/bin/objdump")
-SET (CMAKE_RANLIB               "/usr/bin/ranlib")
+# ==============================================================================
+# set linker options
+# ==============================================================================
+SET (CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-as-needed")
+SET (CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed")

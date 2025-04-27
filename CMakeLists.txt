@@ -26,7 +26,7 @@ set(CMAKE_BUILD_TYPE Release)
 #    - "LLVM", or
 #    - "GNU"
 # pick one
-set(USE_TOOLCHAIN "LLVM")
+set(USE_TOOLCHAIN "GNU")
 
 # ==============================================================================
 # with the basics done, everything else should be pretty much
@@ -108,7 +108,7 @@ add_subdirectory(3rd-party)
 
 # ------------------------------------------------------------------------------
 # enable (ON) || disable (OFF) execution profiling
-set(ENABLE_EXECUTION_PROFILING ON)
+set(ENABLE_EXECUTION_PROFILING OFF)
 
 # ------------------------------------------------------------------------------
 # tracy : realtime high-resolution profiler

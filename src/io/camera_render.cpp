@@ -303,7 +303,7 @@ namespace raytracer
                  * each thread picks a new 'work_item' from the work-queue once
                  * it is done with the current one.
                  **/
-                static constexpr uint32_t PIXELS_PER_WORK_ITEM = 30;
+                static constexpr uint32_t PIXELS_PER_WORK_ITEM = 256;
 
                 const long total_pixel_count        = horiz_size_ * vert_size_;
                 const auto work_items_and_remainder = std::div(total_pixel_count, PIXELS_PER_WORK_ITEM);

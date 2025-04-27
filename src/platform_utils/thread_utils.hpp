@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <pthread.h>
 
 namespace platform_utils
 {
@@ -25,7 +26,7 @@ namespace platform_utils
                  * @return
                  *    '0' on success.
                  **/
-                static int set_thread_affinity(void* native_thread_handle, uint16_t cpu_id);
+                static int set_thread_affinity(pthread_t thread_handle, uint16_t cpu_id);
         };
 
 } // namespace platform_utils
