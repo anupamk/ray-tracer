@@ -15,6 +15,7 @@
 #include "primitives/intersection_record.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
+#include "shapes/aabb.hpp"
 #include "utils/badge.hpp"
 #include "utils/constants.hpp"
 #include "utils/utils.hpp"
@@ -64,6 +65,17 @@ namespace raytracer
                 }
 
                 return false;
+        }
+
+        /// --------------------------------------------------------------------
+        /// return the bounding box for this instance of the cone.
+        aabb cone::bounds_of() const
+        {
+                auto limit  = std::max(std::fabs(min_y), std::fabs(max_y));
+                auto min_pt = create_point(-limit, min_y, -limit);
+                auto max_pt = create_point(limit, max_y, limit);
+
+                return aabb(min_pt, max_pt);
         }
 
         /// --------------------------------------------------------------------

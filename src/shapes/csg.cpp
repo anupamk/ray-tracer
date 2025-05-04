@@ -16,6 +16,7 @@
 #include "common/include/assert_utils.h"
 #include "primitives/intersection_record.hpp"
 #include "primitives/ray.hpp"
+#include "shapes/aabb.hpp"
 #include "utils/badge.hpp"
 #include "utils/constants.hpp"
 #include "utils/utils.hpp"
@@ -93,6 +94,13 @@ namespace raytracer
             , csg_op(csg_op)
             , r_shape(right)
         {
+                /// ------------------------------------------------------------
+                /// update the bounding box encompassing the two shapes
+                auto ls_aabb = left->parent_space_bounds_of(left);
+                bounding_box_.add_box(ls_aabb);
+
+                auto rs_aabb = right->parent_space_bounds_of(right);
+                bounding_box_.add_box(rs_aabb);
         }
 
         std::shared_ptr<shape_interface> csg_shape::left() const
@@ -162,6 +170,13 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// return the bounding box for this instance of the csg_shape
+        aabb csg_shape::bounds_of() const
+        {
+                return bounding_box_;
+        }
+
+        /// --------------------------------------------------------------------
         /// does this shape include the other ? returns 'true' if it does,
         /// 'false' otherwise.
         bool csg_shape::includes(std::shared_ptr<shape_interface const> const& other) const
@@ -211,6 +226,10 @@ namespace raytracer
         /// compute ray-csg shape intersections
         std::optional<intersection_records> csg_shape::compute_intersections_(ray_t const& R) const
         {
+                if (bounding_box_.intersects(R) == false) {
+                        return std::nullopt;
+                }
+
                 auto l_xs = R.intersect(this->l_shape);
                 auto r_xs = R.intersect(this->r_shape);
 

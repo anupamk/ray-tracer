@@ -236,7 +236,7 @@ namespace raytracer
                  *    (-1,1)  |    (1,1)
                  *       x----+----x
                  *       |    |    |
-                 *  -----+----x----+----- (xy-center-color)
+                 *  -----+----o----+----- ('o' ==> xy-center-color)
                  *       |    |    |
                  *       x----+----x
                  *    (-1,-1) |    (1, -1)
@@ -246,16 +246,18 @@ namespace raytracer
                  * is *significant*, with dx[i] and dy[i] *together* defining
                  * a single point of a pixel as described above.
                  **/
-                static constexpr uint8_t points_per_pixel = 5;
-                static constexpr double dx[]              = {1.0, 1.0, -1.0, -1.0};
-                static constexpr double dy[]              = {1.0, -1.0, -1.0, 1.0};
+                static constexpr uint8_t corners_per_pixel = 4;
+                static constexpr uint8_t center_pixel      = 1;
+                static constexpr uint8_t points_per_pixel  = corners_per_pixel + center_pixel;
+                static constexpr double dx[]               = {1.0, 1.0, -1.0, -1.0};
+                static constexpr double dy[]               = {1.0, -1.0, -1.0, 1.0};
 
                 auto const xy_center_color = pixel_color_at(W, x, y);
                 auto pixel_color           = xy_center_color * (1.0 / points_per_pixel);
 
-                for (int i = 0; i < 4; i++) {
-                        auto const c_x = x + dx[i] * delta;
-                        auto const c_y = y + dy[i] * delta;
+                for (int i = 0; i < corners_per_pixel; i++) {
+                        auto const ci_x = x + dx[i] * delta;
+                        auto const ci_y = y + dy[i] * delta;
 
                         /// ----------------------------------------------------
                         /// this is the adaptive color sampling part.
@@ -270,12 +272,12 @@ namespace raytracer
                         /// perspective) approach of *always* projecting a fixed
                         /// number of random rays per pixel, and sampling the
                         /// colors.
-                        auto corner_color    = pixel_color_at(W, c_x, c_y);
+                        auto corner_color    = pixel_color_at(W, ci_x, ci_y);
                         auto color_diff      = xy_center_color - corner_color;
                         float component_diff = std::fabs(color_diff.R() + color_diff.G() + color_diff.B());
 
                         if (component_diff > config_render_params::AA_COLOR_DIFF_THRESHOLD) {
-                                corner_color = adaptively_color_a_pixel_at(W, c_x, c_y, delta / 2.0);
+                                corner_color = adaptively_color_a_pixel_at(W, ci_x, ci_y, delta / 2.0);
                         }
 
                         pixel_color += corner_color * (1.0 / points_per_pixel);

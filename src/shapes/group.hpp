@@ -9,6 +9,7 @@
 /// our includes
 #include "primitives/intersection_record.hpp"
 #include "primitives/tuple.hpp"
+#include "shapes/aabb.hpp"
 #include "shapes/shape_interface.hpp"
 
 namespace raytracer
@@ -27,7 +28,18 @@ namespace raytracer
         class group final : public shape_interface
         {
             private:
+                /*
+                 * @brief
+                 *    all the child shapes belonging to this group.
+                 **/
                 std::vector<std::shared_ptr<shape_interface const>> child_shapes_;
+
+                /*
+                 * @brief
+                 *    aabb of a group of objects would not change. there is no
+                 *    reason not to cache it for quick access.
+                 **/
+                aabb bounding_box_ = {};
 
             public:
                 group(bool cast_shadow = true);
@@ -52,6 +64,10 @@ namespace raytracer
                 /// 'true' iff the ray intersects before 'distance'.
                 bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
                                              double distance) const override;
+
+                /// ------------------------------------------------------------
+                /// bounding box for an instance of a group of shapes
+                aabb bounds_of() const override;
 
                 /// is the group empty ? i.e contains no child shapes
                 bool is_empty() const;

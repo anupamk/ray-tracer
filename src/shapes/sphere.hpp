@@ -16,8 +16,11 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
+
         template <typename T>
         class the_badge;
+
+        class aabb;
 
         /*
          * this defines an origin centered sphere.
@@ -61,6 +64,10 @@ namespace raytracer
                 /// return 'false' otherwise
                 bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
                                              double distance) const override;
+
+                /// ------------------------------------------------------------
+                /// bounding box for an instance of sphere
+                aabb bounds_of() const override;
 
             private:
                 /// ------------------------------------------------------------

@@ -9,7 +9,7 @@ namespace platform_utils
 {
         /// --------------------------------------------------------------------
         /// just a stub
-        int thread_utils::set_thread_affinity(void*, uint16_t)
+        int thread_utils::set_thread_affinity(pthread_t, uint16_t)
         {
                 return 0;
         }

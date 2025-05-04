@@ -20,6 +20,7 @@
 #include "patterns/material.hpp"
 #include "primitives/intersection_record.hpp"
 #include "primitives/ray.hpp"
+#include "shapes/aabb.hpp"
 #include "shapes/shape_interface.hpp"
 #include "utils/badge.hpp"
 #include "utils/constants.hpp"
@@ -106,6 +107,13 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// return the bounding box for this instance of a group of shapes.
+        aabb group::bounds_of() const
+        {
+                return bounding_box_;
+        }
+
+        /// --------------------------------------------------------------------
         /// this function is called to see if the group is empty or not. it
         /// returns 'true' if the group is empty, 'false' otherwise.
         bool group::is_empty() const
@@ -131,6 +139,11 @@ namespace raytracer
         {
                 new_shape->set_parent(get_ptr());
                 child_shapes_.push_back(new_shape);
+
+                /// ------------------------------------------------------------
+                /// update the bounding box encompassing this child shape.
+                auto cs_aabb = new_shape->parent_space_bounds_of(new_shape);
+                bounding_box_.add_box(cs_aabb);
         }
 
         /// --------------------------------------------------------------------
@@ -145,6 +158,10 @@ namespace raytracer
          **/
         std::optional<intersection_records> group::compute_intersections_(ray_t const& R) const
         {
+                if (bounding_box_.intersects(R) == false) {
+                        return std::nullopt;
+                }
+
                 intersection_records xs_result;
 
                 for (auto const& cs : child_shapes_) {

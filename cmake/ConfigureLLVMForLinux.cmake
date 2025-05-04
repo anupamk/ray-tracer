@@ -4,7 +4,7 @@
 # setup the llvm-tool-chain binaries
 # ==============================================================================
 SET (CMAKE_C_COMPILER      "/usr/bin/clang-19")
-SET (CMAKE_CXX_COMPILER    "/usr/bin/clang++-19")
+SET (CMAKE_CXX_COMPILER    "/usr/bin/clang++")
 SET (CMAKE_AR              "/usr/bin/llvm-ar-19")
 SET (CMAKE_NM              "/usr/bin/llvm-nm-19")
 SET (CMAKE_OBJDUMP         "/usr/bin/llvm-objdump-19")

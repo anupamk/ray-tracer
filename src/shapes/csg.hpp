@@ -14,7 +14,8 @@
 /// our includes
 #include "primitives/intersection_record.hpp" // for intersection_records
 #include "primitives/tuple.hpp"               // for tuple
-#include "shapes/shape_interface.hpp"         // for shape_interface
+#include "shapes/aabb.hpp"
+#include "shapes/shape_interface.hpp" // for shape_interface
 
 namespace raytracer
 {
@@ -120,6 +121,13 @@ namespace raytracer
                 std::shared_ptr<csg_operation> csg_op;
                 std::shared_ptr<shape_interface> r_shape;
 
+                /*
+                 * @brief
+                 *    aabb of a group of objects would not change. there is no
+                 *    reason not to cache it for quick access.
+                 **/
+                aabb bounding_box_ = {};
+
             public:
                 static std::shared_ptr<csg_shape>
                 create_csg(std::shared_ptr<shape_interface> left,  /// left-shape
@@ -177,6 +185,10 @@ namespace raytracer
                 /// return 'false' otherwise
                 bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
                                              double distance) const override;
+
+                /// ------------------------------------------------------------
+                /// bounding box for an instance of csg
+                aabb bounds_of() const override;
 
                 /// ------------------------------------------------------------
                 /// does this shape include the other shape ? for instances of

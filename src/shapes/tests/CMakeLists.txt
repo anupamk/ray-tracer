@@ -10,6 +10,7 @@ SET(RT_SHAPE_TEST_SOURCES
   group_test.cpp
   triangle_test.cpp
   csg_test.cpp
+  aabb_test.cpp
 )
 
 # ------------------------------------------------------------------------------

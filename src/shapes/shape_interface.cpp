@@ -2,6 +2,7 @@
 
 /// our includes
 #include "primitives/tuple.hpp"
+#include "shapes/aabb.hpp"
 
 namespace raytracer
 {
@@ -140,6 +141,14 @@ namespace raytracer
         bool shape_interface::includes(std::shared_ptr<shape_interface const> const& other) const
         {
                 return this == other.get();
+        }
+
+        /// --------------------------------------------------------------------
+        /// shape's bounding box in the space of the shape's parent
+        aabb shape_interface::parent_space_bounds_of(std::shared_ptr<shape_interface const> s) const
+        {
+                auto const& shape_bounds = s->bounds_of();
+                return shape_bounds.transform(s->transform());
         }
 
 } // namespace raytracer

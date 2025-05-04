@@ -172,3 +172,27 @@ TEST_CASE("ray hits a csg object")
 
         CHECK(csg_xs_val.size() == 2);
 }
+
+TEST_CASE("Intersecting ray+csg doesn't test children if box is missed")
+{
+        auto csg_1 = RT::csg_shape::create_csg(std::make_shared<RT::sphere>(),         /// left-shape
+                                               std::make_shared<RT::csg_difference>(), /// operation
+                                               std::make_shared<RT::sphere>());        /// right-shape
+
+        auto new_ray = RT::ray_t(RT::create_point(0.0, 0.0, -5.0), RT::create_vector(0.0, 1.0, 0.0));
+        auto csg_xs  = new_ray.intersect(csg_1);
+
+        CHECK(csg_xs.has_value() == false);
+}
+
+TEST_CASE("Intersecting ray+csg tests children if box is hit")
+{
+        auto csg_1 = RT::csg_shape::create_csg(std::make_shared<RT::sphere>(),         /// left-shape
+                                               std::make_shared<RT::csg_difference>(), /// operation
+                                               std::make_shared<RT::sphere>());        /// right-shape
+
+        auto new_ray = RT::ray_t(RT::create_point(0.0, 0.0, -5.0), RT::create_vector(0.0, 0.0, 1.0));
+        auto csg_xs  = new_ray.intersect(csg_1);
+
+        CHECK(csg_xs.has_value() == true);
+}

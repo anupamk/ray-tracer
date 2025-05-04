@@ -68,6 +68,10 @@ namespace raytracer
                                              double distance) const override;
 
                 /// ------------------------------------------------------------
+                /// bounding box for an instance of cylinder
+                aabb bounds_of() const override;
+
+                /// ------------------------------------------------------------
                 /// stringified representation of a cube
                 std::string stringify() const override;
 

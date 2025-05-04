@@ -162,6 +162,20 @@ namespace raytracer
                                      (a.x() * b.y()) - (a.y() * b.x())); // z
         }
 
+        /// --------------------------------------------------------------------
+        /// return a point an +INFINITY
+        constexpr tuple point_at_positive_infinity()
+        {
+                return create_point(INF, INF, INF);
+        }
+
+        /// --------------------------------------------------------------------
+        /// return a point an -INFINITY
+        constexpr tuple point_at_negative_infinity()
+        {
+                return create_point(-INF, -INF, -INF);
+        }
+
         inline double magnitude(tuple a)
         {
                 return std::sqrt(dot(a, a));

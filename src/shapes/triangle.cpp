@@ -16,6 +16,7 @@
 #include "patterns/material.hpp"
 #include "primitives/intersection_record.hpp"
 #include "primitives/ray.hpp"
+#include "shapes/aabb.hpp"
 #include "utils/badge.hpp"
 #include "utils/constants.hpp"
 
@@ -125,6 +126,19 @@ namespace raytracer
                 }
 
                 return false;
+        }
+
+        /// --------------------------------------------------------------------
+        /// return the bounding box for this instance of the triangle.
+        aabb triangle::bounds_of() const
+        {
+                aabb triangle_bb{};
+
+                triangle_bb.add_point(pt_1_);
+                triangle_bb.add_point(pt_2_);
+                triangle_bb.add_point(pt_3_);
+
+                return triangle_bb;
         }
 
         /// --------------------------------------------------------------------

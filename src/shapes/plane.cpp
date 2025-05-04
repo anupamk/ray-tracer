@@ -13,6 +13,7 @@
 #include "primitives/intersection_record.hpp"
 #include "primitives/ray.hpp"
 #include "primitives/tuple.hpp"
+#include "shapes/aabb.hpp"
 #include "utils/badge.hpp"
 #include "utils/constants.hpp"
 
@@ -60,6 +61,16 @@ namespace raytracer
                 }
 
                 return false;
+        }
+
+        /// --------------------------------------------------------------------
+        /// return the bounding box for this instance of the plane.
+        aabb plane::bounds_of() const
+        {
+                auto min_pt = create_point(-INF, 0.0, -INF);
+                auto max_pt = create_point(INF, 0.0, INF);
+
+                return aabb(min_pt, max_pt);
         }
 
         /// --------------------------------------------------------------------

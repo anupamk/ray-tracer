@@ -165,3 +165,29 @@ TEST_CASE("finding normal on a child object in a group")
 
         CHECK(got_normal == exp_normal);
 }
+
+TEST_CASE("Intersecting ray+group doesn't test children if box is missed")
+{
+        auto g_1 = std::make_shared<RT::group>();
+        auto s_1 = std::make_shared<RT::sphere>();
+
+        g_1->add_child(s_1);
+
+        auto new_ray  = RT::ray_t(RT::create_point(0.0, 0.0, -5.0), RT::create_vector(0.0, 1.0, 0.0));
+        auto group_xs = new_ray.intersect(g_1);
+
+        CHECK(group_xs.has_value() == false);
+}
+
+TEST_CASE("Intersecting ray+group tests children if box is hit")
+{
+        auto g_1 = std::make_shared<RT::group>();
+        auto s_1 = std::make_shared<RT::sphere>();
+
+        g_1->add_child(s_1);
+
+        auto new_ray  = RT::ray_t(RT::create_point(0.0, 0.0, -5.0), RT::create_vector(0.0, 0.0, 1.0));
+        auto group_xs = new_ray.intersect(g_1);
+
+        CHECK(group_xs.has_value() == true);
+}

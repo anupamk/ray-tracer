@@ -16,8 +16,11 @@ namespace raytracer
         /// --------------------------------------------------------------------
         /// forward declarations
         class ray_t;
+
         template <typename T>
         class the_badge;
+
+        class aabb;
 
         /*
          * this defines the common shape_interface which is implemented by
@@ -85,6 +88,11 @@ namespace raytracer
                 /// return 'true' if it does, 'false' otherwise.
                 virtual bool includes(std::shared_ptr<shape_interface const> const& other) const;
 
+                /// ------------------------------------------------------------
+                /// return an instance of a bounding-box (in object-space !) for
+                /// the shape.
+                virtual aabb bounds_of() const = 0;
+
             public:
                 /// ------------------------------------------------------------
                 /// this function is called to return the current transform
@@ -138,5 +146,9 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// is this shape part of a group ?
                 bool is_grouped() const;
+
+                /// ------------------------------------------------------------
+                /// shape's bounding box in the space of the shape's parent
+                aabb parent_space_bounds_of(std::shared_ptr<shape_interface const>) const;
         };
 } // namespace raytracer

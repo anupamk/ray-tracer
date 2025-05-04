@@ -38,8 +38,9 @@ namespace raytracer
         constexpr double SQRT_3_BY_3F = SQRT_3 / 3.0;
 
         /// --------------------------------------------------------------------
-        /// easy access numeric constants
-        constexpr float INF = std::numeric_limits<float>::infinity();
+        /// easy access numeric constants, IEEE 754 is needed
+        static_assert(std::numeric_limits<double>::is_iec559, "IEEE 754 required");
+        constexpr double INF = std::numeric_limits<double>::infinity();
 
         /// --------------------------------------------------------------------
         /// a common place for all textures and OBJ files

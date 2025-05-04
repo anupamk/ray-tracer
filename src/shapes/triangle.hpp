@@ -78,6 +78,10 @@ namespace raytracer
                 bool has_intersection_before(the_badge<ray_t>, ray_t const& R,
                                              double distance) const override;
 
+                /// ------------------------------------------------------------
+                /// bounding box for an instance of triangle
+                aabb bounds_of() const override;
+
             private:
                 /// ------------------------------------------------------------
                 /// actual workhorse for computing ray-sphere intersections

@@ -26,7 +26,7 @@ set(CMAKE_BUILD_TYPE Release)
 #    - "LLVM", or
 #    - "GNU"
 # pick one
-set(USE_TOOLCHAIN "GNU")
+set(USE_TOOLCHAIN "LLVM")
 
 # ==============================================================================
 # with the basics done, everything else should be pretty much

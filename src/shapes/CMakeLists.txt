@@ -18,7 +18,9 @@ add_library(rt_shapes SHARED
   sphere.cpp
   sphere.hpp
   triangle.cpp
-  triangle.hpp)
+  triangle.hpp
+  aabb.hpp
+  aabb.cpp)
 
 target_link_libraries(rt_shapes
 
