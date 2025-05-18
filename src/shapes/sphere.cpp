@@ -79,6 +79,12 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// 'divide' a sphere into nothing ... nothing at all
+        void sphere::divide(size_t threshold)
+        {
+        }
+
+        /// --------------------------------------------------------------------
         /// stringified representation of sphere's information
         std::string sphere::stringify() const
         {

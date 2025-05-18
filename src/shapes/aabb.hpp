@@ -134,6 +134,21 @@ namespace raytracer
                  **/
                 bool intersects(ray_t const& R) const;
 
+                /*
+                 * @brief
+                 *    split a bounding box into two non-overlapping boxes, such
+                 *    that they cover the same volume as the original bounding
+                 *    box.
+                 *
+                 *    when the box is 'perfect' i.e. equal dimension along all
+                 *    axes, we split along the x-axis.
+                 *
+                 * @return
+                 *    std::pair<left-bounding-box, right-bounding-box> the
+                 *    'left' and 'right' box.
+                 **/
+                std::pair<aabb, aabb> split_bounds() const;
+
             private:
                 /// ------------------------------------------------------------
                 /// for each of the x,y,z axes check where a ray intersects

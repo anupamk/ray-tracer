@@ -32,7 +32,7 @@ namespace raytracer
                  * @brief
                  *    all the child shapes belonging to this group.
                  **/
-                std::vector<std::shared_ptr<shape_interface const>> child_shapes_;
+                std::vector<std::shared_ptr<shape_interface>> child_shapes_;
 
                 /*
                  * @brief
@@ -69,6 +69,10 @@ namespace raytracer
                 /// bounding box for an instance of a group of shapes
                 aabb bounds_of() const override;
 
+                /// ------------------------------------------------------------
+                /// 'divide' a group
+                void divide(size_t threshold) override;
+
                 /// is the group empty ? i.e contains no child shapes
                 bool is_empty() const;
 
@@ -92,9 +96,38 @@ namespace raytracer
                 /// return 'true' if it does, 'false' otherwise.
                 bool includes(std::shared_ptr<shape_interface const> const& other) const override;
 
+                /*
+                 * @brief
+                 *    partition the children of a group that fit into the
+                 *    corresponding halves of this group's bounding box.
+                 *
+                 *    children that are thus returned, are no longer part of the
+                 *    original group, and are therefore removed from it.
+                 *
+                 * @return
+                 *    pair of std::vector of shapes in a group.
+                 **/
+                std::pair<std::vector<std::shared_ptr<shape_interface>>,
+                          std::vector<std::shared_ptr<shape_interface>>>
+                partition_children();
+
+                /*
+                 * @brief
+                 *    create a sub-group from a list of children.
+                 *
+                 *    the 'sub-group-child-list' is added to a new group, and
+                 *    _that_ group is then added to the group instance for which
+                 *    this invoked.
+                 **/
+                void make_subgroup(std::vector<std::shared_ptr<shape_interface>> sg_child_list);
+
             private:
                 /// ------------------------------------------------------------
                 /// actual workhorse for ray-group intersections
                 std::optional<intersection_records> compute_intersections_(ray_t const&) const;
+
+                /// ------------------------------------------------------------
+                /// update the bounding box to encompass a new child shape
+                void update_aabb(std::shared_ptr<shape_interface const> new_shape);
         };
 } // namespace raytracer

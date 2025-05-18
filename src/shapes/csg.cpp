@@ -96,10 +96,10 @@ namespace raytracer
         {
                 /// ------------------------------------------------------------
                 /// update the bounding box encompassing the two shapes
-                auto ls_aabb = left->parent_space_bounds_of(left);
+                auto ls_aabb = left->parent_space_bounds_of();
                 bounding_box_.add_box(ls_aabb);
 
-                auto rs_aabb = right->parent_space_bounds_of(right);
+                auto rs_aabb = right->parent_space_bounds_of();
                 bounding_box_.add_box(rs_aabb);
         }
 
@@ -174,6 +174,14 @@ namespace raytracer
         aabb csg_shape::bounds_of() const
         {
                 return bounding_box_;
+        }
+
+        /// ------------------------------------------------------------
+        /// divide a 'csg' shape
+        void csg_shape::divide(size_t threshold)
+        {
+                l_shape->divide(threshold);
+                r_shape->divide(threshold);
         }
 
         /// --------------------------------------------------------------------

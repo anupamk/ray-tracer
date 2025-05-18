@@ -415,7 +415,7 @@ RT::world create_shapes_world()
 /// create_world(...)
 RT::camera create_shapes_world_camera()
 {
-        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, RT::PI_BY_2F);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS_2K, RT::canvas::Y_PIXELS_2K, RT::PI_BY_2F);
         auto look_from     = RT::create_point(-2.0, 1.0, -5.0);
         auto look_to       = RT::create_point(0.0, 0.0, 0.0);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

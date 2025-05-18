@@ -84,6 +84,12 @@ namespace raytracer
                 return aabb(min_pt, max_pt);
         }
 
+        /// --------------------------------------------------------------------
+        /// divide a cube into nothing ... nothing at all
+        void cube::divide(size_t threshold)
+        {
+        }
+
         /// ------------------------------------------------------------
         /// stringified representation of a cube
         std::string cube::stringify() const

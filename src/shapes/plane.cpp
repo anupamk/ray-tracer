@@ -74,6 +74,12 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// 'divide' a plane into nothing ... nothing at all
+        void plane::divide(size_t threshold)
+        {
+        }
+
+        /// --------------------------------------------------------------------
         /// stringified representation of a plane
         std::string plane::stringify() const
         {

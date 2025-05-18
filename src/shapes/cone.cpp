@@ -79,6 +79,12 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// 'divide' a cone into nothing ... nothing at all
+        void cone::divide(size_t threshold)
+        {
+        }
+
+        /// --------------------------------------------------------------------
         /// compute normal vector at a given point on the cone surface
         tuple cone::normal_at_local(tuple const& P, intersection_record const&) const
         {

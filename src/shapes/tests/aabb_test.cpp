@@ -1,4 +1,5 @@
 /// c++ includes
+#include "primitives/tuple.hpp"
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -473,5 +474,60 @@ TEST_CASE("aabb: Intersecting a ray with a non-cubic bounding box")
                 auto tc_ray           = RT::ray_t(tc.ray_origin, RT::normalize(tc.ray_direction));
                 auto got_intersection = aabb_1.intersects(tc_ray);
                 CHECK(tc.expected_intersection == got_intersection);
+        }
+}
+
+TEST_CASE("aabb: Intersecting a ray with a non-cubic bounding box")
+{
+        struct {
+                RT::aabb aabb_instance;
+                RT::tuple left_aabb_min;
+                RT::tuple left_aabb_max;
+                RT::tuple right_aabb_min;
+                RT::tuple right_aabb_max;
+        } const all_tc[] = {
+                /// [0]: a perfect cube
+                {
+                        RT::aabb(RT::create_point(-1.0, -4.0, -5.0), RT::create_point(9.0, 6.0, 5.0)),
+                        RT::create_point(-1.0, -4.0, -5.0),
+                        RT::create_point(4.0, 6.0, 5.0),
+                        RT::create_point(4.0, -4.0, -5.0),
+                        RT::create_point(9.0, 6.0, 5.0),
+                },
+
+                /// [1]: x-wide box
+                {
+                        RT::aabb(RT::create_point(-1.0, -2.0, -3.0), RT::create_point(9.0, 5.5, 3.0)),
+                        RT::create_point(-1.0, -2.0, -3.0),
+                        RT::create_point(4.0, 5.5, 3.0),
+                        RT::create_point(4.0, -2.0, -3.0),
+                        RT::create_point(9.0, 5.5, 3.0),
+                },
+
+                /// [2]: y-wide box
+                {
+                        RT::aabb(RT::create_point(-1.0, -2.0, -3.0), RT::create_point(5.0, 8.0, 3.0)),
+                        RT::create_point(-1.0, -2.0, -3.0),
+                        RT::create_point(5.0, 3.0, 3.0),
+                        RT::create_point(-1.0, 3.0, -3.0),
+                        RT::create_point(5.0, 8.0, 3.0),
+                },
+
+                /// [3]: z-wide box
+                {
+                        RT::aabb(RT::create_point(-1.0, -2.0, -3.0), RT::create_point(5.0, 3.0, 7.0)),
+                        RT::create_point(-1.0, -2.0, -3.0),
+                        RT::create_point(5.0, 3.0, 2.0),
+                        RT::create_point(-1.0, -2.0, 2.0),
+                        RT::create_point(5.0, 3.0, 7.0),
+                },
+        };
+
+        for (auto const& tc : all_tc) {
+                const auto& [l_aabb, r_aabb] = tc.aabb_instance.split_bounds();
+                CHECK(l_aabb.min() == tc.left_aabb_min);
+                CHECK(l_aabb.max() == tc.left_aabb_max);
+                CHECK(r_aabb.min() == tc.right_aabb_min);
+                CHECK(r_aabb.max() == tc.right_aabb_max);
         }
 }

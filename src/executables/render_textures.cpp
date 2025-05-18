@@ -74,14 +74,14 @@ int main(int argc, char** argv)
 
         /// --------------------------------------------------------------------
         /// generate MAX_NUMBER_OF_CANVASES each with RT::canvas::X_PIXELS X
-        /// RT::canvas::Y_PIXELS. stitch them together for a movie !
+        /// RT::canvas::Y_PIXELS_2K. stitch them together for a movie !
         constexpr size_t MAX_NUMBER_OF_CANVASES = 1;
 
         auto gp = std::make_shared<RT::checkers_pattern>(RT::color::RGB(0x00, 0x00, 0xff),  /// start-color
                                                          RT::color::RGB(0xff, 0xff, 0x00)); /// end-color
 
         for (size_t c = 0; c < MAX_NUMBER_OF_CANVASES; c++) {
-                RT::canvas ith_canvas = RT::canvas::create_binary(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS);
+                RT::canvas ith_canvas = RT::canvas::create_binary(RT::canvas::X_PIXELS_2K, RT::canvas::Y_PIXELS_2K);
 
                 constexpr double frequency = 1.0;
                 double const fx            = ith_canvas.width() / frequency;

@@ -5,6 +5,8 @@
 
 /// c++ includes
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
 
 /// our includes
 #include "primitives/matrix.hpp"
@@ -131,6 +133,50 @@ namespace raytracer
                 double const t_max = std::min(x_tmax, std::min(y_tmax, z_tmax));
 
                 return (t_min <= t_max);
+        }
+
+        /// --------------------------------------------------------------------
+        /// split a bounding box into two halves such that they cover the same
+        /// volume as the original bounding box.
+        ///
+        /// splitting is performed in the simplest possible fashion by choosing
+        /// an axis that is the largest.
+        std::pair<aabb, aabb> aabb::split_bounds() const
+        {
+                auto x0 = min_.x();
+                auto x1 = max_.x();
+                auto y0 = min_.y();
+                auto y1 = max_.y();
+                auto z0 = min_.z();
+                auto z1 = max_.z();
+
+                /// ------------------------------------------------------------
+                /// find largest of the 3 axes along which the box lies...
+                auto aabb_x_size   = std::abs(x0 - x1);
+                auto aabb_y_size   = std::abs(y0 - y1);
+                auto aabb_z_size   = std::abs(z0 - z1);
+                auto aabb_max_size = std::max({aabb_x_size, aabb_y_size, aabb_z_size});
+
+                /// ------------------------------------------------------------
+                /// ... and split along that.
+                if (aabb_x_size == aabb_max_size) {
+                        x1 = x0 + aabb_x_size / 2.0;
+                        x0 = x1;
+                } else if (aabb_y_size == aabb_max_size) {
+                        y1 = y0 + aabb_y_size / 2.0;
+                        y0 = y1;
+                } else {
+                        z1 = z0 + aabb_z_size / 2.0;
+                        z0 = z1;
+                }
+
+                auto mid_min = create_point(x0, y0, z0);
+                auto mid_max = create_point(x1, y1, z1);
+
+                auto left_aabb  = aabb(min_, mid_max);
+                auto right_aabb = aabb(mid_min, max_);
+
+                return {left_aabb, right_aabb};
         }
 
         /*

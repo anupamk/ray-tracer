@@ -1,6 +1,7 @@
 #pragma once
 
 /// c++ includes
+#include <cstddef>
 #include <optional>
 #include <string>
 
@@ -70,6 +71,10 @@ namespace raytracer
                 /// ------------------------------------------------------------
                 /// bounding box for an instance of cone
                 aabb bounds_of() const override;
+
+                /// ------------------------------------------------------------
+                /// 'divide' a cone
+                void divide(size_t threshold) override;
 
                 /// ------------------------------------------------------------
                 /// stringified representation of a cube

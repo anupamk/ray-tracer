@@ -69,6 +69,10 @@ namespace raytracer
                 /// bounding box for an instance of sphere
                 aabb bounds_of() const override;
 
+                /// ------------------------------------------------------------
+                /// 'divide' a sphere
+                void divide(size_t threshold) override;
+
             private:
                 /// ------------------------------------------------------------
                 /// actual workhorse for computing ray-sphere intersections

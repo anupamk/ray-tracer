@@ -142,6 +142,12 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// 'divide' a triangle into nothing ... nothing at all
+        void triangle::divide(size_t threshold)
+        {
+        }
+
+        /// --------------------------------------------------------------------
         /// stringified representation of triangle's information
         std::string triangle::stringify() const
         {

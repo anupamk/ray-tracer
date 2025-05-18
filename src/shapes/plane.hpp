@@ -53,6 +53,10 @@ namespace raytracer
                 /// bounding box for an instance of plane
                 aabb bounds_of() const override;
 
+                /// ------------------------------------------------------------
+                /// 'divide' a plane
+                void divide(size_t threshold) override;
+
             private:
                 /// ------------------------------------------------------------
                 /// actual workhorse for computing ray-plane intersections

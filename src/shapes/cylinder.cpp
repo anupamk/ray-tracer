@@ -93,6 +93,12 @@ namespace raytracer
         }
 
         /// --------------------------------------------------------------------
+        /// 'divide' a cylinder into nothing ... nothing at all
+        void cylinder::divide(size_t threshold)
+        {
+        }
+
+        /// --------------------------------------------------------------------
         /// stringified representation of a cube
         std::string cylinder::stringify() const
         {

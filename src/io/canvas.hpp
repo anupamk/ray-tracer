@@ -52,8 +52,16 @@ namespace raytracer
                  *    for now, by default, we render all images at 2k
                  *    resolution.
                  **/
-                static constexpr uint32_t X_PIXELS = 2560;
-                static constexpr uint32_t Y_PIXELS = 1440;
+                static constexpr uint32_t X_PIXELS_2K = 2560;
+                static constexpr uint32_t Y_PIXELS_2K = 1440;
+
+                /*
+                 * @brief
+                 *    1080p or 1k resolution for those demanding scenes that
+                 *    just take too long.
+                 **/
+                static constexpr uint32_t X_PIXELS_1K = 1920;
+                static constexpr uint32_t Y_PIXELS_1K = 1080;
 
             public:
                 /// ------------------------------------------------------------

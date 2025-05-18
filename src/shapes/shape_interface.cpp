@@ -145,10 +145,9 @@ namespace raytracer
 
         /// --------------------------------------------------------------------
         /// shape's bounding box in the space of the shape's parent
-        aabb shape_interface::parent_space_bounds_of(std::shared_ptr<shape_interface const> s) const
+        aabb shape_interface::parent_space_bounds_of() const
         {
-                auto const& shape_bounds = s->bounds_of();
-                return shape_bounds.transform(s->transform());
+                return bounds_of().transform(transform());
         }
 
 } // namespace raytracer

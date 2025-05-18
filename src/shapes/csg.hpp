@@ -191,6 +191,10 @@ namespace raytracer
                 aabb bounds_of() const override;
 
                 /// ------------------------------------------------------------
+                /// divide a 'csg' shape
+                void divide(size_t threshold) override;
+
+                /// ------------------------------------------------------------
                 /// does this shape include the other shape ? for instances of
                 /// this class, we want this redefined method to be invoked.
                 ///

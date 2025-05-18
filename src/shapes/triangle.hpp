@@ -82,6 +82,10 @@ namespace raytracer
                 /// bounding box for an instance of triangle
                 aabb bounds_of() const override;
 
+                /// ------------------------------------------------------------
+                /// 'divide' a triangle
+                void divide(size_t threshold) override;
+
             private:
                 /// ------------------------------------------------------------
                 /// actual workhorse for computing ray-sphere intersections

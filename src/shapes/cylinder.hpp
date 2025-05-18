@@ -72,6 +72,10 @@ namespace raytracer
                 aabb bounds_of() const override;
 
                 /// ------------------------------------------------------------
+                /// 'divide' a cylinder
+                void divide(size_t threshold) override;
+
+                /// ------------------------------------------------------------
                 /// stringified representation of a cube
                 std::string stringify() const override;
 

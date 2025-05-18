@@ -40,7 +40,9 @@ namespace raytracer
                 }
 
             public:
-                /// get the values out
+                /*
+                 * get the values out
+                 **/
                 constexpr double x() const
                 {
                         return this->x_;
@@ -62,6 +64,7 @@ namespace raytracer
                 }
 
             public:
+                /// ------------------------------------------------------------
                 /// query tuple for point || vector
                 constexpr bool is_point() const
                 {
@@ -73,23 +76,28 @@ namespace raytracer
                         return (this->w_ == tuple_type_t::VECTOR);
                 }
 
+                /// ------------------------------------------------------------
                 /// forcefully make this tuple a vector !
                 constexpr void vectorify()
                 {
                         this->w_ = tuple_type_t::VECTOR;
                 }
 
+                /// ------------------------------------------------------------
                 /// forcefully make this tuple a point !
                 constexpr void pointify()
                 {
                         this->w_ = tuple_type_t::POINT;
                 }
 
+                /// ------------------------------------------------------------
                 /// stringified representation of a tuple
                 std::string stringify() const;
 
             public:
-                /// some operators
+                /*
+                 * some operators
+                 **/
                 tuple& operator+=(tuple);
                 tuple& operator-=(tuple);
         };
@@ -132,12 +140,14 @@ namespace raytracer
                 return tuple(a.x() + f, a.y() + f, a.z() + f, a.tuple_type());
         }
 
+        /// --------------------------------------------------------------------
         /// create a point using tuple as the underlying interface.
         constexpr tuple create_point(double x, double y, double z)
         {
                 return tuple(x, y, z, tuple_type_t::POINT);
         }
 
+        /// --------------------------------------------------------------------
         /// create a vector using tuple as the underlying interface.
         constexpr tuple create_vector(double x, double y, double z)
         {

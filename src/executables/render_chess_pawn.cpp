@@ -177,16 +177,19 @@ static RT::world create_world()
 
                 /// ------------------------------------------------------------
                 /// add the default group and named groups into the world
-                auto grp = chess_pawn_parse_result.default_group_ref();
-                if (grp != nullptr) {
-                        grp->set_cast_shadow(true);
-                        grp->set_material(chess_pawn_material);
-                        grp->transform(pawn_xform);
-                        world.add(grp);
+                auto default_group = chess_pawn_parse_result.default_group_ref();
+                if (default_group != nullptr) {
+                        default_group->set_cast_shadow(true);
+                        default_group->transform(pawn_xform);
+                        world.add(default_group);
+
+                        /// ----------------------------------------------------
+                        /// let's divide the group with a '200' threshold.
+                        default_group->divide(200);
                 }
 
-                auto grp_list = chess_pawn_parse_result.group_list_cref();
-                for (auto const& g_i : grp_list) {
+                auto group_list = chess_pawn_parse_result.group_list_cref();
+                for (auto const& g_i : group_list) {
                         g_i->set_cast_shadow(true);
                         g_i->set_material(chess_pawn_material);
                         g_i->transform(pawn_xform);
@@ -204,9 +207,9 @@ static RT::world create_world()
 /// observed.
 static RT::camera create_camera()
 {
-        auto camera_01 = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, RT::PI_BY_3F);
-        camera_01.transform(RT_XFORM::create_view_transform(RT::create_point(0.0, 4.0, -10.0),  /// look-from
-                                                            RT::create_point(0.0, 2.0, 0.0),    /// look-to
+        auto camera_01 = RT::camera(RT::canvas::X_PIXELS_1K, RT::canvas::Y_PIXELS_1K, RT::PI_BY_3F);
+        camera_01.transform(RT_XFORM::create_view_transform(RT::create_point(0.0, 4.0, -9.0),   /// look-from
+                                                            RT::create_point(0.0, 3.0, 0.0),    /// look-to
                                                             RT::create_vector(0.0, 1.0, 0.0))); /// up-vector
 
         return camera_01;

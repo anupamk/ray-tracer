@@ -191,3 +191,119 @@ TEST_CASE("Intersecting ray+group tests children if box is hit")
 
         CHECK(group_xs.has_value() == true);
 }
+
+TEST_CASE("partitioning a group's children")
+{
+        auto g_1 = std::make_shared<RT::group>();
+
+        /// add sphere s_1
+        auto s_1 = std::make_shared<RT::sphere>();
+        s_1->transform(RT::matrix_transformations_t::create_3d_translation_matrix(-2.0, 0.0, 0.0));
+        g_1->add_child(s_1);
+
+        /// add sphere s_2
+        auto s_2 = std::make_shared<RT::sphere>();
+        s_2->transform(RT::matrix_transformations_t::create_3d_translation_matrix(2.0, 0.0, 0.0));
+        g_1->add_child(s_2);
+
+        /// add sphere s_3
+        auto s_3 = std::make_shared<RT::sphere>();
+        g_1->add_child(s_3);
+
+        /// partition children
+        const auto& [left_shapes, right_shapes] = g_1->partition_children();
+
+        /*
+         * some checks
+         **/
+        CHECK(g_1->includes(s_3) == true);
+        CHECK(g_1->includes(s_1) == false);
+        CHECK(g_1->includes(s_2) == false);
+
+        CHECK(left_shapes.size() == 1);
+        CHECK(left_shapes[0] == s_1);
+
+        CHECK(right_shapes.size() == 1);
+        CHECK(right_shapes[0] == s_2);
+}
+
+TEST_CASE("creating a sub-group from a list of children")
+{
+        auto g_1 = std::make_shared<RT::group>();
+
+        /// --------------------------------------------------------------------
+        /// create spheres s_1 and s_2, and add them as a subgroup to 'g_1'
+        auto s_1 = std::make_shared<RT::sphere>();
+        auto s_2 = std::make_shared<RT::sphere>();
+
+        std::vector<std::shared_ptr<RT::shape_interface>> shape_list;
+        shape_list.push_back(s_1);
+        shape_list.push_back(s_2);
+
+        g_1->make_subgroup(shape_list);
+
+        /// --------------------------------------------------------------------
+        /// group-check
+        auto g_1_child_shapes = g_1->child_shapes_cref();
+        CHECK(g_1_child_shapes.size() == 1);
+
+        /// --------------------------------------------------------------------
+        /// sub-group check
+        std::shared_ptr<RT::group> g_1_sg = std::dynamic_pointer_cast<RT::group>(g_1_child_shapes[0]);
+
+        auto sg_child_shapes = g_1_sg->child_shapes_cref();
+        CHECK(sg_child_shapes.size() == 2);
+        CHECK(g_1_sg->includes(s_1) == true);
+        CHECK(g_1_sg->includes(s_2) == true);
+}
+
+TEST_CASE("Subdividing a group partitions its children")
+{
+        auto s_1 = std::make_shared<RT::sphere>();
+        s_1->transform(RT::matrix_transformations_t::create_3d_translation_matrix(-2.0, -2.0, 0.0));
+
+        auto s_2 = std::make_shared<RT::sphere>();
+        s_2->transform(RT::matrix_transformations_t::create_3d_translation_matrix(-2.0, 2.0, 0.0));
+
+        auto s_3 = std::make_shared<RT::sphere>();
+        s_3->transform(RT::matrix_transformations_t::create_3d_scaling_matrix(4.0, 4.0, 4.0));
+
+        /// --------------------------------------------------------------------
+        /// a group with '3' spheres.
+        auto g_1 = std::make_shared<RT::group>();
+        g_1->add_child(s_1);
+        g_1->add_child(s_2);
+        g_1->add_child(s_3);
+
+        g_1->divide(1);
+
+        /// --------------------------------------------------------------------
+        /// group-check
+        auto g_1_child_shapes = g_1->child_shapes_cref();
+        CHECK(g_1_child_shapes.size() == 2);
+
+        /// --------------------------------------------------------------------
+        /// 'g_1_child_shapes[0]' is a sphere i.e. 's_3'
+        std::shared_ptr<RT::sphere> g_1_s_3 = std::dynamic_pointer_cast<RT::sphere>(g_1_child_shapes[0]);
+        CHECK(g_1_s_3 == s_3);
+
+        /// --------------------------------------------------------------------
+        /// 'g_1_child_shapes[1]' is a subgroup with '2' groups
+        std::shared_ptr<RT::group> g_1_sg_1 = std::dynamic_pointer_cast<RT::group>(g_1_child_shapes[1]);
+        auto sg_1_child_shapes              = g_1_sg_1->child_shapes_cref();
+        CHECK(sg_1_child_shapes.size() == 2);
+
+        /// --------------------------------------------------------------------
+        /// 1st-subgroup contains 's_1'
+        std::shared_ptr<RT::group> g_1_sg_sg_1 = std::dynamic_pointer_cast<RT::group>(sg_1_child_shapes[0]);
+        auto sg_sg_1_child_shapes              = g_1_sg_sg_1->child_shapes_cref();
+        CHECK(sg_sg_1_child_shapes.size() == 1);
+        CHECK(g_1_sg_sg_1->includes(s_1) == true);
+
+        /// --------------------------------------------------------------------
+        /// 2nd-subgroup contains 's_2'
+        std::shared_ptr<RT::group> g_1_sg_sg_2 = std::dynamic_pointer_cast<RT::group>(sg_1_child_shapes[1]);
+        auto sg_sg_2_child_shapes              = g_1_sg_sg_2->child_shapes_cref();
+        CHECK(sg_sg_2_child_shapes.size() == 1);
+        CHECK(g_1_sg_sg_2->includes(s_2) == true);
+}

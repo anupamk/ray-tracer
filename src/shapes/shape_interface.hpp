@@ -1,6 +1,7 @@
 #pragma once
 
 /// c++ includes
+#include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
@@ -93,6 +94,17 @@ namespace raytracer
                 /// the shape.
                 virtual aabb bounds_of() const = 0;
 
+                /// ------------------------------------------------------------
+                /// divide (child shapes in) a composite shape based on the
+                /// 'threshold'.
+                ///
+                /// 'threshold' here indicates the minimum number of
+                /// child-shapes that a composite shape must have before it will
+                /// be divided.
+                ///
+                /// therefore, for primitive shapes, this does nothing at all.
+                virtual void divide(size_t threshold) = 0;
+
             public:
                 /// ------------------------------------------------------------
                 /// this function is called to return the current transform
@@ -149,6 +161,6 @@ namespace raytracer
 
                 /// ------------------------------------------------------------
                 /// shape's bounding box in the space of the shape's parent
-                aabb parent_space_bounds_of(std::shared_ptr<shape_interface const>) const;
+                aabb parent_space_bounds_of() const;
         };
 } // namespace raytracer

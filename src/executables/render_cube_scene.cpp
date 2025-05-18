@@ -209,7 +209,7 @@ RT::world create_table_world()
 /// observed.
 RT::camera create_table_world_camera()
 {
-        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, RT::PI_BY_3F);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS_2K, RT::canvas::Y_PIXELS_2K, RT::PI_BY_3F);
         auto look_from     = RT::create_point(29.0, 10.0, -29.0);
         auto look_to       = RT::create_point(-5.0, 9.0, 0.0);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
@@ -245,10 +245,10 @@ RT::world create_earth_world()
                                       RT_XFORM::create_3d_translation_matrix(0.5, 2.4, 0.4));
 
                 /// auto cloud_cube_pattern = std::make_shared<RT::gradient_perlin_noise_pattern>(
-                /// 	RT::color::RGB(0, 0, 90),                 /// color-a
-                /// 	RT::color::RGB(100, 100, 100),            /// color-a
-                /// 	std::default_random_engine::default_seed, /// seed
-                /// 	16);
+                ///	RT::color::RGB(0, 0, 90),                 /// color-a
+                ///	RT::color::RGB(100, 100, 100),            /// color-a
+                ///	std::default_random_engine::default_seed, /// seed
+                ///	16);
 
                 /// cloud_cube_pattern->transform(RT_XFORM::create_rotx_matrix(-RT::PI_BY_6F));
 
@@ -358,7 +358,7 @@ RT::world create_earth_world()
 
                 /// auto floor_mat = RT::material().set_specular(0.0).set_reflective(0.1);
                 /// auto floor_pattern =
-                /// 	std::make_shared<RT::checkers_pattern>(RT::color(0.35, 0.35, 0.35),  /// color-a
+                ///	std::make_shared<RT::checkers_pattern>(RT::color(0.35, 0.35, 0.35),  /// color-a
                 ///                                                RT::color(0.65, 0.65, 0.65)); /// color-b
 
                 floor_mat.set_pattern(floor_pattern);
@@ -377,7 +377,7 @@ RT::world create_earth_world()
 /// observed.
 RT::camera create_earth_world_camera()
 {
-        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 0.8);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS_2K, RT::canvas::Y_PIXELS_2K, 0.8);
         auto look_from     = RT::create_point(-2.6, 4.5, -20.0);
         auto look_to       = RT::create_point(-0.6, 2.5, -0.8);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
@@ -545,7 +545,7 @@ RT::world create_simple_world()
 /// observed.
 RT::camera create_simple_world_camera()
 {
-        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 0.8);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS_2K, RT::canvas::Y_PIXELS_2K, 0.8);
         auto look_from     = RT::create_point(-20.6, 4.5, -30.0);
         auto look_to       = RT::create_point(0.0, 0.0, 0.0);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);

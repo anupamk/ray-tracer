@@ -107,7 +107,7 @@ RT::world create_cylinder_world()
 /// create_cylinder_world(...)
 RT::camera create_cylinder_world_camera()
 {
-        auto camera_01     = RT::camera(RT::canvas::X_PIXELS, RT::canvas::Y_PIXELS, 0.5);
+        auto camera_01     = RT::camera(RT::canvas::X_PIXELS_2K, RT::canvas::Y_PIXELS_2K, 0.5);
         auto look_from     = RT::create_point(0.0, 0.0, -20.0);
         auto look_to       = RT::create_point(0.0, 0.0, 0.0);
         auto up_dir_vector = RT::create_vector(0.0, 1.0, 0.0);
